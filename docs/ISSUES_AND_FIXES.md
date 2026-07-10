@@ -77,9 +77,10 @@ from it, so even a *correct* LLM answer often failed to match its KG entity.
 **Fix:** parse `m_<mid>_` then take the whole remainder as the label, and URL‑decode
 percent escapes (`cleanLabel()`). Verified against real FB15k URIs.
 
-> Related **OPEN** item: `CandidateExtractor.extractLabel` still returns the raw
-> local name and does not reuse `CanonicalForm`, so candidate labels and sim‑join
-> labels can disagree. Align them before relying on constrained generation.
+> Related item (**FIXED**): `CandidateExtractor.extractLabel` now routes through
+> `CanonicalForm.canon`, so constrained‑generation candidates and grounding
+> label→URI maps use the same canonical labels as the sim‑join
+> (e.g. `Cars 2`, `3 Idiots`, `Comedy GB`), with percent escapes decoded.
 
 ---
 

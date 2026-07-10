@@ -6,6 +6,7 @@ import org.apache.jena.graph.Triple;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.util.iterator.ExtendedIterator;
+import org.gensparql.core.similarity.CanonicalForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -145,32 +146,18 @@ public class CandidateExtractor {
     }
 
     /**
-     * Extract a human-readable label from a node.
-     * For URIs, extracts the local name (last part after / or #).
-     * For literals, returns the lexical form.
+     * Extract a human-readable label from a node, using the same canonicalization
+     * as {@link CanonicalForm} so candidate labels are consistent with the labels
+     * the similarity join and grounding compare against. For example the Freebase
+     * URI {@code m_0407yj__Cars_2} yields {@code "Cars 2"} (not the raw local name),
+     * and percent escapes are decoded.
      */
     private String extractLabel(Node node) {
         if (node == null) {
             return null;
         }
-
-        if (node.isURI()) {
-            String uri = node.getURI();
-            // Extract local name
-            int hashIdx = uri.lastIndexOf('#');
-            int slashIdx = uri.lastIndexOf('/');
-            int idx = Math.max(hashIdx, slashIdx);
-            if (idx >= 0 && idx < uri.length() - 1) {
-                return uri.substring(idx + 1);
-            }
-            return uri;
-        } else if (node.isLiteral()) {
-            return node.getLiteralLexicalForm();
-        } else if (node.isBlank()) {
-            return node.getBlankNodeLabel();
-        }
-
-        return null;
+        String label = CanonicalForm.canon(node);
+        return (label == null || label.isEmpty()) ? null : label;
     }
 
     /**
