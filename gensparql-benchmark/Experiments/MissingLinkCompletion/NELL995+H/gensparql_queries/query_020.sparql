@@ -1,0 +1,9 @@
+# GenSPARQL Query (1-hop Link Prediction with Grounding)
+# Expected Answer: concept_country_japan
+# LLM selects from KG entities, ensuring grounding
+
+SELECT ?target WHERE {
+  GENOP("What is the organizationheadquarteredincountry of denso (company)? Choose from this list: [concept_country_australia, concept_country_britain, concept_country_canada_canada, concept_country_china, concept_country_colombia, concept_country_cuba, concept_country_ethiopia, concept_country_france_france, concept_country_iran, concept_country_japan, concept_country_netherlands, concept_country_somalia, concept_country_switzerland, concept_country_taiwan, concept_country_u_s_, concept_country_united_states_of_america, concept_country_us, concept_country_usa, concept_country_zimbabwe]. Return JSON array of matching items like ['item1', 'item2']. Return [] if none.",
+        (?target),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

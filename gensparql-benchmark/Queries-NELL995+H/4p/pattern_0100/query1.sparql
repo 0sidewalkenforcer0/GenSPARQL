@@ -1,0 +1,16 @@
+# 4p Query (pattern_0100): concept_sportsteam_new_york_giants --[concept:teamplaysagainstteam_reverse]--> ? --[concept:athleteplaysforteam_reverse]--> ? --[concept:athleteledsportsteam]--> ? --[concept:organizationhiredperson]--> ?
+# Machine IDs: anchor=concept_sportsteam_new_york_giants
+# Pattern: 0100 (0=KG match, 1=GENOP inference)
+# Expected Answers (3):
+#   1. concept_coach_romeo_crennel
+#   2. concept_athlete_butch_davis
+#   3. concept_person_belichick
+
+SELECT ?answer ?e1 ?e2 ?e3 WHERE {
+  ?e1 <http://nell.cs.cmu.edu/relation/concept_teamplaysagainstteam> <http://nell.cs.cmu.edu/entity/concept_sportsteam_new_york_giants> .
+  GENOP("List movies released on {?e1} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?e2),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?e2 <http://nell.cs.cmu.edu/relation/concept_athleteledsportsteam> ?e3 .
+  ?e3 <http://nell.cs.cmu.edu/relation/concept_organizationhiredperson> ?answer .
+}

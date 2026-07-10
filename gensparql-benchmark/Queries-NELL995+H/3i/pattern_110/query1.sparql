@@ -1,0 +1,14 @@
+# 3i Query (pattern_110): (concept_profession_workers --[concept:professionistypeofprofession]--> ?) ∩ (concept_profession_practitioners --[concept:professionistypeofprofession_reverse]--> ?) ∩ (concept_profession_practitioners --[concept:professionistypeofprofession]--> ?)
+# Pattern: 110 (0=KG match, 1=GENOP inference)
+# Expected Answers (1):
+#   1. concept_profession_social_workers
+
+SELECT ?answer WHERE {
+  GENOP("List movies or entities where concept_profession_workers is their professionistypeofprofession. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on concept_profession_practitioners format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+  <http://nell.cs.cmu.edu/entity/concept_profession_practitioners> <http://nell.cs.cmu.edu/relation/concept_professionistypeofprofession> ?answer .
+}

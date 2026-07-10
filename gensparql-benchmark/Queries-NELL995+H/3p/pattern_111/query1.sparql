@@ -1,0 +1,17 @@
+# 3p Query (pattern_111): concept_city_york --[concept:subpartof_reverse]--> ? --[concept:atlocation]--> ? --[concept:atdate]--> ?
+# Machine IDs: anchor=concept_city_york
+# Pattern: 111 (0=KG match, 1=GENOP inference)
+# Expected Answers (1):
+#   1. concept_dateliteral_n1947
+
+SELECT ?answer ?e1 ?e2 WHERE {
+  GENOP("List movies released on concept_city_york format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?e1),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies or entities where {?e1} is their atlocation. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?e2),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies or entities where {?e2} is their atdate. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

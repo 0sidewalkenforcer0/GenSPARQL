@@ -1,0 +1,24 @@
+# 4p Query (pattern_0010): concept_geometricshape_dice --[concept:agriculturalproductcutintogeometricshape_reverse]--> ? --[concept:agriculturalproductcookedwithagriculturalproduct]--> ? --[concept:agriculturalproductcomingfromvertebrate]--> ? --[concept:animalpreyson_reverse]--> ?
+# Machine IDs: anchor=concept_geometricshape_dice
+# Pattern: 0010 (0=KG match, 1=GENOP inference)
+# Expected Answers (84):
+#   1. concept_mammal_fox
+#   2. concept_mammal_bears
+#   3. concept_vertebrate_black_bears
+#   4. concept_mammal_rhinoceros
+#   5. concept_mammal_bear
+#   6. concept_agriculturalproduct_pigs
+#   7. concept_mammal_elk
+#   8. concept_animal_hawks
+#   9. concept_mammal_wolves
+#   10. concept_mammal_cougars
+#   ... and 74 more
+
+SELECT ?answer ?e1 ?e2 ?e3 WHERE {
+  ?e1 <http://nell.cs.cmu.edu/relation/concept_agriculturalproductcutintogeometricshape> <http://nell.cs.cmu.edu/entity/concept_geometricshape_dice> .
+  ?e1 <http://nell.cs.cmu.edu/relation/concept_agriculturalproductcookedwithagriculturalproduct> ?e2 .
+  GENOP("List movies or entities where {?e2} is their agriculturalproductcomingfromvertebrate. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?e3),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?answer <http://nell.cs.cmu.edu/relation/concept_animalpreyson> ?e3 .
+}

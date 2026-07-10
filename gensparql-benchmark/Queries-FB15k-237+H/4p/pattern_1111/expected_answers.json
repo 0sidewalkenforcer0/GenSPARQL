@@ -1,0 +1,25 @@
+{
+  "num_answers": 8,
+  "answers": [
+    "/m/06jk5_",
+    "/m/03y5ky",
+    "/m/03205_",
+    "/m/039d4",
+    "/m/065y4w7",
+    "/m/01qd_r",
+    "/m/02cvcd",
+    "/m/02897w"
+  ],
+  "answers_readable": [
+    "Norwich University",
+    "Valparaiso University",
+    "Adelphi University",
+    "George Mason University",
+    "University of Southern California",
+    "University of Colorado Boulder",
+    "Loyola University New Orleans",
+    "Willamette University"
+  ],
+  "query_readable": "/m/0jbk9 --[-/business/job_title/people_with_this_title./business/employment_tenure/company]--> ? --[+/organization/role/leaders./organization/leadership/organization]--> ? --[+/sports/sports_team/colors]--> ? --[-/education/educational_institution/colors]--> ?",
+  "query_readable_with_names": "Animal9 --[←employment tenure.company]--> ? --[→leadership.organization]--> ? --[→sports team.colors]--> ? --[←educational institution.colors]--> ?"
+}

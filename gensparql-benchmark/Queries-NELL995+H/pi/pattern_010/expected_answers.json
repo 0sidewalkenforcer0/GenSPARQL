@@ -1,0 +1,14 @@
+{
+  "num_answers": 6,
+  "answers": [
+    "concept_person_brett",
+    "concept_person_danny",
+    "concept_person_erin",
+    "concept_person_bill",
+    "concept_personasia_anthony",
+    "concept_person_patrice_bergeron"
+  ],
+  "answers_readable": [],
+  "query_readable": "(concept_person_terry --[concept:persongraduatedfromuniversity]--> ? --[concept:persongraduatedschool_reverse]--> ?) ∩ (concept_city_york --[concept:personborninlocation_reverse]--> ?)",
+  "query_readable_with_names": ""
+}

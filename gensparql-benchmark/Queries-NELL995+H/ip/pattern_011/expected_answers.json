@@ -1,0 +1,10 @@
+{
+  "num_answers": 2,
+  "answers": [
+    "concept_profession_providers",
+    "concept_profession_experts"
+  ],
+  "answers_readable": [],
+  "query_readable": "((concept_profession_artists --[concept:professionistypeofprofession_reverse]--> ?) ∩ (concept_profession_support --[concept:professionistypeofprofession]--> ?)) --[concept:professionistypeofprofession]--> ?",
+  "query_readable_with_names": ""
+}

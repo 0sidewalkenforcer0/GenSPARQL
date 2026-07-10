@@ -1,0 +1,8 @@
+# Pure LLM Query (Zero-shot)
+# Expected Answer: concept_dateliteral_n2008
+# No grounding - LLM generates freely
+
+PROMPT: What is the atdate of clinic (retailstore)?
+
+Return your answer as a JSON array: ["answer1", "answer2", ...]
+If you don't know, return [].

@@ -1,0 +1,9 @@
+{
+  "num_answers": 1,
+  "answers": [
+    "concept_person_davis"
+  ],
+  "answers_readable": [],
+  "query_readable": "concept_sportsteam_new_york_giants --[concept:teamplaysagainstteam_reverse]--> ? --[concept:athleteplaysforteam_reverse]--> ? --[concept:athleteledsportsteam]--> ? --[concept:organizationhiredperson]--> ?",
+  "query_readable_with_names": ""
+}

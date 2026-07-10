@@ -1,0 +1,36 @@
+# Query 9: JOIN with GENOP threshold (BGP + GENOP with similarity threshold)
+# Demonstrates JOIN semantics between database query and LLM-generated results
+# 
+# This query demonstrates:
+# 1. BGP: Query scientists and awards from the database (binds ?scientist and ?awardLabel as RDF type)
+# 2. GENOP: Generate Nobel Prize winners independently (binds ?scientist and ?awardLabel as GEN type)
+# 3. JOIN: Natural join between BGP and GENOP results
+# 4. Threshold: Uses 0.8 similarity threshold for matching GEN values
+#
+# Key: Both BGP and GENOP bind the same variables (?scientist, ?awardLabel),
+# so they are joined on these variables. The threshold (0.8) controls how similar
+# the values need to be for matching (when SimJoin is enabled).
+#
+# Execution flow:
+# 1. BGP executes, producing RDF-typed bindings for (?scientist, ?awardLabel)
+# 2. GENOP executes independently (base mode), producing GEN-typed bindings
+# 3. JOIN matches bindings where (?scientist, ?awardLabel) pairs are similar enough
+# 4. Results contain only matched pairs (intersection, not union)
+
+PREFIX ex: <http://example.org/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?scientist ?awardLabel WHERE {
+  {
+    # Part 1: Query from database (standard SPARQL)
+    ?person foaf:name ?scientist .
+    ?person ex:receivedAward ?award .
+    ?award rdfs:label ?awardLabel .
+    # Part 2: Generate Nobel Prize winners using GENOP
+    GENOP("List five scientists who won Nobel Prize. Return as JSON array with objects containing 'scientist' and 'awardLabel' fields", 
+          (?scientist, ?awardLabel), 
+          <model:openrouter:xiaomi/mimo-v2-flash:free>)
+  }
+}
+

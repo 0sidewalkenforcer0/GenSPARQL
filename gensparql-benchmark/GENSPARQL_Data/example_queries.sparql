@@ -1,0 +1,28 @@
+# 示例 SPARQL 查询
+
+# 查询所有三元组 (限制10条)
+PREFIX fbe: <http://freebase.com/entity/>
+PREFIX fbr: <http://freebase.com/relation/>
+
+SELECT ?subject ?predicate ?object
+WHERE {
+    ?subject ?predicate ?object .
+}
+LIMIT 10
+
+# ---
+
+# 查询特定实体的所有关系
+# PREFIX fbe: <http://freebase.com/entity/>
+# SELECT ?predicate ?object
+# WHERE {
+#     fbe:m_027rn_DVD ?predicate ?object .
+# }
+
+# ---
+
+# 统计三元组数量
+# SELECT (COUNT(*) AS ?count)
+# WHERE {
+#     ?s ?p ?o .
+# }

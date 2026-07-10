@@ -1,0 +1,22 @@
+# ip Query (pattern_010): ((concept_buildingfeature_packages --[concept:subpartof]--> ?) ∩ (concept_politicsissue_processes --[concept:subpartof]--> ?)) --[concept:subpartof_reverse]--> ?
+# Pattern: 010 (0=KG match, 1=GENOP inference)
+# Expected Answers (254):
+#   1. concept_buildingfeature_decisions
+#   2. concept_emotion_suite
+#   3. concept_musicalbum_line
+#   4. concept_website_bill
+#   5. concept_physicalaction_tips
+#   6. concept_weapon_staff
+#   7. concept_academicfield_expert
+#   8. concept_bathroomitem_firm
+#   9. concept_physicalaction_questions
+#   10. concept_cognitiveactions_dealer
+#   ... and 244 more
+
+SELECT ?answer ?mid WHERE {
+  <http://nell.cs.cmu.edu/entity/concept_buildingfeature_packages> <http://nell.cs.cmu.edu/relation/concept_subpartof> ?mid .
+  GENOP("List movies or entities where concept_politicsissue_processes is their subpartof. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?mid),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?answer <http://nell.cs.cmu.edu/relation/concept_subpartof> ?mid .
+}

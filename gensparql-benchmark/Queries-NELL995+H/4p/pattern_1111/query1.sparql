@@ -1,0 +1,30 @@
+# 4p Query (pattern_1111): concept_automobilemaker_dallas_cowboys --[concept:worksfor_reverse]--> ? --[concept:personbelongstoorganization]--> ? --[concept:agentcompeteswithagent]--> ? --[concept:athleteplaysinleague_reverse]--> ?
+# Machine IDs: anchor=concept_automobilemaker_dallas_cowboys
+# Pattern: 1111 (0=KG match, 1=GENOP inference)
+# Expected Answers (25):
+#   1. concept_coach_torry_holt
+#   2. concept_athlete_ernie_sims
+#   3. concept_athlete_rogers_hornsby
+#   4. concept_athlete_priest_holmes
+#   5. concept_athlete_paul_brown
+#   6. concept_personmexico_willie_mccovey
+#   7. concept_athlete_joe_bradley
+#   8. concept_athlete_mike_maroth
+#   9. concept_coach_lendale_white
+#   10. concept_athlete_otto_graham
+#   ... and 15 more
+
+SELECT ?answer ?e1 ?e2 ?e3 WHERE {
+  GENOP("List movies released on concept_automobilemaker_dallas_cowboys format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?e1),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies or entities where {?e1} is their personbelongstoorganization. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?e2),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies or entities where {?e2} is their agentcompeteswithagent. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?e3),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on {?e3} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

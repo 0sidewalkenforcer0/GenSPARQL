@@ -1,0 +1,17 @@
+{
+  "num_answers": 9,
+  "answers": [
+    "concept_geopoliticalorganization_web_site",
+    "concept_stateorprovince_investors",
+    "concept_city_nature",
+    "concept_website_match",
+    "concept_county_conditions",
+    "concept_city_home",
+    "concept_city_singapore",
+    "concept_geopoliticalorganization_theaters",
+    "concept_stateorprovince_california"
+  ],
+  "answers_readable": [],
+  "query_readable": "(concept_county_york_county --[concept:atlocation_reverse]--> ? --[concept:locationlocatedwithinlocation]--> ?) ∩ (concept_dateliteral_n2006 --[concept:atdate_reverse]--> ?)",
+  "query_readable_with_names": ""
+}

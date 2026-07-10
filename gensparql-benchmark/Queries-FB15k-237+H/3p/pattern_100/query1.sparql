@@ -1,0 +1,23 @@
+# 3p Query (pattern_100): Melvins --[←genre.artists]--> ? --[→genre.parent genre]--> ? --[→genre.parent genre]--> ?
+# Machine IDs: anchor=/m/01516r
+# Pattern: 100 (0=KG match, 1=GENOP inference)
+# Expected Answers (16):
+#   1. Alternative metal (/m/01_bkd)
+#   2. Electronic dance music (/m/08cyft)
+#   3. Progressive rock (/m/0dl5d)
+#   4. Space rock (/m/0190_q)
+#   5. Psychedelic rock (/m/05w3f)
+#   6. Free jazz (/m/0p9xd)
+#   7. Psychedelic music (/m/025tm81)
+#   8. Folk rock (/m/016jny)
+#   9. Alternative rock (/m/016clz)
+#   10. Jazz fusion (/m/01fh36)
+#   ... and 6 more
+
+SELECT ?answer ?e1 ?e2 WHERE {
+  GENOP("List movies released on /m/01516r format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?e1),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?e1 <http://freebase.com/relation/forward_music_genre_parent_genre> ?e2 .
+  ?e2 <http://freebase.com/relation/forward_music_genre_parent_genre> ?answer .
+}

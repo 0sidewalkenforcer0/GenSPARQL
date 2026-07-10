@@ -1,0 +1,28 @@
+# 4p Query (pattern_0111): Official Website --[←webpage.category]--> ? --[←hud county place.place]--> ? --[←hud county place.place]--> ? --[←hud county place.place]--> ?
+# Machine IDs: anchor=/m/08mbj5d
+# Pattern: 0111 (0=KG match, 1=GENOP inference)
+# Expected Answers (35):
+#   1. Sioux Falls (/m/013l6l)
+#   2. Stockton (/m/0pc56)
+#   3. Cincinnati (/m/01snm)
+#   4. Manchester (/m/0xhj2)
+#   5. Natchitoches (/m/0tln7)
+#   6. Kansas City (/m/04f_d)
+#   7. Chandler (/m/0qpjt)
+#   8. Muskegon (/m/0vfs8)
+#   9. Bellingham (/m/09snz)
+#   10. Hampton (/m/0mnsf)
+#   ... and 25 more
+
+SELECT ?answer ?e1 ?e2 ?e3 WHERE {
+  ?e1 <http://freebase.com/relation/forward_common_topic_webpage._common_webpage_category> <http://freebase.com/entity/m_08mbj5d_Official_Website> .
+  GENOP("List movies released on {?e1} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?e2),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on {?e2} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?e3),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on {?e3} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

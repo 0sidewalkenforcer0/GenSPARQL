@@ -1,0 +1,24 @@
+# Query 5: OPTIONAL with GENOP - Query scientists with optional additional information
+# Demonstrates using OPTIONAL to enrich query results with LLM-generated content
+# Required part: Query scientists and their awards from the database
+# Optional part: Generate additional information about the scientist (birthplace, major contributions, etc.)
+# Even if the GENOP fails or returns no result, the basic information is still returned
+
+PREFIX ex: <http://example.org/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?scientist ?awardLabel ?additionalInfo WHERE {
+  # Required part: Get scientists and their awards from database
+  ?person foaf:name ?scientist .
+  ?person ex:receivedAward ?award .
+  ?award rdfs:label ?awardLabel .
+  
+  # Optional part: Generate additional information about the scientist
+  OPTIONAL {
+    GENOP("Provide additional information about {?scientist} who won {?awardLabel}. Include their birthplace and one major contribution. Format as a brief paragraph (2-3 sentences)", 
+          ?additionalInfo, 
+          <model:openrouter:xiaomi/mimo-v2-flash:free>)
+  }
+}
+

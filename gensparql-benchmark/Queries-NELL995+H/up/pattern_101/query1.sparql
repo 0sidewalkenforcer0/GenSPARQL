@@ -1,0 +1,17 @@
+# up Query (pattern_101): ((concept_country_u_s_ --[concept:statelocatedingeopoliticallocation_reverse]--> ?) ∪ (concept_country_usa --[concept:statelocatedincountry_reverse]--> ?)) --[concept:atlocation_reverse]--> ?
+# Pattern: 101 (0=KG match, 1=GENOP inference)
+# Expected Answers (1):
+#   1. concept_city_hendersonville
+
+SELECT ?answer ?mid WHERE {
+  {
+    GENOP("List movies released on concept_country_u_s_ format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+          (?mid),
+          <model:openrouter:deepseek/deepseek-chat>)
+  } UNION {
+    ?mid <http://nell.cs.cmu.edu/relation/concept_statelocatedincountry> <http://nell.cs.cmu.edu/entity/concept_country_usa> .
+  }
+  GENOP("List movies released on {{?mid}} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

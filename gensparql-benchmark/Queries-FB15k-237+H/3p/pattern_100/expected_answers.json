@@ -1,0 +1,41 @@
+{
+  "num_answers": 16,
+  "answers": [
+    "/m/01_bkd",
+    "/m/08cyft",
+    "/m/0dl5d",
+    "/m/0190_q",
+    "/m/05w3f",
+    "/m/0p9xd",
+    "/m/025tm81",
+    "/m/016jny",
+    "/m/016clz",
+    "/m/01fh36",
+    "/m/018ysx",
+    "/m/0133_p",
+    "/m/011j5x",
+    "/m/03_d0",
+    "/m/0283d",
+    "/m/0m0fw"
+  ],
+  "answers_readable": [
+    "Alternative metal",
+    "Electronic dance music",
+    "Progressive rock",
+    "Space rock",
+    "Psychedelic rock",
+    "Free jazz",
+    "Psychedelic music",
+    "Folk rock",
+    "Alternative rock",
+    "Jazz fusion",
+    "Psychobilly",
+    "Garage rock",
+    "Post-punk",
+    "Jazz",
+    "Drum and bass",
+    "Noise music"
+  ],
+  "query_readable": "/m/01516r --[-/music/genre/artists]--> ? --[+/music/genre/parent_genre]--> ? --[+/music/genre/parent_genre]--> ?",
+  "query_readable_with_names": "Melvins --[←genre.artists]--> ? --[→genre.parent genre]--> ? --[→genre.parent genre]--> ?"
+}

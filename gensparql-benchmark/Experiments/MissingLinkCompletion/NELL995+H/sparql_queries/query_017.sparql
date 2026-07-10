@@ -1,0 +1,7 @@
+# Standard SPARQL Query (1-hop Link Prediction)
+# Expected Answer: concept_writer_lilian_jackson_braun
+# This query should return EMPTY (link is missing from train KG)
+
+SELECT ?target WHERE {
+  <http://nell.cs.cmu.edu/entity/concept_book_the_cat_who_played_brahms> <http://nell.cs.cmu.edu/relation/concept_bookwriter> ?target .
+}

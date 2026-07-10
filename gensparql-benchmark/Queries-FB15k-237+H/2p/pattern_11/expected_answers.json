@@ -1,0 +1,11 @@
+{
+  "num_answers": 1,
+  "answers": [
+    "/m/0ckrgs"
+  ],
+  "answers_readable": [
+    "Sailor Moon S the Movie"
+  ],
+  "query_readable": "/m/03g90h --[+/film/film/distributors./film/film_film_distributor_relationship/film_distribution_medium]--> ? --[-/film/film/release_date_s./film/film_regional_release_date/film_release_distribution_medium]--> ?",
+  "query_readable_with_names": "Babylon 5: The Gathering --[→film film distributor relationship.film distribution medium]--> ? --[←film regional release date.film release distribution medium]--> ?"
+}

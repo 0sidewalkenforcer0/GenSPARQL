@@ -1,0 +1,17 @@
+# 4p Query (pattern_1010): concept_emotion_honor --[concept:mutualproxyfor]--> ? --[concept:proxyfor_reverse]--> ? --[concept:subpartof_reverse]--> ? --[concept:proxyfor_reverse]--> ?
+# Machine IDs: anchor=concept_emotion_honor
+# Pattern: 1010 (0=KG match, 1=GENOP inference)
+# Expected Answers (2):
+#   1. concept_stateorprovince_palakkad
+#   2. concept_beach_vegas_nevada
+
+SELECT ?answer ?e1 ?e2 ?e3 WHERE {
+  GENOP("List movies or entities where concept_emotion_honor is their mutualproxyfor. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?e1),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?e2 <http://nell.cs.cmu.edu/relation/concept_proxyfor> ?e1 .
+  GENOP("List movies released on {?e2} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?e3),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?answer <http://nell.cs.cmu.edu/relation/concept_proxyfor> ?e3 .
+}

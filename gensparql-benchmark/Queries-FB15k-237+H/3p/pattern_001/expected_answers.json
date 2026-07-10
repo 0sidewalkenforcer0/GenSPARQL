@@ -1,0 +1,11 @@
+{
+  "num_answers": 1,
+  "answers": [
+    "/m/02r6mf"
+  ],
+  "answers_readable": [
+    "Minimal music"
+  ],
+  "query_readable": "/m/01516r --[-/music/genre/artists]--> ? --[+/music/genre/parent_genre]--> ? --[+/music/genre/parent_genre]--> ?",
+  "query_readable_with_names": "Melvins --[←genre.artists]--> ? --[→genre.parent genre]--> ? --[→genre.parent genre]--> ?"
+}

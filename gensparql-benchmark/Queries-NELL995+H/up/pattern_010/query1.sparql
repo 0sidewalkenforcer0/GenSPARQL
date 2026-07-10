@@ -1,0 +1,25 @@
+# up Query (pattern_010): ((concept_profession_artists --[concept:professionistypeofprofession_reverse]--> ?) ∪ (concept_profession_support --[concept:professionistypeofprofession]--> ?)) --[concept:professionistypeofprofession]--> ?
+# Pattern: 010 (0=KG match, 1=GENOP inference)
+# Expected Answers (185):
+#   1. concept_jobposition_family_doctor
+#   2. concept_profession_workers
+#   3. concept_profession_private_investigators
+#   4. concept_profession_photographers
+#   5. concept_profession_design_team
+#   6. concept_profession_lactation_consultants
+#   7. concept_jobposition_customer_service_representatives
+#   8. concept_profession_anesthetists
+#   9. concept_profession_diabetes_educators
+#   10. concept_profession_support_staff
+#   ... and 175 more
+
+SELECT ?answer ?mid WHERE {
+  {
+    ?mid <http://nell.cs.cmu.edu/relation/concept_professionistypeofprofession> <http://nell.cs.cmu.edu/entity/concept_profession_artists> .
+  } UNION {
+    GENOP("List movies or entities where concept_profession_support is their professionistypeofprofession. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+          (?mid),
+          <model:openrouter:deepseek/deepseek-chat>)
+  }
+  ?mid <http://nell.cs.cmu.edu/relation/concept_professionistypeofprofession> ?answer .
+}

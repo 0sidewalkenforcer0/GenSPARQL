@@ -1,0 +1,11 @@
+{
+  "num_answers": 1,
+  "answers": [
+    "/m/02ht1k"
+  ],
+  "answers_readable": [
+    "A Mighty Wind"
+  ],
+  "query_readable": "/m/01trhmt --[+/people/person/profession]--> ? --[-/people/profession/specialization_of]--> ? --[-/people/person/profession]--> ? --[-/film/film/music]--> ?",
+  "query_readable_with_names": "Usher --[→person.profession]--> ? --[←profession.specialization of]--> ? --[←person.profession]--> ? --[←film.music]--> ?"
+}

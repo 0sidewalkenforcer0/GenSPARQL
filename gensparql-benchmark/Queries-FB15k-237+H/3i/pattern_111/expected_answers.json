@@ -1,0 +1,11 @@
+{
+  "num_answers": 1,
+  "answers": [
+    "/m/0gry51"
+  ],
+  "answers_readable": [
+    "Jules White"
+  ],
+  "query_readable": "(/m/0l1pj --[-/people/deceased_person/place_of_death]--> ?) ∩ (/m/09c7w0 --[-/people/person/nationality]--> ?) ∩ (/m/0gr07 --[-/award/award_nominee/award_nominations./award/award_nomination/award]--> ?)",
+  "query_readable_with_names": "(Van Nuys --[←deceased person.place of death]--> ?) ∩ (United States of America --[←person.nationality]--> ?) ∩ (Academy Award for Best Short Film (Live Action) --[←award nomination.award]--> ?)"
+}

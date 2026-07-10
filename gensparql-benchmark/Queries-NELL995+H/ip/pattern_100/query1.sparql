@@ -1,0 +1,13 @@
+# ip Query (pattern_100): ((concept_country_u_s_ --[concept:statelocatedingeopoliticallocation_reverse]--> ?) ∩ (concept_country_usa --[concept:statelocatedincountry_reverse]--> ?)) --[concept:atlocation_reverse]--> ?
+# Pattern: 100 (0=KG match, 1=GENOP inference)
+# Expected Answers (2):
+#   1. concept_city_lovington
+#   2. concept_city_espanola
+
+SELECT ?answer ?mid WHERE {
+  GENOP("List movies released on concept_country_u_s_ format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?mid),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?mid <http://nell.cs.cmu.edu/relation/concept_statelocatedincountry> <http://nell.cs.cmu.edu/entity/concept_country_usa> .
+  ?answer <http://nell.cs.cmu.edu/relation/concept_atlocation> ?mid .
+}

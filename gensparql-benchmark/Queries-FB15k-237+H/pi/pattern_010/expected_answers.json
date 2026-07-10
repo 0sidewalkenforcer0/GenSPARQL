@@ -1,0 +1,11 @@
+{
+  "num_answers": 1,
+  "answers": [
+    "/m/0mb5x"
+  ],
+  "answers_readable": [
+    "Harold Pinter"
+  ],
+  "query_readable": "(/m/05qtj --[-/people/deceased_person/place_of_death]--> ? --[-/influence/influence_node/influenced_by]--> ?) ∩ (/m/058vp --[-/influence/influence_node/influenced_by]--> ?)",
+  "query_readable_with_names": "(Paris --[←deceased person.place of death]--> ? --[←influence node.influenced by]--> ?) ∩ (Marcel Proust --[←influence node.influenced by]--> ?)"
+}

@@ -1,0 +1,37 @@
+# Query 8: GENOP before BGP (input variables from subsequent BGP)
+# Demonstrates how GENOP can use input variables that are bound by BGP patterns appearing after it
+# 
+# This query demonstrates the order independence of SPARQL patterns by:
+# 1. GENOP: Appears first, uses ?scientist as input variable (not yet bound)
+# 2. BGP: Appears after GENOP, binds ?scientist from the database
+#    - Note: In SPARQL, pattern order doesn't affect semantics (natural join is commutative)
+#    - The query engine should handle this by joining all patterns together
+#
+# Key: Even though GENOP appears before the BGP that binds ?scientist,
+# the query engine should still be able to use ?scientist from the BGP as input to GENOP.
+# This demonstrates that SPARQL pattern order is semantically irrelevant for natural joins.
+#
+# Execution flow:
+# 1. BGP executes first (or in parallel), binding ?scientist
+# 2. GENOP receives bindings from BGP and uses ?scientist in the prompt
+# 3. GENOP generates ?description for each scientist
+# 4. Results combine BGP bindings with GENOP outputs
+
+PREFIX ex: <http://example.org/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?scientist ?awardLabel ?description WHERE {
+  # GENOP: Uses ?scientist as input (appears BEFORE the BGP that binds it)
+  # This demonstrates that pattern order doesn't matter for natural joins
+  GENOP("Write a brief one-sentence description about the achievements of {?scientist}.",
+        ?description,
+        <model:openrouter:xiaomi/mimo-v2-flash:free>)
+  
+  # BGP: Binds ?scientist and ?awardLabel (appears AFTER GENOP)
+  # The query engine should still provide ?scientist to GENOP above
+  ?person foaf:name ?scientist .
+  ?person ex:receivedAward ?award .
+  ?award rdfs:label ?awardLabel .
+}
+

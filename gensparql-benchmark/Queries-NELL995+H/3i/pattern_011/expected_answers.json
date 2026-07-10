@@ -1,0 +1,10 @@
+{
+  "num_answers": 2,
+  "answers": [
+    "concept_clothing_clothes",
+    "concept_clothing_socks"
+  ],
+  "answers_readable": [],
+  "query_readable": "(concept_clothing_shoes --[concept:clothingtogowithclothing]--> ?) ∩ (concept_visualizableobject_shirt --[concept:clothingtogowithclothing]--> ?) ∩ (concept_clothing_shirts --[concept:clothingtogowithclothing]--> ?)",
+  "query_readable_with_names": ""
+}

@@ -1,0 +1,10 @@
+{
+  "num_answers": 2,
+  "answers": [
+    "concept_athlete_john_ward",
+    "concept_athlete_ray_lewis"
+  ],
+  "answers_readable": [],
+  "query_readable": "((concept_sportsteam_broncos --[concept:teamplaysagainstteam]--> ?) ∩ (concept_sportsgame_games --[concept:sportsgameteam]--> ?)) --[concept:athleteledsportsteam_reverse]--> ?",
+  "query_readable_with_names": ""
+}

@@ -1,0 +1,42 @@
+# Query 5.1: OPTIONAL with selective GENOP - Some results have additional info, some don't
+# Demonstrates OPTIONAL where only certain records get enriched with LLM-generated content
+# 
+# This query demonstrates the OPTIONAL construct with GENOP:
+# - Required part: Query all scientists and their awards from the database
+# - Optional part: Generate additional information using GENOP
+# 
+# Key behavior of OPTIONAL:
+# - If GENOP succeeds, ?additionalInfo will have a value
+# - If GENOP fails, returns empty, or encounters an error, ?additionalInfo will be NULL
+# - The basic information (?scientist, ?awardLabel) is ALWAYS returned regardless of OPTIONAL success
+#
+# In practice, LLM calls might fail or return empty for some records due to:
+# - Rate limits or API errors
+# - Network issues  
+# - Model errors or timeouts
+# - Invalid responses that can't be parsed
+# - Specific conditions in the prompt (e.g., "return NONE if...")
+#
+# This example shows that even if some OPTIONAL GENOP calls fail, the query still returns
+# all the required data, with NULL for the optional fields that couldn't be generated.
+
+PREFIX ex: <http://example.org/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?scientist ?awardLabel ?additionalInfo WHERE {
+  # Required part: Get all scientists and their awards from database
+  ?person foaf:name ?scientist .
+  ?person ex:receivedAward ?award .
+  ?award rdfs:label ?awardLabel .
+  
+  # Optional part: Generate additional information about the scientist
+  # This may succeed for some records and fail/return empty for others
+  # If it fails, ?additionalInfo will be NULL, but the record is still returned
+  OPTIONAL {
+    GENOP("Provide additional information about {?scientist} who won {?awardLabel}. Include their birthplace and one major contribution. Format as a brief paragraph (2-3 sentences).", 
+          ?additionalInfo, 
+          <model:openrouter:xiaomi/mimo-v2-flash:free>)
+  }
+}
+

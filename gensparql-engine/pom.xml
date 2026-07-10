@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.gensparql</groupId>
+        <artifactId>gensparql-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>gensparql-engine</artifactId>
+    <name>GenSPARQL Engine</name>
+    <description>Query execution engine for GenSPARQL</description>
+
+    <dependencies>
+        <!-- Internal -->
+        <dependency>
+            <groupId>org.gensparql</groupId>
+            <artifactId>gensparql-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gensparql</groupId>
+            <artifactId>gensparql-llm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gensparql</groupId>
+            <artifactId>gensparql-parser</artifactId>
+        </dependency>
+
+        <!-- Apache Jena -->
+        <dependency>
+            <groupId>org.apache.jena</groupId>
+            <artifactId>jena-arq</artifactId>
+        </dependency>
+
+        <!-- Logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

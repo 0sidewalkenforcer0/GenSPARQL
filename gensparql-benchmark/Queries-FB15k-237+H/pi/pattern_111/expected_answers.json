@@ -1,0 +1,13 @@
+{
+  "num_answers": 2,
+  "answers": [
+    "/m/0713r",
+    "/m/04mvk7"
+  ],
+  "answers_readable": [
+    "San Francisco Giants",
+    "Chiapas F.C."
+  ],
+  "query_readable": "(/m/06fvc --[+/dataworld/gardening_hint/split_to]--> ? --[-/sports/sports_team/colors]--> ?) ∩ (/m/019sc --[-/sports/sports_team/colors]--> ?)",
+  "query_readable_with_names": "(Red --[→gardening hint.split to]--> ? --[←sports team.colors]--> ?) ∩ (Black --[←sports team.colors]--> ?)"
+}

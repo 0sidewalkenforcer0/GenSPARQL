@@ -1,0 +1,13 @@
+{
+  "num_answers": 2,
+  "answers": [
+    "/m/0ym1n",
+    "/m/01hx2t"
+  ],
+  "answers_readable": [
+    "Lincoln College, Oxford",
+    "Oregon State University"
+  ],
+  "query_readable": "/m/058s44 --[+/award/award_nominee/award_nominations./award/award_nomination/nominated_for]--> ? --[+/film/film/other_crew./film/film_crew_gig/film_crew_role]--> ? --[-/people/person/profession]--> ? --[-/education/educational_institution/students_graduates./education/education/student]--> ?",
+  "query_readable_with_names": "Chris Evans --[→award nomination.nominated for]--> ? --[→film crew gig.film crew role]--> ? --[←person.profession]--> ? --[←education.student]--> ?"
+}

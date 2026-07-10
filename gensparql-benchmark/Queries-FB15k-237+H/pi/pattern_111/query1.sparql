@@ -1,0 +1,17 @@
+# pi Query (pattern_111): (Red --[→gardening hint.split to]--> ? --[←sports team.colors]--> ?) ∩ (Black --[←sports team.colors]--> ?)
+# Pattern: 111 (0=KG match, 1=GENOP inference)
+# Expected Answers (2):
+#   1. San Francisco Giants (/m/0713r)
+#   2. Chiapas F.C. (/m/04mvk7)
+
+SELECT ?answer ?mid WHERE {
+  GENOP("List movies or entities where /m/06fvc is their dataworld gardening hint split to. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?mid),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on {{?mid}} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on /m/019sc format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

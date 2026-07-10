@@ -1,0 +1,513 @@
+@prefix ex: <http://example.org/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# ===========================
+# INSTITUTIONS
+# ===========================
+
+ex:eth_zurich rdf:type ex:Institution ;
+    rdfs:label "ETH Zurich" ;
+    ex:location "Zurich, Switzerland" ;
+    ex:founded 1855 .
+
+ex:princeton rdf:type ex:Institution ;
+    rdfs:label "Princeton University" ;
+    ex:location "Princeton, USA" ;
+    ex:founded 1746 .
+
+ex:university_of_paris rdf:type ex:Institution ;
+    rdfs:label "University of Paris" ;
+    ex:location "Paris, France" ;
+    ex:founded 1150 .
+
+ex:cambridge rdf:type ex:Institution ;
+    rdfs:label "University of Cambridge" ;
+    ex:location "Cambridge, UK" ;
+    ex:founded 1209 .
+
+ex:manchester rdf:type ex:Institution ;
+    rdfs:label "University of Manchester" ;
+    ex:location "Manchester, UK" ;
+    ex:founded 1824 .
+
+ex:caltech rdf:type ex:Institution ;
+    rdfs:label "California Institute of Technology" ;
+    ex:location "Pasadena, USA" ;
+    ex:founded 1891 .
+
+ex:stanford rdf:type ex:Institution ;
+    rdfs:label "Stanford University" ;
+    ex:location "Stanford, USA" ;
+    ex:founded 1885 .
+
+ex:mit rdf:type ex:Institution ;
+    rdfs:label "MIT" ;
+    ex:location "Cambridge, USA" ;
+    ex:founded 1861 .
+
+ex:copenhagen rdf:type ex:Institution ;
+    rdfs:label "University of Copenhagen" ;
+    ex:location "Copenhagen, Denmark" ;
+    ex:founded 1479 .
+
+ex:berlin rdf:type ex:Institution ;
+    rdfs:label "Humboldt University of Berlin" ;
+    ex:location "Berlin, Germany" ;
+    ex:founded 1810 .
+
+ex:oxford rdf:type ex:Institution ;
+    rdfs:label "University of Oxford" ;
+    ex:location "Oxford, UK" ;
+    ex:founded 1096 .
+
+ex:kings_college rdf:type ex:Institution ;
+    rdfs:label "King's College London" ;
+    ex:location "London, UK" ;
+    ex:founded 1829 .
+
+ex:harvard rdf:type ex:Institution ;
+    rdfs:label "Harvard University" ;
+    ex:location "Cambridge, USA" ;
+    ex:founded 1636 .
+
+ex:yale rdf:type ex:Institution ;
+    rdfs:label "Yale University" ;
+    ex:location "New Haven, USA" ;
+    ex:founded 1701 .
+
+ex:ias_princeton rdf:type ex:Institution ;
+    rdfs:label "Institute for Advanced Study" ;
+    ex:location "Princeton, USA" ;
+    ex:founded 1930 .
+
+# ===========================
+# RESEARCH FIELDS
+# ===========================
+
+ex:theoretical_physics rdf:type ex:ResearchField ;
+    rdfs:label "Theoretical Physics" .
+
+ex:experimental_physics rdf:type ex:ResearchField ;
+    rdfs:label "Experimental Physics" .
+
+ex:computer_science rdf:type ex:ResearchField ;
+    rdfs:label "Computer Science" .
+
+ex:mathematics rdf:type ex:ResearchField ;
+    rdfs:label "Mathematics" .
+
+ex:chemistry rdf:type ex:ResearchField ;
+    rdfs:label "Chemistry" .
+
+ex:biology rdf:type ex:ResearchField ;
+    rdfs:label "Biology" .
+
+ex:quantum_mechanics rdf:type ex:ResearchField ;
+    rdfs:label "Quantum Mechanics" .
+
+ex:artificial_intelligence rdf:type ex:ResearchField ;
+    rdfs:label "Artificial Intelligence" .
+
+ex:cryptography rdf:type ex:ResearchField ;
+    rdfs:label "Cryptography" .
+
+ex:radioactivity rdf:type ex:ResearchField ;
+    rdfs:label "Radioactivity" .
+
+# ===========================
+# AWARDS
+# ===========================
+
+ex:nobel_physics_1921 rdf:type ex:Award ;
+    rdfs:label "Nobel Prize in Physics" ;
+    ex:year 1921 ;
+    ex:category "Physics" .
+
+ex:nobel_physics_1903 rdf:type ex:Award ;
+    rdfs:label "Nobel Prize in Physics" ;
+    ex:year 1903 ;
+    ex:category "Physics" .
+
+ex:nobel_chemistry_1911 rdf:type ex:Award ;
+    rdfs:label "Nobel Prize in Chemistry" ;
+    ex:year 1911 ;
+    ex:category "Chemistry" .
+
+ex:copley_medal_1925 rdf:type ex:Award ;
+    rdfs:label "Copley Medal" ;
+    ex:year 1925 ;
+    ex:category "Science" .
+
+ex:max_planck_medal_1929 rdf:type ex:Award ;
+    rdfs:label "Max Planck Medal" ;
+    ex:year 1929 ;
+    ex:category "Physics" .
+
+ex:obe_1945 rdf:type ex:Award ;
+    rdfs:label "Order of the British Empire" ;
+    ex:year 1945 ;
+    ex:category "Honor" .
+
+ex:nobel_physics_1922 rdf:type ex:Award ;
+    rdfs:label "Nobel Prize in Physics" ;
+    ex:year 1922 ;
+    ex:category "Physics" .
+
+ex:nobel_physics_1918 rdf:type ex:Award ;
+    rdfs:label "Nobel Prize in Physics" ;
+    ex:year 1918 ;
+    ex:category "Physics" .
+
+ex:nobel_physics_1965 rdf:type ex:Award ;
+    rdfs:label "Nobel Prize in Physics" ;
+    ex:year 1965 ;
+    ex:category "Physics" .
+
+ex:nobel_chemistry_1954 rdf:type ex:Award ;
+    rdfs:label "Nobel Prize in Chemistry" ;
+    ex:year 1954 ;
+    ex:category "Chemistry" .
+
+ex:nobel_peace_1962 rdf:type ex:Award ;
+    rdfs:label "Nobel Prize in Peace" ;
+    ex:year 1962 ;
+    ex:category "Peace" .
+
+ex:nobel_chemistry_1964 rdf:type ex:Award ;
+    rdfs:label "Nobel Prize in Chemistry" ;
+    ex:year 1964 ;
+    ex:category "Chemistry" .
+
+ex:nobel_chemistry_1999 rdf:type ex:Award ;
+    rdfs:label "Nobel Prize in Chemistry" ;
+    ex:year 1999 ;
+    ex:category "Chemistry" .
+
+ex:turing_award_1974 rdf:type ex:Award ;
+    rdfs:label "Turing Award" ;
+    ex:year 1974 ;
+    ex:category "Computer Science" .
+
+ex:turing_award_2008 rdf:type ex:Award ;
+    rdfs:label "Turing Award" ;
+    ex:year 2008 ;
+    ex:category "Computer Science" .
+
+ex:fields_medal_2014 rdf:type ex:Award ;
+    rdfs:label "Fields Medal" ;
+    ex:year 2014 ;
+    ex:category "Mathematics" .
+
+ex:abel_prize_2003 rdf:type ex:Award ;
+    rdfs:label "Abel Prize" ;
+    ex:year 2003 ;
+    ex:category "Mathematics" .
+
+ex:presidential_medal_2015 rdf:type ex:Award ;
+    rdfs:label "Presidential Medal of Freedom" ;
+    ex:year 2015 ;
+    ex:category "Honor" .
+
+ex:nobel_physics_1933 rdf:type ex:Award ;
+    rdfs:label "Nobel Prize in Physics" ;
+    ex:year 1933 ;
+    ex:category "Physics" .
+
+ex:wolf_prize_1984 rdf:type ex:Award ;
+    rdfs:label "Wolf Prize in Physics" ;
+    ex:year 1984 ;
+    ex:category "Physics" .
+
+# ===========================
+# SCIENTISTS - Physics
+# ===========================
+
+ex:einstein rdf:type foaf:Person ;
+    foaf:name "Albert Einstein" ;
+    ex:alternativeName "A. Einstein" ;
+    ex:alternativeName "Einstein" ;
+    ex:birthYear 1879 ;
+    ex:deathYear 1955 ;
+    ex:affiliation ex:eth_zurich ;
+    ex:affiliation ex:princeton ;
+    ex:researchField ex:theoretical_physics ;
+    ex:receivedAward ex:nobel_physics_1921 ;
+    ex:receivedAward ex:copley_medal_1925 ;
+    ex:receivedAward ex:max_planck_medal_1929 ;
+    ex:collaboratesWith ex:planck ;
+    ex:collaboratesWith ex:bohr .
+
+ex:curie rdf:type foaf:Person ;
+    foaf:name "Marie Curie" ;
+    ex:alternativeName "M. Curie" ;
+    ex:alternativeName "Marie Sklodowska-Curie" ;
+    ex:birthYear 1867 ;
+    ex:deathYear 1934 ;
+    ex:affiliation ex:university_of_paris ;
+    ex:researchField ex:experimental_physics ;
+    ex:researchField ex:chemistry ;
+    ex:researchField ex:radioactivity ;
+    ex:receivedAward ex:nobel_physics_1903 ;
+    ex:receivedAward ex:nobel_chemistry_1911 .
+
+ex:bohr rdf:type foaf:Person ;
+    foaf:name "Niels Bohr" ;
+    ex:alternativeName "N. Bohr" ;
+    ex:birthYear 1885 ;
+    ex:deathYear 1962 ;
+    ex:affiliation ex:copenhagen ;
+    ex:researchField ex:quantum_mechanics ;
+    ex:researchField ex:theoretical_physics ;
+    ex:receivedAward ex:nobel_physics_1922 ;
+    ex:collaboratesWith ex:einstein .
+
+ex:planck rdf:type foaf:Person ;
+    foaf:name "Max Planck" ;
+    ex:alternativeName "M. Planck" ;
+    ex:birthYear 1858 ;
+    ex:deathYear 1947 ;
+    ex:affiliation ex:berlin ;
+    ex:researchField ex:theoretical_physics ;
+    ex:researchField ex:quantum_mechanics ;
+    ex:receivedAward ex:nobel_physics_1918 ;
+    ex:collaboratesWith ex:einstein .
+
+ex:feynman rdf:type foaf:Person ;
+    foaf:name "Richard Feynman" ;
+    ex:alternativeName "R. Feynman" ;
+    ex:alternativeName "R. P. Feynman" ;
+    ex:birthYear 1918 ;
+    ex:deathYear 1988 ;
+    ex:affiliation ex:caltech ;
+    ex:researchField ex:theoretical_physics ;
+    ex:researchField ex:quantum_mechanics ;
+    ex:receivedAward ex:nobel_physics_1965 .
+
+ex:hawking rdf:type foaf:Person ;
+    foaf:name "Stephen Hawking" ;
+    ex:alternativeName "S. Hawking" ;
+    ex:birthYear 1942 ;
+    ex:deathYear 2018 ;
+    ex:affiliation ex:cambridge ;
+    ex:researchField ex:theoretical_physics ;
+    ex:collaboratesWith ex:penrose .
+
+ex:noether rdf:type foaf:Person ;
+    foaf:name "Emmy Noether" ;
+    ex:alternativeName "E. Noether" ;
+    ex:birthYear 1882 ;
+    ex:deathYear 1935 ;
+    ex:affiliation ex:berlin ;
+    ex:researchField ex:mathematics ;
+    ex:researchField ex:theoretical_physics ;
+    ex:collaboratesWith ex:einstein .
+
+ex:penrose rdf:type foaf:Person ;
+    foaf:name "Roger Penrose" ;
+    ex:alternativeName "R. Penrose" ;
+    ex:birthYear 1931 ;
+    ex:affiliation ex:oxford ;
+    ex:researchField ex:theoretical_physics ;
+    ex:researchField ex:mathematics ;
+    ex:receivedAward ex:wolf_prize_1984 ;
+    ex:collaboratesWith ex:hawking .
+
+# ===========================
+# SCIENTISTS - Chemistry
+# ===========================
+
+ex:pauling rdf:type foaf:Person ;
+    foaf:name "Linus Pauling" ;
+    ex:alternativeName "L. Pauling" ;
+    ex:birthYear 1901 ;
+    ex:deathYear 1994 ;
+    ex:affiliation ex:caltech ;
+    ex:researchField ex:chemistry ;
+    ex:researchField ex:biology ;
+    ex:receivedAward ex:nobel_chemistry_1954 ;
+    ex:receivedAward ex:nobel_peace_1962 .
+
+ex:hodgkin rdf:type foaf:Person ;
+    foaf:name "Dorothy Hodgkin" ;
+    ex:alternativeName "D. Hodgkin" ;
+    ex:alternativeName "D. C. Hodgkin" ;
+    ex:birthYear 1910 ;
+    ex:deathYear 1994 ;
+    ex:affiliation ex:oxford ;
+    ex:researchField ex:chemistry ;
+    ex:receivedAward ex:nobel_chemistry_1964 .
+
+ex:zewail rdf:type foaf:Person ;
+    foaf:name "Ahmed Zewail" ;
+    ex:alternativeName "A. Zewail" ;
+    ex:birthYear 1946 ;
+    ex:deathYear 2016 ;
+    ex:affiliation ex:caltech ;
+    ex:researchField ex:chemistry ;
+    ex:receivedAward ex:nobel_chemistry_1999 .
+
+# ===========================
+# SCIENTISTS - Computer Science
+# ===========================
+
+ex:turing rdf:type foaf:Person ;
+    foaf:name "Alan Turing" ;
+    ex:alternativeName "A. M. Turing" ;
+    ex:alternativeName "Turing" ;
+    ex:birthYear 1912 ;
+    ex:deathYear 1954 ;
+    ex:affiliation ex:cambridge ;
+    ex:affiliation ex:manchester ;
+    ex:researchField ex:computer_science ;
+    ex:researchField ex:mathematics ;
+    ex:researchField ex:cryptography ;
+    ex:receivedAward ex:obe_1945 .
+
+ex:knuth rdf:type foaf:Person ;
+    foaf:name "Donald Knuth" ;
+    ex:alternativeName "D. Knuth" ;
+    ex:alternativeName "D. E. Knuth" ;
+    ex:birthYear 1938 ;
+    ex:affiliation ex:stanford ;
+    ex:researchField ex:computer_science ;
+    ex:researchField ex:mathematics ;
+    ex:receivedAward ex:turing_award_1974 .
+
+ex:liskov rdf:type foaf:Person ;
+    foaf:name "Barbara Liskov" ;
+    ex:alternativeName "B. Liskov" ;
+    ex:birthYear 1939 ;
+    ex:affiliation ex:mit ;
+    ex:researchField ex:computer_science ;
+    ex:receivedAward ex:turing_award_2008 .
+
+ex:berners_lee rdf:type foaf:Person ;
+    foaf:name "Tim Berners-Lee" ;
+    ex:alternativeName "T. Berners-Lee" ;
+    ex:alternativeName "TimBL" ;
+    ex:birthYear 1955 ;
+    ex:affiliation ex:mit ;
+    ex:affiliation ex:oxford ;
+    ex:researchField ex:computer_science .
+
+ex:hopper rdf:type foaf:Person ;
+    foaf:name "Grace Hopper" ;
+    ex:alternativeName "G. Hopper" ;
+    ex:alternativeName "G. M. Hopper" ;
+    ex:birthYear 1906 ;
+    ex:deathYear 1992 ;
+    ex:affiliation ex:harvard ;
+    ex:affiliation ex:yale ;
+    ex:researchField ex:computer_science ;
+    ex:researchField ex:mathematics ;
+    ex:receivedAward ex:presidential_medal_2015 .
+
+ex:shannon rdf:type foaf:Person ;
+    foaf:name "Claude Shannon" ;
+    ex:alternativeName "C. Shannon" ;
+    ex:alternativeName "C. E. Shannon" ;
+    ex:birthYear 1916 ;
+    ex:deathYear 2001 ;
+    ex:affiliation ex:mit ;
+    ex:researchField ex:computer_science ;
+    ex:researchField ex:mathematics ;
+    ex:collaboratesWith ex:turing .
+
+# ===========================
+# SCIENTISTS - Mathematics
+# ===========================
+
+ex:lovelace rdf:type foaf:Person ;
+    foaf:name "Ada Lovelace" ;
+    ex:alternativeName "A. Lovelace" ;
+    ex:alternativeName "Augusta Ada King" ;
+    ex:birthYear 1815 ;
+    ex:deathYear 1852 ;
+    ex:researchField ex:mathematics ;
+    ex:researchField ex:computer_science .
+
+ex:von_neumann rdf:type foaf:Person ;
+    foaf:name "John von Neumann" ;
+    ex:alternativeName "J. von Neumann" ;
+    ex:birthYear 1903 ;
+    ex:deathYear 1957 ;
+    ex:affiliation ex:ias_princeton ;
+    ex:researchField ex:mathematics ;
+    ex:researchField ex:computer_science ;
+    ex:researchField ex:theoretical_physics ;
+    ex:collaboratesWith ex:einstein .
+
+ex:mirzakhani rdf:type foaf:Person ;
+    foaf:name "Maryam Mirzakhani" ;
+    ex:alternativeName "M. Mirzakhani" ;
+    ex:birthYear 1977 ;
+    ex:deathYear 2017 ;
+    ex:affiliation ex:stanford ;
+    ex:researchField ex:mathematics ;
+    ex:receivedAward ex:fields_medal_2014 .
+
+# ===========================
+# SCIENTISTS - Biology
+# ===========================
+
+ex:franklin rdf:type foaf:Person ;
+    foaf:name "Rosalind Franklin" ;
+    ex:alternativeName "R. Franklin" ;
+    ex:alternativeName "R. E. Franklin" ;
+    ex:birthYear 1920 ;
+    ex:deathYear 1958 ;
+    ex:affiliation ex:kings_college ;
+    ex:researchField ex:biology ;
+    ex:researchField ex:chemistry ;
+    ex:collaboratesWith ex:crick .
+
+ex:crick rdf:type foaf:Person ;
+    foaf:name "Francis Crick" ;
+    ex:alternativeName "F. Crick" ;
+    ex:alternativeName "F. H. C. Crick" ;
+    ex:birthYear 1916 ;
+    ex:deathYear 2004 ;
+    ex:affiliation ex:cambridge ;
+    ex:researchField ex:biology ;
+    ex:collaboratesWith ex:franklin .
+
+ex:goodall rdf:type foaf:Person ;
+    foaf:name "Jane Goodall" ;
+    ex:alternativeName "J. Goodall" ;
+    ex:birthYear 1934 ;
+    ex:affiliation ex:cambridge ;
+    ex:researchField ex:biology .
+
+# ===========================
+# SCIENTISTS - Interdisciplinary
+# ===========================
+
+ex:sagan rdf:type foaf:Person ;
+    foaf:name "Carl Sagan" ;
+    ex:alternativeName "C. Sagan" ;
+    ex:birthYear 1934 ;
+    ex:deathYear 1996 ;
+    ex:affiliation ex:harvard ;
+    ex:researchField ex:theoretical_physics ;
+    ex:researchField ex:biology .
+
+ex:carson rdf:type foaf:Person ;
+    foaf:name "Rachel Carson" ;
+    ex:alternativeName "R. Carson" ;
+    ex:birthYear 1907 ;
+    ex:deathYear 1964 ;
+    ex:researchField ex:biology ;
+    ex:researchField ex:chemistry .
+
+ex:johnson rdf:type foaf:Person ;
+    foaf:name "Katherine Johnson" ;
+    ex:alternativeName "K. Johnson" ;
+    ex:alternativeName "K. G. Johnson" ;
+    ex:birthYear 1918 ;
+    ex:deathYear 2020 ;
+    ex:researchField ex:mathematics ;
+    ex:researchField ex:computer_science ;
+    ex:receivedAward ex:presidential_medal_2015 .

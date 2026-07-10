@@ -1,0 +1,17 @@
+# 4p Query (pattern_0001): concept_sportsgame_championship --[concept:sportsgameteam]--> ? --[concept:sportsgamewinner_reverse]--> ? --[concept:sportsgameteam]--> ? --[concept:teamplaysagainstteam]--> ?
+# Machine IDs: anchor=concept_sportsgame_championship
+# Pattern: 0001 (0=KG match, 1=GENOP inference)
+# Expected Answers (4):
+#   1. concept_sportsteam_los_angeles_rams
+#   2. concept_sportsteam_atlanta_thrashers
+#   3. concept_sportsteam_colorado_avalanche
+#   4. concept_sportsteam_nashville_predators
+
+SELECT ?answer ?e1 ?e2 ?e3 WHERE {
+  <http://nell.cs.cmu.edu/entity/concept_sportsgame_championship> <http://nell.cs.cmu.edu/relation/concept_sportsgameteam> ?e1 .
+  ?e2 <http://nell.cs.cmu.edu/relation/concept_sportsgamewinner> ?e1 .
+  ?e2 <http://nell.cs.cmu.edu/relation/concept_sportsgameteam> ?e3 .
+  GENOP("List movies or entities where {?e3} is their teamplaysagainstteam. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

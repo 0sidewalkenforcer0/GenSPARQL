@@ -1,0 +1,16 @@
+# pi Query (pattern_011): (Air travel --[←transportation.mode of transportation]--> ? --[←film.featured film locations]--> ?) ∩ (United States Dollar --[←dated money value.currency]--> ?)
+# Pattern: 011 (0=KG match, 1=GENOP inference)
+# Expected Answers (3):
+#   1. Mulholland Drive (/m/0571m)
+#   2. Raging Bull (/m/06cm5)
+#   3. Thor (/m/062zjtt)
+
+SELECT ?answer ?mid WHERE {
+  ?mid <http://freebase.com/relation/forward_travel_travel_destination_how_to_get_here._travel_transportation_mode_of_transportation> <http://freebase.com/entity/m_025t3bg_Air_travel> .
+  GENOP("List movies released on {{?mid}} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on /m/09nqf format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

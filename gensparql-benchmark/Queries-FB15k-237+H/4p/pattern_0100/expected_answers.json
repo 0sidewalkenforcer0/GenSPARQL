@@ -1,0 +1,29 @@
+{
+  "num_answers": 10,
+  "answers": [
+    "/m/07q0g5",
+    "/m/03q3sy",
+    "/m/06mnbn",
+    "/m/02ts3h",
+    "/m/0c6g1l",
+    "/m/04x1_w",
+    "/m/01w02sy",
+    "/m/07ss8_",
+    "/m/016pns",
+    "/m/03sww"
+  ],
+  "answers_readable": [
+    "Jennifer Carpenter",
+    "Michael Cera",
+    "Lena Headey",
+    "Vivica A. Fox",
+    "Chris Pine",
+    "Olivia Wilde",
+    "Courtney Love",
+    "Chris Brown",
+    "Nelly",
+    "Ice-T"
+  ],
+  "query_readable": "/m/041rx --[+/people/ethnicity/people]--> ? --[+/film/director/film]--> ? --[+/award/award_winning_work/awards_won./award/award_honor/award]--> ? --[-/award/award_nominee/award_nominations./award/award_nomination/award]--> ?",
+  "query_readable_with_names": "Jewish people --[→ethnicity.people]--> ? --[→director.film]--> ? --[→award honor.award]--> ? --[←award nomination.award]--> ?"
+}

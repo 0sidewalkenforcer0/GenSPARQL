@@ -1,0 +1,8 @@
+# Pure LLM Query (Zero-shot)
+# Expected Answer: concept_clothing_t_shirt
+# No grounding - LLM generates freely
+
+PROMPT: What clothing items go well with jeans (clothing)?
+
+Return your answer as a JSON array: ["answer1", "answer2", ...]
+If you don't know, return [].

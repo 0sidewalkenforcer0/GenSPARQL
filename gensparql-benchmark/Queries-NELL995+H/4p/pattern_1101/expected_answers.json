@@ -1,0 +1,9 @@
+{
+  "num_answers": 1,
+  "answers": [
+    "concept_geopoliticallocation_national"
+  ],
+  "answers_readable": [],
+  "query_readable": "concept_book_new --[concept:proxyfor_reverse]--> ? --[concept:subpartof_reverse]--> ? --[concept:proxyfor_reverse]--> ? --[concept:agentactsinlocation]--> ?",
+  "query_readable_with_names": ""
+}

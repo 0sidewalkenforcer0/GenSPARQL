@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.gensparql</groupId>
+        <artifactId>gensparql-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>gensparql-integration-tests</artifactId>
+    <name>GenSPARQL Integration Tests</name>
+    <description>Integration tests for GenSPARQL</description>
+
+    <dependencies>
+        <!-- All GenSPARQL modules -->
+        <dependency>
+            <groupId>org.gensparql</groupId>
+            <artifactId>gensparql-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gensparql</groupId>
+            <artifactId>gensparql-llm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gensparql</groupId>
+            <artifactId>gensparql-parser</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gensparql</groupId>
+            <artifactId>gensparql-engine</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gensparql</groupId>
+            <artifactId>gensparql-functions</artifactId>
+        </dependency>
+
+        <!-- Apache Jena -->
+        <dependency>
+            <groupId>org.apache.jena</groupId>
+            <artifactId>jena-arq</artifactId>
+        </dependency>
+
+        <!-- Logging -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+        </dependency>
+    </dependencies>
+</project>

@@ -1,0 +1,25 @@
+{
+  "num_answers": 17,
+  "answers": [
+    "concept_academicfield_humanities",
+    "concept_academicfield_life_sciences",
+    "concept_academicfield_plant_pathology",
+    "concept_academicfield_pharmacology",
+    "concept_academicfield_meteorology",
+    "concept_academicfield_physiology",
+    "concept_academicfield_plant_physiology",
+    "concept_academicfield_human_sciences",
+    "concept_academicfield_environmental_sciences",
+    "concept_academicfield_ecology",
+    "concept_academicfield_social_work",
+    "concept_academicfield_health_professions",
+    "concept_academicfield_social",
+    "concept_academicfield_natural_resources",
+    "concept_academicfield_physical_sciences",
+    "concept_academicfield_ethnology",
+    "concept_academicfield_physical"
+  ],
+  "answers_readable": [],
+  "query_readable": "concept_university_seminary --[concept:academicprogramatuniversity_reverse]--> ? --[concept:academicfieldsuchasacademicfield]--> ? --[concept:academicfieldsuchasacademicfield]--> ?",
+  "query_readable_with_names": ""
+}

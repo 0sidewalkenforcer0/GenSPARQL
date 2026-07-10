@@ -1,0 +1,17 @@
+{
+  "num_answers": 4,
+  "answers": [
+    "/m/0vbk",
+    "/m/05fkf",
+    "/m/0d060g",
+    "/m/0488g"
+  ],
+  "answers_readable": [
+    "Arkansas",
+    "North Carolina",
+    "Canada",
+    "Kansas"
+  ],
+  "query_readable": "((/m/05kj_ --[+/location/statistical_region/religions./location/religion_percentage/religion]--> ?) ∪ (/m/04n6k --[-/user/tsegaran/random/taxonomy_subject/entry./user/tsegaran/random/taxonomy_entry/taxonomy]--> ?)) --[-/location/statistical_region/religions./location/religion_percentage/religion]--> ?",
+  "query_readable_with_names": "((Oregon --[→religion percentage.religion]--> ?) ∪ (Library of Congress Classification --[←taxonomy entry.taxonomy]--> ?)) --[←religion percentage.religion]--> ?"
+}

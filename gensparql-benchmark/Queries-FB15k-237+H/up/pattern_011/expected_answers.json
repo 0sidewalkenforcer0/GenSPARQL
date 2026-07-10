@@ -1,0 +1,23 @@
+{
+  "num_answers": 7,
+  "answers": [
+    "/m/0652ty",
+    "/m/036hf4",
+    "/m/01l4g5",
+    "/m/01p85y",
+    "/m/07gkgp",
+    "/m/05slvm",
+    "/m/0fs9jn"
+  ],
+  "answers_readable": [
+    "Saul Rubinek",
+    "Ryan Reynolds",
+    "Loreena McKennitt",
+    "Kim Cattrall",
+    "Michael Dobson",
+    "Kate Nelligan",
+    "Stephen McHattie"
+  ],
+  "query_readable": "((/m/01hp22 --[+/olympics/olympic_sport/athletes./olympics/olympic_athlete_affiliation/country]--> ?) ∪ (/m/0_2v --[-/organization/organization_member/member_of./organization/organization_membership/organization]--> ?)) --[-/people/person/nationality]--> ?",
+  "query_readable_with_names": "((Artistic gymnastics --[→olympic athlete affiliation.country]--> ?) ∪ (Asian Development Bank --[←organization membership.organization]--> ?)) --[←person.nationality]--> ?"
+}

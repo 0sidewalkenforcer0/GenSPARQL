@@ -1,0 +1,39 @@
+# Query 7: Cartesian Product with GENOP
+# Demonstrates how GENOP handles input variables from multiple BGPs with no shared variables
+# 
+# This query demonstrates Cartesian Product by:
+# 1. BGP1: Querying scientists from the database (binds ?scientist)
+# 2. BGP2: Querying awards from the database (binds ?awardLabel)
+#    - Note: These two BGPs have NO shared variables, so they produce a Cartesian product
+# 3. GENOP: Uses both ?scientist and ?awardLabel as input variables
+#    - For each combination of (scientist, award), GENOP generates a description
+#
+# Key: Since BGP1 and BGP2 have no shared variables, they produce a Cartesian product.
+# If BGP1 has 3 scientists and BGP2 has 3 awards, GENOP will be called 3×3=9 times.
+#
+# Example result combinations:
+# - (Albert Einstein, Nobel Prize in Physics) → description
+# - (Albert Einstein, Nobel Prize in Chemistry) → description
+# - (Albert Einstein, Order of the British Empire) → description
+# - (Alan Turing, Nobel Prize in Physics) → description
+# - ... (all 9 combinations)
+
+PREFIX ex: <http://example.org/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?scientist ?awardLabel ?description WHERE {
+  # BGP1: Query scientists (binds ?scientist only)
+  ?person foaf:name ?scientist .
+  
+  # BGP2: Query awards (binds ?awardLabel only)
+  # Note: No shared variables with BGP1 → Cartesian product
+  ?award rdfs:label ?awardLabel .
+  
+  # GENOP: Uses both ?scientist and ?awardLabel as input variables
+  # This will be called for each combination from the Cartesian product
+  GENOP("Write a one-sentence description about {?scientist} and their relationship to {?awardLabel}. Be creative and interesting.",
+        ?description,
+        <model:openrouter:xiaomi/mimo-v2-flash:free>)
+}
+

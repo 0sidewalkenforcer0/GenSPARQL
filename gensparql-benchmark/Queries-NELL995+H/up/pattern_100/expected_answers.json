@@ -1,0 +1,11 @@
+{
+  "num_answers": 3,
+  "answers": [
+    "concept_profession_physician_assistants",
+    "concept_jobposition_dentist",
+    "concept_profession_nutritionists"
+  ],
+  "answers_readable": [],
+  "query_readable": "((concept_profession_artists --[concept:professionistypeofprofession_reverse]--> ?) ∪ (concept_profession_support --[concept:professionistypeofprofession]--> ?)) --[concept:professionistypeofprofession]--> ?",
+  "query_readable_with_names": ""
+}

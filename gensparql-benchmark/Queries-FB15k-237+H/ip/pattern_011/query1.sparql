@@ -1,0 +1,14 @@
+# ip Query (pattern_011): ((Library of Congress Classification --[←taxonomy entry.taxonomy]--> ?) ∩ (Noam Chomsky --[→philosopher.interests]--> ?)) --[←education.major field of study]--> ?
+# Pattern: 011 (0=KG match, 1=GENOP inference)
+# Expected Answers (1):
+#   1. Photography (/m/05wkw)
+
+SELECT ?answer ?mid WHERE {
+  ?mid <http://freebase.com/relation/forward_user_tsegaran_random_taxonomy_subject_entry._user_tsegaran_random_taxonomy_entry_taxonomy> <http://freebase.com/entity/m_04n6k_Library_of_Congress_Classification> .
+  GENOP("List movies or entities where /m/0b78hw is their user alexander philosophy philosopher interests. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?mid),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on {{?mid}} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

@@ -1,0 +1,9 @@
+# GenSPARQL Query (1-hop Link Prediction with Grounding)
+# Expected Answer: concept_sportsleague_ncaa
+# LLM selects from KG entities, ensuring grounding
+
+SELECT ?target WHERE {
+  GENOP("What league does faulkner state sun chiefs (sportsteam) play in? Choose from this list: [concept_sportsleague_acc, concept_sportsleague_afc, concept_sportsleague_bcs, concept_sportsleague_cfl, concept_sportsleague_fa, concept_sportsleague_international, concept_sportsleague_league, concept_sportsleague_mlb, concept_sportsleague_mls, concept_sportsleague_nascar, concept_sportsleague_nba, concept_sportsleague_ncaa, concept_sportsleague_nfl, concept_sportsleague_nhl, concept_sportsleague_uefa, concept_sportsleague_wnba]. Return JSON array of matching items like ['item1', 'item2']. Return [] if none.",
+        (?target),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

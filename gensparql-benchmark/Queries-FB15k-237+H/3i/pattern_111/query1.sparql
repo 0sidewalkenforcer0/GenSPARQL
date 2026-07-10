@@ -1,0 +1,16 @@
+# 3i Query (pattern_111): (Van Nuys --[←deceased person.place of death]--> ?) ∩ (United States of America --[←person.nationality]--> ?) ∩ (Academy Award for Best Short Film (Live Action) --[←award nomination.award]--> ?)
+# Pattern: 111 (0=KG match, 1=GENOP inference)
+# Expected Answers (1):
+#   1. Jules White (/m/0gry51)
+
+SELECT ?answer WHERE {
+  GENOP("List movies released on /m/0l1pj format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on /m/09c7w0 format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on /m/0gr07 format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

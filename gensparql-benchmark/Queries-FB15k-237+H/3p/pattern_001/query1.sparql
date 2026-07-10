@@ -1,0 +1,13 @@
+# 3p Query (pattern_001): Melvins --[←genre.artists]--> ? --[→genre.parent genre]--> ? --[→genre.parent genre]--> ?
+# Machine IDs: anchor=/m/01516r
+# Pattern: 001 (0=KG match, 1=GENOP inference)
+# Expected Answers (1):
+#   1. Minimal music (/m/02r6mf)
+
+SELECT ?answer ?e1 ?e2 WHERE {
+  ?e1 <http://freebase.com/relation/forward_music_genre_artists> <http://freebase.com/entity/m_01516r_Melvins> .
+  ?e1 <http://freebase.com/relation/forward_music_genre_parent_genre> ?e2 .
+  GENOP("List movies or entities where {?e2} is their genre parent genre. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

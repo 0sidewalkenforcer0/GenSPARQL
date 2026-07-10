@@ -1,0 +1,13 @@
+# Query 1: List all scientists and their awards
+# Basic SPARQL query without GENOP
+
+PREFIX ex: <http://example.org/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?scientist ?awardLabel WHERE {
+  ?person foaf:name ?scientist .
+  ?person ex:receivedAward ?award .
+  ?award rdfs:label ?awardLabel .
+}
+

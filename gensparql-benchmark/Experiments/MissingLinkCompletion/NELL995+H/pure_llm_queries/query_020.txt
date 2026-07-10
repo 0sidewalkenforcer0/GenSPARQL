@@ -1,0 +1,8 @@
+# Pure LLM Query (Zero-shot)
+# Expected Answer: concept_country_japan
+# No grounding - LLM generates freely
+
+PROMPT: What is the organizationheadquarteredincountry of denso (company)?
+
+Return your answer as a JSON array: ["answer1", "answer2", ...]
+If you don't know, return [].

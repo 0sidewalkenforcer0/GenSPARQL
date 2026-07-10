@@ -1,0 +1,11 @@
+{
+  "num_answers": 1,
+  "answers": [
+    "/m/01pxcf"
+  ],
+  "answers_readable": [
+    "Australian National University"
+  ],
+  "query_readable": "(/m/014mlp --[+/education/educational_degree/people_with_this_degree./education/education/institution]--> ?) ∩ (/m/01rr_d --[+/education/educational_degree/people_with_this_degree./education/education/institution]--> ?) ∩ (/m/05jxkf --[-/education/educational_institution/school_type]--> ?)",
+  "query_readable_with_names": "(Bachelor of Arts --[→education.institution]--> ?) ∩ (Bachelor of Laws --[→education.institution]--> ?) ∩ (Public university --[←educational institution.school type]--> ?)"
+}

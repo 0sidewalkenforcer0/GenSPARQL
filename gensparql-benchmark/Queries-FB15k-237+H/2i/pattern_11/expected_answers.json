@@ -1,0 +1,13 @@
+{
+  "num_answers": 2,
+  "answers": [
+    "/m/015c2f",
+    "/m/01ycfv"
+  ],
+  "answers_readable": [
+    "Cynthia Nixon",
+    "Michael Kamen"
+  ],
+  "query_readable": "(/m/02_286 --[-/people/person/place_of_birth]--> ?) ∩ (/m/02_286 --[-/people/person/places_lived./people/place_lived/location]--> ?)",
+  "query_readable_with_names": "(New York City --[←person.place of birth]--> ?) ∩ (New York City --[←place lived.location]--> ?)"
+}

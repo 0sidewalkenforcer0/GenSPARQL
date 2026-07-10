@@ -1,0 +1,22 @@
+{
+  "num_answers": 14,
+  "answers": [
+    "concept_academicfield_archaeology",
+    "concept_academicfield_construction",
+    "concept_academicfield_microbiology",
+    "concept_academicfield_social_science",
+    "concept_academicfield_communication_engineering",
+    "concept_academicfield_ph_d",
+    "concept_academicfield_botany",
+    "concept_academicfield_veterinary_medicine",
+    "concept_academicfield_natural_sciences",
+    "concept_academicfield_engineering_science",
+    "concept_academicfield_operations_research",
+    "concept_academicfield_business_management",
+    "concept_academicfield_geophysics",
+    "concept_academicfield_geology"
+  ],
+  "answers_readable": [],
+  "query_readable": "concept_country_scotland --[concept:languageofcountry_reverse]--> ? --[concept:languageofuniversity]--> ? --[concept:academicprogramatuniversity_reverse]--> ? --[concept:academicfieldsuchasacademicfield]--> ?",
+  "query_readable_with_names": ""
+}

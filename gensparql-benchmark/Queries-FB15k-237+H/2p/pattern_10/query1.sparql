@@ -1,0 +1,23 @@
+# 2p Query (pattern_10): Solo --[→track contribution.role]--> ? --[←track contribution.role]--> ?
+# Machine IDs: anchor=/m/0214km, rel1=+/music/performance_role/track_performances./music/track_contribution/role, rel2=-/music/artist/track_contributions./music/track_contribution/role
+# Pattern: 10 (0=KG match, 1=GENOP inference)
+# Relation directions: rel1_reverse=False, rel2_reverse=True
+# Expected Answers (44):
+#   1. Sergei Prokofiev (/m/06wvj)
+#   2. Morrissey (/m/01w524f)
+#   3. Hans Zimmer (/m/0150t6)
+#   4. John Williams (/m/0146pg)
+#   5. Dmitri Shostakovich (/m/02ck1)
+#   6. Serge Gainsbourg (/m/0knjh)
+#   7. Georg Solti (/m/015rmq)
+#   8. Dudley Moore (/m/0cj2w)
+#   9. Michel Legrand (/m/012ky3)
+#   10. Daniel Barenboim (/m/01dhpj)
+#   ... and 34 more
+
+SELECT ?answer ?mid WHERE {
+  GENOP("List movies or entities where /m/0214km is their performance role track performances track contribution role. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?mid),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?answer <http://freebase.com/relation/forward_music_artist_track_contributions._music_track_contribution_role> ?mid .
+}

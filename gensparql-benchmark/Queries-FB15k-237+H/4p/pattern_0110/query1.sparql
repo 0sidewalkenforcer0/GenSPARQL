@@ -1,0 +1,26 @@
+# 4p Query (pattern_0110): Animal9 --[←dated integer.source]--> ? --[←hud county place.place]--> ? --[←hud county place.place]--> ? --[←location.contains]--> ?
+# Machine IDs: anchor=/m/0jbk9
+# Pattern: 0110 (0=KG match, 1=GENOP inference)
+# Expected Answers (12):
+#   1. Chicago metropolitan area (/m/01w65s)
+#   2. McLennan County (/m/0mqs0)
+#   3. Mobile County (/m/0kwmc)
+#   4. Jefferson County (/m/0n25q)
+#   5. DeKalb County (/m/0nzw2)
+#   6. Volusia County (/m/0j_1v)
+#   7. Tompkins County (/m/0fplg)
+#   8. Whatcom County (/m/0mlw1)
+#   9. San Joaquin County (/m/0l2sr)
+#   10. Madison County (/m/0kwgs)
+#   ... and 2 more
+
+SELECT ?answer ?e1 ?e2 ?e3 WHERE {
+  ?e1 <http://freebase.com/relation/forward_location_hud_foreclosure_area_estimated_number_of_mortgages._measurement_unit_dated_integer_source> <http://freebase.com/entity/m_0jbk9_United_States_Department_of_Housing_and_Urban_Development> .
+  GENOP("List movies released on {?e1} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?e2),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on {?e2} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?e3),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?answer <http://freebase.com/relation/forward_location_location_contains> ?e3 .
+}

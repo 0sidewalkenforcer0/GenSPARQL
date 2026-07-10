@@ -1,0 +1,8 @@
+# Pure LLM Query (Zero-shot)
+# Expected Answer: concept_sportsequipment_skis
+# No grounding - LLM generates freely
+
+PROMPT: What is the sportusesequipment of ski (sport)?
+
+Return your answer as a JSON array: ["answer1", "answer2", ...]
+If you don't know, return [].

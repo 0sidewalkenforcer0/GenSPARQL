@@ -1,0 +1,13 @@
+{
+  "num_answers": 5,
+  "answers": [
+    "concept_profession_psychiatrists",
+    "concept_profession_nurses",
+    "concept_jobposition_doctor",
+    "concept_profession_health_care_professionals",
+    "concept_profession_doctors"
+  ],
+  "answers_readable": [],
+  "query_readable": "(concept_profession_providers --[concept:professionistypeofprofession]--> ?) ∩ (concept_profession_staff --[concept:professionistypeofprofession]--> ?)",
+  "query_readable_with_names": ""
+}

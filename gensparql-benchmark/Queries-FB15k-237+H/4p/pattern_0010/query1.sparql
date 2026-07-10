@@ -1,0 +1,14 @@
+# 4p Query (pattern_0010): Usher --[→person.profession]--> ? --[←profession.specialization of]--> ? --[←person.profession]--> ? --[←film.music]--> ?
+# Machine IDs: anchor=/m/01trhmt
+# Pattern: 0010 (0=KG match, 1=GENOP inference)
+# Expected Answers (1):
+#   1. A Mighty Wind (/m/02ht1k)
+
+SELECT ?answer ?e1 ?e2 ?e3 WHERE {
+  <http://freebase.com/entity/m_01trhmt_Usher> <http://freebase.com/relation/forward_people_person_profession> ?e1 .
+  ?e2 <http://freebase.com/relation/forward_people_profession_specialization_of> ?e1 .
+  GENOP("List movies released on {?e2} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?e3),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?answer <http://freebase.com/relation/forward_film_film_music> ?e3 .
+}

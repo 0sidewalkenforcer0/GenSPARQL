@@ -1,0 +1,25 @@
+# 3p Query (pattern_101): concept_river_columbia --[concept:cityliesonriver_reverse]--> ? --[concept:headquarteredin_reverse]--> ? --[concept:agentcollaborateswithagent_reverse]--> ?
+# Machine IDs: anchor=concept_river_columbia
+# Pattern: 101 (0=KG match, 1=GENOP inference)
+# Expected Answers (22):
+#   1. concept_televisionstation_wdtv
+#   2. concept_televisionstation_wgbx_tv
+#   3. concept_televisionstation_kyve_tv
+#   4. concept_televisionstation_wouc_tv
+#   5. concept_televisionstation_weao
+#   6. concept_televisionstation_ksmq_tv
+#   7. concept_televisionstation_kzsd_tv
+#   8. concept_televisionstation_kixe_tv
+#   9. concept_televisionstation_kwse
+#   10. concept_televisionstation_klru
+#   ... and 12 more
+
+SELECT ?answer ?e1 ?e2 WHERE {
+  GENOP("List movies released on concept_river_columbia format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?e1),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?e2 <http://nell.cs.cmu.edu/relation/concept_headquarteredin> ?e1 .
+  GENOP("List movies released on {?e2} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

@@ -1,0 +1,40 @@
+# Maven / Java build output
+target/
+*.class
+*.jar
+*.war
+dependency-reduced-pom.xml
+
+# Generated parser output (regenerated from the .jj grammar)
+**/generated-sources/
+
+# IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.project
+.classpath
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs / scratch
+*.log
+classpath.txt
+benchmark_results_*/
+__pycache__/
+*.pyc
+
+# Large benchmark data (see gensparql-benchmark/DATA.md)
+gensparql-benchmark/GENSPARQL_Data/FB15k-237+H/
+gensparql-benchmark/GENSPARQL_Data/NELL995+H/
+*.nt
+*.tdb/
+
+# Secrets — never commit API keys
+.env
+*.key

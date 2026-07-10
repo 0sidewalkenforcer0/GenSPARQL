@@ -1,0 +1,21 @@
+# 4p Query (pattern_1110): AIA Gold Medal --[←award category.category of]--> ? --[←award category.category of]--> ? --[←award category.category of]--> ? --[→award honor.award winner]--> ?
+# Machine IDs: anchor=/m/05kjlr
+# Pattern: 1110 (0=KG match, 1=GENOP inference)
+# Expected Answers (4):
+#   1. I. M. Pei (/m/03xds)
+#   2. Frank Lloyd Wright (/m/02wlk)
+#   3. Thomas Jefferson (/m/07cbs)
+#   4. Frank Gehry (/m/0d_w7)
+
+SELECT ?answer ?e1 ?e2 ?e3 WHERE {
+  GENOP("List movies released on /m/05kjlr format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?e1),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on {?e1} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?e2),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on {?e2} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?e3),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?e3 <http://freebase.com/relation/forward_award_award_category_winners._award_award_honor_award_winner> ?answer .
+}

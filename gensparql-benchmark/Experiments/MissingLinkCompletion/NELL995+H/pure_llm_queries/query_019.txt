@@ -1,0 +1,8 @@
+# Pure LLM Query (Zero-shot)
+# Expected Answer: concept_animal_birds002
+# No grounding - LLM generates freely
+
+PROMPT: What is the animalpreyson of parrots (fish)?
+
+Return your answer as a JSON array: ["answer1", "answer2", ...]
+If you don't know, return [].

@@ -1,0 +1,18 @@
+# 4p Query (pattern_1011): concept_sportsteamposition_line --[concept:sporthassportsteamposition_reverse]--> ? --[concept:teamplayssport_reverse]--> ? --[concept:athleteplaysforteam_reverse]--> ? --[concept:athleteledsportsteam]--> ?
+# Machine IDs: anchor=concept_sportsteamposition_line
+# Pattern: 1011 (0=KG match, 1=GENOP inference)
+# Expected Answers (1):
+#   1. concept_sportsteam_bucs
+
+SELECT ?answer ?e1 ?e2 ?e3 WHERE {
+  GENOP("List movies released on concept_sportsteamposition_line format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?e1),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?e2 <http://nell.cs.cmu.edu/relation/concept_teamplayssport> ?e1 .
+  GENOP("List movies released on {?e2} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?e3),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies or entities where {?e3} is their athleteledsportsteam. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

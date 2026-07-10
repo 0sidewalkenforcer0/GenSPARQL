@@ -1,0 +1,13 @@
+# ip Query (pattern_001): ((concept_sportsteam_broncos --[concept:teamplaysagainstteam]--> ?) ∩ (concept_sportsgame_games --[concept:sportsgameteam]--> ?)) --[concept:athleteledsportsteam_reverse]--> ?
+# Pattern: 001 (0=KG match, 1=GENOP inference)
+# Expected Answers (2):
+#   1. concept_athlete_john_ward
+#   2. concept_athlete_ray_lewis
+
+SELECT ?answer ?mid WHERE {
+  <http://nell.cs.cmu.edu/entity/concept_sportsteam_broncos> <http://nell.cs.cmu.edu/relation/concept_teamplaysagainstteam> ?mid .
+  <http://nell.cs.cmu.edu/entity/concept_sportsgame_games> <http://nell.cs.cmu.edu/relation/concept_sportsgameteam> ?mid .
+  GENOP("List movies released on {{?mid}} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

@@ -1,0 +1,12 @@
+# pi Query (pattern_010): (Paris --[←deceased person.place of death]--> ? --[←influence node.influenced by]--> ?) ∩ (Marcel Proust --[←influence node.influenced by]--> ?)
+# Pattern: 010 (0=KG match, 1=GENOP inference)
+# Expected Answers (1):
+#   1. Harold Pinter (/m/0mb5x)
+
+SELECT ?answer ?mid WHERE {
+  ?mid <http://freebase.com/relation/forward_people_deceased_person_place_of_death> <http://freebase.com/entity/m_05qtj_Paris> .
+  GENOP("List movies released on {{?mid}} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?answer <http://freebase.com/relation/forward_influence_influence_node_influenced_by> <http://freebase.com/entity/m_058vp_Marcel_Proust> .
+}

@@ -1,0 +1,21 @@
+# 2i Query (pattern_01): (Comedy-GB --[←film.genre]--> ?) ∩ (DVD --[←film regional release date.film release distribution medium]--> ?)
+# Pattern: 01 (0=KG match, 1=GENOP inference)
+# Expected Answers (40):
+#   1. Cars 2 (/m/0407yj_)
+#   2. Space Cowboys (/m/05r3qc)
+#   3. The Producers (/m/07tw_b)
+#   4. Jackass: The Movie (/m/04cf_l)
+#   5. Hannah and Her Sisters (/m/0sxns)
+#   6. Everyone Says I Love You (/m/0blpg)
+#   7. She's Having a Baby (/m/058kh7)
+#   8. Gosford Park (/m/011ywj)
+#   9. Lars and the Real Girl (/m/02x0fs9)
+#   10. All About My Mother (/m/0gpx6)
+#   ... and 30 more
+
+SELECT ?answer WHERE {
+  ?answer <http://freebase.com/relation/forward_film_film_genre> <http://freebase.com/entity/m_05p553_Comedy-GB> .
+  GENOP("List movies released on DVD format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

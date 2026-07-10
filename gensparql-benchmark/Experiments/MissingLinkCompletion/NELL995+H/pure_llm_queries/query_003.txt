@@ -1,0 +1,8 @@
+# Pure LLM Query (Zero-shot)
+# Expected Answer: concept_profession_special_education_teachers
+# No grounding - LLM generates freely
+
+PROMPT: What is the professionistypeofprofession of staff (profession)?
+
+Return your answer as a JSON array: ["answer1", "answer2", ...]
+If you don't know, return [].

@@ -1,0 +1,23 @@
+# 3p Query (pattern_010): Animal9 --[←dated integer.source]--> ? --[←hud county place.place]--> ? --[←person.place of birth]--> ?
+# Machine IDs: anchor=/m/0jbk9
+# Pattern: 010 (0=KG match, 1=GENOP inference)
+# Expected Answers (128):
+#   1. Billy Zane (/m/01vxxb)
+#   2. John F. Seitz (/m/071jrc)
+#   3. Robert Ryan (/m/03xx3m)
+#   4. Chris Cooper (/m/02s2ft)
+#   5. Joseph C. Wright (/m/05218gr)
+#   6. Travis Banton (/m/025_nbr)
+#   7. Jason Robards Jr. (/m/01tcf7)
+#   8. Helen Rose (/m/0fx0j2)
+#   9. Bob Balaban (/m/051wwp)
+#   10. Robert Young (/m/018qql)
+#   ... and 118 more
+
+SELECT ?answer ?e1 ?e2 WHERE {
+  ?e1 <http://freebase.com/relation/forward_location_hud_foreclosure_area_estimated_number_of_mortgages._measurement_unit_dated_integer_source> <http://freebase.com/entity/m_0jbk9_United_States_Department_of_Housing_and_Urban_Development> .
+  GENOP("List movies released on {?e1} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?e2),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?answer <http://freebase.com/relation/forward_people_person_place_of_birth> ?e2 .
+}

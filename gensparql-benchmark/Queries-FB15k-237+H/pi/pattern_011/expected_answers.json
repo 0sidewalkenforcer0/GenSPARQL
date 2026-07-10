@@ -1,0 +1,15 @@
+{
+  "num_answers": 3,
+  "answers": [
+    "/m/0571m",
+    "/m/06cm5",
+    "/m/062zjtt"
+  ],
+  "answers_readable": [
+    "Mulholland Drive",
+    "Raging Bull",
+    "Thor"
+  ],
+  "query_readable": "(/m/025t3bg --[-/travel/travel_destination/how_to_get_here./travel/transportation/mode_of_transportation]--> ? --[-/film/film/featured_film_locations]--> ?) ∩ (/m/09nqf --[-/film/film/estimated_budget./measurement_unit/dated_money_value/currency]--> ?)",
+  "query_readable_with_names": "(Air travel --[←transportation.mode of transportation]--> ? --[←film.featured film locations]--> ?) ∩ (United States Dollar --[←dated money value.currency]--> ?)"
+}

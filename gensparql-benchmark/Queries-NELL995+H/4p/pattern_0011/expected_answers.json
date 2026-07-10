@@ -1,0 +1,26 @@
+{
+  "num_answers": 18,
+  "answers": [
+    "concept_invertebrate_slugs",
+    "concept_bird_chickens",
+    "concept_bird_penguins",
+    "concept_mammal_zebras",
+    "concept_reptile_tortoises",
+    "concept_mammal_puppies",
+    "concept_mammal_rodents",
+    "concept_mammal_llamas",
+    "concept_animal_brown_bears",
+    "concept_mammal_boars",
+    "concept_amphibian_toads",
+    "concept_animal_roosters",
+    "concept_vertebrate_dinosaurs",
+    "concept_animal_hyenas",
+    "concept_mammal_dogs",
+    "concept_mammal_apes",
+    "concept_animal_cetaceans",
+    "concept_mammal_primates"
+  ],
+  "answers_readable": [],
+  "query_readable": "concept_geometricshape_dice --[concept:agriculturalproductcutintogeometricshape_reverse]--> ? --[concept:agriculturalproductcookedwithagriculturalproduct]--> ? --[concept:agriculturalproductcomingfromvertebrate]--> ? --[concept:animalpreyson_reverse]--> ?",
+  "query_readable_with_names": ""
+}

@@ -1,0 +1,22 @@
+# ip Query (pattern_010): ((Adventure Film --[←film.genre]--> ?) ∩ (United States Dollar --[←dated money value.currency]--> ?)) --[←performance.film]--> ?
+# Pattern: 010 (0=KG match, 1=GENOP inference)
+# Expected Answers (52):
+#   1. Patricia Arquette (/m/023tp8)
+#   2. Meredith Vieira (/m/020ffd)
+#   3. Steven Berkoff (/m/01r9c_)
+#   4. Susan Sarandon (/m/01vwllw)
+#   5. Bernie Mac (/m/02lj6p)
+#   6. Edward Fox (/m/01xsbh)
+#   7. Sherri Shepherd (/m/0c33pl)
+#   8. Carlos Alazraqui (/m/02hblj)
+#   9. Kurt Russell (/m/01g969)
+#   10. Lyle Lovett (/m/028hc2)
+#   ... and 42 more
+
+SELECT ?answer ?mid WHERE {
+  ?mid <http://freebase.com/relation/forward_film_film_genre> <http://freebase.com/entity/m_03k9fj_Adventure_Film> .
+  GENOP("List movies released on /m/09nqf format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?mid),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?answer <http://freebase.com/relation/forward_film_actor_film._film_performance_film> ?mid .
+}

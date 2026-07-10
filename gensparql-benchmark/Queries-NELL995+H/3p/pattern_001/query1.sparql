@@ -1,0 +1,13 @@
+# 3p Query (pattern_001): concept_visualizableattribute_diamond --[concept:buildingfeaturemadefrombuildingmaterial_reverse]--> ? --[concept:agentinvolvedwithitem_reverse]--> ? --[concept:agentcompeteswithagent_reverse]--> ?
+# Machine IDs: anchor=concept_visualizableattribute_diamond
+# Pattern: 001 (0=KG match, 1=GENOP inference)
+# Expected Answers (1):
+#   1. concept_actor_financial
+
+SELECT ?answer ?e1 ?e2 WHERE {
+  ?e1 <http://nell.cs.cmu.edu/relation/concept_buildingfeaturemadefrombuildingmaterial> <http://nell.cs.cmu.edu/entity/concept_visualizableattribute_diamond> .
+  ?e2 <http://nell.cs.cmu.edu/relation/concept_agentinvolvedwithitem> ?e1 .
+  GENOP("List movies released on {?e2} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

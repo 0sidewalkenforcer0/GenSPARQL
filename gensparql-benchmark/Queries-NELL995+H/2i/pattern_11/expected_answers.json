@@ -1,0 +1,9 @@
+{
+  "num_answers": 1,
+  "answers": [
+    "concept_sportsteam_red_raiders"
+  ],
+  "answers_readable": [],
+  "query_readable": "(concept_sportsteam_state_university --[concept:teamalsoknownas_reverse]--> ?) ∩ (concept_sportsgame_matches --[concept:sportsgameteam]--> ?)",
+  "query_readable_with_names": ""
+}

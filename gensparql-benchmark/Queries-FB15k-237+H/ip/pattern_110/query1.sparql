@@ -1,0 +1,16 @@
+# ip Query (pattern_110): ((Academy Awards --[←event.instance of recurring event]--> ?) ∩ (Academy Award for Best Picture --[→award honor.ceremony]--> ?)) --[→award honor.honored for]--> ?
+# Pattern: 110 (0=KG match, 1=GENOP inference)
+# Expected Answers (3):
+#   1. The Bad and the Beautiful (/m/014kkm)
+#   2. The Quiet Man (/m/0j80w)
+#   3. The Greatest Show on Earth (/m/0bl06)
+
+SELECT ?answer ?mid WHERE {
+  GENOP("List movies released on /m/0g_w format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?mid),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies or entities where /m/0gq9h is their category winners honor ceremony. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?mid),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?mid <http://freebase.com/relation/forward_award_award_ceremony_awards_presented._award_award_honor_honored_for> ?answer .
+}

@@ -1,0 +1,13 @@
+# 2i Query (pattern_11): (concept_sportsteam_state_university --[concept:teamalsoknownas_reverse]--> ?) ∩ (concept_sportsgame_matches --[concept:sportsgameteam]--> ?)
+# Pattern: 11 (0=KG match, 1=GENOP inference)
+# Expected Answers (1):
+#   1. concept_sportsteam_red_raiders
+
+SELECT ?answer WHERE {
+  GENOP("List movies released on concept_sportsteam_state_university format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies or entities where concept_sportsgame_matches is their sportsgameteam. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

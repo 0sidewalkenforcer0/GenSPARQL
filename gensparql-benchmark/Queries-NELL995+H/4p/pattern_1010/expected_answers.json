@@ -1,0 +1,10 @@
+{
+  "num_answers": 2,
+  "answers": [
+    "concept_stateorprovince_palakkad",
+    "concept_beach_vegas_nevada"
+  ],
+  "answers_readable": [],
+  "query_readable": "concept_emotion_honor --[concept:mutualproxyfor]--> ? --[concept:proxyfor_reverse]--> ? --[concept:subpartof_reverse]--> ? --[concept:proxyfor_reverse]--> ?",
+  "query_readable_with_names": ""
+}

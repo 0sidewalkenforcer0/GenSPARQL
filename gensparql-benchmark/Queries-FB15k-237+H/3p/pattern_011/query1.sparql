@@ -1,0 +1,16 @@
+# 3p Query (pattern_011): Salmon Fishing in the Yemen --[→film.language]--> ? --[←ethnicity.languages spoken]--> ? --[→ethnicity.people]--> ?
+# Machine IDs: anchor=/m/0ggbfwf
+# Pattern: 011 (0=KG match, 1=GENOP inference)
+# Expected Answers (2):
+#   1. Jennifer Ehle (/m/03yk8z)
+#   2. H. P. Lovecraft (/m/03j0d)
+
+SELECT ?answer ?e1 ?e2 WHERE {
+  <http://freebase.com/entity/m_0ggbfwf_Salmon_Fishing_in_the_Yemen> <http://freebase.com/relation/forward_film_film_language> ?e1 .
+  GENOP("List movies released on {?e1} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?e2),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies or entities where {?e2} is their ethnicity. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

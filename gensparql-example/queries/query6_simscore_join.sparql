@@ -1,0 +1,39 @@
+# Query 6: SimScore-based similarity join
+# Demonstrates semantic matching between RDF data and LLM-generated data
+# 
+# This query demonstrates SimScore join by:
+# 1. Querying scientist names and awards from the database (RDF source)
+# 2. Using GENOP to generate scientist names independently (GEN source)
+# 3. Joining them on ?scientist using SimScore for semantic similarity matching
+#
+# The SimScore join allows matching even when names are slightly different
+# (e.g., "Albert Einstein" from DB vs "Einstein" or "A. Einstein" from LLM)
+#
+# Key: The GENOP generates names independently, and the join uses SimScore
+# to match them semantically rather than requiring exact string equality.
+
+PREFIX ex: <http://example.org/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?scientist ?awardLabel ?description WHERE {
+  # Part 1: Query scientist names and awards from database (RDF source)
+  {
+    ?person foaf:name ?scientist .
+    ?person ex:receivedAward ?award .
+    ?award rdfs:label ?awardLabel .
+  }
+  
+  # Part 2: Generate scientist names and descriptions using GENOP (GEN source)
+  # This GENOP generates names independently (base mode), which may differ
+  # slightly from database names. The join will use SimScore for matching.
+  {
+    GENOP("List three famous scientists with their major contributions. Return as JSON array with objects containing 'scientist' (name) and 'description' (one sentence) fields.", 
+          (?scientist, ?description), 
+          <model:openrouter:xiaomi/mimo-v2-flash:free>,
+          0.75)
+    # Threshold 0.75 means 75% similarity is required for matching
+    # This threshold applies to the ?scientist variable for SimScore evaluation
+  }
+}
+

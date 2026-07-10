@@ -1,0 +1,22 @@
+# up Query (pattern_101): ((Artistic gymnastics --[→olympic athlete affiliation.country]--> ?) ∪ (Asian Development Bank --[←organization membership.organization]--> ?)) --[←person.nationality]--> ?
+# Pattern: 101 (0=KG match, 1=GENOP inference)
+# Expected Answers (6):
+#   1. Theodor W. Adorno (/m/07h1q)
+#   2. Bertolt Brecht (/m/017r2)
+#   3. Michael Ballhaus (/m/0bqytm)
+#   4. Uwe Boll (/m/0522wp)
+#   5. George Frideric Handel (/m/03bxh)
+#   6. Richard Strauss (/m/0hr3g)
+
+SELECT ?answer ?mid WHERE {
+  {
+    GENOP("List movies or entities where /m/01hp22 is their olympics olympic sport athletes olympics olympic athlete affiliation country. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+          (?mid),
+          <model:openrouter:deepseek/deepseek-chat>)
+  } UNION {
+    ?mid <http://freebase.com/relation/forward_organization_organization_member_member_of._organization_organization_membership_organization> <http://freebase.com/entity/m_0_2v_Asian_Development_Bank> .
+  }
+  GENOP("List movies released on {{?mid}} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

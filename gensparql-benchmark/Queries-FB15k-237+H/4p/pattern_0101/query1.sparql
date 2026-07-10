@@ -1,0 +1,16 @@
+# 4p Query (pattern_0101): Jewish people --[→ethnicity.people]--> ? --[→director.film]--> ? --[→award honor.award]--> ? --[←award nomination.award]--> ?
+# Machine IDs: anchor=/m/041rx
+# Pattern: 0101 (0=KG match, 1=GENOP inference)
+# Expected Answers (1):
+#   1. Jay Chou (/m/02nfjp)
+
+SELECT ?answer ?e1 ?e2 ?e3 WHERE {
+  <http://freebase.com/entity/m_041rx_Jewish_people> <http://freebase.com/relation/forward_people_ethnicity_people> ?e1 .
+  GENOP("List movies or entities where {?e1} is their director. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?e2),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?e2 <http://freebase.com/relation/forward_award_award_winning_work_awards_won._award_award_honor_award> ?e3 .
+  GENOP("List movies released on {?e3} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

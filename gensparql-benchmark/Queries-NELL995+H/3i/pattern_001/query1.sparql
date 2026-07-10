@@ -1,0 +1,19 @@
+# 3i Query (pattern_001): (concept_company_pbs --[concept:agentcollaborateswithagent_reverse]--> ?) ∩ (concept_company_pbs --[concept:subpartof_reverse]--> ?) ∩ (concept_televisionnetwork_pbs --[concept:televisionstationaffiliatedwith_reverse]--> ?)
+# Pattern: 001 (0=KG match, 1=GENOP inference)
+# Expected Answers (8):
+#   1. concept_televisionstation_whiq
+#   2. concept_televisionstation_ktne_tv
+#   3. concept_televisionstation_wdse_tv
+#   4. concept_televisionstation_ketc
+#   5. concept_televisionstation_witf_tv
+#   6. concept_televisionstation_kood
+#   7. concept_televisionstation_wsbn_tv
+#   8. concept_televisionstation_wkoh
+
+SELECT ?answer WHERE {
+  ?answer <http://nell.cs.cmu.edu/relation/concept_agentcollaborateswithagent> <http://nell.cs.cmu.edu/entity/concept_company_pbs> .
+  ?answer <http://nell.cs.cmu.edu/relation/concept_subpartof> <http://nell.cs.cmu.edu/entity/concept_company_pbs> .
+  GENOP("List movies released on concept_televisionnetwork_pbs format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

@@ -1,0 +1,18 @@
+# 3p Query (pattern_011): concept_city_seattle --[concept:automobilemakerdealersincity_reverse]--> ? --[concept:automobilemakercardealersinstateorprovince]--> ? --[concept:citylocatedinstate_reverse]--> ?
+# Machine IDs: anchor=concept_city_seattle
+# Pattern: 011 (0=KG match, 1=GENOP inference)
+# Expected Answers (4):
+#   1. concept_city_ardmore
+#   2. concept_city_lawton
+#   3. concept_city_harlan
+#   4. concept_city_center
+
+SELECT ?answer ?e1 ?e2 WHERE {
+  ?e1 <http://nell.cs.cmu.edu/relation/concept_automobilemakerdealersincity> <http://nell.cs.cmu.edu/entity/concept_city_seattle> .
+  GENOP("List movies or entities where {?e1} is their automobilemakercardealersinstateorprovince. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?e2),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on {?e2} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

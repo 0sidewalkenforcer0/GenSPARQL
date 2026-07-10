@@ -1,0 +1,12 @@
+{
+  "num_answers": 4,
+  "answers": [
+    "concept_vegetable_carrots",
+    "concept_agriculturalproduct_mango",
+    "concept_food_squash",
+    "concept_vegetable_celery"
+  ],
+  "answers_readable": [],
+  "query_readable": "(concept_vegetable_garlic --[concept:agriculturalproductcookedwithagriculturalproduct_reverse]--> ? --[concept:agriculturalproductcookedwithagriculturalproduct_reverse]--> ?) ∩ (concept_geometricshape_cubes --[concept:agriculturalproductcutintogeometricshape_reverse]--> ?)",
+  "query_readable_with_names": ""
+}

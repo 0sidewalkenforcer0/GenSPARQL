@@ -1,0 +1,9 @@
+{
+  "num_answers": 1,
+  "answers": [
+    "concept_dateliteral_n1947"
+  ],
+  "answers_readable": [],
+  "query_readable": "concept_city_york --[concept:subpartof_reverse]--> ? --[concept:atlocation]--> ? --[concept:atdate]--> ?",
+  "query_readable_with_names": ""
+}

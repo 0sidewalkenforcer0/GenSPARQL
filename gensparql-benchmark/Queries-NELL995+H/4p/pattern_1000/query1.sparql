@@ -1,0 +1,24 @@
+# 4p Query (pattern_1000): concept_city_bellevue --[concept:citylocatedingeopoliticallocation]--> ? --[concept:headquarteredin_reverse]--> ? --[concept:competeswith_reverse]--> ? --[concept:journalistwritesforpublication_reverse]--> ?
+# Machine IDs: anchor=concept_city_bellevue
+# Pattern: 1000 (0=KG match, 1=GENOP inference)
+# Expected Answers (43):
+#   1. concept_journalist_mike_lupica
+#   2. concept_writer_michael_dobbs
+#   3. concept_journalist_e_j__dionne
+#   4. concept_journalist_brit_hume
+#   5. concept_journalist_amy_joyce
+#   6. concept_journalist_thomas_boswell
+#   7. concept_journalist_doug_struck
+#   8. concept_journalist_sally_quinn
+#   9. concept_journalist_frank_ahrens
+#   10. concept_personeurope_robert_novak
+#   ... and 33 more
+
+SELECT ?answer ?e1 ?e2 ?e3 WHERE {
+  GENOP("List movies or entities where concept_city_bellevue is their citylocatedingeopoliticallocation. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?e1),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?e2 <http://nell.cs.cmu.edu/relation/concept_headquarteredin> ?e1 .
+  ?e3 <http://nell.cs.cmu.edu/relation/concept_competeswith> ?e2 .
+  ?answer <http://nell.cs.cmu.edu/relation/concept_journalistwritesforpublication> ?e3 .
+}

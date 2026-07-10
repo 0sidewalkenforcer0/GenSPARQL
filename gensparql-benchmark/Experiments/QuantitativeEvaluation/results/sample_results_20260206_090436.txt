@@ -1,0 +1,384 @@
+
+============================================
+GenSPARQL Sample Evaluation
+============================================
+Datasets:     NELL995+H FB15k-237+H
+Max queries:  2 per pattern
+Grounding:    true (threshold=0.4)
+Model:        google/gemma-3-12b-it:free
+Started at:   Fri Feb  6 09:04:38 CET 2026
+============================================
+
+########################################
+# Dataset: NELL995+H
+########################################
+
+[1] Running NELL995+H/2p/pattern_01 (2 queries)...
+[DEBUG GROUNDING] SUCCESS: 'Sweater' -> 'concept_clothing_sweater' (sim=0.6921, uri=http://nell.cs.cmu.edu/entity/concept_clothing_sweater)
+[1/2] concept_clothing_white_shirt --[concept:clothingtogowithclot... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] concept_lake_new --[concept:mutualproxyfor]--> ? --[concept:... -> Hits@1: N, Hits@10: N, Rank: -
+Results: 2p pattern_01
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 414s
+
+[2] Running NELL995+H/2p/pattern_10 (2 queries)...
+[1/2] concept_clothing_white_shirt --[concept:clothingtogowithclot... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] concept_sportsleague_nfl --[concept:agentcompeteswithagent_r... -> Hits@1: N, Hits@10: N, Rank: -
+Results: 2p pattern_10
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 16s
+
+[3] Running NELL995+H/2i/pattern_01 (2 queries)...
+[1/2] (concept_profession_providers --[concept:professionistypeofp... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] (concept_sport_baseball --[concept:athleteplayssport_reverse... -> Hits@1: N, Hits@10: N, Rank: -
+Results: 2i pattern_01
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 15s
+
+[4] Running NELL995+H/2i/pattern_10 (2 queries)...
+[1/2] (concept_profession_providers --[concept:professionistypeofp... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] (concept_sport_baseball --[concept:athleteplayssport_reverse... -> Hits@1: N, Hits@10: N, Rank: -
+Results: 2i pattern_10
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 15s
+
+[5] Running NELL995+H/3p/pattern_001 (2 queries)...
+[1/2] concept_visualizableattribute_diamond --[concept:buildingfea... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] concept_geopoliticallocation_national --[concept:atlocation]... -> Hits@1: N, Hits@10: N, Rank: -
+Results: 3p pattern_001
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 1s
+
+[6] Running NELL995+H/3p/pattern_100 (2 queries)...
+[1/2] concept_city_chula_vista --[concept:subpartof]--> ? --[conce... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] concept_visualizableattribute_diamond --[concept:buildingfea... -> Hits@1: N, Hits@10: N, Rank: -
+Results: 3p pattern_100
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 15s
+
+[7] Running NELL995+H/3i/pattern_001 (2 queries)...
+[1/2] (concept_company_pbs --[concept:agentcollaborateswithagent_r... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] (concept_sport_baseball --[concept:athleteplayssport_reverse... -> Hits@1: N, Hits@10: N, Rank: -
+Results: 3i pattern_001
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 14s
+
+[8] Running NELL995+H/3i/pattern_100 (2 queries)...
+[1/2] (concept_stateorprovince_california --[concept:proxyfor_reve... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] (concept_company_pbs --[concept:agentcollaborateswithagent_r... -> Hits@1: N, Hits@10: N, Rank: -
+Results: 3i pattern_100
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 15s
+
+[9] Running NELL995+H/4p/pattern_0001 (2 queries)...
+[1/2] concept_sportsgame_championship --[concept:sportsgameteam]--... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] concept_book_new --[concept:mutualproxyfor_reverse]--> ? --[... -> Hits@1: N, Hits@10: N, Rank: -
+Results: 4p pattern_0001
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 1s
+
+[10] Running NELL995+H/4p/pattern_1000 (2 queries)...
+[1/2] concept_city_bellevue --[concept:citylocatedingeopoliticallo... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] concept_agriculturalproduct_crops --[concept:agriculturalpro... -> Hits@1: N, Hits@10: N, Rank: -
+Results: 4p pattern_1000
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 15s
+
+[11] Running NELL995+H/pi/pattern_001 (2 queries)...
+[1/2] (concept_vegetable_garlic --[concept:agriculturalproductcook... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] (concept_person_terry --[concept:persongraduatedfromuniversi... -> Hits@1: N, Hits@10: N, Rank: -
+Results: pi pattern_001
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 14s
+
+[12] Running NELL995+H/pi/pattern_100 (2 queries)...
+[1/2] (concept_sportsteam_tampa_bay_rays --[concept:teamplayssport... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] (concept_city_los_gatos --[concept:mutualproxyfor]--> ? --[c... -> Hits@1: N, Hits@10: N, Rank: -
+Results: pi pattern_100
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 15s
+
+[13] Running NELL995+H/ip/pattern_001 (2 queries)...
+[1/2] ((concept_sportsteam_broncos --[concept:teamplaysagainstteam... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] ((concept_dateliteral_n2007 --[concept:atdate_reverse]--> ?)... -> Hits@1: N, Hits@10: N, Rank: -
+Results: ip pattern_001
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 92s
+
+[14] Running NELL995+H/ip/pattern_100 (2 queries)...
+[1/2] ((concept_country_u_s_ --[concept:statelocatedingeopolitical... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] ((concept_chemical_carbon --[concept:chemicalistypeofchemica... -> Hits@1: N, Hits@10: N, Rank: -
+Results: ip pattern_100
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 15s
+
+[15] Running NELL995+H/up/pattern_001 (2 queries)...
+[DEBUG GROUNDING] FAILED: 'Fish' - no match above threshold 0.4
+[DEBUG GROUNDING] FAILED: 'Goldfish' - no match above threshold 0.4
+[1/2] ((concept_food_eggs --[concept:agriculturalproductcomingfrom... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] ((concept_profession_artists --[concept:professionistypeofpr... -> Hits@1: N, Hits@10: N, Rank: -
+Results: up pattern_001
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 1010s
+
+[16] Running NELL995+H/up/pattern_100 (2 queries)...
+[1/2] ((concept_profession_artists --[concept:professionistypeofpr... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] ((concept_sportsteam_broncos --[concept:teamplaysagainstteam... -> Hits@1: N, Hits@10: N, Rank: -
+Results: up pattern_100
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 14s
+
+########################################
+# Dataset: FB15k-237+H
+########################################
+
+[17] Running FB15k-237+H/2p/pattern_01 (2 queries)...
+[1/2] /m/0214km --[+/music/performance_role/track_performances./mu... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] /m/0n1h --[-/people/profession/specialization_of]--> ? --[-/... -> Hits@1: N, Hits@10: N, Rank: -
+Results: 2p pattern_01
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 2s
+
+[18] Running FB15k-237+H/2p/pattern_10 (2 queries)...
+[1/2] /m/0214km --[+/music/performance_role/track_performances./mu... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] /m/0n1h --[-/people/profession/specialization_of]--> ? --[-/... -> Hits@1: N, Hits@10: N, Rank: -
+Results: 2p pattern_10
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 15s
+
+[19] Running FB15k-237+H/2i/pattern_01 (2 queries)...
+[1/2] (/m/05p553 --[-/film/film/genre]--> ?) ∩ (/m/029j_ --[-/film... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] (/m/09nqf --[-/location/statistical_region/rent50_2./measure... -> Hits@1: N, Hits@10: N, Rank: -
+Results: 2i pattern_01
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 16s
+
+[20] Running FB15k-237+H/2i/pattern_10 (2 queries)...
+[1/2] (/m/05p553 --[-/film/film/genre]--> ?) ∩ (/m/029j_ --[-/film... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] (/m/09nqf --[-/location/statistical_region/rent50_2./measure... -> Hits@1: N, Hits@10: N, Rank: -
+Results: 2i pattern_10
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 15s
+
+[21] Running FB15k-237+H/3p/pattern_001 (2 queries)...
+[1/2] /m/01516r --[-/music/genre/artists]--> ? --[+/music/genre/pa... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] /m/0840vq --[-/music/genre/artists]--> ? --[+/music/genre/pa... -> Hits@1: N, Hits@10: N, Rank: -
+Results: 3p pattern_001
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 2s
+
+[22] Running FB15k-237+H/3p/pattern_100 (2 queries)...
+[1/2] /m/01516r --[-/music/genre/artists]--> ? --[+/music/genre/pa... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] /m/092ys_y --[+/people/person/profession]--> ? --[-/film/fil... -> Hits@1: N, Hits@10: N, Rank: -
+Results: 3p pattern_100
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 15s
+
+[23] Running FB15k-237+H/3i/pattern_001 (2 queries)...
+[1/2] (/m/0971v --[+/food/food/nutrients./food/nutrition_fact/nutr... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] (/m/06sks6 --[-/olympics/olympic_participating_country/athle... -> Hits@1: N, Hits@10: N, Rank: -
+Results: 3i pattern_001
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 15s
+
+[24] Running FB15k-237+H/3i/pattern_100 (2 queries)...
+[1/2] (/m/0971v --[+/food/food/nutrients./food/nutrition_fact/nutr... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] (/m/06sks6 --[-/olympics/olympic_participating_country/athle... -> Hits@1: N, Hits@10: N, Rank: -
+Results: 3i pattern_100
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 15s
+
+[25] Running FB15k-237+H/4p/pattern_0001 (2 queries)...
+[1/2] /m/01trhmt --[+/people/person/profession]--> ? --[-/people/p... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] /m/01vvydl --[+/people/person/profession]--> ? --[-/people/p... -> Hits@1: N, Hits@10: N, Rank: -
+Results: 4p pattern_0001
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 2s
+
+[26] Running FB15k-237+H/4p/pattern_1000 (2 queries)...
+[1/2] /m/058s44 --[+/award/award_nominee/award_nominations./award/... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] /m/04rcr --[+/music/artist/origin]--> ? --[-/time/event/loca... -> Hits@1: N, Hits@10: N, Rank: -
+Results: 4p pattern_1000
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 15s
+
+[27] Running FB15k-237+H/pi/pattern_001 (2 queries)...
+[1/2] (/m/01fpfn --[-/location/country/form_of_government]--> ? --... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] (/m/0pqc5 --[+/government/government_office_category/officeh... -> Hits@1: N, Hits@10: N, Rank: -
+Results: pi pattern_001
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 16s
+
+[28] Running FB15k-237+H/pi/pattern_100 (2 queries)...
+[1/2] (/m/047rgpy --[-/people/profession/specialization_of]--> ? -... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] (/m/05qtj --[-/people/deceased_person/place_of_death]--> ? -... -> Hits@1: N, Hits@10: N, Rank: -
+Results: pi pattern_100
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 15s
+
+[29] Running FB15k-237+H/ip/pattern_001 (2 queries)...
+[1/2] ((/m/02cgp8 --[-/location/location/partially_contains]--> ?)... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] ((/m/03k9fj --[-/film/film/genre]--> ?) ∩ (/m/09nqf --[-/fil... -> Hits@1: N, Hits@10: N, Rank: -
+Results: ip pattern_001
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 2s
+
+[30] Running FB15k-237+H/ip/pattern_100 (2 queries)...
+[1/2] ((/m/03k9fj --[-/film/film/genre]--> ?) ∩ (/m/09nqf --[-/fil... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] ((/m/01fpfn --[-/location/country/form_of_government]--> ?) ... -> Hits@1: N, Hits@10: N, Rank: -
+Results: ip pattern_100
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 15s
+
+[31] Running FB15k-237+H/up/pattern_001 (2 queries)...
+[1/2] ((/m/05kj_ --[+/location/statistical_region/religions./locat... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] ((/m/0pz04 --[+/people/person/religion]--> ?) ∪ (/m/04fhn_ -... -> Hits@1: N, Hits@10: N, Rank: -
+Results: up pattern_001
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 2s
+
+[32] Running FB15k-237+H/up/pattern_100 (2 queries)...
+[1/2] ((/m/01hp22 --[+/olympics/olympic_sport/athletes./olympics/o... -> Hits@1: N, Hits@10: N, Rank: -
+[2/2] ((/m/01bx35 --[+/award/award_ceremony/awards_presented./awar... -> Hits@1: N, Hits@10: N, Rank: -
+Results: up pattern_100
+Queries evaluated: 2
+Hits@1:  0.0000 (0.0%)
+Hits@10: 0.0000 (0.0%)
+MRR:     0.0000
+  Time: 15s
+
+============================================
+Evaluation completed at: Fri Feb  6 09:35:37 CET 2026
+Total runs: 32
+============================================
+
+SUMMARY TABLE
+============================================
+Dataset      Type   Pattern  N    Hits@1   Hits@10  MRR     
+------------------------------------------------------------
+NELL995+H    2p     01       2    0        0        0.0000  
+NELL995+H    2p     10       2    0        0        0.0000  
+NELL995+H    2i     01       2    0        0        0.0000  
+NELL995+H    2i     10       2    0        0        0.0000  
+NELL995+H    3p     001      2    0        0        0.0000  
+NELL995+H    3p     100      2    0        0        0.0000  
+NELL995+H    3i     001      2    0        0        0.0000  
+NELL995+H    3i     100      2    0        0        0.0000  
+NELL995+H    4p     0001     2    0        0        0.0000  
+NELL995+H    4p     1000     2    0        0        0.0000  
+NELL995+H    pi     001      2    0        0        0.0000  
+NELL995+H    pi     100      2    0        0        0.0000  
+NELL995+H    ip     001      2    0        0        0.0000  
+NELL995+H    ip     100      2    0        0        0.0000  
+NELL995+H    up     001      2    0        0        0.0000  
+NELL995+H    up     100      2    0        0        0.0000  
+FB15k-237+H  2p     01       2    0        0        0.0000  
+FB15k-237+H  2p     10       2    0        0        0.0000  
+FB15k-237+H  2i     01       2    0        0        0.0000  
+FB15k-237+H  2i     10       2    0        0        0.0000  
+FB15k-237+H  3p     001      2    0        0        0.0000  
+FB15k-237+H  3p     100      2    0        0        0.0000  
+FB15k-237+H  3i     001      2    0        0        0.0000  
+FB15k-237+H  3i     100      2    0        0        0.0000  
+FB15k-237+H  4p     0001     2    0        0        0.0000  
+FB15k-237+H  4p     1000     2    0        0        0.0000  
+FB15k-237+H  pi     001      2    0        0        0.0000  
+FB15k-237+H  pi     100      2    0        0        0.0000  
+FB15k-237+H  ip     001      2    0        0        0.0000  
+FB15k-237+H  ip     100      2    0        0        0.0000  
+FB15k-237+H  up     001      2    0        0        0.0000  
+FB15k-237+H  up     100      2    0        0        0.0000  
+============================================

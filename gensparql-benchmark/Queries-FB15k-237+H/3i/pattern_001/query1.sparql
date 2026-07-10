@@ -1,0 +1,15 @@
+# 3i Query (pattern_001): (Beef --[→nutrition fact.nutrient]--> ?) ∩ (Bread --[→nutrition fact.nutrient]--> ?) ∩ (Onion --[→nutrition fact.nutrient]--> ?)
+# Pattern: 001 (0=KG match, 1=GENOP inference)
+# Expected Answers (4):
+#   1. Saturated fat (/m/01n78x)
+#   2. Potassium (/m/025s7j4)
+#   3. Ash (/m/04zjxcz)
+#   4. Arginine (/m/0h1yf)
+
+SELECT ?answer WHERE {
+  <http://freebase.com/entity/m_0971v_Beef> <http://freebase.com/relation/forward_food_food_nutrients._food_nutrition_fact_nutrient> ?answer .
+  <http://freebase.com/entity/m_09728_Bread> <http://freebase.com/relation/forward_food_food_nutrients._food_nutrition_fact_nutrient> ?answer .
+  GENOP("List movies or entities where /m/0dj75 is their food food nutrients food nutrition fact nutrient. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

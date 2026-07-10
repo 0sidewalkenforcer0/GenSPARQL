@@ -1,0 +1,16 @@
+# 3i Query (pattern_111): (concept_profession_workers --[concept:professionistypeofprofession]--> ?) ∩ (concept_profession_practitioners --[concept:professionistypeofprofession_reverse]--> ?) ∩ (concept_profession_practitioners --[concept:professionistypeofprofession]--> ?)
+# Pattern: 111 (0=KG match, 1=GENOP inference)
+# Expected Answers (1):
+#   1. concept_profession_care_professionals
+
+SELECT ?answer WHERE {
+  GENOP("List movies or entities where concept_profession_workers is their professionistypeofprofession. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on concept_profession_practitioners format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies or entities where concept_profession_practitioners is their professionistypeofprofession. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

@@ -1,0 +1,8 @@
+# Pure LLM Query (Zero-shot)
+# Expected Answer: concept_university_institute
+# No grounding - LLM generates freely
+
+PROMPT: What is the academicprogramatuniversity of teaching (politicsissue)?
+
+Return your answer as a JSON array: ["answer1", "answer2", ...]
+If you don't know, return [].
