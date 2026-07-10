@@ -1,0 +1,13 @@
+{
+  "num_answers": 2,
+  "answers": [
+    "/m/03yk8z",
+    "/m/03j0d"
+  ],
+  "answers_readable": [
+    "Jennifer Ehle",
+    "H. P. Lovecraft"
+  ],
+  "query_readable": "/m/0ggbfwf --[+/film/film/language]--> ? --[-/people/ethnicity/languages_spoken]--> ? --[+/people/ethnicity/people]--> ?",
+  "query_readable_with_names": "Salmon Fishing in the Yemen --[→film.language]--> ? --[←ethnicity.languages spoken]--> ? --[→ethnicity.people]--> ?"
+}

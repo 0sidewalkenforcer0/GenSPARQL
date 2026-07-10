@@ -1,0 +1,11 @@
+{
+  "num_answers": 1,
+  "answers": [
+    "/m/03cvv4"
+  ],
+  "answers_readable": [
+    "Blair Underwood"
+  ],
+  "query_readable": "(/m/01q2nx --[-/film/actor/film./film/performance/film]--> ?) ∩ (/m/09c7w0 --[-/people/person/nationality]--> ?) ∩ (/m/04ztj --[-/people/person/spouse_s./people/marriage/type_of_union]--> ?)",
+  "query_readable_with_names": "(Deep Impact --[←performance.film]--> ?) ∩ (United States of America --[←person.nationality]--> ?) ∩ (Marriage --[←marriage.type of union]--> ?)"
+}

@@ -1,0 +1,8 @@
+# Pure LLM Query (Zero-shot)
+# Expected Answer: concept_visualizablething_grenada
+# No grounding - LLM generates freely
+
+PROMPT: What is the citylocatedincountry of grenada (city)?
+
+Return your answer as a JSON array: ["answer1", "answer2", ...]
+If you don't know, return [].

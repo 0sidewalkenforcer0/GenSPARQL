@@ -1,0 +1,18 @@
+# up Query (pattern_001): ((Oregon --[→religion percentage.religion]--> ?) ∪ (Library of Congress Classification --[←taxonomy entry.taxonomy]--> ?)) --[←religion percentage.religion]--> ?
+# Pattern: 001 (0=KG match, 1=GENOP inference)
+# Expected Answers (4):
+#   1. Arkansas (/m/0vbk)
+#   2. North Carolina (/m/05fkf)
+#   3. Canada (/m/0d060g)
+#   4. Kansas (/m/0488g)
+
+SELECT ?answer ?mid WHERE {
+  {
+    <http://freebase.com/entity/m_05kj__Oregon> <http://freebase.com/relation/forward_location_statistical_region_religions._location_religion_percentage_religion> ?mid .
+  } UNION {
+    ?mid <http://freebase.com/relation/forward_user_tsegaran_random_taxonomy_subject_entry._user_tsegaran_random_taxonomy_entry_taxonomy> <http://freebase.com/entity/m_04n6k_Library_of_Congress_Classification> .
+  }
+  GENOP("List movies released on {{?mid}} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

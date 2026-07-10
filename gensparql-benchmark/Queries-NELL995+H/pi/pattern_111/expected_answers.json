@@ -1,0 +1,17 @@
+{
+  "num_answers": 9,
+  "answers": [
+    "concept_female_hillary",
+    "concept_politicianus_al_gore",
+    "concept_politicianus_mr__bush",
+    "concept_politicianus_legislation",
+    "concept_politicianus_bills",
+    "concept_politicianus_howard_coble",
+    "concept_politicianus_george_w",
+    "concept_politicianus_nancy_pelosi",
+    "concept_politicianus_franklin_d__roosevelt"
+  ],
+  "answers_readable": [],
+  "query_readable": "(concept_city_bush --[concept:agentcollaborateswithagent]--> ? --[concept:politicianusmemberofpoliticalgroup_reverse]--> ?) ∩ (concept_governmentorganization_house --[concept:politicianusmemberofpoliticalgroup_reverse]--> ?)",
+  "query_readable_with_names": ""
+}

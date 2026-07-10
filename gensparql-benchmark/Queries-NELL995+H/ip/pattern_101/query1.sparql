@@ -1,0 +1,16 @@
+# ip Query (pattern_101): ((concept_food_eggs --[concept:agriculturalproductcomingfromvertebrate]--> ?) ∩ (concept_bakedgood_sauce --[concept:fishservedwithfood_reverse]--> ?)) --[concept:animalsuchasfish_reverse]--> ?
+# Pattern: 101 (0=KG match, 1=GENOP inference)
+# Expected Answers (3):
+#   1. concept_fish_exotic_fish
+#   2. concept_fish_cutthroat_trout
+#   3. concept_animal_head
+
+SELECT ?answer ?mid WHERE {
+  GENOP("List movies or entities where concept_food_eggs is their agriculturalproductcomingfromvertebrate. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?mid),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?mid <http://nell.cs.cmu.edu/relation/concept_fishservedwithfood> <http://nell.cs.cmu.edu/entity/concept_bakedgood_sauce> .
+  GENOP("List movies released on {{?mid}} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

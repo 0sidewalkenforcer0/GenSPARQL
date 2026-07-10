@@ -1,0 +1,12 @@
+# 3i Query (pattern_100): (concept_stateorprovince_california --[concept:proxyfor_reverse]--> ?) ∩ (concept_buildingfeature_american --[concept:atlocation]--> ?) ∩ (concept_company_national --[concept:hasofficeincity]--> ?)
+# Pattern: 100 (0=KG match, 1=GENOP inference)
+# Expected Answers (1):
+#   1. concept_city_irvine
+
+SELECT ?answer WHERE {
+  GENOP("List movies released on concept_stateorprovince_california format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+  <http://nell.cs.cmu.edu/entity/concept_buildingfeature_american> <http://nell.cs.cmu.edu/relation/concept_atlocation> ?answer .
+  <http://nell.cs.cmu.edu/entity/concept_company_national> <http://nell.cs.cmu.edu/relation/concept_hasofficeincity> ?answer .
+}

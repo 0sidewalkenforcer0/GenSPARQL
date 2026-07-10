@@ -1,0 +1,10 @@
+{
+  "num_answers": 2,
+  "answers": [
+    "concept_landscapefeatures_metropolitan_area",
+    "concept_website_match"
+  ],
+  "answers_readable": [],
+  "query_readable": "(concept_beverage_new --[concept:atlocation]--> ?) ∩ (concept_lake_new --[concept:locationlocatedwithinlocation]--> ?) ∩ (concept_book_new --[concept:proxyfor_reverse]--> ?)",
+  "query_readable_with_names": ""
+}

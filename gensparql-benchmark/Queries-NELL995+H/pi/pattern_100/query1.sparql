@@ -1,0 +1,22 @@
+# pi Query (pattern_100): (concept_sportsteam_tampa_bay_rays --[concept:teamplayssport]--> ? --[concept:athleteplayssport_reverse]--> ?) ∩ (concept_sportsteamposition_center --[concept:athleteflyouttosportsteamposition_reverse]--> ?)
+# Pattern: 100 (0=KG match, 1=GENOP inference)
+# Expected Answers (368):
+#   1. concept_personmexico_jack_wilson
+#   2. concept_athlete_dexter_fowler
+#   3. concept_athlete_elvin_ramirez
+#   4. concept_athlete_steve_carlton
+#   5. concept_athlete_mo_vaughn
+#   6. concept_athlete_david_ortiz
+#   7. concept_personmexico_chris_iannetta
+#   8. concept_athlete_jeff_clement
+#   9. concept_athlete_al_kaline
+#   10. concept_athlete_jorge_sosa
+#   ... and 358 more
+
+SELECT ?answer ?mid WHERE {
+  GENOP("List movies or entities where concept_sportsteam_tampa_bay_rays is their teamplayssport. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?mid),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?answer <http://nell.cs.cmu.edu/relation/concept_athleteplayssport> ?mid .
+  ?answer <http://nell.cs.cmu.edu/relation/concept_athleteflyouttosportsteamposition> <http://nell.cs.cmu.edu/entity/concept_sportsteamposition_center> .
+}

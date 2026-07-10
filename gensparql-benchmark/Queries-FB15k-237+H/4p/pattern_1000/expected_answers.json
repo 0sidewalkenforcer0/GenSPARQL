@@ -1,0 +1,35 @@
+{
+  "num_answers": 13,
+  "answers": [
+    "/m/015zyd",
+    "/m/09wv__",
+    "/m/09f2j",
+    "/m/02g839",
+    "/m/0bjqh",
+    "/m/02s62q",
+    "/m/01qd_r",
+    "/m/02bqy",
+    "/m/07vjm",
+    "/m/0g8rj",
+    "/m/021w0_",
+    "/m/05q2c",
+    "/m/07tgn"
+  ],
+  "answers_readable": [
+    "California Institute of the Arts",
+    "Art Students League of New York",
+    "University of California, Los Angeles",
+    "Berklee College of Music",
+    "School of the Art Institute of Chicago",
+    "Rhode Island School of Design",
+    "University of Colorado Boulder",
+    "Dartmouth College",
+    "University of California, San Diego",
+    "University of Virginia",
+    "California State University, Long Beach",
+    "Occidental College",
+    "University of Oxford"
+  ],
+  "query_readable": "/m/058s44 --[+/award/award_nominee/award_nominations./award/award_nomination/nominated_for]--> ? --[+/film/film/other_crew./film/film_crew_gig/film_crew_role]--> ? --[-/people/person/profession]--> ? --[-/education/educational_institution/students_graduates./education/education/student]--> ?",
+  "query_readable_with_names": "Chris Evans --[→award nomination.nominated for]--> ? --[→film crew gig.film crew role]--> ? --[←person.profession]--> ? --[←education.student]--> ?"
+}

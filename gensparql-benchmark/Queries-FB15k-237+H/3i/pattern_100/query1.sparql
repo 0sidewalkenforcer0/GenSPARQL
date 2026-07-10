@@ -1,0 +1,13 @@
+# 3i Query (pattern_100): (Beef --[→nutrition fact.nutrient]--> ?) ∩ (Bread --[→nutrition fact.nutrient]--> ?) ∩ (Onion --[→nutrition fact.nutrient]--> ?)
+# Pattern: 100 (0=KG match, 1=GENOP inference)
+# Expected Answers (2):
+#   1. Polyunsaturated fat (/m/05gh50)
+#   2. Water (/m/0838f)
+
+SELECT ?answer WHERE {
+  GENOP("List movies or entities where /m/0971v is their food food nutrients food nutrition fact nutrient. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+  <http://freebase.com/entity/m_09728_Bread> <http://freebase.com/relation/forward_food_food_nutrients._food_nutrition_fact_nutrient> ?answer .
+  <http://freebase.com/entity/m_0dj75_Onion> <http://freebase.com/relation/forward_food_food_nutrients._food_nutrition_fact_nutrient> ?answer .
+}

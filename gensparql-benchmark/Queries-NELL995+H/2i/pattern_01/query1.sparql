@@ -1,0 +1,15 @@
+# 2i Query (pattern_01): (concept_profession_providers --[concept:professionistypeofprofession]--> ?) ∩ (concept_profession_staff --[concept:professionistypeofprofession]--> ?)
+# Pattern: 01 (0=KG match, 1=GENOP inference)
+# Expected Answers (5):
+#   1. concept_profession_psychiatrists
+#   2. concept_profession_nurses
+#   3. concept_jobposition_doctor
+#   4. concept_profession_health_care_professionals
+#   5. concept_profession_doctors
+
+SELECT ?answer WHERE {
+  <http://nell.cs.cmu.edu/entity/concept_profession_providers> <http://nell.cs.cmu.edu/relation/concept_professionistypeofprofession> ?answer .
+  GENOP("List movies or entities where concept_profession_staff is their professionistypeofprofession. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

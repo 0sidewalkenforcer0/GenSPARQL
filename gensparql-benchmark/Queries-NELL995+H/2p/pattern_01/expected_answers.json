@@ -1,0 +1,24 @@
+{
+  "num_answers": 16,
+  "answers": [
+    "concept_clothing_baseball_cap",
+    "concept_clothing_work_boots",
+    "concept_clothing_short_shorts",
+    "concept_clothing_black_coat",
+    "concept_clothing_cotton_shirts",
+    "concept_clothing_knickers",
+    "concept_clothing_white_tank",
+    "concept_clothing_pink_dress",
+    "concept_clothing_track_pants",
+    "concept_clothing_gown",
+    "concept_clothing_denim_shorts",
+    "concept_clothing_leather_pants",
+    "concept_clothing_cowboy_hat",
+    "concept_clothing_turtleneck_sweater",
+    "concept_clothing_khaki_shorts",
+    "concept_clothing_cutoff_jeans"
+  ],
+  "answers_readable": [],
+  "query_readable": "concept_clothing_white_shirt --[concept:clothingtogowithclothing]--> ? --[concept:clothingtogowithclothing]--> ?",
+  "query_readable_with_names": ""
+}

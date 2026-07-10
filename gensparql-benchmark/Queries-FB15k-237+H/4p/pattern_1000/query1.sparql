@@ -1,0 +1,24 @@
+# 4p Query (pattern_1000): Chris Evans --[→award nomination.nominated for]--> ? --[→film crew gig.film crew role]--> ? --[←person.profession]--> ? --[←education.student]--> ?
+# Machine IDs: anchor=/m/058s44
+# Pattern: 1000 (0=KG match, 1=GENOP inference)
+# Expected Answers (13):
+#   1. California Institute of the Arts (/m/015zyd)
+#   2. Art Students League of New York (/m/09wv__)
+#   3. University of California, Los Angeles (/m/09f2j)
+#   4. Berklee College of Music (/m/02g839)
+#   5. School of the Art Institute of Chicago (/m/0bjqh)
+#   6. Rhode Island School of Design (/m/02s62q)
+#   7. University of Colorado Boulder (/m/01qd_r)
+#   8. Dartmouth College (/m/02bqy)
+#   9. University of California, San Diego (/m/07vjm)
+#   10. University of Virginia (/m/0g8rj)
+#   ... and 3 more
+
+SELECT ?answer ?e1 ?e2 ?e3 WHERE {
+  GENOP("List movies or entities where /m/058s44 is their nominee nominations nomination nominated for. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?e1),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?e1 <http://freebase.com/relation/forward_film_film_other_crew._film_film_crew_gig_film_crew_role> ?e2 .
+  ?e3 <http://freebase.com/relation/forward_people_person_profession> ?e2 .
+  ?answer <http://freebase.com/relation/forward_education_educational_institution_students_graduates._education_education_student> ?e3 .
+}

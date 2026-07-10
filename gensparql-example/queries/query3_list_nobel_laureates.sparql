@@ -1,0 +1,12 @@
+# Query 3: Base Mode GENOP - List five Nobel Prize winners
+# Demonstrates GENOP in base mode (no input variables)
+# The GENOP query generates a list independently without binding to existing data
+
+PREFIX ex: <http://example.org/>
+
+SELECT ?scientist ?award WHERE {
+  GENOP("List all prize marie curie got. Return as JSON array with objects containing 'scientist' and 'award' fields", 
+        (?scientist, ?award), 
+        <model:openrouter:xiaomi/mimo-v2-flash:free>)
+}
+

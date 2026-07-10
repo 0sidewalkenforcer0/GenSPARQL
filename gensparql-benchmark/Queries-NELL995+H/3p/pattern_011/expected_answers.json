@@ -1,0 +1,12 @@
+{
+  "num_answers": 4,
+  "answers": [
+    "concept_city_ardmore",
+    "concept_city_lawton",
+    "concept_city_harlan",
+    "concept_city_center"
+  ],
+  "answers_readable": [],
+  "query_readable": "concept_city_seattle --[concept:automobilemakerdealersincity_reverse]--> ? --[concept:automobilemakercardealersinstateorprovince]--> ? --[concept:citylocatedinstate_reverse]--> ?",
+  "query_readable_with_names": ""
+}

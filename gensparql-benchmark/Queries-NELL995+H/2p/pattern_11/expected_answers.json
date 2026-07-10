@@ -1,0 +1,9 @@
+{
+  "num_answers": 1,
+  "answers": [
+    "concept_county_milford"
+  ],
+  "answers_readable": [],
+  "query_readable": "concept_country_usa --[concept:statelocatedincountry_reverse]--> ? --[concept:atlocation_reverse]--> ?",
+  "query_readable_with_names": ""
+}

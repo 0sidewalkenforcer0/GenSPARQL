@@ -1,0 +1,24 @@
+# pi Query (pattern_101): (Buenos Aires --[←marriage.location of ceremony]--> ? --[←marriage.type of union]--> ?) ∩ (Songwriter-GB --[←person.profession]--> ?)
+# Pattern: 101 (0=KG match, 1=GENOP inference)
+# Expected Answers (30):
+#   1. Bobby McFerrin (/m/01sbf2)
+#   2. Gwen Stefani (/m/016fnb)
+#   3. Ringo Starr (/m/01vrnsk)
+#   4. Robert Fripp (/m/06gd4)
+#   5. CeCe Winans (/m/01kp_1t)
+#   6. Bruce Springsteen (/m/0gcs9)
+#   7. Miles Davis (/m/053yx)
+#   8. The Edge (/m/01vswx5)
+#   9. Bruce Hornsby (/m/02x8z_)
+#   10. Carole Bayer Sager (/m/02v3yy)
+#   ... and 20 more
+
+SELECT ?answer ?mid WHERE {
+  GENOP("List movies released on /m/01ly5m format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?mid),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?answer <http://freebase.com/relation/forward_people_person_spouse_s._people_marriage_type_of_union> ?mid .
+  GENOP("List movies released on /m/0nbcg format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

@@ -1,0 +1,37 @@
+{
+  "num_answers": 14,
+  "answers": [
+    "/m/04vrxh",
+    "/m/02_jkc",
+    "/m/074tb5",
+    "/m/044mfr",
+    "/m/01wf86y",
+    "/m/05y7hc",
+    "/m/01x1fq",
+    "/m/01w20rx",
+    "/m/01w7nww",
+    "/m/01kv4mb",
+    "/m/06gd4",
+    "/m/01k47c",
+    "/m/03wjb7",
+    "/m/03cfjg"
+  ],
+  "answers_readable": [
+    "Chad Hugo",
+    "Phil Ramone",
+    "Dermot Mulroney",
+    "Adam Levine",
+    "Cyndi Lauper",
+    "Craig Armstrong",
+    "Angelo Badalamenti",
+    "Tobymac",
+    "Erykah Badu",
+    "Leon Russell",
+    "Robert Fripp",
+    "Jon Lord",
+    "Robyn Hitchcock",
+    "Marty Stuart"
+  ],
+  "query_readable": "/m/0214km --[+/music/performance_role/track_performances./music/track_contribution/role]--> ? --[-/music/artist/track_contributions./music/track_contribution/role]--> ?",
+  "query_readable_with_names": "Solo --[→track contribution.role]--> ? --[←track contribution.role]--> ?"
+}

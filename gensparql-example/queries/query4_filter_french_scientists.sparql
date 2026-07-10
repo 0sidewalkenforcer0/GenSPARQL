@@ -1,0 +1,19 @@
+# Query 4: Semantic Filter - Scientists born in France
+# Demonstrates GENOP for semantic filtering using LLM knowledge
+# The LLM uses its own knowledge to determine if a scientist was born in France
+
+
+PREFIX ex: <http://example.org/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?scientist ?award WHERE {
+  ?person foaf:name ?scientist .
+  ?person ex:receivedAward ?award .
+  ?award rdfs:label ?awardLabel .
+  GENOP("Was the scientist '{?scientist}' born in Germany or German territory? Answer only 'yes' or 'no'", 
+        ?isGermany, 
+        <model:openrouter:xiaomi/mimo-v2-flash:free>)
+  FILTER(CONTAINS(LCASE(?isGermany), "yes"))
+}
+

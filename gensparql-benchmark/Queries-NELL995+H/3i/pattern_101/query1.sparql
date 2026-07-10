@@ -1,0 +1,15 @@
+# 3i Query (pattern_101): (concept_beverage_new --[concept:atlocation]--> ?) ∩ (concept_lake_new --[concept:locationlocatedwithinlocation]--> ?) ∩ (concept_book_new --[concept:proxyfor_reverse]--> ?)
+# Pattern: 101 (0=KG match, 1=GENOP inference)
+# Expected Answers (2):
+#   1. concept_landscapefeatures_metropolitan_area
+#   2. concept_website_match
+
+SELECT ?answer WHERE {
+  GENOP("List movies or entities where concept_beverage_new is their atlocation. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+  <http://nell.cs.cmu.edu/entity/concept_lake_new> <http://nell.cs.cmu.edu/relation/concept_locationlocatedwithinlocation> ?answer .
+  GENOP("List movies released on concept_book_new format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

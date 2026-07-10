@@ -1,0 +1,24 @@
+# ip Query (pattern_110): ((concept_country_scotland --[concept:languageofcountry_reverse]--> ?) ∩ (concept_university_graduate_school --[concept:languageofuniversity_reverse]--> ?)) --[concept:languageofcountry]--> ?
+# Pattern: 110 (0=KG match, 1=GENOP inference)
+# Expected Answers (62):
+#   1. concept_country_bhutan
+#   2. concept_country_bulgaria
+#   3. concept_country_bangladesh
+#   4. concept_country_palestine
+#   5. concept_country_wales
+#   6. concept_country_new_zealand
+#   7. concept_country_singapore
+#   8. concept_country_united_arab_emirates
+#   9. concept_country_rwanda
+#   10. concept_visualizablething_grenada
+#   ... and 52 more
+
+SELECT ?answer ?mid WHERE {
+  GENOP("List movies released on concept_country_scotland format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?mid),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on concept_university_graduate_school format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?mid),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?mid <http://nell.cs.cmu.edu/relation/concept_languageofcountry> ?answer .
+}

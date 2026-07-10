@@ -1,0 +1,22 @@
+# pi Query (pattern_100): (Music executive-GB --[←profession.specialization of]--> ? --[←person.profession]--> ?) ∩ (Artist-GB --[←person.profession]--> ?)
+# Pattern: 100 (0=KG match, 1=GENOP inference)
+# Expected Answers (51):
+#   1. Whitney Houston (/m/086qd)
+#   2. Lauryn Hill (/m/015mrk)
+#   3. Cyndi Lauper (/m/01wf86y)
+#   4. Nicole Scherzinger (/m/0gps0z)
+#   5. Sheryl Crow (/m/06rgq)
+#   6. Robin Thicke (/m/01q32bd)
+#   7. Missy Elliott (/m/018n6m)
+#   8. Kirk Franklin (/m/01kwlwp)
+#   9. Kid Cudi (/m/04n2vgk)
+#   10. Janet Jackson (/m/0gbwp)
+#   ... and 41 more
+
+SELECT ?answer ?mid WHERE {
+  GENOP("List movies released on /m/047rgpy format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?mid),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?answer <http://freebase.com/relation/forward_people_person_profession> ?mid .
+  ?answer <http://freebase.com/relation/forward_people_person_profession> <http://freebase.com/entity/m_0n1h_Artist-GB> .
+}

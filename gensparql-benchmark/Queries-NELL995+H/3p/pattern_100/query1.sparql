@@ -1,0 +1,23 @@
+# 3p Query (pattern_100): concept_city_chula_vista --[concept:subpartof]--> ? --[concept:proxyfor_reverse]--> ? --[concept:atdate_reverse]--> ?
+# Machine IDs: anchor=concept_city_chula_vista
+# Pattern: 100 (0=KG match, 1=GENOP inference)
+# Expected Answers (1357):
+#   1. concept_mlalgorithm_speech
+#   2. concept_disease_pancreatic_cancer
+#   3. concept_country_england
+#   4. concept_book_romania
+#   5. concept_eventoutcome_loss
+#   6. concept_city_singapore
+#   7. concept_visualartmovement_sciences
+#   8. concept_book_woman
+#   9. concept_visualizablething_bonn
+#   10. concept_visualizablething_award
+#   ... and 1347 more
+
+SELECT ?answer ?e1 ?e2 WHERE {
+  GENOP("List movies or entities where concept_city_chula_vista is their subpartof. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?e1),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?e2 <http://nell.cs.cmu.edu/relation/concept_proxyfor> ?e1 .
+  ?answer <http://nell.cs.cmu.edu/relation/concept_atdate> ?e2 .
+}

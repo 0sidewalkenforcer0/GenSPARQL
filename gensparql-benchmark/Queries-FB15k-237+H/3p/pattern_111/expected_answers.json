@@ -1,0 +1,15 @@
+{
+  "num_answers": 3,
+  "answers": [
+    "/m/030xr_",
+    "/m/01yhvv",
+    "/m/03wy70"
+  ],
+  "answers_readable": [
+    "Colm Feore",
+    "Elisha Cuthbert",
+    "Clancy Brown"
+  ],
+  "query_readable": "/m/047vnkj --[+/film/film/other_crew./film/film_crew_gig/film_crew_role]--> ? --[-/tv/tv_program/tv_producer./tv/tv_producer_term/producer_type]--> ? --[+/tv/tv_program/regular_cast./tv/regular_tv_appearance/actor]--> ?",
+  "query_readable_with_names": "2012 --[→film crew gig.film crew role]--> ? --[←tv producer term.producer type]--> ? --[→regular tv appearance.actor]--> ?"
+}

@@ -1,0 +1,12 @@
+{
+  "num_answers": 4,
+  "answers": [
+    "concept_sportsteam_los_angeles_rams",
+    "concept_sportsteam_atlanta_thrashers",
+    "concept_sportsteam_colorado_avalanche",
+    "concept_sportsteam_nashville_predators"
+  ],
+  "answers_readable": [],
+  "query_readable": "concept_sportsgame_championship --[concept:sportsgameteam]--> ? --[concept:sportsgamewinner_reverse]--> ? --[concept:sportsgameteam]--> ? --[concept:teamplaysagainstteam]--> ?",
+  "query_readable_with_names": ""
+}

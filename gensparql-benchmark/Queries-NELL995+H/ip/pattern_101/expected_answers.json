@@ -1,0 +1,11 @@
+{
+  "num_answers": 3,
+  "answers": [
+    "concept_fish_exotic_fish",
+    "concept_fish_cutthroat_trout",
+    "concept_animal_head"
+  ],
+  "answers_readable": [],
+  "query_readable": "((concept_food_eggs --[concept:agriculturalproductcomingfromvertebrate]--> ?) ∩ (concept_bakedgood_sauce --[concept:fishservedwithfood_reverse]--> ?)) --[concept:animalsuchasfish_reverse]--> ?",
+  "query_readable_with_names": ""
+}

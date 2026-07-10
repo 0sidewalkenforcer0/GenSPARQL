@@ -1,0 +1,8 @@
+# Pure LLM Query (Zero-shot)
+# Expected Answer: concept_bodypart_sac
+# No grounding - LLM generates freely
+
+PROMPT: What is the bodypartcontainsbodypart of nerves001 (bodypart)?
+
+Return your answer as a JSON array: ["answer1", "answer2", ...]
+If you don't know, return [].

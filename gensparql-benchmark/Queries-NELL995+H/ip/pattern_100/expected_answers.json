@@ -1,0 +1,10 @@
+{
+  "num_answers": 2,
+  "answers": [
+    "concept_city_lovington",
+    "concept_city_espanola"
+  ],
+  "answers_readable": [],
+  "query_readable": "((concept_country_u_s_ --[concept:statelocatedingeopoliticallocation_reverse]--> ?) ∩ (concept_country_usa --[concept:statelocatedincountry_reverse]--> ?)) --[concept:atlocation_reverse]--> ?",
+  "query_readable_with_names": ""
+}

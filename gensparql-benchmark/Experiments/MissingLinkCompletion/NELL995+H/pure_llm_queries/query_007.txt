@@ -1,0 +1,8 @@
+# Pure LLM Query (Zero-shot)
+# Expected Answer: concept_personmexico_ncaa
+# No grounding - LLM generates freely
+
+PROMPT: Who does florida gulf coast eagles (sportsteam) collaborate with?
+
+Return your answer as a JSON array: ["answer1", "answer2", ...]
+If you don't know, return [].

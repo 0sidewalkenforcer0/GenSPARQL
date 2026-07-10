@@ -1,0 +1,11 @@
+{
+  "num_answers": 3,
+  "answers": [
+    "concept_coach_romeo_crennel",
+    "concept_athlete_butch_davis",
+    "concept_person_belichick"
+  ],
+  "answers_readable": [],
+  "query_readable": "concept_sportsteam_new_york_giants --[concept:teamplaysagainstteam_reverse]--> ? --[concept:athleteplaysforteam_reverse]--> ? --[concept:athleteledsportsteam]--> ? --[concept:organizationhiredperson]--> ?",
+  "query_readable_with_names": ""
+}

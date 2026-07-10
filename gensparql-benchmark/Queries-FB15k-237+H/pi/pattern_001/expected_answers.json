@@ -1,0 +1,13 @@
+{
+  "num_answers": 2,
+  "answers": [
+    "/m/03vrp",
+    "/m/016hvl"
+  ],
+  "answers_readable": [
+    "Italo Calvino",
+    "Pier Paolo Pasolini"
+  ],
+  "query_readable": "(/m/01fpfn --[-/location/country/form_of_government]--> ? --[-/people/person/nationality]--> ?) ∩ (/m/0d8qb --[-/people/person/profession]--> ?)",
+  "query_readable_with_names": "(Unitary state --[←country.form of government]--> ? --[←person.nationality]--> ?) ∩ (Journalist-GB --[←person.profession]--> ?)"
+}

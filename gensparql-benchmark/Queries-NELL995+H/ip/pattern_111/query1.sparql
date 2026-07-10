@@ -1,0 +1,26 @@
+# ip Query (pattern_111): ((concept_plant_jacaranda --[concept:plantincludeplant_reverse]--> ?) ∩ (concept_emotion_peace --[concept:plantrepresentemotion_reverse]--> ?)) --[concept:plantincludeplant_reverse]--> ?
+# Pattern: 111 (0=KG match, 1=GENOP inference)
+# Expected Answers (31):
+#   1. concept_plant_hollies
+#   2. concept_plant_plum
+#   3. concept_plant_cherry_blossom
+#   4. concept_plant_pear_cacti
+#   5. concept_plant_olive_trees
+#   6. concept_plant_hazel
+#   7. concept_plant_dogwood
+#   8. concept_fruit_apples
+#   9. concept_plant_coconut_palm
+#   10. concept_plant_elm_trees
+#   ... and 21 more
+
+SELECT ?answer ?mid WHERE {
+  GENOP("List movies released on concept_plant_jacaranda format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?mid),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on concept_emotion_peace format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?mid),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on {{?mid}} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

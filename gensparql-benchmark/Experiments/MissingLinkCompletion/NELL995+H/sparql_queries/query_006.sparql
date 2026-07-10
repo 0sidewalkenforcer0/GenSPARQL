@@ -1,0 +1,7 @@
+# Standard SPARQL Query (1-hop Link Prediction)
+# Expected Answer: concept_sportsleague_ncaa
+# This query should return EMPTY (link is missing from train KG)
+
+SELECT ?target WHERE {
+  <http://nell.cs.cmu.edu/entity/concept_sportsteam_faulkner_state_sun_chiefs> <http://nell.cs.cmu.edu/relation/concept_teamplaysinleague> ?target .
+}

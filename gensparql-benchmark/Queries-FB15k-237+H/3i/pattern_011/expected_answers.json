@@ -1,0 +1,11 @@
+{
+  "num_answers": 1,
+  "answers": [
+    "/m/047svrl"
+  ],
+  "answers_readable": [
+    "Funny People"
+  ],
+  "query_readable": "(/m/017s11 --[+/film/film_distributor/films_distributed./film/film_film_distributor_relationship/film]--> ?) ∩ (/m/0ch6mp2 --[-/film/film/other_crew./film/film_crew_gig/film_crew_role]--> ?) ∩ (/m/02h40lc --[-/film/film/language]--> ?)",
+  "query_readable_with_names": "(Columbia Pictures --[→film film distributor relationship.film]--> ?) ∩ (Sound Mixer --[←film crew gig.film crew role]--> ?) ∩ (English Language --[←film.language]--> ?)"
+}

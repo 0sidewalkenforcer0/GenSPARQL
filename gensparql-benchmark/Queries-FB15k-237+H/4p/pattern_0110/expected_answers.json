@@ -1,0 +1,33 @@
+{
+  "num_answers": 12,
+  "answers": [
+    "/m/01w65s",
+    "/m/0mqs0",
+    "/m/0kwmc",
+    "/m/0n25q",
+    "/m/0nzw2",
+    "/m/0j_1v",
+    "/m/0fplg",
+    "/m/0mlw1",
+    "/m/0l2sr",
+    "/m/0kwgs",
+    "/m/0nm6k",
+    "/m/0msck"
+  ],
+  "answers_readable": [
+    "Chicago metropolitan area",
+    "McLennan County",
+    "Mobile County",
+    "Jefferson County",
+    "DeKalb County",
+    "Volusia County",
+    "Tompkins County",
+    "Whatcom County",
+    "San Joaquin County",
+    "Madison County",
+    "Penobscot County",
+    "Cameron County"
+  ],
+  "query_readable": "/m/0jbk9 --[-/location/hud_foreclosure_area/estimated_number_of_mortgages./measurement_unit/dated_integer/source]--> ? --[-/location/hud_county_place/place]--> ? --[-/location/hud_county_place/place]--> ? --[-/location/location/contains]--> ?",
+  "query_readable_with_names": "Animal9 --[←dated integer.source]--> ? --[←hud county place.place]--> ? --[←hud county place.place]--> ? --[←location.contains]--> ?"
+}

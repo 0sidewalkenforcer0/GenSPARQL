@@ -1,0 +1,42 @@
+@prefix ex: <http://example.org/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+# Albert Einstein
+ex:einstein
+    rdf:type foaf:Person ;
+    foaf:name "Albert Einstein" ;
+    ex:receivedAward ex:nobel_physics .
+
+# Alan Turing
+ex:turing
+    rdf:type foaf:Person ;
+    foaf:name "Alan Turing" ;
+    ex:receivedAward ex:obe .
+
+# Marie Curie
+ex:curie
+    rdf:type foaf:Person ;
+    foaf:name "Marie Curie" ;
+    ex:receivedAward ex:nobel_chemistry .
+
+# Awards
+ex:nobel_physics
+    rdf:type ex:Award ;
+    rdfs:label "Nobel Prize in Physics" ;
+    ex:year 1921 ;
+    ex:category "Physics" .
+
+ex:obe
+    rdf:type ex:Award ;
+    rdfs:label "Order of the British Empire" ;
+    ex:year 1945 ;
+    ex:category "Honor" .
+
+ex:nobel_chemistry
+    rdf:type ex:Award ;
+    rdfs:label "Nobel Prize in Chemistry" ;
+    ex:year 1911 ;
+    ex:category "Chemistry" .
+

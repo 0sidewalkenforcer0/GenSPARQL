@@ -1,0 +1,11 @@
+{
+  "num_answers": 3,
+  "answers": [
+    "concept_person_weill",
+    "concept_person_carnegie",
+    "concept_person_long"
+  ],
+  "answers_readable": [],
+  "query_readable": "concept_musicalbum_solaris --[concept:agentcreated_reverse]--> ? --[concept:agentcompeteswithagent_reverse]--> ? --[concept:subpartof_reverse]--> ? --[concept:personborninlocation_reverse]--> ?",
+  "query_readable_with_names": ""
+}

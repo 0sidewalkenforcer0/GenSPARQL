@@ -1,0 +1,35 @@
+{
+  "num_answers": 13,
+  "answers": [
+    "/m/0lfgr",
+    "/m/0yjf0",
+    "/m/0bqxw",
+    "/m/07t90",
+    "/m/01c333",
+    "/m/05hf_5",
+    "/m/05mv4",
+    "/m/012fvq",
+    "/m/02zd460",
+    "/m/01f1r4",
+    "/m/0l2tk",
+    "/m/01g7_r",
+    "/m/01fpvz"
+  ],
+  "answers_readable": [
+    "Tufts University",
+    "Magdalen College, Oxford",
+    "Emory University",
+    "University of Washington",
+    "Bowdoin College",
+    "University of Ghana",
+    "Oberlin College",
+    "Swarthmore College",
+    "University of California, Berkeley",
+    "University of California, Santa Barbara",
+    "Brigham Young University",
+    "Bryn Mawr College",
+    "Yale College"
+  ],
+  "query_readable": "/m/0223xd --[+/award/award_category/category_of]--> ? --[+/award/award_category/category_of]--> ? --[+/award/award_category/disciplines_or_subjects]--> ? --[-/education/educational_institution/students_graduates./education/education/major_field_of_study]--> ?",
+  "query_readable_with_names": "Bancroft Prize --[→award category.category of]--> ? --[→award category.category of]--> ? --[→award category.disciplines or subjects]--> ? --[←education.major field of study]--> ?"
+}

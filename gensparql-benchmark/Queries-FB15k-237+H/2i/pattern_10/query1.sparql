@@ -1,0 +1,21 @@
+# 2i Query (pattern_10): (Comedy-GB --[←film.genre]--> ?) ∩ (DVD --[←film regional release date.film release distribution medium]--> ?)
+# Pattern: 10 (0=KG match, 1=GENOP inference)
+# Expected Answers (45):
+#   1. Monster House (/m/07y9w5)
+#   2. American Pie (/m/07pd_j)
+#   3. Bullets Over Broadway (/m/0421ng)
+#   4. Chicago (/m/01cmp9)
+#   5. The Guard (/m/09gkx35)
+#   6. Volver (/m/0cvkv5)
+#   7. Three Kings (/m/01bb9r)
+#   8. Funny People (/m/047svrl)
+#   9. Mrs Henderson Presents (/m/089j8p)
+#   10. Zookeeper (/m/07kb7vh)
+#   ... and 35 more
+
+SELECT ?answer WHERE {
+  GENOP("List movies released on Comedy-GB format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?answer <http://freebase.com/relation/forward_film_film_release_date_s._film_film_regional_release_date_film_release_distribution_medium> <http://freebase.com/entity/m_029j__DVD> .
+}

@@ -1,0 +1,28 @@
+# 4p Query (pattern_1110): concept_country_scotland --[concept:languageofcountry_reverse]--> ? --[concept:languageofuniversity]--> ? --[concept:academicprogramatuniversity_reverse]--> ? --[concept:academicfieldsuchasacademicfield]--> ?
+# Machine IDs: anchor=concept_country_scotland
+# Pattern: 1110 (0=KG match, 1=GENOP inference)
+# Expected Answers (36):
+#   1. concept_academicfield_logistics
+#   2. concept_academicfield_operations_management
+#   3. concept_academicfield_international_affairs
+#   4. concept_academicfield_metallurgical_engineering
+#   5. concept_academicfield_electrical_and_electronics_engineering
+#   6. concept_academicfield_organizational_psychology
+#   7. concept_academicfield_materials_engineering
+#   8. concept_academicfield_phd_student
+#   9. concept_academicfield_electrical_engineer
+#   10. concept_academicfield_applied_biology
+#   ... and 26 more
+
+SELECT ?answer ?e1 ?e2 ?e3 WHERE {
+  GENOP("List movies released on concept_country_scotland format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?e1),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies or entities where {?e1} is their languageofuniversity. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?e2),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on {?e2} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?e3),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?e3 <http://nell.cs.cmu.edu/relation/concept_academicfieldsuchasacademicfield> ?answer .
+}

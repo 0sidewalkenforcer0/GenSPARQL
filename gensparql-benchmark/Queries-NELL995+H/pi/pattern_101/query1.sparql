@@ -1,0 +1,22 @@
+# pi Query (pattern_101): (concept_county_york_county --[concept:atlocation_reverse]--> ? --[concept:locationlocatedwithinlocation]--> ?) ∩ (concept_dateliteral_n2006 --[concept:atdate_reverse]--> ?)
+# Pattern: 101 (0=KG match, 1=GENOP inference)
+# Expected Answers (9):
+#   1. concept_geopoliticalorganization_web_site
+#   2. concept_stateorprovince_investors
+#   3. concept_city_nature
+#   4. concept_website_match
+#   5. concept_county_conditions
+#   6. concept_city_home
+#   7. concept_city_singapore
+#   8. concept_geopoliticalorganization_theaters
+#   9. concept_stateorprovince_california
+
+SELECT ?answer ?mid WHERE {
+  GENOP("List movies released on concept_county_york_county format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?mid),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?mid <http://nell.cs.cmu.edu/relation/concept_locationlocatedwithinlocation> ?answer .
+  GENOP("List movies released on concept_dateliteral_n2006 format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

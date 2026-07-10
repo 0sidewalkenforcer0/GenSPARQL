@@ -1,0 +1,24 @@
+# pi Query (pattern_011): (concept_athlete_sinorice_moss --[concept:athleteplaysinleague]--> ? --[concept:teamplaysinleague_reverse]--> ?) ∩ (concept_sportsleague_ncaa --[concept:teamplaysinleague_reverse]--> ?)
+# Pattern: 011 (0=KG match, 1=GENOP inference)
+# Expected Answers (78):
+#   1. concept_sportsteam_queens_college
+#   2. concept_sportsteam_greensboro
+#   3. concept_sportsteam_columbia_university_lions
+#   4. concept_sportsteam_xavier_musketeers
+#   5. concept_sportsteam_saint_peter_s_peacocks
+#   6. concept_sportsteam_florida_a_m_rattlers
+#   7. concept_sportsteam_centenary_college
+#   8. concept_sportsteam_oklahoma_state_cowboys
+#   9. concept_sportsteam_gardner_webb_bulldogs
+#   10. concept_sportsteam_florida_international_golden_panthers
+#   ... and 68 more
+
+SELECT ?answer ?mid WHERE {
+  <http://nell.cs.cmu.edu/entity/concept_athlete_sinorice_moss> <http://nell.cs.cmu.edu/relation/concept_athleteplaysinleague> ?mid .
+  GENOP("List movies released on {{?mid}} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on concept_sportsleague_ncaa format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

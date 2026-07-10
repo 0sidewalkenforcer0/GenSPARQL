@@ -1,0 +1,15 @@
+# 3i Query (pattern_101): (Bachelor of Arts --[→education.institution]--> ?) ∩ (Bachelor of Laws --[→education.institution]--> ?) ∩ (Public university --[←educational institution.school type]--> ?)
+# Pattern: 101 (0=KG match, 1=GENOP inference)
+# Expected Answers (2):
+#   1. University of Alberta (/m/01k3s2)
+#   2. Monash University (/m/013719)
+
+SELECT ?answer WHERE {
+  GENOP("List movies or entities where /m/014mlp is their education educational degree with this degree education education institution. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+  <http://freebase.com/entity/m_01rr_d_Bachelor_of_Laws> <http://freebase.com/relation/forward_education_educational_degree_people_with_this_degree._education_education_institution> ?answer .
+  GENOP("List movies released on /m/05jxkf format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

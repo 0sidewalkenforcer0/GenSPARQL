@@ -1,0 +1,39 @@
+{
+  "num_answers": 15,
+  "answers": [
+    "/m/01_x6d",
+    "/m/096hm",
+    "/m/05txrz",
+    "/m/0171lb",
+    "/m/0522wp",
+    "/m/01h1b",
+    "/m/043gj",
+    "/m/051wwp",
+    "/m/01b0k1",
+    "/m/01nr36",
+    "/m/01_x6v",
+    "/m/02_n5d",
+    "/m/081l_",
+    "/m/0f502",
+    "/m/0kvqv"
+  ],
+  "answers_readable": [
+    "Matt Stone",
+    "Blake Edwards",
+    "Seth Rogen",
+    "George Seaton",
+    "Uwe Boll",
+    "Billy Crystal",
+    "John Wayne",
+    "Bob Balaban",
+    "Verity Lambert",
+    "Tim Robbins",
+    "Trey Parker",
+    "Patricia Heaton",
+    "Wim Wenders",
+    "John Travolta",
+    "Terrence Malick"
+  ],
+  "query_readable": "/m/05ty4m --[+/people/person/languages]--> ? --[-/film/film/language]--> ? --[+/film/film/produced_by]--> ?",
+  "query_readable_with_names": "Judd Apatow --[→person.languages]--> ? --[←film.language]--> ? --[→film.produced by]--> ?"
+}

@@ -1,0 +1,8 @@
+# Pure LLM Query (Zero-shot)
+# Expected Answer: concept_plant_trees
+# No grounding - LLM generates freely
+
+PROMPT: What is the plantincludeplant of pines (plant)?
+
+Return your answer as a JSON array: ["answer1", "answer2", ...]
+If you don't know, return [].

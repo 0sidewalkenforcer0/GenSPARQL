@@ -1,0 +1,8 @@
+# Pure LLM Query (Zero-shot)
+# Expected Answer: concept_wine_cabernet
+# No grounding - LLM generates freely
+
+PROMPT: What is the beveragemadefrombeverage of vineyards (beverage)?
+
+Return your answer as a JSON array: ["answer1", "answer2", ...]
+If you don't know, return [].

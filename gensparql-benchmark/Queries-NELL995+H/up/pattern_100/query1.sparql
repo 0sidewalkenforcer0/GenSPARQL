@@ -1,0 +1,17 @@
+# up Query (pattern_100): ((concept_profession_artists --[concept:professionistypeofprofession_reverse]--> ?) ∪ (concept_profession_support --[concept:professionistypeofprofession]--> ?)) --[concept:professionistypeofprofession]--> ?
+# Pattern: 100 (0=KG match, 1=GENOP inference)
+# Expected Answers (3):
+#   1. concept_profession_physician_assistants
+#   2. concept_jobposition_dentist
+#   3. concept_profession_nutritionists
+
+SELECT ?answer ?mid WHERE {
+  {
+    GENOP("List movies released on concept_profession_artists format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+          (?mid),
+          <model:openrouter:deepseek/deepseek-chat>)
+  } UNION {
+    <http://nell.cs.cmu.edu/entity/concept_profession_support> <http://nell.cs.cmu.edu/relation/concept_professionistypeofprofession> ?mid .
+  }
+  ?mid <http://nell.cs.cmu.edu/relation/concept_professionistypeofprofession> ?answer .
+}

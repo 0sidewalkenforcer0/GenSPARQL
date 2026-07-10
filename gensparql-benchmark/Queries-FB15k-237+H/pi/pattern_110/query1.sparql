@@ -1,0 +1,24 @@
+# pi Query (pattern_110): (Buenos Aires --[←marriage.location of ceremony]--> ? --[←marriage.type of union]--> ?) ∩ (Songwriter-GB --[←person.profession]--> ?)
+# Pattern: 110 (0=KG match, 1=GENOP inference)
+# Expected Answers (18):
+#   1. Joe Strummer (/m/01w5gg6)
+#   2. George Benson (/m/03d2k)
+#   3. LL Cool J (/m/01vvyd8)
+#   4. Rick Springfield (/m/0167km)
+#   5. Cyndi Lauper (/m/01wf86y)
+#   6. Kenny Loggins (/m/01q3_2)
+#   7. Steve Howe (/m/02l_7y)
+#   8. Serj Tankian (/m/01386_)
+#   9. David Foster (/m/02dbp7)
+#   10. Sarah Brightman (/m/01sxd1)
+#   ... and 8 more
+
+SELECT ?answer ?mid WHERE {
+  GENOP("List movies released on /m/01ly5m format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?mid),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on {{?mid}} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?answer <http://freebase.com/relation/forward_people_person_profession> <http://freebase.com/entity/m_0nbcg_Songwriter-GB> .
+}

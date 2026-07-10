@@ -1,0 +1,14 @@
+# 2i Query (pattern_11): (New York City --[←person.place of birth]--> ?) ∩ (New York City --[←place lived.location]--> ?)
+# Pattern: 11 (0=KG match, 1=GENOP inference)
+# Expected Answers (2):
+#   1. Cynthia Nixon (/m/015c2f)
+#   2. Michael Kamen (/m/01ycfv)
+
+SELECT ?answer WHERE {
+  GENOP("List movies released on New York City format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on New York City format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

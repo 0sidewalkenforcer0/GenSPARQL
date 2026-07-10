@@ -1,0 +1,23 @@
+{
+  "num_answers": 7,
+  "answers": [
+    "/m/04jspq",
+    "/m/02rchht",
+    "/m/0315q3",
+    "/m/03_2y",
+    "/m/081lh",
+    "/m/0638kv",
+    "/m/0cc63l"
+  ],
+  "answers_readable": [
+    "John Lasseter",
+    "Jon Avnet",
+    "Vince Vaughn",
+    "John Woo",
+    "Woody Allen",
+    "William Cameron Menzies",
+    "David Dhawan"
+  ],
+  "query_readable": "/m/05ty4m --[+/people/person/languages]--> ? --[-/film/film/language]--> ? --[+/film/film/produced_by]--> ?",
+  "query_readable_with_names": "Judd Apatow --[→person.languages]--> ? --[←film.language]--> ? --[→film.produced by]--> ?"
+}

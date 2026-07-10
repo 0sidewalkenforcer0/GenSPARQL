@@ -1,0 +1,22 @@
+# ip Query (pattern_100): ((Adventure Film --[←film.genre]--> ?) ∩ (United States Dollar --[←dated money value.currency]--> ?)) --[←performance.film]--> ?
+# Pattern: 100 (0=KG match, 1=GENOP inference)
+# Expected Answers (59):
+#   1. P!nk (/m/01vrt_c)
+#   2. Joaquin Phoenix (/m/018db8)
+#   3. Matt Lucas (/m/02_j8x)
+#   4. Carmen Electra (/m/01lbp)
+#   5. Roy Scheider (/m/015wfg)
+#   6. Robert Redford (/m/0gs1_)
+#   7. Nicole Scherzinger (/m/0gps0z)
+#   8. Anne Hathaway (/m/02vntj)
+#   9. Colin Firth (/m/03f1zdw)
+#   10. Sammy Davis, Jr. (/m/01bmlb)
+#   ... and 49 more
+
+SELECT ?answer ?mid WHERE {
+  GENOP("List movies released on /m/03k9fj format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?mid),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?mid <http://freebase.com/relation/forward_film_film_estimated_budget._measurement_unit_dated_money_value_currency> <http://freebase.com/entity/m_09nqf_United_States_Dollar> .
+  ?answer <http://freebase.com/relation/forward_film_actor_film._film_performance_film> ?mid .
+}

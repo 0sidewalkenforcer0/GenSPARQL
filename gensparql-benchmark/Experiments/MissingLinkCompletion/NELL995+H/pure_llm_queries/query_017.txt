@@ -1,0 +1,8 @@
+# Pure LLM Query (Zero-shot)
+# Expected Answer: concept_writer_lilian_jackson_braun
+# No grounding - LLM generates freely
+
+PROMPT: What is the bookwriter of the cat who played brahms (book)?
+
+Return your answer as a JSON array: ["answer1", "answer2", ...]
+If you don't know, return [].

@@ -1,0 +1,15 @@
+# pi Query (pattern_001): (concept_vegetable_garlic --[concept:agriculturalproductcookedwithagriculturalproduct_reverse]--> ? --[concept:agriculturalproductcookedwithagriculturalproduct_reverse]--> ?) ∩ (concept_geometricshape_cubes --[concept:agriculturalproductcutintogeometricshape_reverse]--> ?)
+# Pattern: 001 (0=KG match, 1=GENOP inference)
+# Expected Answers (4):
+#   1. concept_vegetable_carrots
+#   2. concept_agriculturalproduct_mango
+#   3. concept_food_squash
+#   4. concept_vegetable_celery
+
+SELECT ?answer ?mid WHERE {
+  ?mid <http://nell.cs.cmu.edu/relation/concept_agriculturalproductcookedwithagriculturalproduct> <http://nell.cs.cmu.edu/entity/concept_vegetable_garlic> .
+  ?answer <http://nell.cs.cmu.edu/relation/concept_agriculturalproductcookedwithagriculturalproduct> ?mid .
+  GENOP("List movies released on concept_geometricshape_cubes format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

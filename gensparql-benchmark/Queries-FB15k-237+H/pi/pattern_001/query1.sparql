@@ -1,0 +1,13 @@
+# pi Query (pattern_001): (Unitary state --[←country.form of government]--> ? --[←person.nationality]--> ?) ∩ (Journalist-GB --[←person.profession]--> ?)
+# Pattern: 001 (0=KG match, 1=GENOP inference)
+# Expected Answers (2):
+#   1. Italo Calvino (/m/03vrp)
+#   2. Pier Paolo Pasolini (/m/016hvl)
+
+SELECT ?answer ?mid WHERE {
+  ?mid <http://freebase.com/relation/forward_location_country_form_of_government> <http://freebase.com/entity/m_01fpfn_Unitary_state> .
+  ?answer <http://freebase.com/relation/forward_people_person_nationality> ?mid .
+  GENOP("List movies released on /m/0d8qb format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

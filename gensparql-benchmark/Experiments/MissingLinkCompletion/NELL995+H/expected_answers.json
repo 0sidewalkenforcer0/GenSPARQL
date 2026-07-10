@@ -1,0 +1,122 @@
+[
+  {
+    "id": 1,
+    "head": "concept_retailstore_clinic",
+    "relation": "concept:atdate",
+    "expected_tail": "concept_dateliteral_n2008"
+  },
+  {
+    "id": 2,
+    "head": "concept_city_grenada",
+    "relation": "concept:citylocatedincountry",
+    "expected_tail": "concept_visualizablething_grenada"
+  },
+  {
+    "id": 3,
+    "head": "concept_profession_staff",
+    "relation": "concept:professionistypeofprofession",
+    "expected_tail": "concept_profession_special_education_teachers"
+  },
+  {
+    "id": 4,
+    "head": "concept_politicsissue_teaching",
+    "relation": "concept:academicprogramatuniversity",
+    "expected_tail": "concept_university_institute"
+  },
+  {
+    "id": 5,
+    "head": "concept_bodypart_nerves001",
+    "relation": "concept:bodypartcontainsbodypart",
+    "expected_tail": "concept_bodypart_sac"
+  },
+  {
+    "id": 6,
+    "head": "concept_sportsteam_faulkner_state_sun_chiefs",
+    "relation": "concept:teamplaysinleague",
+    "expected_tail": "concept_sportsleague_ncaa"
+  },
+  {
+    "id": 7,
+    "head": "concept_sportsteam_florida_gulf_coast_eagles",
+    "relation": "concept:agentcollaborateswithagent",
+    "expected_tail": "concept_personmexico_ncaa"
+  },
+  {
+    "id": 8,
+    "head": "concept_city_cohoes",
+    "relation": "concept:cityliesonriver",
+    "expected_tail": "concept_river_hudson"
+  },
+  {
+    "id": 9,
+    "head": "concept_chemical_nitrous_oxides",
+    "relation": "concept:chemicalistypeofchemical",
+    "expected_tail": "concept_chemical_pollutants"
+  },
+  {
+    "id": 10,
+    "head": "concept_beverage_vineyards",
+    "relation": "concept:beveragemadefrombeverage",
+    "expected_tail": "concept_wine_cabernet"
+  },
+  {
+    "id": 11,
+    "head": "concept_chemical_urea",
+    "relation": "concept:chemicalistypeofchemical",
+    "expected_tail": "concept_chemical_carbon"
+  },
+  {
+    "id": 12,
+    "head": "concept_newspaper_journal",
+    "relation": "concept:agentcontrols",
+    "expected_tail": "concept_newspaper_national_review"
+  },
+  {
+    "id": 13,
+    "head": "concept_clothing_jeans",
+    "relation": "concept:clothingtogowithclothing",
+    "expected_tail": "concept_clothing_t_shirt"
+  },
+  {
+    "id": 14,
+    "head": "concept_sport_ski",
+    "relation": "concept:sportusesequipment",
+    "expected_tail": "concept_sportsequipment_skis"
+  },
+  {
+    "id": 15,
+    "head": "concept_plant_pines",
+    "relation": "concept:plantincludeplant",
+    "expected_tail": "concept_plant_trees"
+  },
+  {
+    "id": 16,
+    "head": "concept_visualartist_andy_warhol",
+    "relation": "concept:visualartistartform",
+    "expected_tail": "concept_visualartform_exhibition"
+  },
+  {
+    "id": 17,
+    "head": "concept_book_the_cat_who_played_brahms",
+    "relation": "concept:bookwriter",
+    "expected_tail": "concept_writer_lilian_jackson_braun"
+  },
+  {
+    "id": 18,
+    "head": "concept_academicfield_biology",
+    "relation": "concept:academicfieldsuchasacademicfield",
+    "expected_tail": "concept_academicfield_microbiology"
+  },
+  {
+    "id": 19,
+    "head": "concept_fish_parrots",
+    "relation": "concept:animalpreyson",
+    "expected_tail": "concept_animal_birds002"
+  },
+  {
+    "id": 20,
+    "head": "concept_company_denso",
+    "relation": "concept:organizationheadquarteredincountry",
+    "expected_tail": "concept_country_japan"
+  }
+]

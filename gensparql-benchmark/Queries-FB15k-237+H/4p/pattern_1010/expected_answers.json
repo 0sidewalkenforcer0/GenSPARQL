@@ -1,0 +1,19 @@
+{
+  "num_answers": 5,
+  "answers": [
+    "/m/041wm",
+    "/m/06hx2",
+    "/m/04xfb",
+    "/m/0d3k14",
+    "/m/05hks"
+  ],
+  "answers_readable": [
+    "Julius Caesar",
+    "Robert F. Kennedy",
+    "Mahatma Gandhi",
+    "John F. Kennedy",
+    "Nicholas II of Russia"
+  ],
+  "query_readable": "/m/0kfpm --[+/tv/tv_program/languages]--> ? --[-/film/film/language]--> ? --[-/film/film_subject/films]--> ? --[+/people/cause_of_death/people]--> ?",
+  "query_readable_with_names": "The Mary Tyler Moore Show --[→tv program.languages]--> ? --[←film.language]--> ? --[←film subject.films]--> ? --[→cause of death.people]--> ?"
+}

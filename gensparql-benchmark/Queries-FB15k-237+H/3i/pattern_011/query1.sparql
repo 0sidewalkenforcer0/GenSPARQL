@@ -1,0 +1,14 @@
+# 3i Query (pattern_011): (Columbia Pictures --[→film film distributor relationship.film]--> ?) ∩ (Sound Mixer --[←film crew gig.film crew role]--> ?) ∩ (English Language --[←film.language]--> ?)
+# Pattern: 011 (0=KG match, 1=GENOP inference)
+# Expected Answers (1):
+#   1. Funny People (/m/047svrl)
+
+SELECT ?answer WHERE {
+  <http://freebase.com/entity/m_017s11_Columbia_Pictures> <http://freebase.com/relation/forward_film_film_distributor_films_distributed._film_film_film_distributor_relationship_film> ?answer .
+  GENOP("List movies released on /m/0ch6mp2 format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on /m/02h40lc format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

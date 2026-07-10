@@ -1,0 +1,24 @@
+# pi Query (pattern_111): (concept_city_bush --[concept:agentcollaborateswithagent]--> ? --[concept:politicianusmemberofpoliticalgroup_reverse]--> ?) ∩ (concept_governmentorganization_house --[concept:politicianusmemberofpoliticalgroup_reverse]--> ?)
+# Pattern: 111 (0=KG match, 1=GENOP inference)
+# Expected Answers (9):
+#   1. concept_female_hillary
+#   2. concept_politicianus_al_gore
+#   3. concept_politicianus_mr__bush
+#   4. concept_politicianus_legislation
+#   5. concept_politicianus_bills
+#   6. concept_politicianus_howard_coble
+#   7. concept_politicianus_george_w
+#   8. concept_politicianus_nancy_pelosi
+#   9. concept_politicianus_franklin_d__roosevelt
+
+SELECT ?answer ?mid WHERE {
+  GENOP("List movies or entities where concept_city_bush is their agentcollaborateswithagent. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?mid),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on {{?mid}} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on concept_governmentorganization_house format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

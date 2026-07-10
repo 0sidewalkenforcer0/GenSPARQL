@@ -1,0 +1,338 @@
+{
+  "metrics": {
+    "sparql": {
+      "approach": "sparql",
+      "total_cases": 15,
+      "hits": 0,
+      "recall": "0.00%",
+      "semantic_hits": 0,
+      "semantic_recall": "0.00%",
+      "grounded_cases": 15,
+      "total_answers": 0,
+      "valid_answers": 0,
+      "grounding_rate": "0.00%",
+      "avg_time_ms": 0.00020662943522135416
+    },
+    "pure_llm": {
+      "approach": "pure_llm",
+      "total_cases": 15,
+      "hits": 0,
+      "recall": "0.00%",
+      "semantic_hits": 3,
+      "semantic_recall": "20.00%",
+      "grounded_cases": 8,
+      "total_answers": 25,
+      "valid_answers": 0,
+      "grounding_rate": "0.00%",
+      "avg_time_ms": 1484.1819922129314
+    }
+  },
+  "results": {
+    "sparql": [
+      {
+        "case_id": 1,
+        "expected": "concept_dateliteral_n2008",
+        "actual": [],
+        "is_hit": false,
+        "is_grounded": true,
+        "execution_time_ms": 0.0,
+        "error": null
+      },
+      {
+        "case_id": 2,
+        "expected": "concept_visualizablething_grenada",
+        "actual": [],
+        "is_hit": false,
+        "is_grounded": true,
+        "execution_time_ms": 0.0,
+        "error": null
+      },
+      {
+        "case_id": 3,
+        "expected": "concept_profession_special_education_teachers",
+        "actual": [],
+        "is_hit": false,
+        "is_grounded": true,
+        "execution_time_ms": 0.0,
+        "error": null
+      },
+      {
+        "case_id": 4,
+        "expected": "concept_university_institute",
+        "actual": [],
+        "is_hit": false,
+        "is_grounded": true,
+        "execution_time_ms": 0.0011920928955078125,
+        "error": null
+      },
+      {
+        "case_id": 5,
+        "expected": "concept_bodypart_sac",
+        "actual": [],
+        "is_hit": false,
+        "is_grounded": true,
+        "execution_time_ms": 0.0,
+        "error": null
+      },
+      {
+        "case_id": 6,
+        "expected": "concept_sportsleague_ncaa",
+        "actual": [],
+        "is_hit": false,
+        "is_grounded": true,
+        "execution_time_ms": 0.00095367431640625,
+        "error": null
+      },
+      {
+        "case_id": 7,
+        "expected": "concept_personmexico_ncaa",
+        "actual": [],
+        "is_hit": false,
+        "is_grounded": true,
+        "execution_time_ms": 0.0,
+        "error": null
+      },
+      {
+        "case_id": 8,
+        "expected": "concept_river_hudson",
+        "actual": [],
+        "is_hit": false,
+        "is_grounded": true,
+        "execution_time_ms": 0.00095367431640625,
+        "error": null
+      },
+      {
+        "case_id": 9,
+        "expected": "concept_chemical_pollutants",
+        "actual": [],
+        "is_hit": false,
+        "is_grounded": true,
+        "execution_time_ms": 0.0,
+        "error": null
+      },
+      {
+        "case_id": 10,
+        "expected": "concept_wine_cabernet",
+        "actual": [],
+        "is_hit": false,
+        "is_grounded": true,
+        "execution_time_ms": 0.0,
+        "error": null
+      },
+      {
+        "case_id": 11,
+        "expected": "concept_chemical_carbon",
+        "actual": [],
+        "is_hit": false,
+        "is_grounded": true,
+        "execution_time_ms": 0.0,
+        "error": null
+      },
+      {
+        "case_id": 12,
+        "expected": "concept_newspaper_national_review",
+        "actual": [],
+        "is_hit": false,
+        "is_grounded": true,
+        "execution_time_ms": 0.0,
+        "error": null
+      },
+      {
+        "case_id": 13,
+        "expected": "concept_clothing_t_shirt",
+        "actual": [],
+        "is_hit": false,
+        "is_grounded": true,
+        "execution_time_ms": 0.0,
+        "error": null
+      },
+      {
+        "case_id": 14,
+        "expected": "concept_sportsequipment_skis",
+        "actual": [],
+        "is_hit": false,
+        "is_grounded": true,
+        "execution_time_ms": 0.0,
+        "error": null
+      },
+      {
+        "case_id": 15,
+        "expected": "concept_plant_trees",
+        "actual": [],
+        "is_hit": false,
+        "is_grounded": true,
+        "execution_time_ms": 0.0,
+        "error": null
+      }
+    ],
+    "pure_llm": [
+      {
+        "case_id": 1,
+        "expected": "concept_dateliteral_n2008",
+        "actual": [],
+        "is_hit": false,
+        "is_grounded": true,
+        "execution_time_ms": 887.5470161437988,
+        "error": null
+      },
+      {
+        "case_id": 2,
+        "expected": "concept_visualizablething_grenada",
+        "actual": [
+          "St. George's"
+        ],
+        "is_hit": false,
+        "is_grounded": false,
+        "execution_time_ms": 1102.215051651001,
+        "error": null
+      },
+      {
+        "case_id": 3,
+        "expected": "concept_profession_special_education_teachers",
+        "actual": [],
+        "is_hit": false,
+        "is_grounded": true,
+        "execution_time_ms": 867.1388626098633,
+        "error": null
+      },
+      {
+        "case_id": 4,
+        "expected": "concept_university_institute",
+        "actual": [],
+        "is_hit": false,
+        "is_grounded": true,
+        "execution_time_ms": 907.2220325469971,
+        "error": null
+      },
+      {
+        "case_id": 5,
+        "expected": "concept_bodypart_sac",
+        "actual": [],
+        "is_hit": false,
+        "is_grounded": true,
+        "execution_time_ms": 817.1570301055908,
+        "error": null
+      },
+      {
+        "case_id": 6,
+        "expected": "concept_sportsleague_ncaa",
+        "actual": [],
+        "is_hit": false,
+        "is_grounded": true,
+        "execution_time_ms": 2873.047113418579,
+        "error": null
+      },
+      {
+        "case_id": 7,
+        "expected": "concept_personmexico_ncaa",
+        "actual": [],
+        "is_hit": false,
+        "is_grounded": true,
+        "execution_time_ms": 967.1061038970947,
+        "error": null
+      },
+      {
+        "case_id": 8,
+        "expected": "concept_river_hudson",
+        "actual": [
+          "Hudson River"
+        ],
+        "is_hit": false,
+        "is_grounded": false,
+        "execution_time_ms": 918.5621738433838,
+        "error": null
+      },
+      {
+        "case_id": 9,
+        "expected": "concept_chemical_pollutants",
+        "actual": [
+          "oxide",
+          "nitrogen compound"
+        ],
+        "is_hit": false,
+        "is_grounded": false,
+        "execution_time_ms": 3070.5268383026123,
+        "error": null
+      },
+      {
+        "case_id": 10,
+        "expected": "concept_wine_cabernet",
+        "actual": [
+          "wine"
+        ],
+        "is_hit": false,
+        "is_grounded": false,
+        "execution_time_ms": 822.9959011077881,
+        "error": null
+      },
+      {
+        "case_id": 11,
+        "expected": "concept_chemical_carbon",
+        "actual": [
+          "organic compound",
+          "amide"
+        ],
+        "is_hit": false,
+        "is_grounded": false,
+        "execution_time_ms": 1427.927017211914,
+        "error": null
+      },
+      {
+        "case_id": 12,
+        "expected": "concept_newspaper_national_review",
+        "actual": [],
+        "is_hit": false,
+        "is_grounded": true,
+        "execution_time_ms": 845.477819442749,
+        "error": null
+      },
+      {
+        "case_id": 13,
+        "expected": "concept_clothing_t_shirt",
+        "actual": [
+          "t-shirt",
+          "sweater",
+          "blazer",
+          "button-down shirt",
+          "hoodie",
+          "tank top",
+          "denim jacket",
+          "leather jacket",
+          "cardigan",
+          "flannel shirt"
+        ],
+        "is_hit": false,
+        "is_grounded": false,
+        "execution_time_ms": 4617.090940475464,
+        "error": null
+      },
+      {
+        "case_id": 14,
+        "expected": "concept_sportsequipment_skis",
+        "actual": [
+          "skis",
+          "ski poles",
+          "ski boots",
+          "bindings",
+          "goggles",
+          "helmet",
+          "ski suit",
+          "gloves"
+        ],
+        "is_hit": false,
+        "is_grounded": false,
+        "execution_time_ms": 1076.9801139831543,
+        "error": null
+      },
+      {
+        "case_id": 15,
+        "expected": "concept_plant_trees",
+        "actual": [],
+        "is_hit": false,
+        "is_grounded": true,
+        "execution_time_ms": 1061.7358684539795,
+        "error": null
+      }
+    ]
+  }
+}

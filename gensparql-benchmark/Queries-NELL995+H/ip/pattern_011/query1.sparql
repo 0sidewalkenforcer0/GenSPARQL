@@ -1,0 +1,15 @@
+# ip Query (pattern_011): ((concept_profession_artists --[concept:professionistypeofprofession_reverse]--> ?) ∩ (concept_profession_support --[concept:professionistypeofprofession]--> ?)) --[concept:professionistypeofprofession]--> ?
+# Pattern: 011 (0=KG match, 1=GENOP inference)
+# Expected Answers (2):
+#   1. concept_profession_providers
+#   2. concept_profession_experts
+
+SELECT ?answer ?mid WHERE {
+  ?mid <http://nell.cs.cmu.edu/relation/concept_professionistypeofprofession> <http://nell.cs.cmu.edu/entity/concept_profession_artists> .
+  GENOP("List movies or entities where concept_profession_support is their professionistypeofprofession. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?mid),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies or entities where {{?mid}} is their professionistypeofprofession. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

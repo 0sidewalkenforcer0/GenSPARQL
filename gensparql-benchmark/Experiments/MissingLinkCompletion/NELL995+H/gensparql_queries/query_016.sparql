@@ -1,0 +1,9 @@
+# GenSPARQL Query (1-hop Link Prediction with Grounding)
+# Expected Answer: concept_visualartform_exhibition
+# LLM selects from KG entities, ensuring grounding
+
+SELECT ?target WHERE {
+  GENOP("What is the visualartistartform of andy warhol (visualartist)? Choose from this list: [concept_hobby_colors, concept_hobby_pictures, concept_visualartform_art, concept_visualartform_art_collection, concept_visualartform_art_prints, concept_visualartform_artist, concept_visualartform_artworks, concept_visualartform_canvases, concept_visualartform_ceramics, concept_visualartform_collage, concept_visualartform_collection, concept_visualartform_contemporary_art, concept_visualartform_drawing, concept_visualartform_drawings, concept_visualartform_engravings, concept_visualartform_exhibition, concept_visualartform_famous_artist, concept_visualartform_famous_painting, concept_visualartform_friends, concept_visualartform_impressionist_painting, concept_visualartform_installation, concept_visualartform_installation_art, concept_visualartform_oil_painting, concept_visualartform_painters, concept_visualartform_paintings, concept_visualartform_paper, concept_visualartform_photographs, concept_visualartform_photography, concept_visualartform_portraits, concept_visualartform_printmaking, concept_visualartform_prints, concept_visualartform_sculpture, concept_visualartform_sculptures, concept_visualartform_statues, concept_visualartform_subjects, concept_visualartform_watercolors, concept_visualizablething_painting]. Return JSON array of matching items like ['item1', 'item2']. Return [] if none.",
+        (?target),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

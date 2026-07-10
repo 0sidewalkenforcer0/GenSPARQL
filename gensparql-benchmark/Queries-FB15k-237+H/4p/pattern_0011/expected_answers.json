@@ -1,0 +1,13 @@
+{
+  "num_answers": 2,
+  "answers": [
+    "/m/018fwv",
+    "/m/03kbb8"
+  ],
+  "answers_readable": [
+    "Matt Frewer",
+    "Bryce Dallas Howard"
+  ],
+  "query_readable": "/m/03gjzk --[-/people/person/profession]--> ? --[-/people/cause_of_death/people]--> ? --[+/film/film_subject/films]--> ? --[-/film/actor/film./film/performance/film]--> ?",
+  "query_readable_with_names": "Television producer-GB --[←person.profession]--> ? --[←cause of death.people]--> ? --[→film subject.films]--> ? --[←performance.film]--> ?"
+}

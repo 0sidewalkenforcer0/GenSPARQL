@@ -1,0 +1,20 @@
+# 4p Query (pattern_1011): Superman II --[←award honor.honored for]--> ? --[←award honor.ceremony]--> ? --[→award nomination.nominated for]--> ? --[←performance.film]--> ?
+# Machine IDs: anchor=/m/042fgh
+# Pattern: 1011 (0=KG match, 1=GENOP inference)
+# Expected Answers (3):
+#   1. Steve Coogan (/m/01nfys)
+#   2. Charlton Heston (/m/0chsq)
+#   3. Callum Keith Rennie (/m/03s2dj)
+
+SELECT ?answer ?e1 ?e2 ?e3 WHERE {
+  GENOP("List movies released on /m/042fgh format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?e1),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?e2 <http://freebase.com/relation/forward_award_award_category_winners._award_award_honor_ceremony> ?e1 .
+  GENOP("List movies or entities where {?e2} is their category nominees nomination nominated for. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?e3),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on {?e3} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

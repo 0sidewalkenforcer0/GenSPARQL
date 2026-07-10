@@ -1,0 +1,8 @@
+# Pure LLM Query (Zero-shot)
+# Expected Answer: concept_academicfield_microbiology
+# No grounding - LLM generates freely
+
+PROMPT: What is the academicfieldsuchasacademicfield of biology (academicfield)?
+
+Return your answer as a JSON array: ["answer1", "answer2", ...]
+If you don't know, return [].

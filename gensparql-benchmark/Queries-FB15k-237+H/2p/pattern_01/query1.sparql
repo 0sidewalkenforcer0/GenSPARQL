@@ -1,0 +1,23 @@
+# 2p Query (pattern_01): Solo --[→track contribution.role]--> ? --[←track contribution.role]--> ?
+# Machine IDs: anchor=/m/0214km, rel1=+/music/performance_role/track_performances./music/track_contribution/role, rel2=-/music/artist/track_contributions./music/track_contribution/role
+# Pattern: 01 (0=KG match, 1=GENOP inference)
+# Relation directions: rel1_reverse=False, rel2_reverse=True
+# Expected Answers (14):
+#   1. Chad Hugo (/m/04vrxh)
+#   2. Phil Ramone (/m/02_jkc)
+#   3. Dermot Mulroney (/m/074tb5)
+#   4. Adam Levine (/m/044mfr)
+#   5. Cyndi Lauper (/m/01wf86y)
+#   6. Craig Armstrong (/m/05y7hc)
+#   7. Angelo Badalamenti (/m/01x1fq)
+#   8. Tobymac (/m/01w20rx)
+#   9. Erykah Badu (/m/01w7nww)
+#   10. Leon Russell (/m/01kv4mb)
+#   ... and 4 more
+
+SELECT ?answer ?mid WHERE {
+  <http://freebase.com/entity/m_0214km_Solo> <http://freebase.com/relation/forward_music_performance_role_track_performances._music_track_contribution_role> ?mid .
+  GENOP("List movies released on {?mid} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

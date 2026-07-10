@@ -1,0 +1,7 @@
+# Standard SPARQL Query (1-hop Link Prediction)
+# Expected Answer: concept_wine_cabernet
+# This query should return EMPTY (link is missing from train KG)
+
+SELECT ?target WHERE {
+  <http://nell.cs.cmu.edu/entity/concept_beverage_vineyards> <http://nell.cs.cmu.edu/relation/concept_beveragemadefrombeverage> ?target .
+}

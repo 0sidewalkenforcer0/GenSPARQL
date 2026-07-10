@@ -1,0 +1,17 @@
+# 4p Query (pattern_1001): Chris Evans --[→award nomination.nominated for]--> ? --[→film crew gig.film crew role]--> ? --[←person.profession]--> ? --[←education.student]--> ?
+# Machine IDs: anchor=/m/058s44
+# Pattern: 1001 (0=KG match, 1=GENOP inference)
+# Expected Answers (2):
+#   1. Lincoln College, Oxford (/m/0ym1n)
+#   2. Oregon State University (/m/01hx2t)
+
+SELECT ?answer ?e1 ?e2 ?e3 WHERE {
+  GENOP("List movies or entities where /m/058s44 is their nominee nominations nomination nominated for. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?e1),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?e1 <http://freebase.com/relation/forward_film_film_other_crew._film_film_crew_gig_film_crew_role> ?e2 .
+  ?e3 <http://freebase.com/relation/forward_people_person_profession> ?e2 .
+  GENOP("List movies released on {?e3} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

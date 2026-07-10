@@ -1,0 +1,15 @@
+# 3i Query (pattern_011): (concept_clothing_shoes --[concept:clothingtogowithclothing]--> ?) ∩ (concept_visualizableobject_shirt --[concept:clothingtogowithclothing]--> ?) ∩ (concept_clothing_shirts --[concept:clothingtogowithclothing]--> ?)
+# Pattern: 011 (0=KG match, 1=GENOP inference)
+# Expected Answers (2):
+#   1. concept_clothing_clothes
+#   2. concept_clothing_socks
+
+SELECT ?answer WHERE {
+  <http://nell.cs.cmu.edu/entity/concept_clothing_shoes> <http://nell.cs.cmu.edu/relation/concept_clothingtogowithclothing> ?answer .
+  GENOP("List movies or entities where concept_visualizableobject_shirt is their clothingtogowithclothing. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies or entities where concept_clothing_shirts is their clothingtogowithclothing. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

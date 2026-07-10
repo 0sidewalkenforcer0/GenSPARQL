@@ -1,0 +1,9 @@
+{
+  "num_answers": 1,
+  "answers": [
+    "concept_profession_care_professionals"
+  ],
+  "answers_readable": [],
+  "query_readable": "(concept_profession_workers --[concept:professionistypeofprofession]--> ?) ∩ (concept_profession_practitioners --[concept:professionistypeofprofession_reverse]--> ?) ∩ (concept_profession_practitioners --[concept:professionistypeofprofession]--> ?)",
+  "query_readable_with_names": ""
+}

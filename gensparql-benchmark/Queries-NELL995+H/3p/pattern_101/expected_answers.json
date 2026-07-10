@@ -1,0 +1,30 @@
+{
+  "num_answers": 22,
+  "answers": [
+    "concept_televisionstation_wdtv",
+    "concept_televisionstation_wgbx_tv",
+    "concept_televisionstation_kyve_tv",
+    "concept_televisionstation_wouc_tv",
+    "concept_televisionstation_weao",
+    "concept_televisionstation_ksmq_tv",
+    "concept_televisionstation_kzsd_tv",
+    "concept_televisionstation_kixe_tv",
+    "concept_televisionstation_kwse",
+    "concept_televisionstation_klru",
+    "concept_televisionstation_wnin_tv",
+    "concept_televisionstation_kuat_tv",
+    "concept_televisionstation_ktsc_tv",
+    "concept_televisionstation_wunl_tv",
+    "concept_televisionstation_kuas_tv",
+    "concept_televisionstation_kufm_tv",
+    "concept_televisionstation_kdsd_tv",
+    "concept_televisionstation_ksps_tv",
+    "concept_televisionstation_klne_tv",
+    "concept_televisionstation_ketg",
+    "concept_televisionstation_wfpt",
+    "concept_televisionstation_kawe"
+  ],
+  "answers_readable": [],
+  "query_readable": "concept_river_columbia --[concept:cityliesonriver_reverse]--> ? --[concept:headquarteredin_reverse]--> ? --[concept:agentcollaborateswithagent_reverse]--> ?",
+  "query_readable_with_names": ""
+}

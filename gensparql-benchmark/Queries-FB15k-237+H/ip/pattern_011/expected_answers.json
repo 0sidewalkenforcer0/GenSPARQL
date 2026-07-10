@@ -1,0 +1,11 @@
+{
+  "num_answers": 1,
+  "answers": [
+    "/m/05wkw"
+  ],
+  "answers_readable": [
+    "Photography"
+  ],
+  "query_readable": "((/m/04n6k --[-/user/tsegaran/random/taxonomy_subject/entry./user/tsegaran/random/taxonomy_entry/taxonomy]--> ?) ∩ (/m/0b78hw --[+/user/alexander/philosophy/philosopher/interests]--> ?)) --[-/education/field_of_study/students_majoring./education/education/major_field_of_study]--> ?",
+  "query_readable_with_names": "((Library of Congress Classification --[←taxonomy entry.taxonomy]--> ?) ∩ (Noam Chomsky --[→philosopher.interests]--> ?)) --[←education.major field of study]--> ?"
+}

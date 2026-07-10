@@ -1,0 +1,16 @@
+# 4p Query (pattern_0101): concept_sportsteam_new_york_giants --[concept:teamplaysagainstteam_reverse]--> ? --[concept:athleteplaysforteam_reverse]--> ? --[concept:athleteledsportsteam]--> ? --[concept:organizationhiredperson]--> ?
+# Machine IDs: anchor=concept_sportsteam_new_york_giants
+# Pattern: 0101 (0=KG match, 1=GENOP inference)
+# Expected Answers (1):
+#   1. concept_person_davis
+
+SELECT ?answer ?e1 ?e2 ?e3 WHERE {
+  ?e1 <http://nell.cs.cmu.edu/relation/concept_teamplaysagainstteam> <http://nell.cs.cmu.edu/entity/concept_sportsteam_new_york_giants> .
+  GENOP("List movies released on {?e1} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?e2),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?e2 <http://nell.cs.cmu.edu/relation/concept_athleteledsportsteam> ?e3 .
+  GENOP("List movies or entities where {?e3} is their organizationhiredperson. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

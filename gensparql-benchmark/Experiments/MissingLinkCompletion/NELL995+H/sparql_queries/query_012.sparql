@@ -1,0 +1,7 @@
+# Standard SPARQL Query (1-hop Link Prediction)
+# Expected Answer: concept_newspaper_national_review
+# This query should return EMPTY (link is missing from train KG)
+
+SELECT ?target WHERE {
+  <http://nell.cs.cmu.edu/entity/concept_newspaper_journal> <http://nell.cs.cmu.edu/relation/concept_agentcontrols> ?target .
+}

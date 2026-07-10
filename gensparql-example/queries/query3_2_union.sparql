@@ -1,0 +1,25 @@
+# Query 3.2: UNION query combining database query and GENOP generation
+# Demonstrates combining traditional SPARQL query results with LLM-generated results
+# Part 1: Query scientists and awards from the database (query1)
+# Part 2: Generate Nobel Prize winners using GENOP (query3)
+
+PREFIX ex: <http://example.org/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?scientist ?awardLabel WHERE {
+  {
+    # Part 1: Query from database (standard SPARQL)
+    ?person foaf:name ?scientist .
+    ?person ex:receivedAward ?award .
+    ?award rdfs:label ?awardLabel .
+  }
+  UNION
+  {
+    # Part 2: Generate Nobel Prize winners using GENOP
+    GENOP("List five scientists who won Nobel Prize. Return as JSON array with objects containing 'scientist' and 'awardLabel' fields", 
+          (?scientist, ?awardLabel), 
+          <model:openrouter:xiaomi/mimo-v2-flash:free>)
+  }
+}
+

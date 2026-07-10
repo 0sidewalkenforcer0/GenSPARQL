@@ -1,0 +1,15 @@
+{
+  "num_answers": 3,
+  "answers": [
+    "/m/014kkm",
+    "/m/0j80w",
+    "/m/0bl06"
+  ],
+  "answers_readable": [
+    "The Bad and the Beautiful",
+    "The Quiet Man",
+    "The Greatest Show on Earth"
+  ],
+  "query_readable": "((/m/0g_w --[-/time/event/instance_of_recurring_event]--> ?) ∩ (/m/0gq9h --[+/award/award_category/winners./award/award_honor/ceremony]--> ?)) --[+/award/award_ceremony/awards_presented./award/award_honor/honored_for]--> ?",
+  "query_readable_with_names": "((Academy Awards --[←event.instance of recurring event]--> ?) ∩ (Academy Award for Best Picture --[→award honor.ceremony]--> ?)) --[→award honor.honored for]--> ?"
+}

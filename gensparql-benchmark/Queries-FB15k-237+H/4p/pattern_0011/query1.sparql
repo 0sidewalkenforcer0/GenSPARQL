@@ -1,0 +1,17 @@
+# 4p Query (pattern_0011): Television producer-GB --[←person.profession]--> ? --[←cause of death.people]--> ? --[→film subject.films]--> ? --[←performance.film]--> ?
+# Machine IDs: anchor=/m/03gjzk
+# Pattern: 0011 (0=KG match, 1=GENOP inference)
+# Expected Answers (2):
+#   1. Matt Frewer (/m/018fwv)
+#   2. Bryce Dallas Howard (/m/03kbb8)
+
+SELECT ?answer ?e1 ?e2 ?e3 WHERE {
+  ?e1 <http://freebase.com/relation/forward_people_person_profession> <http://freebase.com/entity/m_03gjzk_Television_producer-GB> .
+  ?e2 <http://freebase.com/relation/forward_people_cause_of_death_people> ?e1 .
+  GENOP("List movies or entities where {?e2} is their subject films. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?e3),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on {?e3} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

@@ -1,0 +1,28 @@
+# 4p Query (pattern_1101): Bancroft Prize --[→award category.category of]--> ? --[→award category.category of]--> ? --[→award category.disciplines or subjects]--> ? --[←education.major field of study]--> ?
+# Machine IDs: anchor=/m/0223xd
+# Pattern: 1101 (0=KG match, 1=GENOP inference)
+# Expected Answers (13):
+#   1. Tufts University (/m/0lfgr)
+#   2. Magdalen College, Oxford (/m/0yjf0)
+#   3. Emory University (/m/0bqxw)
+#   4. University of Washington (/m/07t90)
+#   5. Bowdoin College (/m/01c333)
+#   6. University of Ghana (/m/05hf_5)
+#   7. Oberlin College (/m/05mv4)
+#   8. Swarthmore College (/m/012fvq)
+#   9. University of California, Berkeley (/m/02zd460)
+#   10. University of California, Santa Barbara (/m/01f1r4)
+#   ... and 3 more
+
+SELECT ?answer ?e1 ?e2 ?e3 WHERE {
+  GENOP("List movies or entities where /m/0223xd is their category category of. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?e1),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies or entities where {?e1} is their category category of. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?e2),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?e2 <http://freebase.com/relation/forward_award_award_category_disciplines_or_subjects> ?e3 .
+  GENOP("List movies released on {?e3} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

@@ -1,0 +1,17 @@
+# pi Query (pattern_010): (concept_person_terry --[concept:persongraduatedfromuniversity]--> ? --[concept:persongraduatedschool_reverse]--> ?) ∩ (concept_city_york --[concept:personborninlocation_reverse]--> ?)
+# Pattern: 010 (0=KG match, 1=GENOP inference)
+# Expected Answers (6):
+#   1. concept_person_brett
+#   2. concept_person_danny
+#   3. concept_person_erin
+#   4. concept_person_bill
+#   5. concept_personasia_anthony
+#   6. concept_person_patrice_bergeron
+
+SELECT ?answer ?mid WHERE {
+  <http://nell.cs.cmu.edu/entity/concept_person_terry> <http://nell.cs.cmu.edu/relation/concept_persongraduatedfromuniversity> ?mid .
+  GENOP("List movies released on {{?mid}} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?answer <http://nell.cs.cmu.edu/relation/concept_personborninlocation> <http://nell.cs.cmu.edu/entity/concept_city_york> .
+}

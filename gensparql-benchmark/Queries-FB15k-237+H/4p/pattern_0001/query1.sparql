@@ -1,0 +1,16 @@
+# 4p Query (pattern_0001): Usher --[→person.profession]--> ? --[←profession.specialization of]--> ? --[←person.profession]--> ? --[←film.music]--> ?
+# Machine IDs: anchor=/m/01trhmt
+# Pattern: 0001 (0=KG match, 1=GENOP inference)
+# Expected Answers (3):
+#   1. Terminator Salvation (/m/043tvp3)
+#   2. Dick Tracy (/m/035_2h)
+#   3. The Family Man (/m/0ptdz)
+
+SELECT ?answer ?e1 ?e2 ?e3 WHERE {
+  <http://freebase.com/entity/m_01trhmt_Usher> <http://freebase.com/relation/forward_people_person_profession> ?e1 .
+  ?e2 <http://freebase.com/relation/forward_people_profession_specialization_of> ?e1 .
+  ?e3 <http://freebase.com/relation/forward_people_person_profession> ?e2 .
+  GENOP("List movies released on {?e3} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

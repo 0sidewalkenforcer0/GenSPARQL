@@ -1,0 +1,9 @@
+{
+  "num_answers": 1,
+  "answers": [
+    "concept_sportsteam_bucs"
+  ],
+  "answers_readable": [],
+  "query_readable": "concept_sportsteamposition_line --[concept:sporthassportsteamposition_reverse]--> ? --[concept:teamplayssport_reverse]--> ? --[concept:athleteplaysforteam_reverse]--> ? --[concept:athleteledsportsteam]--> ?",
+  "query_readable_with_names": ""
+}

@@ -1,0 +1,25 @@
+# 3p Query (pattern_110): Judd Apatow --[→person.languages]--> ? --[←film.language]--> ? --[→film.produced by]--> ?
+# Machine IDs: anchor=/m/05ty4m
+# Pattern: 110 (0=KG match, 1=GENOP inference)
+# Expected Answers (15):
+#   1. Matt Stone (/m/01_x6d)
+#   2. Blake Edwards (/m/096hm)
+#   3. Seth Rogen (/m/05txrz)
+#   4. George Seaton (/m/0171lb)
+#   5. Uwe Boll (/m/0522wp)
+#   6. Billy Crystal (/m/01h1b)
+#   7. John Wayne (/m/043gj)
+#   8. Bob Balaban (/m/051wwp)
+#   9. Verity Lambert (/m/01b0k1)
+#   10. Tim Robbins (/m/01nr36)
+#   ... and 5 more
+
+SELECT ?answer ?e1 ?e2 WHERE {
+  GENOP("List movies or entities where /m/05ty4m is their person languages. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?e1),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on {?e1} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?e2),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?e2 <http://freebase.com/relation/forward_film_film_produced_by> ?answer .
+}

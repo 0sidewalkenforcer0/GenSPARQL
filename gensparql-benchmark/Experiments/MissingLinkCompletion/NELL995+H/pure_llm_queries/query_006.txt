@@ -1,0 +1,8 @@
+# Pure LLM Query (Zero-shot)
+# Expected Answer: concept_sportsleague_ncaa
+# No grounding - LLM generates freely
+
+PROMPT: What league does faulkner state sun chiefs (sportsteam) play in?
+
+Return your answer as a JSON array: ["answer1", "answer2", ...]
+If you don't know, return [].

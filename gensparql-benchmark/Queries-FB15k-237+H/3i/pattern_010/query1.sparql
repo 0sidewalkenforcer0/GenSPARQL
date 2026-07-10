@@ -1,0 +1,12 @@
+# 3i Query (pattern_010): (Deep Impact --[←performance.film]--> ?) ∩ (United States of America --[←person.nationality]--> ?) ∩ (Marriage --[←marriage.type of union]--> ?)
+# Pattern: 010 (0=KG match, 1=GENOP inference)
+# Expected Answers (1):
+#   1. Blair Underwood (/m/03cvv4)
+
+SELECT ?answer WHERE {
+  ?answer <http://freebase.com/relation/forward_film_actor_film._film_performance_film> <http://freebase.com/entity/m_01q2nx_Deep_Impact> .
+  GENOP("List movies released on /m/09c7w0 format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?answer <http://freebase.com/relation/forward_people_person_spouse_s._people_marriage_type_of_union> <http://freebase.com/entity/m_04ztj_Marriage> .
+}

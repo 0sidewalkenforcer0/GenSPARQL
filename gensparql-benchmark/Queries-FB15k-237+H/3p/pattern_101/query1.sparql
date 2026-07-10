@@ -1,0 +1,21 @@
+# 3p Query (pattern_101): Judd Apatow --[→person.languages]--> ? --[←film.language]--> ? --[→film.produced by]--> ?
+# Machine IDs: anchor=/m/05ty4m
+# Pattern: 101 (0=KG match, 1=GENOP inference)
+# Expected Answers (7):
+#   1. John Lasseter (/m/04jspq)
+#   2. Jon Avnet (/m/02rchht)
+#   3. Vince Vaughn (/m/0315q3)
+#   4. John Woo (/m/03_2y)
+#   5. Woody Allen (/m/081lh)
+#   6. William Cameron Menzies (/m/0638kv)
+#   7. David Dhawan (/m/0cc63l)
+
+SELECT ?answer ?e1 ?e2 WHERE {
+  GENOP("List movies or entities where /m/05ty4m is their person languages. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?e1),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?e2 <http://freebase.com/relation/forward_film_film_language> ?e1 .
+  GENOP("List movies or entities where {?e2} is their produced by. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

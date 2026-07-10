@@ -1,0 +1,14 @@
+# 3i Query (pattern_110): (Bachelor of Arts --[→education.institution]--> ?) ∩ (Bachelor of Laws --[→education.institution]--> ?) ∩ (Public university --[←educational institution.school type]--> ?)
+# Pattern: 110 (0=KG match, 1=GENOP inference)
+# Expected Answers (1):
+#   1. Australian National University (/m/01pxcf)
+
+SELECT ?answer WHERE {
+  GENOP("List movies or entities where /m/014mlp is their education educational degree with this degree education education institution. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies or entities where /m/01rr_d is their education educational degree with this degree education education institution. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+  ?answer <http://freebase.com/relation/forward_education_educational_institution_school_type> <http://freebase.com/entity/m_05jxkf_Public_university> .
+}

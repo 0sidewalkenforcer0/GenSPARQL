@@ -1,0 +1,15 @@
+{
+  "num_answers": 3,
+  "answers": [
+    "/m/043tvp3",
+    "/m/035_2h",
+    "/m/0ptdz"
+  ],
+  "answers_readable": [
+    "Terminator Salvation",
+    "Dick Tracy",
+    "The Family Man"
+  ],
+  "query_readable": "/m/01trhmt --[+/people/person/profession]--> ? --[-/people/profession/specialization_of]--> ? --[-/people/person/profession]--> ? --[-/film/film/music]--> ?",
+  "query_readable_with_names": "Usher --[→person.profession]--> ? --[←profession.specialization of]--> ? --[←person.profession]--> ? --[←film.music]--> ?"
+}

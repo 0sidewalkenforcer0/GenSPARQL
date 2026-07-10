@@ -1,0 +1,12 @@
+{
+  "num_answers": 4,
+  "answers": [
+    "concept_profession_veterinarians",
+    "concept_profession_leaders",
+    "concept_profession_researchers",
+    "concept_profession_dentists"
+  ],
+  "answers_readable": [],
+  "query_readable": "(concept_profession_providers --[concept:professionistypeofprofession]--> ?) ∩ (concept_profession_staff --[concept:professionistypeofprofession]--> ?)",
+  "query_readable_with_names": ""
+}

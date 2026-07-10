@@ -1,0 +1,17 @@
+{
+  "num_answers": 4,
+  "answers": [
+    "/m/03xds",
+    "/m/02wlk",
+    "/m/07cbs",
+    "/m/0d_w7"
+  ],
+  "answers_readable": [
+    "I. M. Pei",
+    "Frank Lloyd Wright",
+    "Thomas Jefferson",
+    "Frank Gehry"
+  ],
+  "query_readable": "/m/05kjlr --[-/award/award_category/category_of]--> ? --[-/award/award_category/category_of]--> ? --[-/award/award_category/category_of]--> ? --[+/award/award_category/winners./award/award_honor/award_winner]--> ?",
+  "query_readable_with_names": "AIA Gold Medal --[←award category.category of]--> ? --[←award category.category of]--> ? --[←award category.category of]--> ? --[→award honor.award winner]--> ?"
+}

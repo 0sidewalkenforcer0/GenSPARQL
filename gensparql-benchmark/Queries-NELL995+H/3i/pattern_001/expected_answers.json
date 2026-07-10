@@ -1,0 +1,16 @@
+{
+  "num_answers": 8,
+  "answers": [
+    "concept_televisionstation_whiq",
+    "concept_televisionstation_ktne_tv",
+    "concept_televisionstation_wdse_tv",
+    "concept_televisionstation_ketc",
+    "concept_televisionstation_witf_tv",
+    "concept_televisionstation_kood",
+    "concept_televisionstation_wsbn_tv",
+    "concept_televisionstation_wkoh"
+  ],
+  "answers_readable": [],
+  "query_readable": "(concept_company_pbs --[concept:agentcollaborateswithagent_reverse]--> ?) ∩ (concept_company_pbs --[concept:subpartof_reverse]--> ?) ∩ (concept_televisionnetwork_pbs --[concept:televisionstationaffiliatedwith_reverse]--> ?)",
+  "query_readable_with_names": ""
+}

@@ -1,0 +1,33 @@
+{
+  "num_answers": 25,
+  "answers": [
+    "concept_coach_torry_holt",
+    "concept_athlete_ernie_sims",
+    "concept_athlete_rogers_hornsby",
+    "concept_athlete_priest_holmes",
+    "concept_athlete_paul_brown",
+    "concept_personmexico_willie_mccovey",
+    "concept_athlete_joe_bradley",
+    "concept_athlete_mike_maroth",
+    "concept_coach_lendale_white",
+    "concept_athlete_otto_graham",
+    "concept_athlete_brad_butler",
+    "concept_coach_t_j__houshmandzadeh",
+    "concept_athlete_steve_slaton",
+    "concept_coach_eugenio_velez",
+    "concept_personmexico_herschel_walker",
+    "concept_athlete_tiki_barber",
+    "concept_athlete_joe_flacco",
+    "concept_athlete_derek_hagan",
+    "concept_athlete_reggie_sanders",
+    "concept_athlete_brian_barton",
+    "concept_athlete_marques_colston",
+    "concept_athlete_carson_palmer",
+    "concept_coach_ryan_ludwick",
+    "concept_athlete_matt_schaub",
+    "concept_coach_trent_edwards"
+  ],
+  "answers_readable": [],
+  "query_readable": "concept_automobilemaker_dallas_cowboys --[concept:worksfor_reverse]--> ? --[concept:personbelongstoorganization]--> ? --[concept:agentcompeteswithagent]--> ? --[concept:athleteplaysinleague_reverse]--> ?",
+  "query_readable_with_names": ""
+}

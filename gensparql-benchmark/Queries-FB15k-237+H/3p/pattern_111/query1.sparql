@@ -1,0 +1,19 @@
+# 3p Query (pattern_111): 2012 --[→film crew gig.film crew role]--> ? --[←tv producer term.producer type]--> ? --[→regular tv appearance.actor]--> ?
+# Machine IDs: anchor=/m/047vnkj
+# Pattern: 111 (0=KG match, 1=GENOP inference)
+# Expected Answers (3):
+#   1. Colm Feore (/m/030xr_)
+#   2. Elisha Cuthbert (/m/01yhvv)
+#   3. Clancy Brown (/m/03wy70)
+
+SELECT ?answer ?e1 ?e2 WHERE {
+  GENOP("List movies or entities where /m/047vnkj is their other crew crew gig crew role. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?e1),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on {?e1} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?e2),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies or entities where {?e2} is their program regular cast regular appearance actor. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

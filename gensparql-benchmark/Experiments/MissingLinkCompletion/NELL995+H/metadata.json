@@ -1,0 +1,28 @@
+{
+  "dataset": "NELL995+H",
+  "num_cases": 20,
+  "num_missing_links": 14267,
+  "num_entities": 63361,
+  "relations": [
+    "concept:atdate",
+    "concept:citylocatedincountry",
+    "concept:professionistypeofprofession",
+    "concept:academicprogramatuniversity",
+    "concept:bodypartcontainsbodypart",
+    "concept:teamplaysinleague",
+    "concept:agentcollaborateswithagent",
+    "concept:cityliesonriver",
+    "concept:chemicalistypeofchemical",
+    "concept:beveragemadefrombeverage",
+    "concept:agentcontrols",
+    "concept:clothingtogowithclothing",
+    "concept:sportusesequipment",
+    "concept:plantincludeplant",
+    "concept:visualartistartform",
+    "concept:bookwriter",
+    "concept:academicfieldsuchasacademicfield",
+    "concept:animalpreyson",
+    "concept:organizationheadquarteredincountry"
+  ],
+  "cases_count": 20
+}

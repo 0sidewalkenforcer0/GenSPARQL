@@ -1,0 +1,15 @@
+{
+  "num_answers": 3,
+  "answers": [
+    "/m/01nfys",
+    "/m/0chsq",
+    "/m/03s2dj"
+  ],
+  "answers_readable": [
+    "Steve Coogan",
+    "Charlton Heston",
+    "Callum Keith Rennie"
+  ],
+  "query_readable": "/m/042fgh --[-/award/award_ceremony/awards_presented./award/award_honor/honored_for]--> ? --[-/award/award_category/winners./award/award_honor/ceremony]--> ? --[+/award/award_category/nominees./award/award_nomination/nominated_for]--> ? --[-/film/actor/film./film/performance/film]--> ?",
+  "query_readable_with_names": "Superman II --[←award honor.honored for]--> ? --[←award honor.ceremony]--> ? --[→award nomination.nominated for]--> ? --[←performance.film]--> ?"
+}

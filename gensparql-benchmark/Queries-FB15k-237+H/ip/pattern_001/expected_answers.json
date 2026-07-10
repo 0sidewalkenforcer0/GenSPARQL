@@ -1,0 +1,29 @@
+{
+  "num_answers": 10,
+  "answers": [
+    "/m/0g0syc",
+    "/m/013ksx",
+    "/m/0zpfy",
+    "/m/0mws3",
+    "/m/0cy8v",
+    "/m/0cc1v",
+    "/m/0mvxt",
+    "/m/0mww2",
+    "/m/0tt6k",
+    "/m/09dfcj"
+  ],
+  "answers_readable": [
+    "Pennsylvania's 12th congressional district",
+    "Bethlehem",
+    "Johnstown",
+    "Delaware County",
+    "Columbia",
+    "Prince George's County",
+    "Greenville County",
+    "Centre County",
+    "Cumberland",
+    "Cumberland County"
+  ],
+  "query_readable": "((/m/02cgp8 --[-/location/location/partially_contains]--> ?) ∩ (/m/0f6c3 --[+/government/government_office_category/officeholders./government/government_position_held/jurisdiction_of_office]--> ?)) --[+/location/location/contains]--> ?",
+  "query_readable_with_names": "((Blue Ridge Mountains --[←location.partially contains]--> ?) ∩ (Attorney general --[→government position held.jurisdiction of office]--> ?)) --[→location.contains]--> ?"
+}

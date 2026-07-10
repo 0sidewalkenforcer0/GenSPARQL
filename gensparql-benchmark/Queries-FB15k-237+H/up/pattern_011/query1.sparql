@@ -1,0 +1,23 @@
+# up Query (pattern_011): ((Artistic gymnastics --[→olympic athlete affiliation.country]--> ?) ∪ (Asian Development Bank --[←organization membership.organization]--> ?)) --[←person.nationality]--> ?
+# Pattern: 011 (0=KG match, 1=GENOP inference)
+# Expected Answers (7):
+#   1. Saul Rubinek (/m/0652ty)
+#   2. Ryan Reynolds (/m/036hf4)
+#   3. Loreena McKennitt (/m/01l4g5)
+#   4. Kim Cattrall (/m/01p85y)
+#   5. Michael Dobson (/m/07gkgp)
+#   6. Kate Nelligan (/m/05slvm)
+#   7. Stephen McHattie (/m/0fs9jn)
+
+SELECT ?answer ?mid WHERE {
+  {
+    <http://freebase.com/entity/m_01hp22_Artistic_gymnastics> <http://freebase.com/relation/forward_olympics_olympic_sport_athletes._olympics_olympic_athlete_affiliation_country> ?mid .
+  } UNION {
+    GENOP("List movies released on /m/0_2v format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+          (?mid),
+          <model:openrouter:deepseek/deepseek-chat>)
+  }
+  GENOP("List movies released on {{?mid}} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

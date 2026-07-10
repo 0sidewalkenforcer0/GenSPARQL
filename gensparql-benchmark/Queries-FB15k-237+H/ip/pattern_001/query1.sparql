@@ -1,0 +1,21 @@
+# ip Query (pattern_001): ((Blue Ridge Mountains --[←location.partially contains]--> ?) ∩ (Attorney general --[→government position held.jurisdiction of office]--> ?)) --[→location.contains]--> ?
+# Pattern: 001 (0=KG match, 1=GENOP inference)
+# Expected Answers (10):
+#   1. Pennsylvania's 12th congressional district (/m/0g0syc)
+#   2. Bethlehem (/m/013ksx)
+#   3. Johnstown (/m/0zpfy)
+#   4. Delaware County (/m/0mws3)
+#   5. Columbia (/m/0cy8v)
+#   6. Prince George's County (/m/0cc1v)
+#   7. Greenville County (/m/0mvxt)
+#   8. Centre County (/m/0mww2)
+#   9. Cumberland (/m/0tt6k)
+#   10. Cumberland County (/m/09dfcj)
+
+SELECT ?answer ?mid WHERE {
+  ?mid <http://freebase.com/relation/forward_location_location_partially_contains> <http://freebase.com/entity/m_02cgp8_Blue_Ridge_Mountains> .
+  <http://freebase.com/entity/m_0f6c3_Attorney_general> <http://freebase.com/relation/forward_government_government_office_category_officeholders._government_government_position_held_jurisdiction_of_office> ?mid .
+  GENOP("List movies or entities where {{?mid}} is their contains. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

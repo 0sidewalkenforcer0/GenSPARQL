@@ -1,0 +1,15 @@
+# up Query (pattern_100): ((Artistic gymnastics --[→olympic athlete affiliation.country]--> ?) ∪ (Asian Development Bank --[←organization membership.organization]--> ?)) --[←person.nationality]--> ?
+# Pattern: 100 (0=KG match, 1=GENOP inference)
+# Expected Answers (1):
+#   1. Kader Khan (/m/0894_x)
+
+SELECT ?answer ?mid WHERE {
+  {
+    GENOP("List movies or entities where /m/01hp22 is their olympics olympic sport athletes olympics olympic athlete affiliation country. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+          (?mid),
+          <model:openrouter:deepseek/deepseek-chat>)
+  } UNION {
+    ?mid <http://freebase.com/relation/forward_organization_organization_member_member_of._organization_organization_membership_organization> <http://freebase.com/entity/m_0_2v_Asian_Development_Bank> .
+  }
+  ?answer <http://freebase.com/relation/forward_people_person_nationality> ?mid .
+}

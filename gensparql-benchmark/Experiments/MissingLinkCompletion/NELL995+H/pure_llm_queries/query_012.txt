@@ -1,0 +1,8 @@
+# Pure LLM Query (Zero-shot)
+# Expected Answer: concept_newspaper_national_review
+# No grounding - LLM generates freely
+
+PROMPT: What is the agentcontrols of journal (newspaper)?
+
+Return your answer as a JSON array: ["answer1", "answer2", ...]
+If you don't know, return [].

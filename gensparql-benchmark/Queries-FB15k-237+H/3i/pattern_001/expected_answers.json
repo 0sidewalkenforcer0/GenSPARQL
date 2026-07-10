@@ -1,0 +1,17 @@
+{
+  "num_answers": 4,
+  "answers": [
+    "/m/01n78x",
+    "/m/025s7j4",
+    "/m/04zjxcz",
+    "/m/0h1yf"
+  ],
+  "answers_readable": [
+    "Saturated fat",
+    "Potassium",
+    "Ash",
+    "Arginine"
+  ],
+  "query_readable": "(/m/0971v --[+/food/food/nutrients./food/nutrition_fact/nutrient]--> ?) ∩ (/m/09728 --[+/food/food/nutrients./food/nutrition_fact/nutrient]--> ?) ∩ (/m/0dj75 --[+/food/food/nutrients./food/nutrition_fact/nutrient]--> ?)",
+  "query_readable_with_names": "(Beef --[→nutrition fact.nutrient]--> ?) ∩ (Bread --[→nutrition fact.nutrient]--> ?) ∩ (Onion --[→nutrition fact.nutrient]--> ?)"
+}

@@ -1,0 +1,16 @@
+# Query 2: Use GENOP to generate descriptions
+# Demonstrates GENOP with context mode (using variables from BGP)
+
+PREFIX ex: <http://example.org/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?scientist ?award ?description WHERE {
+  ?person foaf:name ?scientist .
+  ?person ex:receivedAward ?award .
+  ?award rdfs:label ?awardLabel .
+  GENOP("Write a brief description (1-2 sentences) about {?scientist} who won {?awardLabel}",
+        ?description,
+        <model:openrouter:xiaomi/mimo-v2-flash:free>)
+}
+

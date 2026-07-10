@@ -1,0 +1,11 @@
+{
+  "num_answers": 1,
+  "answers": [
+    "/m/02nfjp"
+  ],
+  "answers_readable": [
+    "Jay Chou"
+  ],
+  "query_readable": "/m/041rx --[+/people/ethnicity/people]--> ? --[+/film/director/film]--> ? --[+/award/award_winning_work/awards_won./award/award_honor/award]--> ? --[-/award/award_nominee/award_nominations./award/award_nomination/award]--> ?",
+  "query_readable_with_names": "Jewish people --[→ethnicity.people]--> ? --[→director.film]--> ? --[→award honor.award]--> ? --[←award nomination.award]--> ?"
+}

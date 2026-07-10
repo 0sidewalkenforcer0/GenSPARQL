@@ -1,0 +1,16 @@
+# ip Query (pattern_111): ((Oregon --[→religion percentage.religion]--> ?) ∩ (Library of Congress Classification --[←taxonomy entry.taxonomy]--> ?)) --[←religion percentage.religion]--> ?
+# Pattern: 111 (0=KG match, 1=GENOP inference)
+# Expected Answers (1):
+#   1. Delaware (/m/026mj)
+
+SELECT ?answer ?mid WHERE {
+  GENOP("List movies or entities where /m/05kj_ is their statistical region religions religion percentage religion. Return ONLY a JSON array of exact names like ['Name 1', 'Name 2']. No explanations.",
+        (?mid),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on /m/04n6k format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?mid),
+        <model:openrouter:deepseek/deepseek-chat>)
+  GENOP("List movies released on {{?mid}} format. Return ONLY a JSON array of exact movie titles like ['The Matrix', 'Inception']. No explanations.",
+        (?answer),
+        <model:openrouter:deepseek/deepseek-chat>)
+}

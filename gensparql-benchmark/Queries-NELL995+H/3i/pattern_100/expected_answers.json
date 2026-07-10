@@ -1,0 +1,9 @@
+{
+  "num_answers": 1,
+  "answers": [
+    "concept_city_irvine"
+  ],
+  "answers_readable": [],
+  "query_readable": "(concept_stateorprovince_california --[concept:proxyfor_reverse]--> ?) ∩ (concept_buildingfeature_american --[concept:atlocation]--> ?) ∩ (concept_company_national --[concept:hasofficeincity]--> ?)",
+  "query_readable_with_names": ""
+}

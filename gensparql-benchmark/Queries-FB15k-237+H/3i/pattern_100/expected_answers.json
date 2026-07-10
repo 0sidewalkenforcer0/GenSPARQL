@@ -1,0 +1,13 @@
+{
+  "num_answers": 2,
+  "answers": [
+    "/m/05gh50",
+    "/m/0838f"
+  ],
+  "answers_readable": [
+    "Polyunsaturated fat",
+    "Water"
+  ],
+  "query_readable": "(/m/0971v --[+/food/food/nutrients./food/nutrition_fact/nutrient]--> ?) ∩ (/m/09728 --[+/food/food/nutrients./food/nutrition_fact/nutrient]--> ?) ∩ (/m/0dj75 --[+/food/food/nutrients./food/nutrition_fact/nutrient]--> ?)",
+  "query_readable_with_names": "(Beef --[→nutrition fact.nutrient]--> ?) ∩ (Bread --[→nutrition fact.nutrient]--> ?) ∩ (Onion --[→nutrition fact.nutrient]--> ?)"
+}
