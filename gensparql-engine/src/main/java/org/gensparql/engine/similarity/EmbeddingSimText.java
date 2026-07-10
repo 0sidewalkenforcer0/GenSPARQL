@@ -138,6 +138,66 @@ public class EmbeddingSimText implements SimText {
     }
 
     /**
+     * Pre-compute and cache embeddings for a collection of strings using a few
+     * batched requests instead of one request per string. This turns a similarity
+     * join's O(n+m) embedding calls into a handful of batches, removing the
+     * sequential per-string API latency that dominates large joins.
+     *
+     * Failures are non-fatal: any string left uncached simply falls back to a lazy
+     * (or Jaccard) computation later.
+     */
+    public static void warmUp(java.util.Collection<String> texts) {
+        if (texts == null || texts.isEmpty()) {
+            return;
+        }
+        LLMProvider provider;
+        try {
+            provider = LLMProviderRegistry.getDefault();
+        } catch (Exception e) {
+            return;
+        }
+        if (provider == null || !provider.supportsEmbedding()) {
+            return;
+        }
+
+        // Unique, non-empty, not-yet-cached texts (preserve encounter order).
+        java.util.List<String> todo = new java.util.ArrayList<>();
+        java.util.Set<String> seen = new java.util.HashSet<>();
+        for (String t : texts) {
+            if (t == null || t.isEmpty() || embeddingCache.containsKey(t) || !seen.add(t)) {
+                continue;
+            }
+            todo.add(t);
+        }
+        if (todo.isEmpty()) {
+            return;
+        }
+
+        final int batch = 64;
+        for (int i = 0; i < todo.size(); i += batch) {
+            java.util.List<String> chunk =
+                    new java.util.ArrayList<>(todo.subList(i, Math.min(i + batch, todo.size())));
+            try {
+                EmbedResponse resp = provider.embedSync(new EmbedRequest(chunk, null));
+                if (resp == null || !resp.isSuccess()) {
+                    continue;
+                }
+                java.util.List<float[]> embs = resp.getEmbeddings();
+                for (int j = 0; j < chunk.size() && j < embs.size(); j++) {
+                    float[] e = embs.get(j);
+                    if (e != null && embeddingCache.size() < MAX_CACHE_SIZE) {
+                        embeddingCache.put(chunk.get(j), e);
+                    }
+                }
+            } catch (Exception e) {
+                LOG.debug("warmUp batch failed: {}", e.getMessage());
+            }
+        }
+        LOG.debug("warmUp: cached embeddings for up to {} new strings ({} total cached)",
+                todo.size(), embeddingCache.size());
+    }
+
+    /**
      * Compute cosine similarity between two vectors.
      */
     private double cosineSimilarity(float[] a, float[] b) {

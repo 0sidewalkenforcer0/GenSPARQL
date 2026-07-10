@@ -11,6 +11,9 @@ import org.apache.jena.sparql.serializer.SerializationContext;
 import org.gensparql.core.model.SourceType;
 import org.gensparql.core.model.TypedBinding;
 import org.gensparql.core.model.TypedValue;
+import org.gensparql.core.similarity.CanonicalForm;
+import org.gensparql.core.similarity.SimText;
+import org.gensparql.engine.similarity.EmbeddingSimText;
 import org.gensparql.engine.similarity.SimScoreEvaluator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +28,25 @@ import java.util.*;
  *
  * COM(μ₁, μ₂) ⟺ ∀v ∈ dom(μ₁) ∩ dom(μ₂): SimScore(μ₁(v), μ₂(v), v) = ⊤
  *
- * This allows LLM-generated values to be joined with RDF values
- * based on semantic similarity rather than exact string matching.
+ * <h2>Performance</h2>
+ * A naive N×M scan that calls an embedding model for every pair does not scale:
+ * on a single join it triggered hundreds of sequential embedding requests
+ * (minutes of wall-clock). This implementation therefore:
+ * <ol>
+ *   <li><b>Exact-match first.</b> A pre-built hash index over the right side,
+ *       keyed by the normalized join-variable labels, resolves exact matches in
+ *       O(1) with no similarity computation at all. For constrained generation
+ *       (where the model copies exact KG labels) this handles every match.</li>
+ *   <li><b>Exact-only fast path.</b> When every join variable requires an exact
+ *       match (threshold ≥ 1.0), the fuzzy scan is skipped entirely.</li>
+ *   <li><b>Batched pre-warm.</b> When approximate matching is needed and the
+ *       similarity strategy is embedding-based, all join-variable labels are
+ *       embedded in a few batched requests up front, so the fuzzy scan performs
+ *       in-memory cosine comparisons instead of per-pair API round-trips.</li>
+ * </ol>
+ * Results are identical to the naive scan (every candidate is still verified with
+ * the {@link SimScoreEvaluator}); only their order may differ, which is
+ * irrelevant to SPARQL bag semantics.
  */
 public class QueryIterSimJoin extends QueryIteratorBase {
     private static final Logger LOG = LoggerFactory.getLogger(QueryIterSimJoin.class);
@@ -37,6 +57,12 @@ public class QueryIterSimJoin extends QueryIteratorBase {
     private final ExecutionContext execCxt;
     private final Map<Var, SourceType> leftSourceTypes;
     private final Map<Var, SourceType> rightSourceTypes;
+
+    // Pre-built exact-match index over the right side.
+    private final List<Var> joinVars;
+    private final boolean approximate;
+    private final Map<String, List<TypedBinding>> rightIndex = new HashMap<>();
+    private final List<String> rightKeys = new ArrayList<>(); // aligned with rightBindings
 
     private Iterator<TypedBinding> leftIter;
     private TypedBinding currentLeft;
@@ -63,23 +89,20 @@ public class QueryIterSimJoin extends QueryIteratorBase {
         this.leftSourceTypes = leftSourceTypes != null ? leftSourceTypes : Collections.emptyMap();
         this.rightSourceTypes = rightSourceTypes != null ? rightSourceTypes : Collections.emptyMap();
 
-        // Materialize both sides (needed for N×M comparison)
+        // Materialize both sides.
         this.leftBindings = materialize(left, this.leftSourceTypes);
         this.rightBindings = materialize(right, this.rightSourceTypes);
         this.leftIter = leftBindings.iterator();
 
-        // Debug output
+        // Build the pre-computed index and decide whether a fuzzy scan is needed.
+        this.joinVars = computeJoinVars();
+        this.approximate = computeApproximate();
+        buildRightIndex();
+        maybeWarmEmbeddings();
+
         if (LOG.isDebugEnabled()) {
-            LOG.debug("SimJoin Initialization: {} left bindings, {} right bindings",
-                    leftBindings.size(), rightBindings.size());
-            for (TypedBinding tb : leftBindings) {
-                LOG.debug("  Left: {}", tb);
-            }
-            for (TypedBinding tb : rightBindings) {
-                LOG.debug("  Right: {}", tb);
-            }
-            LOG.debug("Left source types: {}, Right source types: {}",
-                    this.leftSourceTypes, this.rightSourceTypes);
+            LOG.debug("SimJoin init: {} left, {} right, joinVars={}, approximate={}, index buckets={}",
+                    leftBindings.size(), rightBindings.size(), joinVars, approximate, rightIndex.size());
         }
     }
 
@@ -119,6 +142,100 @@ public class QueryIterSimJoin extends QueryIteratorBase {
         return builder.build();
     }
 
+    /** Variables shared by both sides (the join key), in a deterministic order. */
+    private List<Var> computeJoinVars() {
+        Set<Var> leftVars = new LinkedHashSet<>();
+        for (TypedBinding tb : leftBindings) {
+            leftVars.addAll(tb.varSet());
+        }
+        Set<Var> rightVars = new HashSet<>();
+        for (TypedBinding tb : rightBindings) {
+            rightVars.addAll(tb.varSet());
+        }
+        List<Var> shared = new ArrayList<>();
+        for (Var v : leftVars) {
+            if (rightVars.contains(v)) {
+                shared.add(v);
+            }
+        }
+        shared.sort(Comparator.comparing(Var::getName));
+        return shared;
+    }
+
+    /** True if any join variable allows approximate (non-exact) matches. */
+    private boolean computeApproximate() {
+        for (Var v : joinVars) {
+            if (simScoreEvaluator.getThreshold(v) < 1.0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void buildRightIndex() {
+        if (joinVars.isEmpty()) {
+            return;
+        }
+        for (TypedBinding tb : rightBindings) {
+            String key = keyOf(tb);
+            rightKeys.add(key);
+            if (key != null) {
+                rightIndex.computeIfAbsent(key, k -> new ArrayList<>()).add(tb);
+            }
+        }
+    }
+
+    /**
+     * Normalized join key for a binding, or {@code null} if any join variable is
+     * unbound/null (such bindings cannot be indexed and are handled by scanning).
+     * Uses the same lexical/canonical forms the {@link SimScoreEvaluator} compares.
+     */
+    private String keyOf(TypedBinding tb) {
+        StringBuilder sb = new StringBuilder();
+        for (Var v : joinVars) {
+            TypedValue tv = tb.getTypedValue(v);
+            if (tv == null || tv.getNode() == null) {
+                return null;
+            }
+            String s = tv.isGen() ? CanonicalForm.lex(tv.getNode()) : CanonicalForm.canon(tv.getNode());
+            sb.append(CanonicalForm.normalize(s)).append('\u0001');
+        }
+        return sb.toString();
+    }
+
+    /** Batch-embed all join-variable labels up front when a fuzzy scan will run. */
+    private void maybeWarmEmbeddings() {
+        if (!approximate || joinVars.isEmpty()) {
+            return;
+        }
+        SimText st = simScoreEvaluator.getSimText();
+        if (!(st instanceof EmbeddingSimText)) {
+            return; // Jaccard etc. are in-memory; nothing to pre-warm.
+        }
+        Set<String> labels = new HashSet<>();
+        collectLabels(leftBindings, labels);
+        collectLabels(rightBindings, labels);
+        if (!labels.isEmpty()) {
+            LOG.debug("SimJoin pre-warming {} embeddings (batched)", labels.size());
+            EmbeddingSimText.warmUp(labels);
+        }
+    }
+
+    private void collectLabels(List<TypedBinding> bindings, Set<String> out) {
+        for (TypedBinding tb : bindings) {
+            for (Var v : joinVars) {
+                TypedValue tv = tb.getTypedValue(v);
+                if (tv == null || tv.getNode() == null) {
+                    continue;
+                }
+                String s = tv.isGen() ? CanonicalForm.lex(tv.getNode()) : CanonicalForm.canon(tv.getNode());
+                if (s != null && !s.isEmpty()) {
+                    out.add(s);
+                }
+            }
+        }
+    }
+
     @Override
     protected boolean hasNextBinding() {
         if (exhausted) {
@@ -126,17 +243,13 @@ public class QueryIterSimJoin extends QueryIteratorBase {
         }
 
         while (true) {
-            // Check if we have more matches for current left binding
             if (matchIter != null && matchIter.hasNext()) {
                 return true;
             }
-
-            // Move to next left binding
             if (!leftIter.hasNext()) {
                 exhausted = true;
                 return false;
             }
-
             currentLeft = leftIter.next();
             matchIter = findCompatibleBindings(currentLeft).iterator();
         }
@@ -150,22 +263,55 @@ public class QueryIterSimJoin extends QueryIteratorBase {
     }
 
     /**
-     * Find all right bindings compatible with left binding using SimScore.
-     * Implements the COM predicate check.
+     * Find all right bindings compatible with the left binding, using the exact
+     * index first and only falling back to a scan for approximate matches.
      */
     private List<TypedBinding> findCompatibleBindings(TypedBinding left) {
+        // No shared variables => Cartesian product (all right bindings compatible).
+        if (joinVars.isEmpty()) {
+            return rightBindings;
+        }
+
+        String leftKey = keyOf(left);
         List<TypedBinding> compatible = new ArrayList<>();
 
-        for (TypedBinding right : rightBindings) {
-            if (areCompatible(left, right)) {
-                compatible.add(right);
+        // Phase 1 -- exact match via the pre-built index (no similarity/embeddings).
+        if (leftKey != null) {
+            List<TypedBinding> exact = rightIndex.get(leftKey);
+            if (exact != null) {
+                for (TypedBinding right : exact) {
+                    if (areCompatible(left, right)) {
+                        compatible.add(right);
+                    }
+                }
+            }
+        }
+
+        // Phase 2 -- approximate scan (skip the exact bucket already handled).
+        if (approximate) {
+            for (int i = 0; i < rightBindings.size(); i++) {
+                String rKey = rightKeys.get(i);
+                if (leftKey != null && leftKey.equals(rKey)) {
+                    continue; // already handled exactly in phase 1
+                }
+                TypedBinding right = rightBindings.get(i);
+                if (areCompatible(left, right)) {
+                    compatible.add(right);
+                }
+            }
+        } else if (leftKey == null) {
+            // Exact-only mode but the left key is unbound: scan to honour the
+            // null==null compatibility semantics of SimScore.
+            for (TypedBinding right : rightBindings) {
+                if (areCompatible(left, right)) {
+                    compatible.add(right);
+                }
             }
         }
 
         if (LOG.isTraceEnabled()) {
             LOG.trace("Found {} compatible bindings for left: {}", compatible.size(), left);
         }
-
         return compatible;
     }
 
@@ -176,27 +322,23 @@ public class QueryIterSimJoin extends QueryIteratorBase {
      * SimScore evaluates to true.
      */
     private boolean areCompatible(TypedBinding b1, TypedBinding b2) {
-        // Find shared variables
         Set<Var> shared = new HashSet<>();
         Set<Var> b1Vars = b1.varSet();
         Set<Var> b2Vars = b2.varSet();
-
         for (Var v : b1Vars) {
             if (b2Vars.contains(v)) {
                 shared.add(v);
             }
         }
 
-        // If no shared variables, they are compatible (can be merged)
+        // If no shared variables, they are compatible (can be merged).
         if (shared.isEmpty()) {
             return true;
         }
 
-        // Check SimScore for each shared variable
         for (Var var : shared) {
             TypedValue tv1 = b1.getTypedValue(var);
             TypedValue tv2 = b2.getTypedValue(var);
-
             if (!simScoreEvaluator.evaluate(tv1, tv2, var)) {
                 if (LOG.isTraceEnabled()) {
                     LOG.trace("Bindings not compatible at var ?{}: {} vs {}",
@@ -204,11 +346,10 @@ public class QueryIterSimJoin extends QueryIteratorBase {
                             tv1 != null ? tv1.getLexicalForm() : "null",
                             tv2 != null ? tv2.getLexicalForm() : "null");
                 }
-                return false;  // Not compatible
+                return false;
             }
         }
-
-        return true;  // All shared variables compatible
+        return true;
     }
 
     @Override
@@ -218,7 +359,6 @@ public class QueryIterSimJoin extends QueryIteratorBase {
 
     @Override
     protected void requestCancel() {
-        // Cancel by exhausting
         exhausted = true;
     }
 
@@ -227,6 +367,8 @@ public class QueryIterSimJoin extends QueryIteratorBase {
         out.print("QueryIterSimJoin(");
         out.print("left=" + leftBindings.size());
         out.print(", right=" + rightBindings.size());
+        out.print(", exactBuckets=" + rightIndex.size());
+        out.print(", approximate=" + approximate);
         out.print(")");
     }
 

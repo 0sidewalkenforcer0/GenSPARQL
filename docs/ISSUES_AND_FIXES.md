@@ -97,18 +97,28 @@ percent escapes (`cleanLabel()`). Verified against real FB15k URIs.
 
 ---
 
-## 5. Similarity join is an O(n×m) embedding brute force — **OPEN**
+## 5. Similarity join was an O(n×m) embedding brute force — **FIXED**
 
-**Where:** `gensparql-engine/.../GenSPARQLQueryEngine.executeSimJoinForSequence` +
-`QueryIterSimJoin` + `EmbeddingSimText`.
+**Where:** `gensparql-engine/.../iterator/QueryIterSimJoin` + `EmbeddingSimText`.
 
-The sim‑join compares **every** left (KG) binding against **every** right (generated)
-value; the default `SimText` calls the embedding API for each non‑exact string.
+The sim‑join compared **every** left (KG) binding against **every** right (generated)
+value, and the default `SimText` called the embedding API for each non‑exact string.
 On a single 2i pattern this meant ~500 sequential embedding calls and **~230–320s**
 wall‑clock (vs. ~3s for the LLM call itself).
 
-**Recommended fix:** exact‑match first, then a pre‑built entity embedding index with
-approximate nearest‑neighbour lookup and batched embeddings.
+**Fix:** `QueryIterSimJoin` now
+(a) builds a pre‑computed hash index over the right side keyed by normalized
+join‑variable labels and resolves exact matches in O(1) with no similarity
+computation (this alone covers constrained generation, where the model copies exact
+KG labels);
+(b) skips the fuzzy scan entirely when the join variable's threshold is ≥ 1.0
+(exact‑only mode); and
+(c) when approximate matching is needed with an embedding `SimText`, pre‑warms all
+labels via `EmbeddingSimText.warmUp` in a few batched requests instead of ~O(n+m)
+sequential ones.
+Results are unchanged (every candidate is still verified by the `SimScoreEvaluator`);
+a micro‑benchmark confirms exact‑only mode performs only the matching comparisons via
+the index while approximate mode still finds fuzzy matches.
 
 ---
 
