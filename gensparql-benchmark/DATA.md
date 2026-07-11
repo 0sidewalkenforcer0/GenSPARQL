@@ -41,3 +41,20 @@ Expected file layout after preparation:
 GENSPARQL_Data/FB15k-237+H/{train,valid,test}.nt
 GENSPARQL_Data/NELL995+H/{train,valid,test}.nt
 ```
+
+## Clean entity labels (FB15k)
+
+FB15k entity URIs embed variable-underscore MIDs, so labels cannot be recovered
+from the URIs alone. Fetch the standard MID→name file and build a clean
+`URI → name` map:
+
+```bash
+cd gensparql-benchmark/GENSPARQL_Data
+curl -fsSL https://raw.githubusercontent.com/yao8839836/KG-BERT/master/data/FB15k-237/entity2text.txt \
+     -o FB15k-237+H/entity2text.txt
+python3 build_entity_labels.py FB15k-237+H     # -> FB15k-237+H/entity_labels.tsv
+```
+
+`GenSPARQLExample` auto-loads `entity_labels.tsv` (next to `train.nt`) and calls
+`CanonicalForm.setLabelLookup(...)`; the query generator uses the same map for
+constrained-generation candidate lists.

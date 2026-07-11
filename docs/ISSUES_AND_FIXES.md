@@ -216,3 +216,22 @@ path fan‑out), **not** the query engine or the harness.
 - Selecting relations that are genuinely LLM‑answerable (genre, director, cast — not
   distribution medium).
 - Batching / a per‑query call cap to make path types tractable.
+
+### Addendum — clean entity labels obtained, but accuracy unchanged
+
+Root cause #1 (unrecoverable labels) was subsequently **resolved**: KG‑BERT's
+`entity2text.txt` (14,950 MID→name pairs) was fetched and `build_entity_labels.py`
+produced `entity_labels.tsv` with a clean name for **all 14,505** FB15k entities
+(e.g. `m_07g_0c_The_Weather_Man` → "The Weather Man"). This is now wired into both
+sides — `GenSPARQLExample` sets `CanonicalForm.setLabelLookup(...)` so the sim‑join
+canonicalizes to real names, and the generator uses the same map for clean
+candidate lists.
+
+**It did not change the outcome.** With clean candidates *and* a natural‑language
+prompt, the model still returns `[]` on 2i/pattern_01. The earlier "80% recall"
+run returned ~427 items — the model **dumping almost the entire candidate list**
+(recall high, precision ~7%) — and it is **non‑deterministic** (a rerun returns
+empty). The relations chosen for the GENOP branch (e.g. "released on DVD") are not
+discriminative world knowledge, so the LLM cannot perform meaningful selection: it
+either gives up (`[]`) or returns everything. Clean labels were **necessary but not
+sufficient**; the benchmark‑design blocker (issue #7) is the binding constraint.

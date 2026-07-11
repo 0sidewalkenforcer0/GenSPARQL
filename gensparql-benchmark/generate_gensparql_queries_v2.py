@@ -251,9 +251,31 @@ def parse_query_readable(query_readable, dataset):
 _answer_cand_cache = {}
 
 
+_label_maps = {}
+
+
+def _labels_for(dataset):
+    """Lazy-load the clean <URI>\\t<name> map (entity_labels.tsv) for a dataset."""
+    if dataset in _label_maps:
+        return _label_maps[dataset]
+    m = {}
+    path = DATA_DIR / dataset / "entity_labels.tsv"
+    if path.exists():
+        with open(path, encoding='utf-8') as f:
+            for line in f:
+                t = line.rstrip('\n').split('\t')
+                if len(t) >= 2:
+                    m[t[0]] = t[1]
+    _label_maps[dataset] = m
+    return m
+
+
 def canon_label_py(uri, dataset):
-    """Readable label for an entity URI, mirroring Java CanonicalForm.canon so the
-    candidate strings match what the similarity join compares against."""
+    """Readable label for an entity URI. Prefers the clean entity_labels.tsv map,
+    falling back to URI parsing (mirroring Java CanonicalForm.canon)."""
+    labels = _labels_for(dataset)
+    if uri in labels:
+        return labels[uri]
     local = uri.rstrip('>').split('/')[-1]
     if 'NELL' in dataset:
         if local.startswith('concept_'):
