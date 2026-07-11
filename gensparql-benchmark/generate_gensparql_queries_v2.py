@@ -6,6 +6,7 @@ Uses machine IDs to generate queries that match the actual RDF data.
 
 import os
 import re
+import ast
 import json
 import subprocess
 import argparse
@@ -16,6 +17,9 @@ BASE_DIR = Path(__file__).parent
 DATA_DIR = BASE_DIR / "GENSPARQL_Data"
 QUERIES_FB = BASE_DIR / "Queries-FB15k-237+H"
 QUERIES_NELL = BASE_DIR / "Queries-NELL995+H"
+
+# How many query instances to emit per pattern (each gets its own expected{i}.json)
+QUERIES_PER_PATTERN = int(os.environ.get("QUERIES_PER_PATTERN", "3"))
 
 # Namespaces for each dataset
 NAMESPACES = {
@@ -159,6 +163,11 @@ def relation_to_natural_language(rel_name, dataset, is_reverse=False):
     if not filtered_parts:
         filtered_parts = parts
 
+    # Keep only the most specific tail (the last few tokens) for a cleaner phrase,
+    # e.g. "...regional release date release distribution medium" -> "distribution medium".
+    if len(filtered_parts) > 3:
+        filtered_parts = filtered_parts[-3:]
+
     description = ' '.join(filtered_parts)
 
     if is_reverse:
@@ -236,6 +245,84 @@ def parse_query_readable(query_readable, dataset):
                 break
 
     return parts
+
+
+# ---- Constrained-generation candidates from the KG co-branch ----
+_answer_cand_cache = {}
+
+
+def canon_label_py(uri, dataset):
+    """Readable label for an entity URI, mirroring Java CanonicalForm.canon so the
+    candidate strings match what the similarity join compares against."""
+    local = uri.rstrip('>').split('/')[-1]
+    if 'NELL' in dataset:
+        if local.startswith('concept_'):
+            local = local[8:]
+        return local.replace('_', ' ').strip()
+    if local.startswith('m_'):
+        di = local.find('__')
+        if di > 0:
+            lbl = local[di + 2:]
+        else:
+            sep = local.find('_', 2)
+            lbl = local[sep + 1:] if sep > 0 else local
+        try:
+            import urllib.parse
+            lbl = urllib.parse.unquote(lbl)
+        except Exception:
+            pass
+        return lbl.replace('_', ' ').replace('-', ' ').strip()
+    return local.replace('_', ' ').replace('-', ' ').strip()
+
+
+def extract_answer_candidates(data_file, rel_uri, anchor_uri, reverse, dataset):
+    """?answer entities allowed by one KG branch:
+    reverse -> (?answer rel anchor); forward -> (anchor rel ?answer)."""
+    key = f"{rel_uri}|{anchor_uri}|{reverse}"
+    if key in _answer_cand_cache:
+        return _answer_cand_cache[key]
+    out, seen = [], set()
+    if reverse:
+        needle = f"<{rel_uri}> <{anchor_uri}> ."
+        idx = 0  # subject
+    else:
+        needle = f"<{anchor_uri}> <{rel_uri}> "
+        idx = 2  # object
+    try:
+        result = subprocess.run(['grep', '-F', needle, str(data_file)],
+                                capture_output=True, text=True)
+        for line in result.stdout.splitlines():
+            parts = line.strip().split(' ')
+            if len(parts) < 3:
+                continue
+            lbl = canon_label_py(parts[idx].strip('<>'), dataset)
+            if lbl and lbl not in seen:
+                seen.add(lbl)
+                out.append(lbl)
+    except Exception:
+        pass
+    _answer_cand_cache[key] = out
+    return out
+
+
+def kg_cobranch_candidates(branches, code, dataset, data_file, ns):
+    """?answer candidates = entities satisfying ALL KG (code==0) branches.
+    Returns None when constrained mode is off or there is no KG branch to anchor on."""
+    if not CONSTRAINED_GENERATION:
+        return None
+    sets = []
+    for j, b in enumerate(branches):
+        if j < len(code) and code[j] == 0:
+            rel_name, rel_rev, _ = parse_relation(b['rel1'], dataset)
+            anchor_uri = find_entity_uri(b['entity'], data_file, ns['entity_ns'], dataset)
+            rel_uri = ns['relation_ns'] + rel_name
+            subs = set(extract_answer_candidates(data_file, rel_uri, anchor_uri, rel_rev, dataset))
+            if subs:
+                sets.append(subs)
+    if not sets:
+        return None
+    inter = set.intersection(*sets) if len(sets) > 1 else sets[0]
+    return sorted(inter)
 
 
 def generate_triple_pattern(subject, rel_name, obj, ns, is_reverse):
@@ -699,6 +786,9 @@ def generate_2i_query(query_data, dataset, data_file, pattern_code):
     # Get pattern code (default to [0, 1] if not provided)
     code = pattern_code if pattern_code and len(pattern_code) >= 2 else [0, 1]
 
+    # Constrained-generation candidates from the KG co-branch(es)
+    cands = kg_cobranch_candidates(branches, code, dataset, data_file, ns)
+
     lines = []
 
     # Branch 1: e1 --[r1]--> ?answer
@@ -706,7 +796,7 @@ def generate_2i_query(query_data, dataset, data_file, pattern_code):
         triple = generate_triple_pattern(f"<{e1_uri}>", rel1_name, "?answer", ns, rel1_reverse)
         lines.append(triple)
     else:
-        prompt = generate_genop_prompt(f"<{e1_uri}>", rel1_desc, "answer", e1_name)
+        prompt = generate_genop_prompt(f"<{e1_uri}>", rel1_desc, "answer", e1_name, candidates=cands, max_candidates=MAX_CANDIDATES)
         lines.append(f'  GENOP("{prompt}",')
         lines.append(f'        (?answer),')
         lines.append(f'        <model:openrouter:deepseek/deepseek-chat>)')
@@ -716,7 +806,7 @@ def generate_2i_query(query_data, dataset, data_file, pattern_code):
         triple = generate_triple_pattern(f"<{e2_uri}>", rel2_name, "?answer", ns, rel2_reverse)
         lines.append(triple)
     else:
-        prompt = generate_genop_prompt(f"<{e2_uri}>", rel2_desc, "answer", e2_name)
+        prompt = generate_genop_prompt(f"<{e2_uri}>", rel2_desc, "answer", e2_name, candidates=cands, max_candidates=MAX_CANDIDATES)
         lines.append(f'  GENOP("{prompt}",')
         lines.append(f'        (?answer),')
         lines.append(f'        <model:openrouter:deepseek/deepseek-chat>)')
@@ -744,8 +834,9 @@ def generate_3i_query(query_data, dataset, data_file, pattern_code):
     """
     ns = NAMESPACES[dataset]
     query_readable = query_data.get('query_readable', '')
+    query_readable_with_names = query_data.get('query_readable_with_names', '')
 
-    branches = parse_intersection_query(query_readable, dataset)
+    branches = parse_intersection_query(query_readable, dataset, query_readable_with_names)
     if len(branches) < 3:
         return None
 
@@ -761,10 +852,17 @@ def generate_3i_query(query_data, dataset, data_file, pattern_code):
     e3_mid = branches[2]['entity']
     rel3_name, rel3_reverse, rel3_desc = parse_relation(branches[2]['rel1'], dataset)
 
+    e1_name = branches[0].get('entity_name') or e1_mid
+    e2_name = branches[1].get('entity_name') or e2_mid
+    e3_name = branches[2].get('entity_name') or e3_mid
+
     answers_comment = format_answers_comment(query_data)
 
     # Get pattern code (default to [0, 0, 1] if not provided)
     code = pattern_code if pattern_code and len(pattern_code) >= 3 else [0, 0, 1]
+
+    # Constrained-generation candidates from the KG co-branch(es)
+    cands = kg_cobranch_candidates(branches, code, dataset, data_file, ns)
 
     lines = []
 
@@ -773,7 +871,7 @@ def generate_3i_query(query_data, dataset, data_file, pattern_code):
         triple = generate_triple_pattern(f"<{e1_uri}>", rel1_name, "?answer", ns, rel1_reverse)
         lines.append(triple)
     else:
-        prompt = generate_genop_prompt(f"<{e1_uri}>", rel1_desc, "answer", e1_mid)
+        prompt = generate_genop_prompt(f"<{e1_uri}>", rel1_desc, "answer", e1_name, candidates=cands, max_candidates=MAX_CANDIDATES)
         lines.append(f'  GENOP("{prompt}",')
         lines.append(f'        (?answer),')
         lines.append(f'        <model:openrouter:deepseek/deepseek-chat>)')
@@ -783,7 +881,7 @@ def generate_3i_query(query_data, dataset, data_file, pattern_code):
         triple = generate_triple_pattern(f"<{e2_uri}>", rel2_name, "?answer", ns, rel2_reverse)
         lines.append(triple)
     else:
-        prompt = generate_genop_prompt(f"<{e2_uri}>", rel2_desc, "answer", e2_mid)
+        prompt = generate_genop_prompt(f"<{e2_uri}>", rel2_desc, "answer", e2_name, candidates=cands, max_candidates=MAX_CANDIDATES)
         lines.append(f'  GENOP("{prompt}",')
         lines.append(f'        (?answer),')
         lines.append(f'        <model:openrouter:deepseek/deepseek-chat>)')
@@ -793,7 +891,7 @@ def generate_3i_query(query_data, dataset, data_file, pattern_code):
         triple = generate_triple_pattern(f"<{e3_uri}>", rel3_name, "?answer", ns, rel3_reverse)
         lines.append(triple)
     else:
-        prompt = generate_genop_prompt(f"<{e3_uri}>", rel3_desc, "answer", e3_mid)
+        prompt = generate_genop_prompt(f"<{e3_uri}>", rel3_desc, "answer", e3_name, candidates=cands, max_candidates=MAX_CANDIDATES)
         lines.append(f'  GENOP("{prompt}",')
         lines.append(f'        (?answer),')
         lines.append(f'        <model:openrouter:deepseek/deepseek-chat>)')
@@ -1127,28 +1225,34 @@ def process_dataset(dataset_name, data_dir, queries_dir):
                 if not queries:
                     continue
 
-                # Get first query
-                query_data = queries[0]
-
                 # Parse pattern code from directory name (e.g., 'pattern_01' -> [0, 1])
                 pattern_code = parse_pattern_code(pattern_dir.name)
 
-                # Generate GenSPARQL with pattern code
-                gensparql = generate_query(query_type, query_data, dataset_name, data_file, pattern_code)
-                if not gensparql:
-                    errors.append(f"Failed to generate: {json_file}")
-                    continue
-
-                # Write to output directory
                 output_dir = queries_dir / query_type / pattern_dir.name
                 output_dir.mkdir(parents=True, exist_ok=True)
-                output_file = output_dir / 'query1.sparql'
 
-                with open(output_file, 'w', encoding='utf-8') as f:
-                    f.write(gensparql)
+                # Emit up to QUERIES_PER_PATTERN instances per pattern, each with its
+                # own expected-answers file, so every instance can be scored separately.
+                for idx, query_data in enumerate(queries[:QUERIES_PER_PATTERN], start=1):
+                    gensparql = generate_query(query_type, query_data, dataset_name, data_file, pattern_code)
+                    if not gensparql:
+                        errors.append(f"Failed to generate #{idx}: {json_file}")
+                        continue
 
-                count += 1
-                print(f"Generated: {output_file}")
+                    (output_dir / f'query{idx}.sparql').write_text(gensparql, encoding='utf-8')
+
+                    # Normalize this instance's answers into {"answers": [...]}
+                    ans = query_data.get('answers', [])
+                    if isinstance(ans, str):
+                        try:
+                            ans = ast.literal_eval(ans)
+                        except Exception:
+                            ans = []
+                    with open(output_dir / f'expected{idx}.json', 'w', encoding='utf-8') as ef:
+                        json.dump({'answers': ans}, ef)
+
+                    count += 1
+                    print(f"Generated: {output_dir / f'query{idx}.sparql'}")
 
             except Exception as e:
                 errors.append(f"Error processing {json_file}: {e}")
