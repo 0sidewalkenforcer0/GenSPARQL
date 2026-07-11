@@ -33,14 +33,16 @@ public class GenSPARQLExample {
 
     public static void main(String[] args) {
         if (args.length < 2) {
-            System.err.println("Usage: GenSPARQLExample <data_file> <query_file>");
+            System.err.println("Usage: GenSPARQLExample <data_file> <query_file> [expected_answers_json]");
             System.err.println("  data_file:  Path to RDF data (TTL, NT, etc.)");
             System.err.println("  query_file: Path to SPARQL query file");
+            System.err.println("  expected_answers_json: (optional) expected answers; defaults to expected_answers.json next to the query");
             System.exit(1);
         }
 
         String dataFile = args[0];
         String queryFile = args[1];
+        String expectedFile = args.length >= 3 ? args[2] : null;
 
         try {
             // Initialize GenSPARQL
@@ -61,7 +63,7 @@ public class GenSPARQLExample {
             System.out.println(queryString);
 
             // Load expected answers if available
-            Set<String> expectedAnswers = loadExpectedAnswers(queryFile);
+            Set<String> expectedAnswers = loadExpectedAnswers(queryFile, expectedFile);
 
             // Execute query and evaluate
             System.out.println("\n=== Executing Query ===");
@@ -89,11 +91,13 @@ public class GenSPARQLExample {
     /**
      * Load expected answers from expected_answers.json in the same directory as the query file.
      */
-    private static Set<String> loadExpectedAnswers(String queryFile) {
+    private static Set<String> loadExpectedAnswers(String queryFile, String expectedOverride) {
         Set<String> expectedAnswers = new HashSet<>();
         try {
             Path queryPath = Paths.get(queryFile);
-            Path expectedFile = queryPath.getParent().resolve("expected_answers.json");
+            Path expectedFile = (expectedOverride != null && !expectedOverride.isEmpty())
+                    ? Paths.get(expectedOverride)
+                    : queryPath.getParent().resolve("expected_answers.json");
             
             if (Files.exists(expectedFile)) {
                 String json = Files.readString(expectedFile);

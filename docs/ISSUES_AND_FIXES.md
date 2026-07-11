@@ -146,7 +146,7 @@ from issue #5. For 2i patterns the sim‑join already performs the GEN→KG mapp
 
 ## 8. Secret committed to the tree — **FIXED (in this clean repo)**
 
-A live OpenRouter API key (`sk-or-v1-…`) was hard‑coded in ~190 run scripts. All
+A live OpenRouter API key was hard‑coded in ~190 run scripts. All
 occurrences were replaced with `YOUR_OPENROUTER_API_KEY`; scripts read the
 `OPENROUTER_API_KEY` environment variable at runtime. **Rotate that key**, since it
 was present in the original history.
@@ -161,6 +161,58 @@ was present in the original history.
 | Fixed prompt (open generation) | 33 | 3 | 9.09% | 7.50% | 8.22% |
 | Fixed prompt + candidate‑constrained selection | 427 | 32 | 7.49% | **80.00%** | 13.70% |
 
-The mechanism works (recall 0 → 80%, and every output is a valid KG entity); the
-remaining low precision is a property of the chosen benchmark relation (issue #7),
-not of the engine.
+The mechanism works (recall 0 → 80%, and every output is a valid KG entity). **But
+the 80% row was a hand‑crafted, single‑pattern best case** — a natural‑language
+prompt with hand‑typed, clean candidate titles. It is **not reproducible by the
+automated query generator**; see the evaluation outcome below.
+
+---
+
+## 9. Evaluation outcome — automated benchmark scores ~0 — **FINDING**
+
+A full post‑fix evaluation was attempted: **both datasets × every pattern × 3 query
+instances**, scored with `GenSPARQLExample` (Precision/Recall/F1). All supporting
+infrastructure was built and works: the generator emits 3 instances per pattern
+with per‑instance `expected{i}.json`; `GenSPARQLExample` accepts an explicit
+expected‑answers file; `run_full_sweep.sh` iterates the matrix; and the
+intersection generators (2i/3i) were wired to build **candidate‑constrained**
+prompts from the KG co‑branch. Despite this, the automated queries score
+essentially **0** — via both the open and the constrained path.
+
+**Evidence**
+- 2i/pattern_01, open generation: expected 40, actual 33, **TP 0**.
+- 2i/pattern_01, constrained: the model returns `[]` (selects nothing) → **0**.
+- 3i/pattern_001, constrained: `[]` → **0**.
+
+**Root causes (compounding, several are fundamental)**
+1. **FB15k entity labels are unrecoverable from the URIs.** Local names embed
+   variable‑length machine IDs that themselves contain underscores
+   (`m_07g_0c_The_Weather_Man` → mid `07g_0c`; `m_05_5_22_Get_Him_to_the_Greek` →
+   mid `05_5_22`). No underscore rule separates mid from label, so
+   canonicalization yields garbage (`"0c The Weather Man"`). This corrupts both the
+   candidate lists and the sim‑join keys. (Issue #3 only fixed the clean cases.)
+2. **Garbled candidates + technical relation phrasing make the model give up** — it
+   returns `[]` when asked to "select entities whose 'release distribution medium'
+   is 'DVD'" over names like `"0c The Weather Man"`.
+3. **The relations are not LLM world knowledge** ("released on DVD" is
+   arbitrary/near‑universal), so even clean labels would not recover the specific
+   answers (issue #7).
+4. **Path types (2p/3p/4p) are computationally infeasible.** Context‑mode `GENOP`
+   fires once per intermediate binding: 2p/pattern_01 issued **41 LLM calls**,
+   returned **1252** answers, and took **5.2 min** for one query. A full sweep of
+   path types would run for hours.
+
+**Conclusion.** With the *automated* pipeline, GenSPARQL scores ~0 on FB15k‑237+H
+and NELL‑995+H. The engine itself is correct — validated on a curated case where a
+natural prompt + clean candidates reached ~80% recall — but the benchmark is not
+solvable by automated generation as it stands. The blockers are the data encoding
+(unrecoverable labels) and the benchmark design (non‑discriminative relations,
+path fan‑out), **not** the query engine or the harness.
+
+**What a meaningful evaluation would require**
+- An external MID→name mapping to recover clean entity labels (cannot come from the
+  URIs alone).
+- Natural‑language prompts (not the "whose 'X' is 'Y'" template).
+- Selecting relations that are genuinely LLM‑answerable (genre, director, cast — not
+  distribution medium).
+- Batching / a per‑query call cap to make path types tractable.
