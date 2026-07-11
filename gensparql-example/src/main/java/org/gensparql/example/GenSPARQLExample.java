@@ -54,6 +54,19 @@ public class GenSPARQLExample {
             Model model = loadData(dataFile);
             System.out.println("Loaded " + model.size() + " triples");
 
+            // Load clean entity labels (entity_labels.tsv next to the data), if present,
+            // so CanonicalForm.canon() returns real names instead of garbled URI locals.
+            Path labelsPath = Paths.get(dataFile).getParent().resolve("entity_labels.tsv");
+            if (Files.exists(labelsPath)) {
+                java.util.Map<String, String> labels = new java.util.HashMap<>();
+                for (String line : Files.readAllLines(labelsPath)) {
+                    int tab = line.indexOf('\t');
+                    if (tab > 0) labels.put(line.substring(0, tab), line.substring(tab + 1));
+                }
+                org.gensparql.core.similarity.CanonicalForm.setLabelLookup(labels::get);
+                System.out.println("Loaded " + labels.size() + " clean entity labels");
+            }
+
             // Load query
             System.out.println("Loading query from: " + queryFile);
             String queryString = Files.readString(Paths.get(queryFile));
