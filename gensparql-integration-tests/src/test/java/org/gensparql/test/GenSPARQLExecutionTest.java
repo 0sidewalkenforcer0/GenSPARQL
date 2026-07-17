@@ -4,13 +4,19 @@ import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.gensparql.engine.GenSPARQLConfig;
 import org.gensparql.engine.boot.GenSPARQL;
 import org.gensparql.llm.LLMProviderRegistry;
 import org.gensparql.llm.provider.MockLLMProvider;
 import org.gensparql.parser.GenSPARQLQueryFactory;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -54,6 +60,85 @@ public class GenSPARQLExecutionTest {
         // Set up mock provider for each test
         mockProvider = new MockLLMProvider();
         LLMProviderRegistry.setDefault(mockProvider);
+    }
+
+    @AfterEach
+    void tearDown() {
+        // C3 dedup is a global static flag; keep tests isolated.
+        GenSPARQLConfig.reset();
+    }
+
+    // ---- C3: cross-binding prompt deduplication ----------------------------------
+
+    /** Three bindings; two resolve to the same prompt ("Physics"), one to "Chemistry". */
+    private static final String FIELD_QUERY = """
+            PREFIX ex: <http://example.org/>
+            SELECT ?field ?tool WHERE {
+              ?p ex:field ?field .
+              GENOP("List one tool used in {?field}", ?tool, <model:mock:test>)
+            }
+            """;
+
+    private static Model fieldModel() {
+        Model m = ModelFactory.createDefaultModel();
+        String ns = "http://example.org/";
+        String[][] rows = {{"p1", "Physics"}, {"p2", "Physics"}, {"p3", "Chemistry"}};
+        for (String[] r : rows) {
+            m.add(ResourceFactory.createResource(ns + r[0]),
+                  ResourceFactory.createProperty(ns + "field"),
+                  ResourceFactory.createPlainLiteral(r[1]));
+        }
+        return m;
+    }
+
+    private List<String> runFieldQuery(Model model) {
+        Query query = GenSPARQLQueryFactory.create(FIELD_QUERY);
+        List<String> out = new ArrayList<>();
+        try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
+            ResultSet rs = qexec.execSelect();
+            while (rs.hasNext()) {
+                QuerySolution s = rs.next();
+                out.add(s.get("field") + "|" + s.get("tool"));
+            }
+        }
+        return out;
+    }
+
+    @Test
+    void testDedupCollapsesIdenticalPromptCalls() {
+        mockProvider.withResponse("Physics", "telescope");
+        mockProvider.withResponse("Chemistry", "beaker");
+
+        GenSPARQLConfig.setBatchDedupEnabled(true);
+        List<String> rows = runFieldQuery(fieldModel());
+
+        assertEquals(3, rows.size(), "Dedup must not change the number of result rows");
+        assertEquals(2, mockProvider.getRequestHistory().size(),
+                "Two Physics bindings must share one LLM call -> 2 distinct prompts, 2 calls");
+    }
+
+    @Test
+    void testDedupIsLossless() {
+        mockProvider.withResponse("Physics", "telescope");
+        mockProvider.withResponse("Chemistry", "beaker");
+
+        // Baseline: dedup OFF -> one LLM call per binding.
+        GenSPARQLConfig.setBatchDedupEnabled(false);
+        List<String> baseline = runFieldQuery(fieldModel());
+        assertEquals(3, mockProvider.getRequestHistory().size(),
+                "Without dedup, every binding calls the LLM");
+
+        mockProvider.clearHistory();
+
+        // Dedup ON -> fewer calls, identical results.
+        GenSPARQLConfig.setBatchDedupEnabled(true);
+        List<String> deduped = runFieldQuery(fieldModel());
+        assertEquals(2, mockProvider.getRequestHistory().size(),
+                "With dedup, identical prompts collapse to one call");
+
+        Collections.sort(baseline);
+        Collections.sort(deduped);
+        assertEquals(baseline, deduped, "Dedup must be lossless: identical (field,tool) rows");
     }
 
     @Test

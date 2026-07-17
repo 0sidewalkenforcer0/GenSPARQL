@@ -71,6 +71,11 @@ public class QueryIterGenerate extends QueryIteratorBase {
     private final List<String> batchPrompts = new ArrayList<>();
     private Iterator<Binding> batchResults = null;
 
+    // C3: cross-binding prompt deduplication (per-query memo of parsed outputs).
+    private final boolean dedupEnabled;
+    private final Map<String, List<Map<String, String>>> promptMemo = new HashMap<>();
+    private int dedupSavedCalls = 0;
+
     private Iterator<Binding> currentResults;
     private Binding currentInputBinding;
     private boolean exhausted = false;
@@ -100,6 +105,7 @@ public class QueryIterGenerate extends QueryIteratorBase {
         // Configure batching
         this.batchingEnabled = GenSPARQLConfig.isBatchingEnabled();
         this.batchSize = GenSPARQLConfig.getBatchSize();
+        this.dedupEnabled = GenSPARQLConfig.isBatchDedupEnabled();
 
         // Configure constrained generation
         // Check if candidates_relation is specified in options
@@ -319,99 +325,106 @@ public class QueryIterGenerate extends QueryIteratorBase {
 
     /**
      * Generate bindings by calling the LLM (non-batched).
+     *
+     * With C3 deduplication enabled, the parsed output maps for an identical resolved
+     * prompt are memoized per query execution: the LLM is called only for the first
+     * occurrence of a prompt, and later bindings that resolve to the same prompt reuse
+     * those outputs (fanned out against their own input binding). Lossless — the result
+     * is identical to calling the LLM every time, minus the redundant calls.
      */
     private Iterator<Binding> generateBindings(Binding inputBinding, String prompt) {
-        System.out.println("[DEBUG generateBindings] Starting with prompt: " + truncate(prompt, 200));
         LOG.debug("Generating with prompt: {}", truncate(prompt, 100));
 
+        List<String> outputVarNames = new ArrayList<>();
+        for (Var v : opGen.getOutputVariables()) {
+            outputVarNames.add(v.getName());
+        }
+
+        // Compute the prompt actually sent to the LLM (may include KG candidates).
+        String finalPrompt = prompt;
+        if (constrainedMode && candidateExtractor != null) {
+            Set<String> candidates = getCandidates();
+            if (!candidates.isEmpty()) {
+                finalPrompt = PromptBuilder.buildConstrainedPrompt(
+                        prompt, candidates, outputVarNames,
+                        GenSPARQLConfig.getMaxCandidates());
+            }
+        }
+
+        // C3: reuse parsed outputs for a prompt already generated this execution.
+        List<Map<String, String>> outputMaps;
+        if (dedupEnabled && promptMemo.containsKey(finalPrompt)) {
+            outputMaps = promptMemo.get(finalPrompt);
+            dedupSavedCalls++;
+            LOG.debug("Dedup hit: reusing {} output map(s) for repeated prompt (saved {} call(s))",
+                    outputMaps.size(), dedupSavedCalls);
+        } else {
+            outputMaps = callAndParse(finalPrompt, outputVarNames);
+            if (dedupEnabled) {
+                promptMemo.put(finalPrompt, outputMaps);
+            }
+        }
+
+        // Expand the (input-independent) output maps against THIS input binding.
         List<Binding> results = new ArrayList<>();
+        for (Map<String, String> outputValues : outputMaps) {
+            Binding newBinding = createBinding(inputBinding, outputValues);
+            if (newBinding != null) {
+                results.add(newBinding);
+            }
+        }
+        LOG.debug("Produced {} output binding(s) from {} output map(s)", results.size(), outputMaps.size());
+        return results.iterator();
+    }
 
+    /**
+     * Call the LLM for a single resolved prompt and parse its response into a list of
+     * validated output-variable maps (independent of any input binding). Returns an
+     * empty list on failure. This is the unit that C3 deduplication memoizes.
+     */
+    private List<Map<String, String>> callAndParse(String finalPrompt, List<String> outputVarNames) {
+        List<Map<String, String>> outputMaps = new ArrayList<>();
         try {
-            // Build request
-            ModelSpec modelSpec = opGen.getModelSpec();
-            List<String> outputVarNames = new ArrayList<>();
-            for (Var v : opGen.getOutputVariables()) {
-                outputVarNames.add(v.getName());
-            }
-            System.out.println("[DEBUG generateBindings] Output vars: " + outputVarNames);
-            System.out.println("[DEBUG generateBindings] Model spec: " + modelSpec);
-
-            // Apply constrained generation if enabled
-            String finalPrompt = prompt;
-            if (constrainedMode && candidateExtractor != null) {
-                Set<String> candidates = getCandidates();
-                if (!candidates.isEmpty()) {
-                    finalPrompt = PromptBuilder.buildConstrainedPrompt(
-                            prompt, candidates, outputVarNames,
-                            GenSPARQLConfig.getMaxCandidates());
-                    System.out.println("[DEBUG generateBindings] Constrained prompt with " +
-                            candidates.size() + " candidates");
-                }
-            }
-
             GenerateRequest request = GenerateRequest.builder()
                     .prompt(finalPrompt)
-                    .modelSpec(modelSpec)
+                    .modelSpec(opGen.getModelSpec())
                     .outputVariables(outputVarNames)
                     .build();
 
-            // Call LLM with timing
-            System.out.println("[DEBUG generateBindings] Calling LLM: " + provider.getName());
             LOG.debug("Calling LLM: {}", provider.getName());
             long startTime = System.currentTimeMillis();
             GenerateResponse response = provider.generateSync(request);
             long latency = System.currentTimeMillis() - startTime;
-            System.out.println("[DEBUG generateBindings] LLM call took " + latency + "ms");
-            System.out.println("[DEBUG generateBindings] Response success: " + response.isSuccess());
-            System.out.println("[DEBUG generateBindings] Response raw text: " + truncate(response.getRawText(), 500));
-            System.out.println("[DEBUG generateBindings] Response bindings count: " + (response.hasBindings() ? response.getBindings().size() : 0));
 
-            // Record metrics
-            recordMetrics(prompt, latency, response, false, 1);
+            recordMetrics(finalPrompt, latency, response, false, 1);
 
             if (!response.isSuccess()) {
                 LOG.warn("LLM generation failed: {}", response.getErrorMessage());
-                return Collections.emptyIterator();
+                return outputMaps;
             }
-            LOG.debug("LLM Success: {} bindings", response.getBindings().size());
 
-            // Process response bindings
             if (response.hasBindings()) {
                 for (Map<String, String> outputBinding : response.getBindings()) {
                     Map<String, String> validatedBinding = validateOutputBinding(outputBinding);
                     if (validatedBinding != null) {
-                        Binding newBinding = createBinding(inputBinding, validatedBinding);
-                        if (newBinding != null) {
-                            results.add(newBinding);
-                        }
+                        outputMaps.add(validatedBinding);
                     } else {
                         LOG.warn("Filtered out invalid output binding: {}", truncate(outputBinding.toString(), 200));
                     }
                 }
-            } else if (response.getRawText() != null) {
-                // Fallback: use raw text for single output variable
-                if (opGen.getOutputVariables().size() == 1) {
-                    String rawText = response.getRawText().trim();
-                    if (isValidResponse(rawText)) {
-                        Var outputVar = opGen.getOutputVariables().get(0);
-                        Map<String, String> binding = Map.of(outputVar.getName(), rawText);
-                        Binding newBinding = createBinding(inputBinding, binding);
-                        if (newBinding != null) {
-                            results.add(newBinding);
-                        }
-                    } else {
-                        LOG.warn("Filtered out invalid raw text response: {}", truncate(rawText, 200));
-                    }
+            } else if (response.getRawText() != null && opGen.getOutputVariables().size() == 1) {
+                // Fallback: use raw text for a single output variable.
+                String rawText = response.getRawText().trim();
+                if (isValidResponse(rawText)) {
+                    outputMaps.add(Map.of(opGen.getOutputVariables().get(0).getName(), rawText));
+                } else {
+                    LOG.warn("Filtered out invalid raw text response: {}", truncate(rawText, 200));
                 }
             }
-
-            LOG.debug("Generated {} output binding(s)", results.size());
-
         } catch (Exception e) {
             LOG.error("Error during LLM generation", e);
         }
-
-        return results.iterator();
+        return outputMaps;
     }
 
     /**
@@ -449,6 +462,14 @@ public class QueryIterGenerate extends QueryIteratorBase {
      */
     public List<LLMCallMetrics> getLLMMetrics() {
         return Collections.unmodifiableList(llmMetrics);
+    }
+
+    /**
+     * Number of LLM calls avoided by C3 cross-binding prompt deduplication in this
+     * execution (i.e. repeated-prompt hits). Zero when dedup is disabled.
+     */
+    public int getDedupSavedCalls() {
+        return dedupSavedCalls;
     }
 
     /**
