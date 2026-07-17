@@ -21,6 +21,11 @@ public class GenSPARQLConfig {
     // Lossless (exact-prompt match); off by default to preserve baseline behavior.
     private static boolean batchDedupEnabled = false;
 
+    // Cost-based reordering (C4): order context-mode GENOP sequences by estimated cost
+    // (GenOpPlanner) instead of the correctness-only "BGPs first" heuristic. Respects
+    // dependency legality (Prop 6); off by default to preserve baseline behavior.
+    private static boolean costBasedPlanningEnabled = false;
+
     // Timing configuration
     private static boolean timingEnabled = true;
     private static boolean verboseLogging = false;
@@ -146,6 +151,20 @@ public class GenSPARQLConfig {
      */
     public static void setBatchDedupEnabled(boolean enabled) {
         batchDedupEnabled = enabled;
+    }
+
+    /**
+     * Check if cost-based reordering (C4) is enabled for context-mode GENOP sequences.
+     */
+    public static boolean isCostBasedPlanningEnabled() {
+        return costBasedPlanningEnabled;
+    }
+
+    /**
+     * Enable or disable cost-based reordering.
+     */
+    public static void setCostBasedPlanningEnabled(boolean enabled) {
+        costBasedPlanningEnabled = enabled;
     }
 
     /**
@@ -344,6 +363,11 @@ public class GenSPARQLConfig {
             batchDedupEnabled = Boolean.parseBoolean(batchDedup);
         }
 
+        String costPlanning = System.getProperty("gensparql.planner.costBased");
+        if (costPlanning != null) {
+            costBasedPlanningEnabled = Boolean.parseBoolean(costPlanning);
+        }
+
         // Timing
         String timingEn = System.getProperty("gensparql.timing.enabled");
         if (timingEn != null) {
@@ -412,6 +436,7 @@ public class GenSPARQLConfig {
         batchSize = 5;
         batchMaxTokens = 8000;
         batchDedupEnabled = false;
+        costBasedPlanningEnabled = false;
         timingEnabled = true;
         verboseLogging = false;
         constrainedGenerationEnabled = false;
