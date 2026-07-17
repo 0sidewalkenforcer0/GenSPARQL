@@ -59,6 +59,24 @@ public class FanOutEstimatorTest {
 
     // ---- Tier 3: online feedback ----
 
+    // ---- Tier 2: grounding survival ----
+
+    @Test
+    void testSurvivalPriorDecreasesWithThreshold() {
+        assertEquals(1.0, FanOutEstimator.survivalPrior(0.0), 1e-9);
+        assertEquals(0.32, FanOutEstimator.survivalPrior(0.85), 1e-9); // anchored on E1 (~0.32)
+        assertEquals(0.2, FanOutEstimator.survivalPrior(1.0), 1e-9);
+        assertTrue(FanOutEstimator.survivalPrior(0.5) > FanOutEstimator.survivalPrior(0.9));
+        assertEquals(1.0, FanOutEstimator.survivalPrior(-1.0), 1e-9); // clamped low
+        assertEquals(0.2, FanOutEstimator.survivalPrior(5.0), 1e-9);  // clamped high
+    }
+
+    @Test
+    void testEffectiveFanOutAppliesSurvival() {
+        assertEquals(10 * 0.32, FanOutEstimator.effectiveFanOut(10.0, 0.85), 1e-9);
+        assertEquals(10.0, FanOutEstimator.effectiveFanOut(10.0, 0.0), 1e-9); // no loss at θ=0
+    }
+
     @Test
     void testOnlineFeedbackMovesTowardObserved() {
         FanOutEstimator est = FanOutEstimator.withPrior(10.0);
