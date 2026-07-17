@@ -41,7 +41,9 @@ public class OpenAIProvider implements LLMProvider {
     }
 
     public OpenAIProvider(String apiKey) {
-        this(apiKey, DEFAULT_BASE_URL);
+        // OPENAI_BASE_URL lets you point at any OpenAI-compatible endpoint
+        // (OpenAI, Ollama at http://localhost:11434/v1, HF TEI, vLLM, ...).
+        this(apiKey, System.getenv("OPENAI_BASE_URL"));
     }
 
     public OpenAIProvider(String apiKey, String baseUrl) {
@@ -73,7 +75,10 @@ public class OpenAIProvider implements LLMProvider {
 
     @Override
     public String getDefaultEmbeddingModel() {
-        return DEFAULT_EMBEDDING_MODEL;
+        // OPENAI_EMBEDDING_MODEL selects the embedding model, e.g. a foundation
+        // text embedder like "nomic-embed-text" or "bge-m3" on a local server.
+        String env = System.getenv("OPENAI_EMBEDDING_MODEL");
+        return (env != null && !env.isEmpty()) ? env : DEFAULT_EMBEDDING_MODEL;
     }
 
     @Override
@@ -179,7 +184,7 @@ public class OpenAIProvider implements LLMProvider {
         }
 
         String model = request.getModelSpec() != null ?
-                request.getModelSpec().getModel() : DEFAULT_EMBEDDING_MODEL;
+                request.getModelSpec().getModel() : getDefaultEmbeddingModel();
 
         Map<String, Object> body = new HashMap<>();
         body.put("model", model);
