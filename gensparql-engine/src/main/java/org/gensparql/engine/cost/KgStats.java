@@ -1,7 +1,13 @@
 package org.gensparql.engine.cost;
 
+import org.apache.jena.graph.Graph;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
+
+import java.util.Collections;
+import java.util.Map;
+import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Graph statistics for cost estimation (C2 ↔ C3 bridge).
@@ -15,8 +21,18 @@ import org.apache.jena.rdf.model.Model;
  *
  * <p>No relational system frames cardinality estimation this way, because a row-dedup ratio
  * is not a schema property; in SPARQL it is a graph statistic.
+ *
+ * <p><b>Caching.</b> COUNT results are cached per (graph, query) so cost-based planning does
+ * not re-scan the graph on every execution (e.g. a benchmark that reruns the same query across
+ * plan variants). The cache keys graphs weakly (GC-friendly) and assumes the graph is stable
+ * while cost planning reads it — true during query evaluation. Call {@link #clearCache()} after
+ * mutating a cached graph, or {@link #setCachingEnabled(boolean)} to disable.
  */
 public final class KgStats {
+
+    private static final Map<Graph, Map<String, Long>> CACHE =
+            Collections.synchronizedMap(new WeakHashMap<>());
+    private static volatile boolean cachingEnabled = true;
 
     private KgStats() {
     }
@@ -45,7 +61,35 @@ public final class KgStats {
         return (double) distinctBindings(model, prefixes, pattern, var) / n;
     }
 
+    /** Enable/disable COUNT caching (disable if querying a graph that mutates between calls). */
+    public static void setCachingEnabled(boolean enabled) {
+        cachingEnabled = enabled;
+    }
+
+    /** Drop all cached COUNTs (call after mutating a graph that was queried). */
+    public static void clearCache() {
+        CACHE.clear();
+    }
+
     private static long countQuery(Model model, String queryString) {
+        if (!cachingEnabled) {
+            return runCount(model, queryString);
+        }
+        Graph graph = model.getGraph();
+        Map<String, Long> perGraph;
+        synchronized (CACHE) {
+            perGraph = CACHE.computeIfAbsent(graph, g -> new ConcurrentHashMap<>());
+        }
+        Long cached = perGraph.get(queryString);
+        if (cached != null) {
+            return cached;
+        }
+        long value = runCount(model, queryString);
+        perGraph.put(queryString, value);
+        return value;
+    }
+
+    private static long runCount(Model model, String queryString) {
         Query q = QueryFactory.create(queryString);
         try (QueryExecution qe = QueryExecutionFactory.create(q, model)) {
             ResultSet rs = qe.execSelect();
