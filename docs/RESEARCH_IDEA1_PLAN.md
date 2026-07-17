@@ -327,7 +327,10 @@ SPARQL algebra + the first to estimate generative fan-out."
    3× fewer calls, same rows). Free-tier smoke, not the formal benchmark. Still TODO:
    token-bounded batch sizing; a fuller live run (needs paid/higher-limit model to avoid
    free-tier 429s); write the short paper around 46→9 + these live numbers + the framing.
-2. **C2 tier 2:** grounding-survival factor + grounding-relation KG prior.
+2. **C2 tier 2:** ✅ grounding-survival factor done (`FanOutEstimator.survivalPrior(θ)` =
+   1−0.8θ, anchored on E1's ~0.32 at θ=0.85; `effectiveFanOut` wired into `reorderByCost`
+   when grounding is on). Still pending: grounding-relation KG prior, and runtime online
+   calibration of the survival rate (feed per-execution grounded/generated counts back).
 3. **Multi-BGP selectivity:** per-pattern join-cardinality estimation so the planner can
    also reorder among KG patterns (not just BGP-before-GENOP).
 4. **Deferred cleanup (from review, non-blocking):** ~~cache `KgStats` COUNTs~~ ✅ DONE;
