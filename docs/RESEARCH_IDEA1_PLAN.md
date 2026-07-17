@@ -295,17 +295,22 @@ SPARQL algebra + the first to estimate generative fan-out."
 - ✅ C3 exact prompt-dedup prototyped, tested, committed (`feat/c3-prompt-dedup`).
 - ✅ Real-workload number: scientists KG researchField, **46 → 9 LLM calls (80%),
   lossless** (mock/deterministic).
-- ✅ C2 fan-out estimator designed (§ "C2 design"), incl. the C2↔C3 dedup-ratio insight.
+- ✅ C2 fan-out estimator designed + implemented (`FanOutEstimator`, `KgStats`); KG predicts
+  N=46→D=9 before any call (the C2↔C3 dedup-ratio insight, empirically verified).
+- ✅ C1 cost model implemented (`GenOpCostModel`): calls/tokens/$/latency/rows.
+- ✅ C4 cost-based planner implemented (`GenOpPlanner`): Held-Karp subset DP, pulls
+  selective KG patterns before an expensive GENOP (26→5 calls in the unit test), respects
+  Prop-6 dependency legality; pure-join reordering sound per Prop 6 / Theorem 6.
 
 **Next:**
-1. **ISWC demo:** live wall-clock/$ numbers for C3 (needs `OPENROUTER_API_KEY`); add
-   token-bounded batch sizing; write the 4-page short paper around 46→9 + the framing.
-2. **C1 cost model:** replace `OpGenerate.effectiveOp()` unit-table stub with a real cost
-   (tokens/$/latency/fan-out) exposed to the planner.
-3. **C2 implementation:** `FanOutEstimator` (tiers 1+3 first), validate q-error (RQ2).
-4. **C4 planner:** cost-based reorder (push cheap BGP/filter before GENOP) under
-   Prop 5/6/Theorem-6 guardrails; DP à la Chaudhuri-Shim.
-5. Re-run the novelty deep-research before submission (time-sensitivity risk).
+1. **Wire the planner into execution:** use `GenOpPlanner` in
+   `GenSPARQLQueryEngine.reorderForDependencies` (currently correctness-only) and expose
+   `GenOpCostModel` via `OpGenerate` so the real engine reorders by cost. (C4 is currently a
+   standalone, unit-tested component; this is the integration step.)
+2. **ISWC demo:** live wall-clock/$ for C3 (needs `OPENROUTER_API_KEY`); token-bounded
+   batch sizing; write the short paper around 46→9 + the framing.
+3. **C2 tier 2:** grounding-survival factor + grounding-relation KG prior.
+4. Re-run the novelty deep-research before submission (time-sensitivity risk).
 
 ---
 
