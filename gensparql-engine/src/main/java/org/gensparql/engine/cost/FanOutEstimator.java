@@ -98,6 +98,23 @@ public final class FanOutEstimator {
         return DEFAULT_UNKNOWN;
     }
 
+    /**
+     * Tier 2: expected fraction of generated candidates that ground to a KG entity at the given
+     * threshold. Heuristic prior, decreasing in θ, anchored on the repo's E1 grounding rate
+     * (~0.32 at θ=0.85; see docs/EVALUATION.md): {@code survival(θ) = 1 − 0.8·θ}, range [0.2, 1].
+     * (Runtime online calibration of this rate is future work — the estimator is not yet fed
+     * per-execution grounded/generated counts.)
+     */
+    public static double survivalPrior(double groundingThreshold) {
+        double t = Math.max(0.0, Math.min(1.0, groundingThreshold));
+        return 1.0 - 0.8 * t;
+    }
+
+    /** Effective (post-grounding) fan-out = raw fan-out × {@link #survivalPrior(double)}. */
+    public static double effectiveFanOut(double rawFanOut, double groundingThreshold) {
+        return rawFanOut * survivalPrior(groundingThreshold);
+    }
+
     private static Integer parseCount(String token) {
         try {
             return Integer.valueOf(token);

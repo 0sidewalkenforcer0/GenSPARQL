@@ -796,6 +796,12 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                     OpGenerate g = findGenerate(e);
                     String prompt = g != null ? g.getPromptTemplate() : "";
                     double fanOut = org.gensparql.engine.cost.FanOutEstimator.promptPrior(prompt);
+                    // C2 tier-2: if grounding is on, only a fraction of generated candidates
+                    // survive grounding, so scale fan-out by the survival prior at this op's θ.
+                    if (GenSPARQLConfig.isGroundingEnabled() && g != null) {
+                        fanOut = org.gensparql.engine.cost.FanOutEstimator.effectiveFanOut(
+                                fanOut, groundingThresholdOf(g));
+                    }
                     int tokens = org.gensparql.engine.cost.GenOpCostModel.estimateTokens(prompt);
                     double dedupRatio = dedupRatioFor(g, statsModel, bgpPattern, nAll, allBound);
                     items.add(new org.gensparql.engine.cost.GenOpPlanner.GenOpItem(
@@ -819,6 +825,12 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                     ex.getMessage());
             return null;
         }
+    }
+
+    /** Grounding threshold for a GENOP: its grounding_threshold option, else the global config. */
+    private double groundingThresholdOf(OpGenerate g) {
+        Object thr = g.getOptions().get("grounding_threshold");
+        return thr != null ? Double.parseDouble(thr.toString()) : GenSPARQLConfig.getGroundingThreshold();
     }
 
     /** Dedup ratio D/N for a GENOP's (single) input variable over the feeding BGP, or 1.0. */
