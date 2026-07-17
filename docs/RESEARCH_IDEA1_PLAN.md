@@ -330,10 +330,11 @@ SPARQL algebra + the first to estimate generative fan-out."
 2. **C2 tier 2:** grounding-survival factor + grounding-relation KG prior.
 3. **Multi-BGP selectivity:** per-pattern join-cardinality estimation so the planner can
    also reorder among KG patterns (not just BGP-before-GENOP).
-4. **Deferred cleanup (from review, non-blocking):** ~~cache `KgStats` COUNTs~~ ✅ DONE
-   (per-graph weak cache, clear/disable API + tests); still pending — memoize grounded nodes
-   so dedup+grounding grounds D times not N; apply dedup on the batched path (or keep them
-   exclusive); consolidate duplicated helpers (dedupRatioFor↔KgStats.dedupRatio,
+4. **Deferred cleanup (from review, non-blocking):** ~~cache `KgStats` COUNTs~~ ✅ DONE;
+   ~~memoize grounded nodes (dedup+grounding grounds D times not N)~~ ✅ DONE (per-value
+   `groundedNodeCache` in `createBinding` + `getGroundingCacheHits()`; also removed the
+   `[DEBUG GROUNDING]` prints); still pending — apply dedup on the batched path (or keep
+   them exclusive); consolidate duplicated helpers (dedupRatioFor↔KgStats.dedupRatio,
    estimateTokens↔BatchedPromptBuilder, findGenerate/collectTriples traversal).
 5. Re-run the novelty deep-research before submission (time-sensitivity risk).
 
