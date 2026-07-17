@@ -321,8 +321,12 @@ SPARQL algebra + the first to estimate generative fan-out."
   dedupRatio guard for chained GENOPs; AtomicInteger counters). Regression tests added.
 
 **Next:**
-1. **ISWC demo:** live wall-clock/$ for C3 (needs `OPENROUTER_API_KEY`); token-bounded
-   batch sizing; write the short paper around 46→9 + the framing.
+1. **ISWC demo:** ✅ live wall-clock obtained (`LiveDedupOpenRouterTest`, gated on
+   `OPENROUTER_API_KEY`, model `openai/gpt-oss-20b:free`): 6 bindings / 2 distinct fields →
+   **dedup OFF: 6 calls, 6 rows, 43.3 s; dedup ON: 2 calls, 6 rows, 8.0 s** (~5.4× faster,
+   3× fewer calls, same rows). Free-tier smoke, not the formal benchmark. Still TODO:
+   token-bounded batch sizing; a fuller live run (needs paid/higher-limit model to avoid
+   free-tier 429s); write the short paper around 46→9 + these live numbers + the framing.
 2. **C2 tier 2:** grounding-survival factor + grounding-relation KG prior.
 3. **Multi-BGP selectivity:** per-pattern join-cardinality estimation so the planner can
    also reorder among KG patterns (not just BGP-before-GENOP).
