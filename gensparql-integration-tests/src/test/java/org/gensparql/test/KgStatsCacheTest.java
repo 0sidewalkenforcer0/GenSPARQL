@@ -65,6 +65,15 @@ public class KgStatsCacheTest {
     }
 
     @Test
+    void testRatioSharedDefinition() {
+        assertEquals(0.2, KgStats.ratio(2, 10), 1e-9);
+        assertEquals(0.5, KgStats.ratio(5, 10), 1e-9);
+        assertEquals(1.0, KgStats.ratio(0, 10), 1e-9, "distinct 0 (var absent) -> no dedup");
+        assertEquals(1.0, KgStats.ratio(5, 0), 1e-9, "empty input -> 1.0");
+        assertEquals(1.0, KgStats.ratio(20, 10), 1e-9, "clamped to 1.0");
+    }
+
+    @Test
     void testDistinctAndCountUseSeparateCacheEntries() {
         KgStats.clearCache();
         Model m = modelWith(4); // 4 triples, 2 distinct fields (Field0, Field1)
