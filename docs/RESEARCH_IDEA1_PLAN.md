@@ -112,6 +112,54 @@ operator over SPARQL/RDF graph bindings** — where the coalescing unit is a *so
 mapping* (not a table row) and dedup/reorder must respect binding provenance
 (RDF-derived vs. generated).
 
+**C3 status (prototyped + verified, 2026-07-17, branch `feat/c3-prompt-dedup`):** exact
+cross-binding prompt dedup implemented behind `gensparql.batch.dedup`. On the bundled
+scientists KG researchField workload: **46 logical GENOP invocations → 9 actual LLM
+calls (80% reduction), result rows unchanged.** Deterministic (mock provider, no key);
+wall-clock/$ gains follow since latency is LLM-bound. Token-bounded sizing, KV-reorder,
+semantic caching, budget cap remain as follow-ons.
+
+### C2 design (fan-out / output-cardinality estimation — full-paper headline)
+
+**Estimand.** For a GENOP `g = GenOp(π(X),Y,M)` under a context binding μ (X bound),
+predict its output row count (fan-out) *before* the call returns; aggregated over the
+input, this feeds the cost model (C1), reordering (C4), and dedup/batch sizing (C3).
+**Hard because** output size is unknown until the LLM returns and depends on prompt
+semantics ("list all…" vs "the capital of…"), the model, and grounding survival.
+
+**Hybrid estimator, three tiers (SPARQL-anchored — the differentiation):**
+1. **Static prompt + schema priors (zero-cost).** (a) Prompt-form features on the
+   template: list-vs-single intent ("list/all/name five" vs "the/which"), and any
+   explicit cardinal ("five physicists" → 5) — a strong direct signal. (b) Output arity
+   |Y|. (c) **KG-structural prior:** when Y grounds to a type/relation
+   (`grounding_relation`), use per-relation object-cardinality stats from
+   `CandidateExtractor` as a prior on plausible fan-out — the signal no relational system
+   has.
+2. **Grounding-survival factor.** post-grounding fan-out ≈ raw-generation count ×
+   survival rate; estimate survival from the grounding threshold θ and KG candidate
+   density near the query (ties to the E1/E2 grounding stats already measured).
+3. **Online feedback (Abacus-style, cheap).** record true fan-out on the first executed
+   bindings and update a per-(template, model) estimate (running mean / Bayesian). The
+   LLM calls happen anyway — we only record outcomes (hook sits next to the C3 memo,
+   which already counts outputs per prompt).
+
+**★ The C2↔C3 SPARQL insight (concrete, novel, and already empirically visible).** The
+dedup ratio = the **value-cardinality of the join/context variable in the KG**, which is
+KNOWN from KG statistics *before* running. On the scientists workload we can predict
+"46 invocations → ~9 distinct-field calls" purely from `COUNT(DISTINCT ?field)` in the KG
+— i.e. C2 estimates *actual LLM calls*, not just raw fan-out, by combining generation
+fan-out with the statically-known dedup collapse. No existing (relational) system frames
+cardinality estimation this way because row-dedup ratios aren't a schema property; in
+SPARQL they are a graph statistic.
+
+**Estimator choice to evaluate (RQ2):** static KG-priors (tier 1) + online feedback
+(tier 3) vs. iPDB-style token-only regression vs. Abacus-style pure sampling — hypothesis:
+the KG-anchored hybrid wins on SPARQL workloads at lower profiling cost.
+
+**Plugs into code:** new `FanOutEstimator` consuming `OpGenerate` (template/options) +
+`CandidateExtractor` (KG stats) + a feedback hook in `QueryIterGenerate`; output feeds
+C1's cost model. Ships after C3 (demo) as the full-paper core.
+
 ## 4. Experimental design
 
 ### Research questions
@@ -145,6 +193,41 @@ dedup, N identical-prompt bindings become 1 LLM call. Report BOTH "logical GENOP
 invocations" (N) and "actual LLM calls" (1) so the saving is legible and not mistaken for
 a correctness change. Correctness is judged on the fanned-out result, which must equal the
 un-deduped result exactly.
+
+### Correctness — two distinct notions (do not conflate)
+
+| | What it asks | Whose job | Compared against |
+|---|---|---|---|
+| **① Planner correctness (preservation)** | optimized plan yields the SAME result as the unoptimized plan | **our contribution** | plan vs plan |
+| **② Answer quality (accuracy)** | the LLM answer matches the dataset gold | LLM / grounding, NOT the optimizer | answer vs gold |
+
+The "dataset gold ≠ LLM answer, both valid" problem is axis ②, not ①. **Proving the
+planner correct never requires knowing the true answer** — it is a plan-vs-plan
+differential judgement. Axis ② is held *fixed* (equal quality), not improved, so it
+cannot confound the efficiency results.
+
+**Proving ① (this validates Prop 5/6 / Theorem 6 empirically) — under record-replay:**
+- **E4a — preservation differential test.** For each optimization (C4 reorder, C3 batch,
+  C3 dedup), assert result-set equality (Jaccard = 1.0) vs. the baseline plan across the
+  whole workload. Metric: % queries at Jaccard 1.0 (target 100%). Any miss is not "the
+  LLM was wrong" — it is an *unsound rewrite*, which is exactly how we surface Prop-condition
+  boundaries (e.g. the OPTIONAL case).
+- **E4b — metamorphic test.** Feed several semantics-equivalent plans / topological orders
+  (allowed by Theorem 6) for the same query; outputs must pairwise match. Tests legality
+  coverage; no gold needed.
+- **E4c — dedup determinism boundary.** C3 dedup is lossless only under
+  identical-prompt⇒identical-answer. Under a *live* non-deterministic LLM, un-deduped and
+  deduped runs can legitimately diverge (two different-but-valid answers to the same
+  prompt). Measure this divergence rate live and show it collapses to 0 under
+  `temperature=0` / record-replay. This turns the semantics paper's determinism assumption
+  into a measured curve, and frames dedup as *explicitly determinizing* the operator (a
+  reproducibility contribution, ties to E5) rather than a hidden assumption.
+
+**Holding ② fixed:** report P/R/F1 / grounding rate identical between baseline and
+optimized (trivially equal under record-replay; within-CI live). Any accuracy-vs-gold
+reporting (optional, not the main claim) uses metrics that accept "different but correct":
+grounding/validity (maps to a real KG entity — GenSPARQL's E1 strength), LLM-judge
+equivalence to gold, and separating closed-answer (exact-match OK) from open-ended tasks.
 
 ### Baselines
 1. **Current GenSPARQL** (no cost model; per-binding calls) — the honest baseline.
@@ -204,15 +287,25 @@ SPARQL algebra + the first to estimate generative fan-out."
 - **Own-group foundation:** low collision risk (no follow-up exists), but coordinate
   with the authors on the theory-refinement framing.
 
-## 8. Immediate next steps
+## 8. Progress & next steps
 
-1. Verify the Prop-17 `dom(μ2) ∩ X = ∅` refinement against the semantics paper's proof (§2).
-2. Build the context-mode fan-out query templates on the scientists KG; capture the
-   baseline blow-up numbers with the existing `metrics/` harness.
-3. Prototype C3 (dedup + cost-driven batch sizing) in `QueryIterGenerate` → target the
-   ISWC short/demo.
-4. Design the fan-out estimator (C2): decide sampling (Abacus-style) vs. learned
-   regression (iPDB-style) vs. KG-structural priors — likely a hybrid.
+**Done (2026-07-17):**
+- ✅ Theory error identified (author-confirmed): the semantics paper assumes a
+  *deterministic* oracle; reframed as a systems-level motivation, not a theorem (§2).
+- ✅ C3 exact prompt-dedup prototyped, tested, committed (`feat/c3-prompt-dedup`).
+- ✅ Real-workload number: scientists KG researchField, **46 → 9 LLM calls (80%),
+  lossless** (mock/deterministic).
+- ✅ C2 fan-out estimator designed (§ "C2 design"), incl. the C2↔C3 dedup-ratio insight.
+
+**Next:**
+1. **ISWC demo:** live wall-clock/$ numbers for C3 (needs `OPENROUTER_API_KEY`); add
+   token-bounded batch sizing; write the 4-page short paper around 46→9 + the framing.
+2. **C1 cost model:** replace `OpGenerate.effectiveOp()` unit-table stub with a real cost
+   (tokens/$/latency/fan-out) exposed to the planner.
+3. **C2 implementation:** `FanOutEstimator` (tiers 1+3 first), validate q-error (RQ2).
+4. **C4 planner:** cost-based reorder (push cheap BGP/filter before GENOP) under
+   Prop 5/6/Theorem-6 guardrails; DP à la Chaudhuri-Shim.
+5. Re-run the novelty deep-research before submission (time-sensitivity risk).
 
 ---
 
