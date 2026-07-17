@@ -39,6 +39,24 @@ public class FanOutEstimatorTest {
                 FanOutEstimator.promptPrior("Describe {?field}."), 1e-9);
     }
 
+    @Test
+    void testMultiLinePromptIntentDetected() {
+        // Newline-safe: intent on a later line must still be seen (regression: matches()+".*").
+        assertEquals(FanOutEstimator.DEFAULT_LIST_SIZE,
+                FanOutEstimator.promptPrior("Consider {?x}.\nList all related items."), 1e-9);
+        assertEquals(5.0,
+                FanOutEstimator.promptPrior("For {?x}:\nlist 5 examples."), 1e-9);
+    }
+
+    @Test
+    void testIncidentalNumberNotTreatedAsCardinal() {
+        // "2 sentences" is a formatting hint, not a result count.
+        assertEquals(1.0,
+                FanOutEstimator.promptPrior("What is the capital of {?c}? Answer in 2 sentences."), 1e-9);
+        assertEquals(FanOutEstimator.DEFAULT_UNKNOWN,
+                FanOutEstimator.promptPrior("Describe {?x} in 2 sentences."), 1e-9);
+    }
+
     // ---- Tier 3: online feedback ----
 
     @Test

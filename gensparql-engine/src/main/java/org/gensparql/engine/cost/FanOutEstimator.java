@@ -31,12 +31,16 @@ public final class FanOutEstimator {
     /** Pseudo-count weight of the prior against online observations. */
     private static final double PRIOR_WEIGHT = 3.0;
 
-    private static final Pattern INT = Pattern.compile("\\b(\\d{1,3})\\b");
     private static final Map<String, Integer> NUMBER_WORDS = Map.ofEntries(
             Map.entry("one", 1), Map.entry("two", 2), Map.entry("three", 3),
             Map.entry("four", 4), Map.entry("five", 5), Map.entry("six", 6),
             Map.entry("seven", 7), Map.entry("eight", 8), Map.entry("nine", 9),
             Map.entry("ten", 10), Map.entry("twenty", 20), Map.entry("fifty", 50));
+    // A count tied to a list/generation verb — avoids reading an incidental number
+    // (e.g. "in 2 sentences") as the result cardinality. Matches digits or number words.
+    private static final Pattern LIST_COUNT = Pattern.compile(
+            "\\b(?:list|top|name|give|select|provide|generate|return|find)\\s+"
+            + "(?:up to\\s+|the\\s+)?(\\d{1,3}|" + String.join("|", NUMBER_WORDS.keySet()) + ")\\b");
     private static final String[] LIST_WORDS = {
             "list", "all", "enumerate", "several", "examples", "kinds", "types", "many"};
     private static final String[] SINGLE_WORDS = {
@@ -60,40 +64,51 @@ public final class FanOutEstimator {
         return new FanOutEstimator(Math.max(0.0, prior));
     }
 
-    /** Tier 1: static fan-out prior from prompt text. Priority: cardinal &gt; list &gt; single. */
+    /**
+     * Tier 1: static fan-out prior from prompt text. Priority: explicit list-count
+     * ("list 5", "name three") &gt; single-answer intent ("the capital of", "which") &gt;
+     * list intent ("list", "all") &gt; default. Newline-safe (works on multi-line prompts).
+     */
     public static double promptPrior(String template) {
         if (template == null || template.isBlank()) {
             return DEFAULT_UNKNOWN;
         }
         String t = template.toLowerCase();
 
-        // Explicit numeric cardinal ("list 5", "top 10").
-        Matcher m = INT.matcher(t);
+        // 1. Explicit count tied to a list/generation verb ("list 5", "name three").
+        Matcher m = LIST_COUNT.matcher(t);
         if (m.find()) {
-            int n = Integer.parseInt(m.group(1));
-            if (n >= 1 && n <= 100) {
+            Integer n = parseCount(m.group(1));
+            if (n != null && n >= 1 && n <= 100) {
                 return n;
             }
         }
-        // Number word ("name three", "five physicists").
-        for (Map.Entry<String, Integer> e : NUMBER_WORDS.entrySet()) {
-            if (t.matches(".*\\b" + e.getKey() + "\\b.*")) {
-                return e.getValue();
-            }
-        }
-        // Single-answer intent.
+        // 2. Single-answer intent.
         for (String s : SINGLE_WORDS) {
             if (t.contains(s)) {
                 return 1.0;
             }
         }
-        // List intent.
+        // 3. List intent.
         for (String w : LIST_WORDS) {
-            if (t.matches(".*\\b" + w + "\\b.*")) {
+            if (containsWord(t, w)) {
                 return DEFAULT_LIST_SIZE;
             }
         }
         return DEFAULT_UNKNOWN;
+    }
+
+    private static Integer parseCount(String token) {
+        try {
+            return Integer.valueOf(token);
+        } catch (NumberFormatException e) {
+            return NUMBER_WORDS.get(token);
+        }
+    }
+
+    /** Word-boundary containment that (unlike String.matches with ".*") works across newlines. */
+    private static boolean containsWord(String text, String word) {
+        return Pattern.compile("\\b" + Pattern.quote(word) + "\\b").matcher(text).find();
     }
 
     /** Tier 3: record an observed fan-out (rows produced by an actual call). */

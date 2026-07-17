@@ -157,7 +157,9 @@ public class QueryIterGenerate extends QueryIteratorBase {
             return false;
         }
 
-        // If batching is enabled, use batch processing
+        // If batching is enabled, use batch processing.
+        // NOTE: C3 cross-binding dedup (promptMemo) is applied on the standard path below;
+        // the batched path coalesces per batch and does not currently also apply dedup.
         if (batchingEnabled && !opGen.isBaseMode()) {
             System.out.println("[DEBUG] Using batched processing");
             return hasNextBindingBatched();
@@ -341,14 +343,21 @@ public class QueryIterGenerate extends QueryIteratorBase {
         }
 
         // Compute the prompt actually sent to the LLM (may include KG candidates).
+        // Guarded: a candidate-extraction / dataset failure must skip this binding, not
+        // abort the whole query iteration.
         String finalPrompt = prompt;
-        if (constrainedMode && candidateExtractor != null) {
-            Set<String> candidates = getCandidates();
-            if (!candidates.isEmpty()) {
-                finalPrompt = PromptBuilder.buildConstrainedPrompt(
-                        prompt, candidates, outputVarNames,
-                        GenSPARQLConfig.getMaxCandidates());
+        try {
+            if (constrainedMode && candidateExtractor != null) {
+                Set<String> candidates = getCandidates();
+                if (!candidates.isEmpty()) {
+                    finalPrompt = PromptBuilder.buildConstrainedPrompt(
+                            prompt, candidates, outputVarNames,
+                            GenSPARQLConfig.getMaxCandidates());
+                }
             }
+        } catch (Exception e) {
+            LOG.error("Error building constrained prompt; skipping binding", e);
+            return Collections.emptyIterator();
         }
 
         // C3: reuse parsed outputs for a prompt already generated this execution.
@@ -360,7 +369,11 @@ public class QueryIterGenerate extends QueryIteratorBase {
                     outputMaps.size(), dedupSavedCalls);
         } else {
             outputMaps = callAndParse(finalPrompt, outputVarNames);
-            if (dedupEnabled) {
+            if (outputMaps == null) {
+                // Failed call: produce no rows and do NOT memoize, so an identical later
+                // prompt is retried rather than permanently poisoned with an empty result.
+                outputMaps = Collections.emptyList();
+            } else if (dedupEnabled) {
                 promptMemo.put(finalPrompt, outputMaps);
             }
         }
@@ -380,7 +393,9 @@ public class QueryIterGenerate extends QueryIteratorBase {
     /**
      * Call the LLM for a single resolved prompt and parse its response into a list of
      * validated output-variable maps (independent of any input binding). Returns an
-     * empty list on failure. This is the unit that C3 deduplication memoizes.
+     * {@code null} on a failed/errored call (so the caller can avoid memoizing it), or the
+     * parsed maps (possibly empty for a successful-but-empty response). This is the unit
+     * that C3 deduplication memoizes.
      */
     private List<Map<String, String>> callAndParse(String finalPrompt, List<String> outputVarNames) {
         List<Map<String, String>> outputMaps = new ArrayList<>();
@@ -400,7 +415,7 @@ public class QueryIterGenerate extends QueryIteratorBase {
 
             if (!response.isSuccess()) {
                 LOG.warn("LLM generation failed: {}", response.getErrorMessage());
-                return outputMaps;
+                return null;
             }
 
             if (response.hasBindings()) {
@@ -423,6 +438,7 @@ public class QueryIterGenerate extends QueryIteratorBase {
             }
         } catch (Exception e) {
             LOG.error("Error during LLM generation", e);
+            return null;
         }
         return outputMaps;
     }
@@ -548,9 +564,15 @@ public class QueryIterGenerate extends QueryIteratorBase {
         Map<String, String> validated = new HashMap<>();
         for (Map.Entry<String, String> entry : binding.entrySet()) {
             String value = entry.getValue();
-            if (value != null && isValidResponse(value)) {
+            if (value == null || value.trim().isEmpty()) {
+                // Present-but-empty field: leave this variable unbound and keep the row,
+                // rather than dropping the whole (possibly multi-variable) binding.
+                continue;
+            }
+            if (isValidResponse(value)) {
                 validated.put(entry.getKey(), value);
             } else {
+                // Genuine garbage in a field: reject the whole row.
                 return null;
             }
         }

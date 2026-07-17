@@ -314,13 +314,24 @@ SPARQL algebra + the first to estimate generative fan-out."
   (Join cardinality across *multiple* BGPs is still approximated — the first BGP carries N;
   precise multi-BGP selectivity ordering is the remaining refinement.)
 
+- ✅ Self-review pass (10 finder angles + verify): fixed 5 correctness issues (multi-var
+  empty-field row drop on the default path; constrained-prompt outside try/catch; dedup
+  memoizing failed calls; record-replay storing failures; record-replay empty-file crash)
+  + 3 quality/robustness (FanOutEstimator multi-line & incidental-number priority;
+  dedupRatio guard for chained GENOPs; AtomicInteger counters). Regression tests added.
+
 **Next:**
 1. **ISWC demo:** live wall-clock/$ for C3 (needs `OPENROUTER_API_KEY`); token-bounded
    batch sizing; write the short paper around 46→9 + the framing.
 2. **C2 tier 2:** grounding-survival factor + grounding-relation KG prior.
 3. **Multi-BGP selectivity:** per-pattern join-cardinality estimation so the planner can
    also reorder among KG patterns (not just BGP-before-GENOP).
-4. Re-run the novelty deep-research before submission (time-sensitivity risk).
+4. **Deferred cleanup (from review, non-blocking):** cache `KgStats` COUNTs per (graph,
+   pattern) so cost planning doesn't re-scan each execution; memoize grounded nodes so
+   dedup+grounding grounds D times not N; apply dedup on the batched path (or keep them
+   exclusive); consolidate duplicated helpers (dedupRatioFor↔KgStats.dedupRatio,
+   estimateTokens↔BatchedPromptBuilder, findGenerate/collectTriples traversal).
+5. Re-run the novelty deep-research before submission (time-sensitivity risk).
 
 ---
 
