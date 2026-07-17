@@ -228,8 +228,19 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                 }
             }
 
-            // Reorder if needed: BGPs first, then OpGenerates
-            if (needsReordering) {
+            // Reorder: cost-based (C4) when enabled for context-mode GENOPs, else the
+            // correctness-only "BGPs first" heuristic when a dependency requires it.
+            if (GenSPARQLConfig.isCostBasedPlanningEnabled() && hasGenOpWithInputVars) {
+                List<Op> costOrder = reorderByCost(elements);
+                if (costOrder != null) {
+                    elements = costOrder;
+                    LOG.debug("Cost-based reorder: {}", elements.stream()
+                        .map(e -> e.getClass().getSimpleName())
+                        .collect(java.util.stream.Collectors.joining(", ")));
+                } else if (needsReordering) {
+                    elements = reorderForDependencies(elements);
+                }
+            } else if (needsReordering) {
                 LOG.debug("Reordering OpSequence elements for variable dependencies");
                 elements = reorderForDependencies(elements);
                 LOG.debug("New order: {}", elements.stream()
@@ -711,5 +722,94 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
         reordered.addAll(genElements);
 
         return reordered;
+    }
+
+    /**
+     * Cost-based reorder (C4): translate the sequence elements into planner items and let
+     * {@link org.gensparql.engine.cost.GenOpPlanner} pick the cost-minimal legal order.
+     * Dependency legality (a GENOP's inputs bound before it) is preserved; variables not
+     * bound by any element are treated as externally supplied (from the incoming binding).
+     * Returns {@code null} on any failure so the caller falls back to the safe heuristic.
+     */
+    private List<Op> reorderByCost(List<Op> elements) {
+        try {
+            Set<Var> allBound = new HashSet<>();
+            for (Op e : elements) {
+                allBound.addAll(getProvidedVariables(e));
+            }
+
+            List<org.gensparql.engine.cost.GenOpPlanner.PlanItem> items = new ArrayList<>();
+            java.util.Map<String, Op> byLabel = new java.util.HashMap<>();
+            for (int i = 0; i < elements.size(); i++) {
+                Op e = elements.get(i);
+                String label = "e" + i;
+                byLabel.put(label, e);
+
+                Set<String> requires = new HashSet<>();
+                for (Var v : getRequiredInputVariables(e)) {
+                    if (allBound.contains(v)) {
+                        requires.add(v.getName()); // external vars are pre-bound, not a constraint
+                    }
+                }
+                Set<String> binds = new HashSet<>();
+                for (Var v : getProvidedVariables(e)) {
+                    binds.add(v.getName());
+                }
+
+                if (isBGPOnly(e)) {
+                    items.add(new org.gensparql.engine.cost.GenOpPlanner.KgPattern(
+                            label, requires, binds, 1.0));
+                } else {
+                    OpGenerate g = findGenerate(e);
+                    String prompt = g != null ? g.getPromptTemplate() : "";
+                    double fanOut = org.gensparql.engine.cost.FanOutEstimator.promptPrior(prompt);
+                    int tokens = org.gensparql.engine.cost.GenOpCostModel.estimateTokens(prompt);
+                    items.add(new org.gensparql.engine.cost.GenOpPlanner.GenOpItem(
+                            label, requires, binds, fanOut, tokens, tokens, 1.0));
+                }
+            }
+
+            org.gensparql.engine.cost.GenOpCostModel model =
+                    org.gensparql.engine.cost.GenOpCostModel.builder().build();
+            org.gensparql.engine.cost.GenOpPlanner.PlanResult res =
+                    new org.gensparql.engine.cost.GenOpPlanner()
+                            .plan(items, 1.0, model, GenSPARQLConfig.isBatchDedupEnabled());
+
+            List<Op> ordered = new ArrayList<>(elements.size());
+            for (org.gensparql.engine.cost.GenOpPlanner.PlanItem it : res.order()) {
+                ordered.add(byLabel.get(it.label()));
+            }
+            return ordered;
+        } catch (Exception ex) {
+            LOG.warn("Cost-based reorder failed, falling back to dependency reorder: {}",
+                    ex.getMessage());
+            return null;
+        }
+    }
+
+    /** Find the first OpGenerate nested inside a sequence element, or null. */
+    private OpGenerate findGenerate(Op op) {
+        if (op instanceof OpGenerate) {
+            return (OpGenerate) op;
+        }
+        if (op instanceof OpProject) {
+            return findGenerate(((OpProject) op).getSubOp());
+        }
+        if (op instanceof OpFilter) {
+            return findGenerate(((OpFilter) op).getSubOp());
+        }
+        if (op instanceof OpJoin) {
+            OpGenerate g = findGenerate(((OpJoin) op).getLeft());
+            return g != null ? g : findGenerate(((OpJoin) op).getRight());
+        }
+        if (op instanceof OpSequence) {
+            for (Op e : ((OpSequence) op).getElements()) {
+                OpGenerate g = findGenerate(e);
+                if (g != null) {
+                    return g;
+                }
+            }
+        }
+        return null;
     }
 }

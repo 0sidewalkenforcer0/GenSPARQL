@@ -302,11 +302,17 @@ SPARQL algebra + the first to estimate generative fan-out."
   selective KG patterns before an expensive GENOP (26→5 calls in the unit test), respects
   Prop-6 dependency legality; pure-join reordering sound per Prop 6 / Theorem 6.
 
+- ✅ Planner WIRED into the engine: `GenSPARQLQueryEngine` uses `GenOpPlanner` to reorder
+  context-mode GENOP sequences when `gensparql.planner.costBased` is on (default off), with a
+  safe fallback to the correctness-only heuristic. End-to-end result-preservation verified
+  (cost-based on/off identical; +dedup identical).
+
 **Next:**
-1. **Wire the planner into execution:** use `GenOpPlanner` in
-   `GenSPARQLQueryEngine.reorderForDependencies` (currently correctness-only) and expose
-   `GenOpCostModel` via `OpGenerate` so the real engine reorders by cost. (C4 is currently a
-   standalone, unit-tested component; this is the integration step.)
+1. **Feed real BGP selectivity:** the wired planner currently uses cardinality factor 1.0 for
+   KG patterns (so it reorders by dependency + GENOP cost, but not yet by KG selectivity).
+   Extract triple patterns and use `KgStats` to estimate per-pattern cardinality so the
+   selective-pushdown cost win (the 26→5 lever) is realized end-to-end. Also thread the
+   per-GENOP dedup ratio from `KgStats` into the planner (currently 1.0).
 2. **ISWC demo:** live wall-clock/$ for C3 (needs `OPENROUTER_API_KEY`); token-bounded
    batch sizing; write the short paper around 46→9 + the framing.
 3. **C2 tier 2:** grounding-survival factor + grounding-relation KG prior.
