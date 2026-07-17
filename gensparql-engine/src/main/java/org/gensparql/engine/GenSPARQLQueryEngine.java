@@ -231,7 +231,7 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
             // Reorder: cost-based (C4) when enabled for context-mode GENOPs, else the
             // correctness-only "BGPs first" heuristic when a dependency requires it.
             if (GenSPARQLConfig.isCostBasedPlanningEnabled() && hasGenOpWithInputVars) {
-                List<Op> costOrder = reorderByCost(elements);
+                List<Op> costOrder = reorderByCost(elements, execCxt);
                 if (costOrder != null) {
                     elements = costOrder;
                     LOG.debug("Cost-based reorder: {}", elements.stream()
@@ -731,15 +731,40 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
      * bound by any element are treated as externally supplied (from the incoming binding).
      * Returns {@code null} on any failure so the caller falls back to the safe heuristic.
      */
-    private List<Op> reorderByCost(List<Op> elements) {
+    private List<Op> reorderByCost(List<Op> elements, ExecutionContext execCxt) {
         try {
             Set<Var> allBound = new HashSet<>();
             for (Op e : elements) {
                 allBound.addAll(getProvidedVariables(e));
             }
 
+            // KG statistics over the feeding BGP patterns (C2 ↔ C3 bridge): real binding
+            // count N and, per GENOP input var, the distinct-value count that determines the
+            // dedup ratio. Unavailable/errored stats fall back to neutral factors.
+            org.apache.jena.rdf.model.Model statsModel = null;
+            String bgpPattern = null;
+            long nAll = -1;
+            try {
+                List<org.apache.jena.graph.Triple> triples = new ArrayList<>();
+                for (Op e : elements) {
+                    if (isBGPOnly(e)) {
+                        org.gensparql.engine.cost.OpStats.collectTriples(e, triples);
+                    }
+                }
+                if (!triples.isEmpty() && execCxt != null && execCxt.getActiveGraph() != null) {
+                    statsModel = org.apache.jena.rdf.model.ModelFactory
+                            .createModelForGraph(execCxt.getActiveGraph());
+                    bgpPattern = org.gensparql.engine.cost.OpStats.buildPattern(triples);
+                    nAll = org.gensparql.engine.cost.KgStats.bindings(statsModel, "", bgpPattern);
+                }
+            } catch (Exception statsEx) {
+                LOG.debug("KG stats unavailable for cost planning: {}", statsEx.getMessage());
+                statsModel = null;
+            }
+
             List<org.gensparql.engine.cost.GenOpPlanner.PlanItem> items = new ArrayList<>();
             java.util.Map<String, Op> byLabel = new java.util.HashMap<>();
+            boolean firstBgp = true;
             for (int i = 0; i < elements.size(); i++) {
                 Op e = elements.get(i);
                 String label = "e" + i;
@@ -757,15 +782,24 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                 }
 
                 if (isBGPOnly(e)) {
+                    // Carry the real combined binding count on the first BGP so the GENOP
+                    // sees the true incoming cardinality; others are neutral (join
+                    // cardinality across multiple BGPs is approximated, see docs §8).
+                    double factor = 1.0;
+                    if (statsModel != null && firstBgp && nAll >= 0) {
+                        factor = Math.max(1.0, nAll);
+                        firstBgp = false;
+                    }
                     items.add(new org.gensparql.engine.cost.GenOpPlanner.KgPattern(
-                            label, requires, binds, 1.0));
+                            label, requires, binds, factor));
                 } else {
                     OpGenerate g = findGenerate(e);
                     String prompt = g != null ? g.getPromptTemplate() : "";
                     double fanOut = org.gensparql.engine.cost.FanOutEstimator.promptPrior(prompt);
                     int tokens = org.gensparql.engine.cost.GenOpCostModel.estimateTokens(prompt);
+                    double dedupRatio = dedupRatioFor(g, statsModel, bgpPattern, nAll, allBound);
                     items.add(new org.gensparql.engine.cost.GenOpPlanner.GenOpItem(
-                            label, requires, binds, fanOut, tokens, tokens, 1.0));
+                            label, requires, binds, fanOut, tokens, tokens, dedupRatio));
                 }
             }
 
@@ -785,6 +819,22 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                     ex.getMessage());
             return null;
         }
+    }
+
+    /** Dedup ratio D/N for a GENOP's (single) input variable over the feeding BGP, or 1.0. */
+    private double dedupRatioFor(OpGenerate g, org.apache.jena.rdf.model.Model statsModel,
+                                 String bgpPattern, long nAll, Set<Var> allBound) {
+        if (g == null || statsModel == null || bgpPattern == null || nAll <= 0) {
+            return 1.0;
+        }
+        for (Var v : g.getInputVariables()) {
+            if (allBound.contains(v)) {
+                long d = org.gensparql.engine.cost.KgStats
+                        .distinctBindings(statsModel, "", bgpPattern, v.getName());
+                return Math.min(1.0, (double) d / nAll);
+            }
+        }
+        return 1.0;
     }
 
     /** Find the first OpGenerate nested inside a sequence element, or null. */

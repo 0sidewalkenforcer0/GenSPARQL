@@ -307,15 +307,19 @@ SPARQL algebra + the first to estimate generative fan-out."
   safe fallback to the correctness-only heuristic. End-to-end result-preservation verified
   (cost-based on/off identical; +dedup identical).
 
+- ✅ Real KG statistics fed into the wired planner: `reorderByCost` now uses `OpStats`
+  (triple extraction + SPARQL serialization) + `KgStats` to compute the real binding count N
+  (carried on the first BGP) and each GENOP's dedup ratio D/N, replacing the 1.0 placeholders.
+  Fallback-safe; `OpStatsTest` proves the built pattern is countable (N=3, D=2, ratio 2/3).
+  (Join cardinality across *multiple* BGPs is still approximated — the first BGP carries N;
+  precise multi-BGP selectivity ordering is the remaining refinement.)
+
 **Next:**
-1. **Feed real BGP selectivity:** the wired planner currently uses cardinality factor 1.0 for
-   KG patterns (so it reorders by dependency + GENOP cost, but not yet by KG selectivity).
-   Extract triple patterns and use `KgStats` to estimate per-pattern cardinality so the
-   selective-pushdown cost win (the 26→5 lever) is realized end-to-end. Also thread the
-   per-GENOP dedup ratio from `KgStats` into the planner (currently 1.0).
-2. **ISWC demo:** live wall-clock/$ for C3 (needs `OPENROUTER_API_KEY`); token-bounded
+1. **ISWC demo:** live wall-clock/$ for C3 (needs `OPENROUTER_API_KEY`); token-bounded
    batch sizing; write the short paper around 46→9 + the framing.
-3. **C2 tier 2:** grounding-survival factor + grounding-relation KG prior.
+2. **C2 tier 2:** grounding-survival factor + grounding-relation KG prior.
+3. **Multi-BGP selectivity:** per-pattern join-cardinality estimation so the planner can
+   also reorder among KG patterns (not just BGP-before-GENOP).
 4. Re-run the novelty deep-research before submission (time-sensitivity risk).
 
 ---
