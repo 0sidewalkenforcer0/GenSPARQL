@@ -25,8 +25,9 @@ import java.util.Set;
  *
  * <p><b>Algorithm.</b> Held-Karp subset DP over placed items. Running cardinality after a set
  * S is order-independent (a product of per-item cardinality factors), so only the position of
- * a GENOP relative to selective patterns changes its cost. DP is O(2^n · n); query fragments
- * are small, and dependency pruning shrinks the space further. Exact optimum.
+ * a GENOP relative to selective patterns changes its cost. DP is O(2^n · n^2) (boundVars and
+ * cardinality are recomputed per state); query fragments are small (capped at n=20), and
+ * dependency pruning shrinks the space further. Exact optimum.
  */
 public final class GenOpPlanner {
 

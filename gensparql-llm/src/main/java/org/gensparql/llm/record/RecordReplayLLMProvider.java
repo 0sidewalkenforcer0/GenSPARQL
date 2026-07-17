@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Record-replay decorator for deterministic, reproducible evaluation.
@@ -36,6 +37,14 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * <p><b>Scope:</b> generation only. Embeddings pass through (grounding determinism is a
  * separate concern, out of scope for the C3/C4 planning experiments).
+ *
+ * <p><b>Usage notes:</b> {@link #getName()} is transparent (returns the delegate's name) so
+ * {@code ModelSpec} routing reaches this wrapper — wrap the BASE provider directly (e.g.
+ * {@code new RecordReplayLLMProvider(openai, ...)}); wrapping a name-changing decorator such as
+ * {@code CachingLLMProvider} (whose name is {@code delegate+"-cached"}) would make the registry's
+ * name-based lookup miss this wrapper and route to the raw provider. RECORD flushes to disk only
+ * on {@link #close()} (or an explicit {@link #save()}); call it before registry/JVM teardown, as
+ * {@code LLMProviderRegistry.clearInstances()} does not close a provider installed via setDefault.
  */
 public class RecordReplayLLMProvider implements LLMProvider {
 
@@ -49,9 +58,9 @@ public class RecordReplayLLMProvider implements LLMProvider {
     private final Map<String, StoredResponse> store = new ConcurrentHashMap<>();
     private final ObjectMapper mapper = new ObjectMapper();
 
-    private int replayHits = 0;
-    private int replayMisses = 0;
-    private int recorded = 0;
+    private final AtomicInteger replayHits = new AtomicInteger();
+    private final AtomicInteger replayMisses = new AtomicInteger();
+    private final AtomicInteger recorded = new AtomicInteger();
 
     public RecordReplayLLMProvider(LLMProvider delegate, Mode mode, Path storeFile) {
         this.delegate = delegate;
@@ -82,22 +91,23 @@ public class RecordReplayLLMProvider implements LLMProvider {
         String key = keyOf(request);
         StoredResponse stored = store.get(key);
         if (stored != null) {
-            if (mode == Mode.REPLAY) replayHits++;
+            if (mode == Mode.REPLAY) replayHits.incrementAndGet();
             return CompletableFuture.completedFuture(stored.toResponse());
         }
 
         if (mode == Mode.REPLAY) {
-            replayMisses++;
+            replayMisses.incrementAndGet();
             LOG.warn("REPLAY_MISS for key {}", key);
             return CompletableFuture.completedFuture(
                     GenerateResponse.error("REPLAY_MISS: no recorded response for key " + key));
         }
 
-        // RECORD: call the delegate once and remember it.
+        // RECORD: call the delegate once and remember only SUCCESSFUL responses — a failed
+        // response must not be persisted, or later runs would replay the failure forever.
         return delegate.generate(request).thenApply(response -> {
-            if (response != null) {
+            if (response != null && response.isSuccess()) {
                 store.put(key, StoredResponse.from(response));
-                recorded++;
+                recorded.incrementAndGet();
             }
             return response;
         });
@@ -161,6 +171,9 @@ public class RecordReplayLLMProvider implements LLMProvider {
             return;
         }
         try {
+            if (Files.size(storeFile) == 0) {
+                return; // empty store file = zero recordings, not an error
+            }
             Map<String, StoredResponse> loaded = mapper.readValue(
                     storeFile.toFile(),
                     mapper.getTypeFactory().constructMapType(
@@ -168,14 +181,17 @@ public class RecordReplayLLMProvider implements LLMProvider {
             store.putAll(loaded);
             LOG.info("Loaded {} recorded response(s) from {}", store.size(), storeFile);
         } catch (IOException e) {
-            throw new UncheckedIOException("Failed to load record-replay store from " + storeFile, e);
+            // A corrupt/truncated store must not abort construction; treat it as empty. In
+            // REPLAY this then fails loud per request (REPLAY_MISS) rather than crashing.
+            LOG.warn("Could not read record-replay store {} (treating as empty): {}",
+                    storeFile, e.getMessage());
         }
     }
 
     // ---- counters (for eval reporting) ----
-    public int getReplayHits() { return replayHits; }
-    public int getReplayMisses() { return replayMisses; }
-    public int getRecorded() { return recorded; }
+    public int getReplayHits() { return replayHits.get(); }
+    public int getReplayMisses() { return replayMisses.get(); }
+    public int getRecorded() { return recorded.get(); }
     public int getStoreSize() { return store.size(); }
     public Mode getMode() { return mode; }
 

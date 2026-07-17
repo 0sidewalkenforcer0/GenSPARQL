@@ -4,6 +4,8 @@ import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.gensparql.core.model.GenerateRequest;
+import org.gensparql.core.model.GenerateResponse;
 import org.gensparql.engine.GenSPARQLConfig;
 import org.gensparql.engine.boot.GenSPARQL;
 import org.gensparql.llm.LLMProviderRegistry;
@@ -16,7 +18,11 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -115,6 +121,59 @@ public class GenSPARQLExecutionTest {
         assertEquals(3, rows.size(), "Dedup must not change the number of result rows");
         assertEquals(2, mockProvider.getRequestHistory().size(),
                 "Two Physics bindings must share one LLM call -> 2 distinct prompts, 2 calls");
+    }
+
+    @Test
+    void testEmptyOutputFieldKeepsPartialRow() {
+        // Provider returns a multi-var binding with one present-but-empty field.
+        MockLLMProvider p = new MockLLMProvider() {
+            @Override
+            public CompletableFuture<GenerateResponse> generate(GenerateRequest request) {
+                Map<String, String> b = new HashMap<>();
+                b.put("director", "Nolan");
+                b.put("cowriter", "");
+                return CompletableFuture.completedFuture(GenerateResponse.success("raw", List.of(b)));
+            }
+        };
+        LLMProviderRegistry.setDefault(p);
+
+        String q = """
+                SELECT ?director ?cowriter WHERE {
+                  GENOP("Name the director and co-writer.", (?director, ?cowriter), <model:mock:test>)
+                }
+                """;
+        Query query = GenSPARQLQueryFactory.create(q);
+        int count = 0;
+        try (QueryExecution qe = QueryExecutionFactory.create(query, testModel)) {
+            ResultSet rs = qe.execSelect();
+            while (rs.hasNext()) {
+                QuerySolution s = rs.next();
+                assertEquals("Nolan", s.get("director").toString());
+                assertNull(s.get("cowriter"), "empty field must be unbound, not drop the whole row");
+                count++;
+            }
+        }
+        assertEquals(1, count, "a row with one valid field must survive an empty sibling field");
+    }
+
+    @Test
+    void testDedupDoesNotMemoizeFailedCalls() {
+        AtomicInteger calls = new AtomicInteger();
+        MockLLMProvider failing = new MockLLMProvider() {
+            @Override
+            public CompletableFuture<GenerateResponse> generate(GenerateRequest request) {
+                calls.incrementAndGet();
+                return CompletableFuture.completedFuture(GenerateResponse.error("transient failure"));
+            }
+        };
+        LLMProviderRegistry.setDefault(failing);
+        GenSPARQLConfig.setBatchDedupEnabled(true);
+
+        List<String> rows = runFieldQuery(fieldModel()); // 3 bindings, Physics x2 + Chemistry
+
+        assertTrue(rows.isEmpty(), "all calls failed -> no rows");
+        assertEquals(3, calls.get(),
+                "failed calls must NOT be memoized; each binding retries (would be 2 if memoized)");
     }
 
     @Test

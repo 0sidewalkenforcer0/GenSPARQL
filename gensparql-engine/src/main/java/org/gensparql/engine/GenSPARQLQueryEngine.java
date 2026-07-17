@@ -831,6 +831,11 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
             if (allBound.contains(v)) {
                 long d = org.gensparql.engine.cost.KgStats
                         .distinctBindings(statsModel, "", bgpPattern, v.getName());
+                if (d <= 0) {
+                    // Input var not produced by the feeding BGP (e.g. a prior GENOP's
+                    // output): no measurable KG dedup, so assume none rather than 0.
+                    return 1.0;
+                }
                 return Math.min(1.0, (double) d / nAll);
             }
         }
