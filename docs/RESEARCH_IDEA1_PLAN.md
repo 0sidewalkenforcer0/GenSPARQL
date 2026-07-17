@@ -336,9 +336,12 @@ SPARQL algebra + the first to estimate generative fan-out."
 4. **Deferred cleanup (from review, non-blocking):** ~~cache `KgStats` COUNTs~~ ✅ DONE;
    ~~memoize grounded nodes (dedup+grounding grounds D times not N)~~ ✅ DONE (per-value
    `groundedNodeCache` in `createBinding` + `getGroundingCacheHits()`; also removed the
-   `[DEBUG GROUNDING]` prints); still pending — apply dedup on the batched path (or keep
-   them exclusive); consolidate duplicated helpers (dedupRatioFor↔KgStats.dedupRatio,
-   estimateTokens↔BatchedPromptBuilder, findGenerate/collectTriples traversal).
+   `[DEBUG GROUNDING]` prints); ~~dedupRatioFor↔KgStats.dedupRatio divergence~~ ✅ DONE
+   (single `KgStats.ratio(distinct,total)`); still pending (low value / cross-module) —
+   apply dedup on the batched path (or keep them exclusive); the estimateTokens↔
+   BatchedPromptBuilder chars/4 dup (different modules, no shared home without a core util)
+   and the findGenerate/collectTriples traversal duplication (a generic Op visitor would be
+   a larger, riskier refactor for little gain).
 5. Re-run the novelty deep-research before submission (time-sensitivity risk).
 
 ---
