@@ -16,6 +16,16 @@ public class GenSPARQLConfig {
     private static int batchSize = 5;
     private static int batchMaxTokens = 8000;
 
+    // Cross-binding prompt deduplication (C3): identical resolved prompts within a
+    // single query execution collapse to one LLM call; results are fanned back out.
+    // Lossless (exact-prompt match); off by default to preserve baseline behavior.
+    private static boolean batchDedupEnabled = false;
+
+    // Cost-based reordering (C4): order context-mode GENOP sequences by estimated cost
+    // (GenOpPlanner) instead of the correctness-only "BGPs first" heuristic. Respects
+    // dependency legality (Prop 6); off by default to preserve baseline behavior.
+    private static boolean costBasedPlanningEnabled = false;
+
     // Timing configuration
     private static boolean timingEnabled = true;
     private static boolean verboseLogging = false;
@@ -124,6 +134,37 @@ public class GenSPARQLConfig {
             throw new IllegalArgumentException("Batch max tokens must be positive");
         }
         batchMaxTokens = maxTokens;
+    }
+
+    /**
+     * Check if cross-binding prompt deduplication (C3) is enabled.
+     * When enabled, identical resolved prompts within one query execution are sent
+     * to the LLM only once and the parsed outputs are reused for every input binding
+     * that produced the same prompt.
+     */
+    public static boolean isBatchDedupEnabled() {
+        return batchDedupEnabled;
+    }
+
+    /**
+     * Enable or disable cross-binding prompt deduplication.
+     */
+    public static void setBatchDedupEnabled(boolean enabled) {
+        batchDedupEnabled = enabled;
+    }
+
+    /**
+     * Check if cost-based reordering (C4) is enabled for context-mode GENOP sequences.
+     */
+    public static boolean isCostBasedPlanningEnabled() {
+        return costBasedPlanningEnabled;
+    }
+
+    /**
+     * Enable or disable cost-based reordering.
+     */
+    public static void setCostBasedPlanningEnabled(boolean enabled) {
+        costBasedPlanningEnabled = enabled;
     }
 
     /**
@@ -317,6 +358,16 @@ public class GenSPARQLConfig {
             }
         }
 
+        String batchDedup = System.getProperty("gensparql.batch.dedup");
+        if (batchDedup != null) {
+            batchDedupEnabled = Boolean.parseBoolean(batchDedup);
+        }
+
+        String costPlanning = System.getProperty("gensparql.planner.costBased");
+        if (costPlanning != null) {
+            costBasedPlanningEnabled = Boolean.parseBoolean(costPlanning);
+        }
+
         // Timing
         String timingEn = System.getProperty("gensparql.timing.enabled");
         if (timingEn != null) {
@@ -384,6 +435,8 @@ public class GenSPARQLConfig {
         batchingEnabled = false;
         batchSize = 5;
         batchMaxTokens = 8000;
+        batchDedupEnabled = false;
+        costBasedPlanningEnabled = false;
         timingEnabled = true;
         verboseLogging = false;
         constrainedGenerationEnabled = false;
@@ -400,11 +453,11 @@ public class GenSPARQLConfig {
     public static String getSummary() {
         return String.format(
             "GenSPARQLConfig{caching=%s (maxSize=%d, ttlDays=%d), " +
-            "batching=%s (size=%d, maxTokens=%d), timing=%s, verbose=%s, " +
+            "batching=%s (size=%d, maxTokens=%d, dedup=%s), timing=%s, verbose=%s, " +
             "constrained=%s (maxCandidates=%d), " +
             "grounding=%s (threshold=%.2f, strategy=%s, batchSize=%d)}",
             cachingEnabled, cacheMaxSize, cacheTtlDays,
-            batchingEnabled, batchSize, batchMaxTokens,
+            batchingEnabled, batchSize, batchMaxTokens, batchDedupEnabled,
             timingEnabled, verboseLogging,
             constrainedGenerationEnabled, maxCandidates,
             groundingEnabled, groundingThreshold, groundingStrategy, groundingBatchSize

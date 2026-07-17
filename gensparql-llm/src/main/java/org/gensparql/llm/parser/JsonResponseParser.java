@@ -355,36 +355,42 @@ public class JsonResponseParser implements ResponseParser {
         for (String var : outputVars) {
             String value = null;
 
-            // Try exact match first
+            // Try exact match first (always).
             if (json.has(var)) {
                 value = nodeToString(json.get(var));
             }
-            // Try common field names
-            else if (json.has("entity")) {
-                value = nodeToString(json.get("entity"));
-            }
-            else if (json.has("value")) {
-                value = nodeToString(json.get("value"));
-            }
-            else if (json.has("result")) {
-                value = nodeToString(json.get("result"));
-            }
-            else if (json.has("name")) {
-                value = nodeToString(json.get("name"));
-            }
-            // If object has only one field, use it
-            else if (json.isObject() && json.size() == 1) {
-                Iterator<JsonNode> it = json.elements();
-                if (it.hasNext()) {
-                    value = nodeToString(it.next());
+            // Fuzzy field-name / shape fallbacks only make sense for a SINGLE output
+            // variable; with multiple vars a missing field must stay unbound (null),
+            // otherwise one field's value leaks into another var.
+            else if (outputVars.size() == 1) {
+                if (json.has("entity")) {
+                    value = nodeToString(json.get("entity"));
+                }
+                else if (json.has("value")) {
+                    value = nodeToString(json.get("value"));
+                }
+                else if (json.has("result")) {
+                    value = nodeToString(json.get("result"));
+                }
+                else if (json.has("name")) {
+                    value = nodeToString(json.get("name"));
+                }
+                // If object has only one field, use it
+                else if (json.isObject() && json.size() == 1) {
+                    Iterator<JsonNode> it = json.elements();
+                    if (it.hasNext()) {
+                        value = nodeToString(it.next());
+                    }
+                }
+                // If it's a simple value (string, number), use it directly
+                else if (json.isValueNode()) {
+                    value = nodeToString(json);
                 }
             }
-            // If it's a simple value (string, number), use it directly
-            else if (json.isValueNode()) {
-                value = nodeToString(json);
-            }
 
-            if (value != null && !value.isEmpty()) {
+            // Keep any value that matched a field, including an explicit empty/null
+            // (a present-but-null field binds to ""); a missing field stays unbound.
+            if (value != null) {
                 binding.put(var, value);
             }
         }
