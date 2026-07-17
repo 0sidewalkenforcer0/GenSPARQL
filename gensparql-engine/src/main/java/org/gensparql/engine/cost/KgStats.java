@@ -54,11 +54,20 @@ public final class KgStats {
      * Lower = more dedup benefit. Returns 1.0 for an empty input.
      */
     public static double dedupRatio(Model model, String prefixes, String pattern, String var) {
-        long n = bindings(model, prefixes, pattern);
-        if (n == 0) {
+        return ratio(distinctBindings(model, prefixes, pattern, var),
+                     bindings(model, prefixes, pattern));
+    }
+
+    /**
+     * Dedup ratio D/N clamped to (0,1]. Returns 1.0 (no measurable dedup) when the total is
+     * non-positive or the distinct count is 0 (e.g. the variable is absent from the pattern).
+     * Single definition shared by {@link #dedupRatio} and the planner.
+     */
+    public static double ratio(long distinct, long total) {
+        if (total <= 0 || distinct <= 0) {
             return 1.0;
         }
-        return (double) distinctBindings(model, prefixes, pattern, var) / n;
+        return Math.min(1.0, (double) distinct / total);
     }
 
     /** Enable/disable COUNT caching (disable if querying a graph that mutates between calls). */
