@@ -76,6 +76,12 @@ public class QueryIterGenerate extends QueryIteratorBase {
     private final Map<String, List<Map<String, String>>> promptMemo = new HashMap<>();
     private int dedupSavedCalls = 0;
 
+    // Grounding result cache (raw value -> resolved Node): grounding is deterministic for a
+    // fixed relation/threshold, so a value repeated across bindings is grounded only once
+    // (D times, not N) — this completes the dedup saving on grounding-enabled runs.
+    private final Map<String, Node> groundedNodeCache = new HashMap<>();
+    private int groundingCacheHits = 0;
+
     private Iterator<Binding> currentResults;
     private Binding currentInputBinding;
     private boolean exhausted = false;
@@ -489,6 +495,14 @@ public class QueryIterGenerate extends QueryIteratorBase {
     }
 
     /**
+     * Number of grounding computations avoided by reusing a cached resolved node for a value
+     * already grounded in this execution. Zero when grounding is disabled.
+     */
+    public int getGroundingCacheHits() {
+        return groundingCacheHits;
+    }
+
+    /**
      * Create a new binding by merging input binding with generated outputs.
      * If grounding is enabled, LLM outputs are mapped to KG entities using embedding similarity.
      */
@@ -500,27 +514,26 @@ public class QueryIterGenerate extends QueryIteratorBase {
             if (value != null) {
                 Node node;
 
-                // Apply embedding-based grounding if enabled
+                // Apply embedding-based grounding if enabled, memoized per raw value so a
+                // value repeated across bindings (common under C3 dedup) is grounded once.
                 if (groundingEnabled && entityGrounder != null) {
-                    System.out.println("[DEBUG GROUNDING] Attempting to ground: '" + value +
-                            "' with relation=" + groundingRelation + ", threshold=" + groundingThreshold);
-                    GroundingResult groundingResult = entityGrounder.ground(
-                            value, groundingRelation, groundingThreshold);
-
-                    if (groundingResult.isGrounded()) {
-                        node = groundingResult.toNode();
-                        System.out.println("[DEBUG GROUNDING] SUCCESS: '" + value + "' -> '" +
-                                groundingResult.getGroundedLabel() + "' (sim=" +
-                                String.format("%.4f", groundingResult.getSimilarity()) +
-                                ", uri=" + (groundingResult.getGroundedUri() != null ? groundingResult.getGroundedUri() : "null") + ")");
-                        LOG.debug("Grounded '{}' -> '{}' (sim={})",
-                                value, groundingResult.getGroundedLabel(),
-                                String.format("%.4f", groundingResult.getSimilarity()));
+                    Node cached = groundedNodeCache.get(value);
+                    if (cached != null) {
+                        groundingCacheHits++;
+                        node = cached;
                     } else {
-                        // Keep original value if grounding failed
-                        node = NodeFactory.createLiteralString(value);
-                        System.out.println("[DEBUG GROUNDING] FAILED: '" + value + "' - no match above threshold " + groundingThreshold);
-                        LOG.debug("Grounding failed for '{}', keeping original", value);
+                        GroundingResult groundingResult = entityGrounder.ground(
+                                value, groundingRelation, groundingThreshold);
+                        if (groundingResult.isGrounded()) {
+                            node = groundingResult.toNode();
+                            LOG.debug("Grounded '{}' -> '{}' (sim={})",
+                                    value, groundingResult.getGroundedLabel(),
+                                    String.format("%.4f", groundingResult.getSimilarity()));
+                        } else {
+                            node = NodeFactory.createLiteralString(value);
+                            LOG.debug("Grounding failed for '{}', keeping original", value);
+                        }
+                        groundedNodeCache.put(value, node);
                     }
                 } else {
                     // No grounding, use raw LLM output
