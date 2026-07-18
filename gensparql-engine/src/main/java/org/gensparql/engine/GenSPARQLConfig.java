@@ -39,6 +39,16 @@ public class GenSPARQLConfig {
     private static double groundingThreshold = 0.8;
     private static int groundingBatchSize = 50;
     private static String groundingStrategy = "embedding"; // embedding, lexical, hybrid
+    // Optional provider name (e.g. "openai" pointed at a local Ollama endpoint via
+    // OPENAI_BASE_URL) used for grounding embeddings. Null reuses the generation
+    // provider, which only works if that provider can embed.
+    private static String groundingEmbeddingProvider = null;
+
+    // Response validation configuration. Heuristic filter that rejects "garbled"
+    // LLM output. OFF by default: generated values pass through to grounding
+    // (SimScore), which is the intended validity mechanism. When enabled it can
+    // silently drop legitimate answers (e.g. "1,000"), so turn it on deliberately.
+    private static boolean responseValidationEnabled = false;
 
     /**
      * Check if response caching is enabled.
@@ -298,6 +308,36 @@ public class GenSPARQLConfig {
     }
 
     /**
+     * Get the provider name used for grounding embeddings (null = generation provider).
+     */
+    public static String getGroundingEmbeddingProvider() {
+        return groundingEmbeddingProvider;
+    }
+
+    /**
+     * Set the provider name used for grounding embeddings, e.g. "openai" pointed at
+     * a local Ollama endpoint. Null reuses the generation provider.
+     */
+    public static void setGroundingEmbeddingProvider(String provider) {
+        groundingEmbeddingProvider = provider;
+    }
+
+    /**
+     * Check if the heuristic response-validation filter is enabled (default false).
+     * When disabled, generated values are validated only by grounding.
+     */
+    public static boolean isResponseValidationEnabled() {
+        return responseValidationEnabled;
+    }
+
+    /**
+     * Enable or disable the heuristic response-validation filter.
+     */
+    public static void setResponseValidationEnabled(boolean enabled) {
+        responseValidationEnabled = enabled;
+    }
+
+    /**
      * Load configuration from system properties.
      * Properties:
      * - gensparql.cache.enabled=true|false
@@ -423,6 +463,12 @@ public class GenSPARQLConfig {
         if (groundingStrat != null) {
             groundingStrategy = groundingStrat;
         }
+
+        // Response validation
+        String respValid = System.getProperty("gensparql.responseValidation.enabled");
+        if (respValid != null) {
+            responseValidationEnabled = Boolean.parseBoolean(respValid);
+        }
     }
 
     /**
@@ -445,6 +491,7 @@ public class GenSPARQLConfig {
         groundingThreshold = 0.8;
         groundingBatchSize = 50;
         groundingStrategy = "embedding";
+        responseValidationEnabled = false;
     }
 
     /**

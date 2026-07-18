@@ -37,29 +37,41 @@ public class E3Runner {
         // ---- Part A: structural grounding recall (best-case input = gold name) ----
         int K = 300;
         int step = Math.max(1, N / K);
-        int sampled = 0, midGrounded = 0, textGrounded = 0, textCorrect = 0;
+        // groundRecall = a candidate grounds to *some* entity at theta (may be the
+        //   wrong one); correctRecall = it grounds to *its own* entity (argmax is
+        //   entity i). correctRecall is the meaningful metric: reporting only
+        //   "grounds to something" would count wrong-entity matches as success.
+        int sampled = 0, midGrounded = 0, midCorrect = 0, textGrounded = 0, textCorrect = 0;
         for (int i = 0; i < N; i += step) {
             String q = names.get(i);
             sampled++;
-            // MID regime: best sim of name vs any MID label
-            double bestMid = 0;
-            for (String m : mids) { double s = st.similarity(q, m); if (s > bestMid) bestMid = s; }
-            if (bestMid >= THETA) midGrounded++;
-            // text regime: best sim of name vs any name label (+ correctness)
-            double bestText = 0; int bestIdx = -1;
-            for (int j = 0; j < N; j++) { double s = st.similarity(q, names.get(j)); if (s > bestText) { bestText = s; bestIdx = j; } }
+            // MID regime: argmax over MID labels; correct iff it is entity i's MID.
+            double bestMid = -1; int bestMidIdx = -1;
+            for (int j = 0; j < mids.size(); j++) {
+                double s = st.similarity(q, mids.get(j));
+                if (s > bestMid) { bestMid = s; bestMidIdx = j; }
+            }
+            if (bestMid >= THETA) { midGrounded++; if (bestMidIdx == i) midCorrect++; }
+            // Label regime: argmax over name labels; correct iff it is entity i's name.
+            double bestText = -1; int bestIdx = -1;
+            for (int j = 0; j < N; j++) {
+                double s = st.similarity(q, names.get(j));
+                if (s > bestText) { bestText = s; bestIdx = j; }
+            }
             if (bestText >= THETA) { textGrounded++; if (bestIdx == i || names.get(bestIdx).equalsIgnoreCase(q)) textCorrect++; }
         }
         System.out.printf(Locale.US,
-            "PARTA sampled=%d theta=%.2f midGroundRecall=%.3f textGroundRecall=%.3f textCorrectRecall=%.3f%n",
-            sampled, THETA, (double)midGrounded/sampled, (double)textGrounded/sampled, (double)textCorrect/sampled);
+            "PARTA sampled=%d theta=%.2f midGroundRecall=%.3f midCorrectRecall=%.3f textGroundRecall=%.3f textCorrectRecall=%.3f%n",
+            sampled, THETA, (double)midGrounded/sampled, (double)midCorrect/sampled,
+            (double)textGrounded/sampled, (double)textCorrect/sampled);
 
         // ---- Part B: small end-to-end with human labels + Jaccard grounding ----
         Set<String> nameSetLc = new HashSet<>();
         for (String n : names) nameSetLc.add(n.toLowerCase());
 
         LLMProvider prov = LLMProviderRegistry.get("openrouter");
-        ModelSpec spec = ModelSpec.builder().provider("openrouter").model("deepseek/deepseek-chat").build();
+        // temperature 0 for deterministic, reproducible predictions
+        ModelSpec spec = ModelSpec.builder().provider("openrouter").model("deepseek/deepseek-chat").temperature(0.0).build();
         ObjectMapper om = new ObjectMapper();
 
         List<String[]> triples = new ArrayList<>();

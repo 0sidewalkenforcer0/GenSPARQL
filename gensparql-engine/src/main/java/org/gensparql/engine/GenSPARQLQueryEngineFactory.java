@@ -42,40 +42,40 @@ public class GenSPARQLQueryEngineFactory implements QueryEngineFactory {
     @Override
     public boolean accept(Query query, DatasetGraph dataset, Context context) {
         // Accept queries that contain ElementGenerate
-        System.out.println("[DEBUG GenSPARQLQueryEngineFactory] accept() called");
+        LOG.debug("[DEBUG GenSPARQLQueryEngineFactory] accept() called");
         Element pattern = query.getQueryPattern();
         boolean result = containsElementGenerate(pattern);
-        System.out.println("[DEBUG GenSPARQLQueryEngineFactory] containsElementGenerate: " + result);
+        LOG.debug("[DEBUG GenSPARQLQueryEngineFactory] containsElementGenerate: " + result);
         return result;
     }
 
     @Override
     public Plan create(Query query, DatasetGraph dataset, Binding inputBinding, Context context) {
-        System.out.println("[DEBUG GenSPARQLQueryEngineFactory] create() called!");
+        LOG.debug("[DEBUG GenSPARQLQueryEngineFactory] create() called!");
         LOG.debug("GenSPARQL Factory create() called");
         // Compile using our custom algebra generator
         Element pattern = query.getQueryPattern();
         Op op;
 
         if (containsElementGenerate(pattern)) {
-            System.out.println("[DEBUG GenSPARQLQueryEngineFactory] Compiling with custom algebra generator");
+            LOG.debug("[DEBUG GenSPARQLQueryEngineFactory] Compiling with custom algebra generator");
             LOG.debug("Compiling GenSPARQL query with custom algebra generator");
             op = AlgebraGeneratorGenSPARQL.compile(pattern);
 
             // Apply standard query modifications (PROJECT, ORDER BY, etc.)
             op = applyQueryModifiers(query, op);
-            System.out.println("[DEBUG GenSPARQLQueryEngineFactory] Final Op: " + op.getClass().getSimpleName());
+            LOG.debug("[DEBUG GenSPARQLQueryEngineFactory] Final Op: " + op.getClass().getSimpleName());
         } else {
             // Fall back to standard compilation
             op = Algebra.compile(query);
         }
 
         // Create our custom query engine
-        System.out.println("[DEBUG GenSPARQLQueryEngineFactory] Creating GenSPARQLQueryEngine");
+        LOG.debug("[DEBUG GenSPARQLQueryEngineFactory] Creating GenSPARQLQueryEngine");
         LOG.debug("Creating GenSPARQLQueryEngine with op: {}", op.getClass().getSimpleName());
         GenSPARQLQueryEngine engine = new GenSPARQLQueryEngine(op, dataset, inputBinding, context);
         Plan plan = engine.getPlan();
-        System.out.println("[DEBUG GenSPARQLQueryEngineFactory] Returning Plan: " + plan);
+        LOG.debug("[DEBUG GenSPARQLQueryEngineFactory] Returning Plan: " + plan);
         return plan;
     }
 

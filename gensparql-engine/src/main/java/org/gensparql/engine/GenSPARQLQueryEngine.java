@@ -41,12 +41,12 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
 
     public GenSPARQLQueryEngine(Op op, DatasetGraph dataset, Binding input, Context context) {
         super(op, dataset, input, context);
-        System.out.println("[DEBUG GenSPARQLQueryEngine CONSTRUCTOR] Op: " + op.getClass().getSimpleName());
+        LOG.debug("[DEBUG GenSPARQLQueryEngine CONSTRUCTOR] Op: " + op.getClass().getSimpleName());
     }
 
     @Override
     public QueryIterator eval(Op op, DatasetGraph dsg, Binding input, Context context) {
-        System.out.println("[DEBUG GenSPARQLQueryEngine.eval] START - Op type: " + op.getClass().getSimpleName());
+        LOG.debug("[DEBUG GenSPARQLQueryEngine.eval] START - Op type: " + op.getClass().getSimpleName());
         LOG.debug("GenSPARQLQueryEngine.eval called with op: {}", op.getClass().getSimpleName());
 
         // Initialize threshold registry and sim text in context if not present
@@ -54,13 +54,13 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
 
         ExecutionContext execCxt = new ExecutionContext(context, dsg.getDefaultGraph(), dsg, QC.getFactory(context));
         QueryIterator qIter = QueryIterRoot.create(input, execCxt);
-        System.out.println("[DEBUG GenSPARQLQueryEngine.eval] Created QueryIterRoot, about to call executeOp");
+        LOG.debug("[DEBUG GenSPARQLQueryEngine.eval] Created QueryIterRoot, about to call executeOp");
 
         // Clear source types for new query
         sourceTypes.clear();
 
         QueryIterator result = executeOp(op, qIter, execCxt);
-        System.out.println("[DEBUG GenSPARQLQueryEngine.eval] executeOp returned: " + result.getClass().getSimpleName());
+        LOG.debug("[DEBUG GenSPARQLQueryEngine.eval] executeOp returned: " + result.getClass().getSimpleName());
         return result;
     }
 
@@ -122,12 +122,12 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
     }
 
     private QueryIterator executeOp(Op op, QueryIterator input, ExecutionContext execCxt) {
-        System.out.println("[DEBUG GenSPARQLQueryEngine] executeOp: " + op.getClass().getSimpleName());
+        LOG.debug("[DEBUG GenSPARQLQueryEngine] executeOp: " + op.getClass().getSimpleName());
         LOG.debug("executeOp: {}", op.getClass().getSimpleName());
 
         // Handle OpGenerate
         if (op instanceof OpGenerate) {
-            System.out.println("[DEBUG GenSPARQLQueryEngine] Executing OpGenerate!");
+            LOG.debug("[DEBUG GenSPARQLQueryEngine] Executing OpGenerate!");
             LOG.debug("Executing OpGenerate");
             OpGenerate opGen = (OpGenerate) op;
 
@@ -146,7 +146,7 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                 }
             }
 
-            System.out.println("[DEBUG GenSPARQLQueryEngine] Calling opGen.eval()...");
+            LOG.debug("[DEBUG GenSPARQLQueryEngine] Calling opGen.eval()...");
             return opGen.eval(input, execCxt);
         }
 

@@ -1,0 +1,38 @@
+# Small football knowledge graph for the GenSPARQL demonstration.
+# Mirrors the running-example figure: players, national teams, birthplaces,
+# and trophies. Stored facts are BornAt / PlaysFor / TeamWonTrophy / Teammate.
+# NOT stored (what GENOP generates and grounding validates): which trophies each
+# athlete personally won.
+@prefix ex:   <http://example.org/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+#################### Athletes ####################
+ex:messi      a ex:Athlete ; rdfs:label "Lionel Messi" ;
+    ex:bornAt ex:rosario ; ex:playsFor ex:argentina ; ex:teammate ex:mascherano .
+ex:mbappe     a ex:Athlete ; rdfs:label "Kylian Mbappe" ;
+    ex:bornAt ex:paris ; ex:playsFor ex:france .
+ex:ronaldo    a ex:Athlete ; rdfs:label "Cristiano Ronaldo" ;
+    ex:bornAt ex:funchal ; ex:playsFor ex:portugal ; ex:teammate ex:pepe .
+ex:pepe       a ex:Athlete ; rdfs:label "Pepe" ;
+    ex:bornAt ex:maceio ; ex:playsFor ex:portugal .
+ex:mascherano a ex:Athlete ; rdfs:label "Javier Mascherano" ;
+    ex:bornAt ex:sanlorenzo ; ex:playsFor ex:argentina .
+
+#################### National teams ####################
+ex:argentina a ex:Team ; rdfs:label "Argentina" ;
+    ex:teamWonTrophy ex:worldCup .
+ex:france    a ex:Team ; rdfs:label "France" ;
+    ex:teamWonTrophy ex:worldCup , ex:europeanChampionship .
+ex:portugal  a ex:Team ; rdfs:label "Portugal" ;
+    ex:teamWonTrophy ex:europeanChampionship .
+
+#################### Cities (birthplaces) ####################
+ex:rosario    a ex:City ; rdfs:label "Rosario" .
+ex:paris      a ex:City ; rdfs:label "Paris" .
+ex:funchal    a ex:City ; rdfs:label "Funchal" .
+ex:maceio     a ex:City ; rdfs:label "Maceio" .
+ex:sanlorenzo a ex:City ; rdfs:label "San Lorenzo" .
+
+#################### Trophies ####################
+ex:worldCup             a ex:Trophy ; rdfs:label "World Cup" .
+ex:europeanChampionship a ex:Trophy ; rdfs:label "European Championship" .

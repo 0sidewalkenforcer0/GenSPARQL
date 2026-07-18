@@ -1,0 +1,61 @@
+# Larger football knowledge graph for the GenSPARQL evaluation (grounding
+# precision / threshold sweep). ~20 well-known players plus their national teams,
+# birthplaces, and major trophies. Facts are illustrative and should be
+# sanity-checked before use in a camera-ready evaluation.
+@prefix ex:   <http://example.org/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+#################### Athletes (label, birthplace, national team) ####################
+ex:messi        a ex:Athlete ; rdfs:label "Lionel Messi" ;      ex:bornAt ex:rosario ;       ex:playsFor ex:argentina .
+ex:ronaldo      a ex:Athlete ; rdfs:label "Cristiano Ronaldo" ; ex:bornAt ex:funchal ;       ex:playsFor ex:portugal .
+ex:mbappe       a ex:Athlete ; rdfs:label "Kylian Mbappe" ;     ex:bornAt ex:paris ;         ex:playsFor ex:france .
+ex:neymar       a ex:Athlete ; rdfs:label "Neymar" ;            ex:bornAt ex:mogidascruzes ; ex:playsFor ex:brazil .
+ex:pele         a ex:Athlete ; rdfs:label "Pele" ;              ex:bornAt ex:trescoracoes ;  ex:playsFor ex:brazil .
+ex:maradona     a ex:Athlete ; rdfs:label "Diego Maradona" ;    ex:bornAt ex:lanus ;         ex:playsFor ex:argentina .
+ex:zidane       a ex:Athlete ; rdfs:label "Zinedine Zidane" ;   ex:bornAt ex:marseille ;     ex:playsFor ex:france .
+ex:ronaldinho   a ex:Athlete ; rdfs:label "Ronaldinho" ;        ex:bornAt ex:portoalegre ;   ex:playsFor ex:brazil .
+ex:r9           a ex:Athlete ; rdfs:label "Ronaldo Nazario" ;   ex:bornAt ex:riodejaneiro ;  ex:playsFor ex:brazil .
+ex:iniesta      a ex:Athlete ; rdfs:label "Andres Iniesta" ;    ex:bornAt ex:fuentealbilla ; ex:playsFor ex:spain .
+ex:xavi         a ex:Athlete ; rdfs:label "Xavi Hernandez" ;    ex:bornAt ex:terrassa ;      ex:playsFor ex:spain .
+ex:modric       a ex:Athlete ; rdfs:label "Luka Modric" ;       ex:bornAt ex:zadar ;         ex:playsFor ex:croatia .
+ex:lewandowski  a ex:Athlete ; rdfs:label "Robert Lewandowski"; ex:bornAt ex:warsaw ;        ex:playsFor ex:poland .
+ex:salah        a ex:Athlete ; rdfs:label "Mohamed Salah" ;     ex:bornAt ex:nagrig ;        ex:playsFor ex:egypt .
+ex:ramos        a ex:Athlete ; rdfs:label "Sergio Ramos" ;      ex:bornAt ex:camas ;         ex:playsFor ex:spain .
+ex:neuer        a ex:Athlete ; rdfs:label "Manuel Neuer" ;      ex:bornAt ex:gelsenkirchen ; ex:playsFor ex:germany .
+ex:kane         a ex:Athlete ; rdfs:label "Harry Kane" ;        ex:bornAt ex:london ;        ex:playsFor ex:england .
+ex:haaland      a ex:Athlete ; rdfs:label "Erling Haaland" ;    ex:bornAt ex:leeds ;         ex:playsFor ex:norway .
+ex:debruyne     a ex:Athlete ; rdfs:label "Kevin De Bruyne" ;   ex:bornAt ex:drongen ;       ex:playsFor ex:belgium .
+ex:henry        a ex:Athlete ; rdfs:label "Thierry Henry" ;     ex:bornAt ex:lesulis ;       ex:playsFor ex:france .
+
+#################### National teams (label, trophies won) ####################
+ex:argentina a ex:Team ; rdfs:label "Argentina" ; ex:teamWonTrophy ex:worldCup , ex:copaAmerica .
+ex:brazil    a ex:Team ; rdfs:label "Brazil" ;    ex:teamWonTrophy ex:worldCup , ex:copaAmerica .
+ex:france    a ex:Team ; rdfs:label "France" ;    ex:teamWonTrophy ex:worldCup , ex:europeanChampionship .
+ex:spain     a ex:Team ; rdfs:label "Spain" ;     ex:teamWonTrophy ex:worldCup , ex:europeanChampionship .
+ex:germany   a ex:Team ; rdfs:label "Germany" ;   ex:teamWonTrophy ex:worldCup , ex:europeanChampionship .
+ex:portugal  a ex:Team ; rdfs:label "Portugal" ;  ex:teamWonTrophy ex:europeanChampionship .
+ex:croatia   a ex:Team ; rdfs:label "Croatia" .
+ex:poland    a ex:Team ; rdfs:label "Poland" .
+ex:egypt     a ex:Team ; rdfs:label "Egypt" .
+ex:england   a ex:Team ; rdfs:label "England" ;   ex:teamWonTrophy ex:worldCup .
+ex:norway    a ex:Team ; rdfs:label "Norway" .
+ex:belgium   a ex:Team ; rdfs:label "Belgium" .
+
+#################### Trophies ####################
+ex:worldCup             a ex:Trophy ; rdfs:label "World Cup" .
+ex:europeanChampionship a ex:Trophy ; rdfs:label "European Championship" .
+ex:copaAmerica          a ex:Trophy ; rdfs:label "Copa America" .
+ex:championsLeague      a ex:Trophy ; rdfs:label "Champions League" .
+ex:ballonDor            a ex:Trophy ; rdfs:label "Ballon d'Or" .
+
+#################### Cities (birthplaces) ####################
+ex:rosario a ex:City ; rdfs:label "Rosario" .            ex:funchal a ex:City ; rdfs:label "Funchal" .
+ex:paris a ex:City ; rdfs:label "Paris" .                ex:mogidascruzes a ex:City ; rdfs:label "Mogi das Cruzes" .
+ex:trescoracoes a ex:City ; rdfs:label "Tres Coracoes" . ex:lanus a ex:City ; rdfs:label "Lanus" .
+ex:marseille a ex:City ; rdfs:label "Marseille" .        ex:portoalegre a ex:City ; rdfs:label "Porto Alegre" .
+ex:riodejaneiro a ex:City ; rdfs:label "Rio de Janeiro" . ex:fuentealbilla a ex:City ; rdfs:label "Fuentealbilla" .
+ex:terrassa a ex:City ; rdfs:label "Terrassa" .          ex:zadar a ex:City ; rdfs:label "Zadar" .
+ex:warsaw a ex:City ; rdfs:label "Warsaw" .              ex:nagrig a ex:City ; rdfs:label "Nagrig" .
+ex:camas a ex:City ; rdfs:label "Camas" .                ex:gelsenkirchen a ex:City ; rdfs:label "Gelsenkirchen" .
+ex:london a ex:City ; rdfs:label "London" .              ex:leeds a ex:City ; rdfs:label "Leeds" .
+ex:drongen a ex:City ; rdfs:label "Drongen" .            ex:lesulis a ex:City ; rdfs:label "Les Ulis" .

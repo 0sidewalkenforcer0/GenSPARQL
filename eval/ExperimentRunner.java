@@ -38,8 +38,9 @@ public class ExperimentRunner {
         System.out.println("LOADED triples=" + model.size());
 
         LLMProvider prov = LLMProviderRegistry.get("openrouter");
+        // temperature 0 for deterministic, reproducible candidate sets
         ModelSpec spec = ModelSpec.builder().provider("openrouter")
-                .model("deepseek/deepseek-chat").build();
+                .model("deepseek/deepseek-chat").temperature(0.0).build();
         // Grounding similarity: text (Jaccard) by default, or embedding cosine when
         // an OpenAI-compatible embedding backend is configured.
         SimText st;

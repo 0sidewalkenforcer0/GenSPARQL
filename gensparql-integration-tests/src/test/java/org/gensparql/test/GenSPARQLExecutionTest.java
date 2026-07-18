@@ -301,4 +301,53 @@ public class GenSPARQLExecutionTest {
         assertFalse(mockProvider.getRequestHistory().isEmpty(),
                 "Should have recorded requests");
     }
+
+    @Test
+    void testGenOpComposesWithOptional() {
+        // Regression: GENOP must compose with OPTIONAL without dropping rows.
+        // Alice has an email, Bob does not; both must be returned (Bob's email
+        // left unbound). Before the algebra fix, OPTIONAL degraded to an inner
+        // join and Bob was silently dropped.
+        mockProvider.withDefaultResponse("ok");
+
+        String ns = "http://example.org/";
+        Model model = ModelFactory.createDefaultModel();
+        model.add(ResourceFactory.createResource(ns + "p1"),
+                ResourceFactory.createProperty(ns + "name"),
+                ResourceFactory.createPlainLiteral("Alice"));
+        model.add(ResourceFactory.createResource(ns + "p2"),
+                ResourceFactory.createProperty(ns + "name"),
+                ResourceFactory.createPlainLiteral("Bob"));
+        model.add(ResourceFactory.createResource(ns + "p1"),
+                ResourceFactory.createProperty(ns + "email"),
+                ResourceFactory.createPlainLiteral("alice@example.org"));
+
+        String queryString = """
+            PREFIX ex: <http://example.org/>
+            SELECT ?name ?email ?g WHERE {
+              ?person ex:name ?name .
+              OPTIONAL { ?person ex:email ?email }
+              GENOP("Echo {?name}", ?g, <model:mock:test>)
+            }
+            """;
+
+        Query query = GenSPARQLQueryFactory.create(queryString);
+        int count = 0;
+        boolean bobPresent = false;
+        try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
+            ResultSet results = qexec.execSelect();
+            while (results.hasNext()) {
+                QuerySolution soln = results.next();
+                assertNotNull(soln.get("name"));
+                assertNotNull(soln.get("g"), "GENOP output must be bound");
+                if ("Bob".equals(soln.get("name").asLiteral().getString())) {
+                    bobPresent = true;
+                    assertNull(soln.get("email"), "Bob has no email; OPTIONAL leaves it unbound");
+                }
+                count++;
+            }
+        }
+        assertEquals(2, count, "OPTIONAL must not drop the row with no optional match");
+        assertTrue(bobPresent, "Bob (no optional match) must still be returned");
+    }
 }
