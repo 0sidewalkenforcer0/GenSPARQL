@@ -8,6 +8,7 @@ import org.apache.jena.sparql.algebra.op.*;
 import org.apache.jena.sparql.core.BasicPattern;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.expr.Expr;
+import org.apache.jena.sparql.expr.ExprList;
 import org.apache.jena.sparql.syntax.*;
 import org.gensparql.engine.op.OpGenerate;
 import org.gensparql.parser.element.ElementGenerate;
@@ -65,30 +66,63 @@ public class AlgebraGeneratorGenSPARQL {
     }
 
     private static Op compileGroup(ElementGroup group) {
+        // A FILTER scopes over the whole group graph pattern, not just the
+        // elements that precede it, so collect filters and apply them once over
+        // the fully-accumulated pattern (SPARQL 1.1 algebra semantics).
+        ExprList filters = new ExprList();
         Op current = OpTable.unit();
 
         for (Element e : group.getElements()) {
-            Op next = compileElement(e);
-
-            if (current instanceof OpTable && ((OpTable) current).isJoinIdentity()) {
-                current = next;
-            } else if (next instanceof OpFilter) {
-                // Filters apply to the accumulated pattern
-                OpFilter filter = (OpFilter) next;
-                current = OpFilter.filterBy(filter.getExprs(), current);
+            if (e instanceof ElementFilter) {
+                filters.add(((ElementFilter) e).getExpr());
             } else {
-                current = OpJoin.create(current, next);
+                current = accumulate(current, e);
             }
         }
 
+        if (!filters.isEmpty()) {
+            current = OpFilter.filterBy(filters, current);
+        }
         return current;
     }
 
+    /**
+     * Combine the pattern accumulated so far with the next group element.
+     * OPTIONAL/MINUS/BIND must see the accumulated left-hand side rather than a
+     * unit placeholder; otherwise OPTIONAL degrades to an inner join (dropping
+     * rows with no optional match), MINUS subtracts nothing, and BIND cannot
+     * reference previously bound variables.
+     */
+    private static Op accumulate(Op current, Element e) {
+        if (e instanceof ElementOptional) {
+            Op right = compileElement(((ElementOptional) e).getOptionalElement());
+            // A FILTER inside the OPTIONAL folds into the left-join condition so
+            // it can reference variables bound on the required (left) side.
+            if (right instanceof OpFilter) {
+                OpFilter f = (OpFilter) right;
+                return OpLeftJoin.create(current, f.getSubOp(), f.getExprs());
+            }
+            return OpLeftJoin.create(current, right, (Expr) null);
+        }
+        if (e instanceof ElementMinus) {
+            Op right = compileElement(((ElementMinus) e).getMinusElement());
+            return OpMinus.create(current, right);
+        }
+        if (e instanceof ElementBind) {
+            ElementBind b = (ElementBind) e;
+            return OpExtend.create(current, b.getVar(), b.getExpr());
+        }
+        Op next = compileElement(e);
+        if (current instanceof OpTable && ((OpTable) current).isJoinIdentity()) {
+            return next;
+        }
+        return OpJoin.create(current, next);
+    }
+
     private static Op compileOptional(ElementOptional optional) {
-        Op left = OpTable.unit();  // Placeholder - actual left should come from context
-        Op right = compileElement(optional.getOptionalElement());
-        // Use explicit null cast to resolve ambiguity
-        return OpLeftJoin.create(left, right, (Expr) null);
+        // Standalone fallback (OPTIONAL is normally handled within a group, where
+        // it can see the accumulated left-hand side via accumulate()).
+        return accumulate(OpTable.unit(), optional);
     }
 
     private static Op compileUnion(ElementUnion union) {
@@ -113,7 +147,7 @@ public class AlgebraGeneratorGenSPARQL {
     }
 
     private static Op compileBind(ElementBind bind) {
-        return OpExtend.create(OpTable.unit(), bind.getVar(), bind.getExpr());
+        return accumulate(OpTable.unit(), bind);
     }
 
     private static Op compilePathBlock(ElementPathBlock block) {
@@ -132,9 +166,7 @@ public class AlgebraGeneratorGenSPARQL {
     }
 
     private static Op compileMinus(ElementMinus minus) {
-        Op left = OpTable.unit();  // Placeholder
-        Op right = compileElement(minus.getMinusElement());
-        return OpMinus.create(left, right);
+        return accumulate(OpTable.unit(), minus);
     }
 
     private static Op compileService(ElementService service) {

@@ -205,19 +205,21 @@ public class EntityGrounder {
         if (globalIndex == null) {
             synchronized (this) {
                 if (globalIndex == null) {
-                    System.out.println("[DEBUG EntityGrounder] Building global embedding index...");
                     LOG.info("Building global embedding index...");
 
-                    // Extract all entities from the dataset
-                    Set<String> allEntities = candidateExtractor.extractAllEntities();
+                    // Extract all entities with their URIs, so a grounded result
+                    // carries the KG node IRI, not just a label string. Without the
+                    // URI map, grounding binds a literal that fails any join
+                    // requiring the variable to be a KG entity.
+                    Map<String, String> labelToUri = candidateExtractor.extractAllEntitiesWithUris();
 
-                    if (allEntities.isEmpty()) {
+                    if (labelToUri.isEmpty()) {
                         LOG.warn("No entities found in dataset");
                         globalIndex = new EntityEmbeddingIndex();
                     } else {
-                        LOG.info("Found {} total entities", allEntities.size());
+                        LOG.info("Found {} total entities", labelToUri.size());
                         globalIndex = new EntityEmbeddingIndex();
-                        globalIndex.buildIndex(allEntities, embeddingProvider);
+                        globalIndex.buildIndex(labelToUri, embeddingProvider);
                     }
                 }
             }

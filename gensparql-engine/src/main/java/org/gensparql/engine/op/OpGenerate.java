@@ -14,6 +14,8 @@ import org.apache.jena.atlas.io.IndentedWriter;
 import org.gensparql.core.model.ModelSpec;
 import org.gensparql.core.util.PromptTemplate;
 import org.gensparql.engine.iterator.QueryIterGenerate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -27,6 +29,8 @@ import java.util.*;
  * - Binds the outputs to specified variables
  */
 public class OpGenerate extends OpExt {
+
+    private static final Logger LOG = LoggerFactory.getLogger(OpGenerate.class);
 
     private final List<Var> outputVariables;     // Y: output variables
     private final String promptTemplate;          // StrX: prompt template string
@@ -140,9 +144,9 @@ public class OpGenerate extends OpExt {
 
     @Override
     public QueryIterator eval(QueryIterator input, ExecutionContext execCxt) {
-        System.out.println("[DEBUG OpGenerate] eval() called");
-        System.out.println("[DEBUG OpGenerate] input: " + input);
-        System.out.println("[DEBUG OpGenerate] execCxt: " + execCxt);
+        LOG.debug("[DEBUG OpGenerate] eval() called");
+        LOG.debug("[DEBUG OpGenerate] input: " + input);
+        LOG.debug("[DEBUG OpGenerate] execCxt: " + execCxt);
         return new QueryIterGenerate(input, this, execCxt);
     }
 

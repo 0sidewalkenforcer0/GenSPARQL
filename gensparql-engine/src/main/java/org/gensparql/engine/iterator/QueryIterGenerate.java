@@ -92,10 +92,10 @@ public class QueryIterGenerate extends QueryIteratorBase {
         this.execCxt = execCxt;
         this.template = new PromptTemplate(opGen.getPromptTemplate());
 
-        System.out.println("[DEBUG] QueryIterGenerate constructor called");
-        System.out.println("[DEBUG] OpGenerate: " + opGen);
-        System.out.println("[DEBUG] Input variables: " + opGen.getInputVariables());
-        System.out.println("[DEBUG] Output variables: " + opGen.getOutputVariables());
+        LOG.debug("[DEBUG] QueryIterGenerate constructor called");
+        LOG.debug("[DEBUG] OpGenerate: " + opGen);
+        LOG.debug("[DEBUG] Input variables: " + opGen.getInputVariables());
+        LOG.debug("[DEBUG] Output variables: " + opGen.getOutputVariables());
 
         // Get LLM provider
         ModelSpec modelSpec = opGen.getModelSpec();
@@ -105,8 +105,8 @@ public class QueryIterGenerate extends QueryIteratorBase {
             this.provider = LLMProviderRegistry.getDefault();
         }
 
-        System.out.println("[DEBUG] LLM Provider: " + provider.getName());
-        System.out.println("[DEBUG] Provider available: " + provider.isAvailable());
+        LOG.debug("[DEBUG] LLM Provider: " + provider.getName());
+        LOG.debug("[DEBUG] Provider available: " + provider.isAvailable());
 
         // Configure batching
         this.batchingEnabled = GenSPARQLConfig.isBatchingEnabled();
@@ -121,7 +121,7 @@ public class QueryIterGenerate extends QueryIteratorBase {
 
         if (constrainedMode) {
             this.candidateExtractor = new CandidateExtractor(execCxt.getDataset());
-            System.out.println("[DEBUG] Constrained generation enabled with relation: " + candidatesRelation);
+            LOG.debug("[DEBUG] Constrained generation enabled with relation: " + candidatesRelation);
         } else {
             this.candidateExtractor = null;
         }
@@ -133,7 +133,7 @@ public class QueryIterGenerate extends QueryIteratorBase {
         this.groundingRelation = groundRelObj != null ? groundRelObj.toString() : candidatesRelation;
         // Enable grounding if configured - null relation means use global index
         this.groundingEnabled = GenSPARQLConfig.isGroundingEnabled();
-        System.out.println("[DEBUG] Grounding config check: isGroundingEnabled=" + GenSPARQLConfig.isGroundingEnabled() +
+        LOG.debug("[DEBUG] Grounding config check: isGroundingEnabled=" + GenSPARQLConfig.isGroundingEnabled() +
                 ", groundingRelation=" + groundingRelation);
 
         // Get grounding threshold from options or config
@@ -143,7 +143,13 @@ public class QueryIterGenerate extends QueryIteratorBase {
                 GenSPARQLConfig.getGroundingThreshold();
 
         if (groundingEnabled) {
-            this.entityGrounder = new EntityGrounder(execCxt.getDataset(), this.provider);
+            LLMProvider embeddingProvider = this.provider;
+            String embProviderName = GenSPARQLConfig.getGroundingEmbeddingProvider();
+            if (embProviderName != null && !embProviderName.isEmpty()) {
+                embeddingProvider = LLMProviderRegistry.get(embProviderName);
+                LOG.debug("Grounding embeddings via provider: {}", embProviderName);
+            }
+            this.entityGrounder = new EntityGrounder(execCxt.getDataset(), embeddingProvider);
             this.entityGrounder.setDefaultThreshold(groundingThreshold);
             this.entityGrounder.setBatchSize(GenSPARQLConfig.getGroundingBatchSize());
             LOG.debug("Embedding-based grounding enabled with relation: {}, threshold: {}",
@@ -158,7 +164,7 @@ public class QueryIterGenerate extends QueryIteratorBase {
 
     @Override
     protected boolean hasNextBinding() {
-        System.out.println("[DEBUG] hasNextBinding called, exhausted=" + exhausted);
+        LOG.debug("[DEBUG] hasNextBinding called, exhausted=" + exhausted);
         if (exhausted) {
             return false;
         }
@@ -167,45 +173,45 @@ public class QueryIterGenerate extends QueryIteratorBase {
         // NOTE: C3 cross-binding dedup (promptMemo) is applied on the standard path below;
         // the batched path coalesces per batch and does not currently also apply dedup.
         if (batchingEnabled && !opGen.isBaseMode()) {
-            System.out.println("[DEBUG] Using batched processing");
+            LOG.debug("[DEBUG] Using batched processing");
             return hasNextBindingBatched();
         }
 
-        System.out.println("[DEBUG] Using standard (non-batched) processing");
+        LOG.debug("[DEBUG] Using standard (non-batched) processing");
 
         // Standard (non-batched) processing
         while (currentResults == null || !currentResults.hasNext()) {
             boolean hasNext = input.hasNext();
-            System.out.println("[DEBUG] input.hasNext() = " + hasNext);
+            LOG.debug("[DEBUG] input.hasNext() = " + hasNext);
             if (!hasNext) {
                 exhausted = true;
-                System.out.println("[DEBUG] No more input, exhausted=true");
+                LOG.debug("[DEBUG] No more input, exhausted=true");
                 return false;
             }
 
             currentInputBinding = input.next();
-            System.out.println("[DEBUG] Got input binding: " + currentInputBinding);
+            LOG.debug("[DEBUG] Got input binding: " + currentInputBinding);
 
             if (opGen.isBaseMode()) {
-                System.out.println("[DEBUG] Base mode - generating with template");
+                LOG.debug("[DEBUG] Base mode - generating with template");
                 currentResults = generateBindings(currentInputBinding, opGen.getPromptTemplate());
             } else {
                 if (!template.allVariablesBound(currentInputBinding)) {
-                    System.out.println("[DEBUG] Skipping binding - not all input variables bound");
-                    System.out.println("[DEBUG] Unbound variables: " + template.getUnboundVariables(currentInputBinding));
+                    LOG.debug("[DEBUG] Skipping binding - not all input variables bound");
+                    LOG.debug("[DEBUG] Unbound variables: " + template.getUnboundVariables(currentInputBinding));
                     LOG.debug("Skipping binding - not all input variables bound: {}",
                             template.getUnboundVariables(currentInputBinding));
                     continue;
                 }
 
                 String resolvedPrompt = template.resolve(currentInputBinding);
-                System.out.println("[DEBUG] Resolved prompt: " + resolvedPrompt);
+                LOG.debug("[DEBUG] Resolved prompt: " + resolvedPrompt);
                 currentResults = generateBindings(currentInputBinding, resolvedPrompt);
             }
         }
 
         boolean result = currentResults.hasNext();
-        System.out.println("[DEBUG] hasNextBinding returning: " + result);
+        LOG.debug("[DEBUG] hasNextBinding returning: " + result);
         return result;
     }
 
@@ -574,6 +580,14 @@ public class QueryIterGenerate extends QueryIteratorBase {
             return null;
         }
 
+        // The heuristic corruption filter is opt-in. By default generated values
+        // pass through unchanged and validity is enforced downstream by grounding
+        // (SimScore); this avoids silently dropping legitimate answers such as
+        // numbers with separators (e.g. "1,000") or names beginning with digits.
+        if (!GenSPARQLConfig.isResponseValidationEnabled()) {
+            return binding;
+        }
+
         Map<String, String> validated = new HashMap<>();
         for (Map.Entry<String, String> entry : binding.entrySet()) {
             String value = entry.getValue();
@@ -598,6 +612,12 @@ public class QueryIterGenerate extends QueryIteratorBase {
     private boolean isValidResponse(String text) {
         if (text == null || text.trim().isEmpty()) {
             return false;
+        }
+
+        // Heuristic corruption checks are opt-in (see validateOutputBinding);
+        // when disabled, any non-empty response is accepted.
+        if (!GenSPARQLConfig.isResponseValidationEnabled()) {
+            return true;
         }
 
         String trimmed = text.trim();

@@ -38,3 +38,4 @@ gensparql-benchmark/GENSPARQL_Data/NELL995+H/
 # Secrets — never commit API keys
 .env
 *.key
+.orkey

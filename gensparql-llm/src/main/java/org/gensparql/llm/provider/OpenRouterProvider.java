@@ -82,13 +82,12 @@ public class OpenRouterProvider implements LLMProvider {
     public CompletableFuture<GenerateResponse> generate(GenerateRequest request) {
         return CompletableFuture.supplyAsync(() -> {
             try {
-                System.out.println("[DEBUG OpenRouterProvider] Starting generation...");
+                LOG.debug("[DEBUG OpenRouterProvider] Starting generation...");
                 GenerateResponse resp = doGenerate(request);
-                System.out.println("[DEBUG OpenRouterProvider] Generation completed, success=" + resp.isSuccess());
+                LOG.debug("[DEBUG OpenRouterProvider] Generation completed, success=" + resp.isSuccess());
                 return resp;
             } catch (Exception e) {
-                System.out.println("[DEBUG OpenRouterProvider] Generation failed: " + e.getMessage());
-                e.printStackTrace();
+                LOG.debug("[DEBUG OpenRouterProvider] Generation failed: " + e.getMessage());
                 LOG.error("Generation failed", e);
                 return GenerateResponse.error(e.getMessage());
             }

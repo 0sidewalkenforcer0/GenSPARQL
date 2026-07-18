@@ -65,16 +65,16 @@ public class GenSPARQL {
         }
 
         LOG.info("Initializing GenSPARQL...");
-        System.out.println("[DEBUG GenSPARQL.init] Starting initialization...");
+        LOG.debug("[DEBUG GenSPARQL.init] Starting initialization...");
 
         // Initialize ARQ if not already done
         ARQ.init();
 
         // Load configuration from system properties
-        System.out.println("[DEBUG GenSPARQL.init] Loading system properties...");
-        System.out.println("[DEBUG GenSPARQL.init] gensparql.grounding.enabled=" + System.getProperty("gensparql.grounding.enabled"));
+        LOG.debug("[DEBUG GenSPARQL.init] Loading system properties...");
+        LOG.debug("[DEBUG GenSPARQL.init] gensparql.grounding.enabled=" + System.getProperty("gensparql.grounding.enabled"));
         GenSPARQLConfig.loadFromSystemProperties();
-        System.out.println("[DEBUG GenSPARQL.init] After loading: isGroundingEnabled=" + GenSPARQLConfig.isGroundingEnabled());
+        LOG.debug("[DEBUG GenSPARQL.init] After loading: isGroundingEnabled=" + GenSPARQLConfig.isGroundingEnabled());
         LOG.debug("Configuration: {}", GenSPARQLConfig.getSummary());
 
         // Register our QueryEngineFactory (must be before OpExecutorFactory)

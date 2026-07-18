@@ -7,6 +7,8 @@ import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.main.OpExecutor;
 import org.apache.jena.sparql.engine.main.OpExecutorFactory;
 import org.gensparql.engine.op.OpGenerate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * OpExecutorFactory that handles GenSPARQL operators.
@@ -14,6 +16,8 @@ import org.gensparql.engine.op.OpGenerate;
  * Extends the standard ARQ execution to support OpGenerate.
  */
 public class GenSPARQLOpExecutorFactory implements OpExecutorFactory {
+
+    private static final Logger LOG = LoggerFactory.getLogger(GenSPARQLOpExecutorFactory.class);
 
     private final OpExecutorFactory delegate;
 
@@ -45,7 +49,7 @@ public class GenSPARQLOpExecutorFactory implements OpExecutorFactory {
 
         @Override
         protected QueryIterator execute(OpExt opExt, QueryIterator input) {
-            System.out.println("[DEBUG GenSPARQLOpExecutor] execute(OpExt) called: " + opExt.getClass().getSimpleName());
+            LOG.debug("[DEBUG GenSPARQLOpExecutor] execute(OpExt) called: " + opExt.getClass().getSimpleName());
             // Handle OpGenerate specifically
             if (opExt instanceof OpGenerate) {
                 return executeGenerate((OpGenerate) opExt, input);
@@ -56,10 +60,10 @@ public class GenSPARQLOpExecutorFactory implements OpExecutorFactory {
         }
 
         private QueryIterator executeGenerate(OpGenerate op, QueryIterator input) {
-            System.out.println("[DEBUG GenSPARQLOpExecutor] executeGenerate called");
-            System.out.println("[DEBUG GenSPARQLOpExecutor] OpGenerate isBaseMode: " + op.isBaseMode());
-            System.out.println("[DEBUG GenSPARQLOpExecutor] Input iterator: " + input.getClass().getSimpleName());
-            System.out.println("[DEBUG GenSPARQLOpExecutor] Input hasNext: " + input.hasNext());
+            LOG.debug("[DEBUG GenSPARQLOpExecutor] executeGenerate called");
+            LOG.debug("[DEBUG GenSPARQLOpExecutor] OpGenerate isBaseMode: " + op.isBaseMode());
+            LOG.debug("[DEBUG GenSPARQLOpExecutor] Input iterator: " + input.getClass().getSimpleName());
+            LOG.debug("[DEBUG GenSPARQLOpExecutor] Input hasNext: " + input.hasNext());
             // OpGenerate.eval handles the execution
             return op.eval(input, execCxt);
         }
