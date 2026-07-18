@@ -9,25 +9,25 @@ import java.util.*;
  * E4: end-to-end query latency + cache effect through the REAL engine.
  * Runs base-mode (Q3, grounding) and context-mode (Q1, enrichment) queries,
  * cold then warm, and reports wall-clock + result counts.
- * Doubles as validation that the engine grounds physics -> ex:quantum_mechanics.
+ * Doubles as validation that the engine grounds a generated name -> a KG athlete.
  */
 public class QueryTimer {
 
     static final String Q3_BASE =
         "PREFIX ex: <http://example.org/>\n" +
         "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-        "SELECT ?field WHERE {\n" +
-        "  ?field rdf:type ex:ResearchField .\n" +
-        "  GENOP(\"List the major branches of physics. Return ONLY a JSON array of short names like ['Quantum Mechanics','Thermodynamics'].\",\n" +
-        "        (?field), <model:openrouter:deepseek/deepseek-chat>, 0.85)\n" +
+        "SELECT ?player WHERE {\n" +
+        "  ?player rdf:type ex:Athlete .\n" +
+        "  GENOP(\"List 20 footballers who have won the FIFA World Cup. Return ONLY a JSON array of names like ['Lionel Messi','Pele'].\",\n" +
+        "        (?player), <model:openrouter:deepseek/deepseek-chat>, 0.85)\n" +
         "}";
 
     static final String Q1_CTX =
         "PREFIX ex: <http://example.org/>\n" +
-        "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n" +
+        "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
         "SELECT ?name ?summary WHERE {\n" +
-        "  ?s a foaf:Person ; foaf:name ?name .\n" +
-        "  GENOP(\"In one sentence, what is {?name} best known for scientifically?\",\n" +
+        "  ?s a ex:Athlete ; rdfs:label ?name .\n" +
+        "  GENOP(\"In one sentence, what is {?name} best known for in football?\",\n" +
         "        (?summary), <model:openrouter:deepseek/deepseek-chat>)\n" +
         "}";
 

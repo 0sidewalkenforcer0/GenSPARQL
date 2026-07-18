@@ -11,9 +11,11 @@ section. Drivers live in [`../eval/`](../eval); run them with
   threshold `θ`. We use text similarity, **not** embeddings, because OpenRouter
   exposes no embedding endpoint (`supportsEmbedding=false`); this is the engine's
   default grounding path when no embedding provider is configured.
-- **KG (E1/E2/E4):** `gensparql-example/data/scientists_awards_large.ttl`
-  (26 scientists, 20 awards, 15 institutions, 10 research fields; clean
-  `rdfs:label`/`foaf:name`).
+- **KG (E1/E2/E4):** `gensparql-example/data/footballers_eval.ttl`
+  (26 athletes, 13 national teams, 12 clubs, 8 trophies, 26 cities; clean
+  `rdfs:label`). Some well-known sibling entities are deliberately omitted
+  (e.g. "Manchester City", "Inter Milan", "Europa League") so embedding grounding
+  has real near-misses to over-match.
 - **KG (E3):** FB15k-237+H (`entity2text.txt`, 14,951 entities). Not shipped in
   this repo — obtain separately and pass via `FB15K_DIR`.
 - Numbers below are from a single representative run; LLM output is
@@ -61,30 +63,36 @@ are dropped.
 
 | Base-mode GENOP query   | LLM cand. | in KG | returned | KG-valid |
 |-------------------------|:---------:|:-----:|:--------:|:--------:|
-| branches of physics     | 14 | 1 | 1 | 100% |
-| research fields         | 12 | 4 | 4 | 100% |
-| scientific awards       | 15 | 6 | 6 | 100% |
-| research institutions   | 15 | 7 | 7 | 100% |
-| Nobel Prize categories  |  6 | 2 | 2 | 100% |
-| **Total**               | **62** | **20** | **20** | **100%** |
+| World Cup winners       | 20 | 8 | 8 | 100% |
+| national teams          | 15 | 8 | 8 | 100% |
+| famous clubs            | 15 | 7 | 7 | 100% |
+| major trophies          | 12 | 2 | 2 | 100% |
+| player birthplaces      | 15 | 4 | 4 | 100% |
+| **Total**               | **77** | **29** | **29** | **100%** |
 
-Raw-LLM KG-validity = 20/62 = **32%**; GenSPARQL = **100%**, 0 hallucination leak.
+Raw-LLM KG-validity = 29/77 = **38%**; GenSPARQL = **100%**, 0 hallucination leak.
+Text (Jaccard) grounding; single representative run (deepseek non-determinism
+shifts candidate counts slightly between runs).
 
 ## E2 — Threshold sensitivity (total grounded across the 5 queries)
 
-| θ        | 0.50 | 0.60 | 0.70 | 0.80 | 0.85 | 0.90 | 1.00 |
-|----------|:----:|:----:|:----:|:----:|:----:|:----:|:----:|
-| grounded | 26 | 23 | 23 | 21 | 20 | 20 | 20 |
+Same candidates, grounded at each θ by both backends (`ExperimentRunnerCompare`):
 
-Lower θ grounds more candidates (recall ↑) at the risk of spurious matches;
-θ ≥ 0.85 admits only near-exact matches (precision ↑).
+| θ (backend)  | 0.50 | 0.60 | 0.70 | 0.80 | 0.85 | 0.90 | 0.95 | 1.00 |
+|--------------|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|
+| Jaccard      | 39 | 32 | 29 | 29 | 29 | 29 | 29 | 29 |
+| Embedding    | 77 | 77 | 77 | 58 | 47 | 39 | 38 | 30 |
 
-## E4 — Systems performance (scientists KG)
+Embedding recall is θ-sensitive: a low θ grounds many candidates (recall ↑) at the
+risk of spurious matches, and collapses toward text similarity as θ rises. Jaccard
+grounds only near-exact matches and is almost flat.
+
+## E4 — Systems performance (football KG)
 
 | Query | Mode | LLM calls | wall-clock | note |
 |-------|------|:---------:|:----------:|------|
-| Q3 (branches of physics) | base + grounding | 1 | 4.3–5.3 s | returns `ex:quantum_mechanics` |
-| Q1 (enrich 26 people)    | context | 26 | 58–63 s | ≈2.3 s / binding |
+| base-mode + grounding | base + grounding | 1 | ~4–8 s | one generation, then grounding |
+| context enrichment    | context | one per binding | scales with bindings | ≈2 s / binding |
 
 - SimScore (Jaccard) grounding over a candidate set: **3–10 ms** — negligible
   vs. the LLM.
@@ -99,20 +107,20 @@ classified correct/wrong by inspection; the driver prints every pair.
 
 | Grounding backend | grounded | correct | precision |
 |---|---|---|---|
-| Text (Jaccard), θ=0.85 | 15 | 15 | **100%** |
-| Embedding, θ=0.85 | 35 | 20 | 57% |
-| Embedding, θ=0.90 | 20 | 17 | 85% |
-| Embedding, θ=0.95 | 16 | 16 | **100%** |
+| Text (Jaccard), θ=0.85 | 29 | 29 | **100%** |
+| Embedding, θ=0.85 | 47 | 38 | 81% |
+| Embedding, θ=0.90 | 39 | 38 | 97% |
+| Embedding, θ=0.95 | 38 | 37 | 97% |
 
-**Genuine recoveries embeddings add (Jaccard scores ~0):**
-`California Institute of Technology (Caltech)`→`Caltech` (0.95),
-`Massachusetts Institute of Technology (MIT)`→`MIT` (0.94),
-Nobel short-forms `Physics`/`Chemistry`→`Nobel Prize in …` (0.89–0.90).
+**Genuine recoveries embeddings add (Jaccard scores low):**
+`Liverpool FC`→`Liverpool` (0.95), `Juventus FC`→`Juventus` (0.97),
+`FIFA World Cup`→`World Cup` (0.98), `UEFA Champions League`→`Champions League`
+(0.98), `São Paulo`→`Sao Paulo` (1.00, accent), `Xavi`→`Xavi Hernandez` (0.92).
 
 **Semantic over-matching (false positives at θ≈0.85):**
-`Classical Mechanics`→Quantum Mechanics (0.87), `Biophysics`→Biology (0.89),
-`Breakthrough Prize`→Nobel Prize in Physics (0.85),
-`Imperial College London`→King's College London (0.88).
+`Manchester City`→Manchester United (0.85), `Inter Milan`→AC Milan (0.89),
+`Atletico Madrid`→Real Madrid (0.89), `Premier League`→Champions League (0.86),
+`AFC Asian Cup`→World Cup (0.86), `Porto`→Porto Alegre (0.87).
 
 **Takeaway.** Embeddings' correct recoveries and false positives sit in the same
 similarity band (~0.85–0.90), so no single θ separates them cleanly; matching
@@ -145,7 +153,7 @@ report rather than obscure.
 
 ```bash
 export OPENROUTER_API_KEY=sk-or-...
-# E1 + E2 + E4 (bundled scientists KG):
+# E1 + E2 + E4 (bundled football KG):
 ./eval/run_eval.sh
 # add E3 (supply FB15k-237+H data directory):
 FB15K_DIR=/path/to/FB15k-237+H ./eval/run_eval.sh

@@ -18,10 +18,18 @@ import java.util.*;
  * printed for inspection).
  */
 public class ExperimentRunnerCompare {
-    static final double[] THETAS = {0.85, 0.90, 0.95};
+    // Full sweep for the threshold figure; the backend table reports 0.85/0.90/0.95.
+    static final double[] THETAS = {0.50, 0.60, 0.70, 0.80, 0.85, 0.90, 0.95, 1.00};
 
     static class Exp { String id, prompt, type;
         Exp(String i,String p,String t){id=i;prompt=p;type=t;} }
+
+    // aggregate grounded counts across queries: method -> per-theta total
+    static final Map<String,long[]> AGG = new LinkedHashMap<>();
+    static long totCand = 0, totExactInKG = 0, totTextGrounded85 = 0;
+    static void agg(String method, int ti, int grounded) {
+        AGG.computeIfAbsent(method, k -> new long[THETAS.length])[ti] += grounded;
+    }
 
     public static void main(String[] args) throws Exception {
         GenSPARQL.init();
@@ -41,11 +49,11 @@ public class ExperimentRunnerCompare {
         }
 
         List<Exp> exps = Arrays.asList(
-            new Exp("physics_branches","List the major branches of physics. Return ONLY a JSON array of short names, e.g. [\"Quantum Mechanics\",\"Thermodynamics\"].","http://example.org/ResearchField"),
-            new Exp("research_fields","List 12 major scientific research fields. Return ONLY a JSON array of short names.","http://example.org/ResearchField"),
-            new Exp("awards","List 15 famous scientific awards and prizes. Return ONLY a JSON array of full names.","http://example.org/Award"),
-            new Exp("institutions","List 15 world-renowned universities and research institutes. Return ONLY a JSON array of names.","http://example.org/Institution"),
-            new Exp("nobel_categories","List the categories of the Nobel Prize. Return ONLY a JSON array.","http://example.org/Award")
+            new Exp("wc_winners","List 20 footballers who have won the FIFA World Cup. Return ONLY a JSON array of player names, e.g. [\"Lionel Messi\",\"Pele\"].","http://example.org/Athlete"),
+            new Exp("national_teams","List 15 national football teams that have won a World Cup or continental title. Return ONLY a JSON array of country names.","http://example.org/Team"),
+            new Exp("clubs","List 15 famous football clubs. Return ONLY a JSON array of club names.","http://example.org/Club"),
+            new Exp("trophies","List 12 major football trophies and competitions. Return ONLY a JSON array of names.","http://example.org/Trophy"),
+            new Exp("birthplaces","List 15 cities that are birthplaces of famous footballers. Return ONLY a JSON array of city names.","http://example.org/City")
         );
         ObjectMapper om = new ObjectMapper();
 
@@ -60,16 +68,30 @@ public class ExperimentRunnerCompare {
             int exactInKG = 0;
             for (String c : cands) if (goldNorm.contains(CanonicalForm.normalize(c))) exactInKG++;
             System.out.println("RESULT id=" + e.id + " candidates=" + cands.size() + " exactInKG=" + exactInKG);
+            totCand += cands.size();
+            totExactInKG += exactInKG;
 
             report("Jaccard", jac, e, cands, gold, goldNorm);
             if (emb != null) report("Embedding", emb, e, cands, gold, goldNorm);
         }
+        // aggregate lines: total grounded per (method, theta) across all queries
+        for (Map.Entry<String,long[]> me : AGG.entrySet()) {
+            StringBuilder sb = new StringBuilder("AGG sim=" + me.getKey() + " ");
+            for (int i = 0; i < THETAS.length; i++)
+                sb.append(String.format(Locale.US, "%.2f:%d ", THETAS[i], me.getValue()[i]));
+            System.out.println(sb.toString().trim());
+        }
+        // Table 2a headline (text default): raw candidates -> in-KG -> returned(grounded@0.85 text)
+        System.out.printf(Locale.US,
+            "TABLE2A totalCand=%d totalInKG=%d textGrounded@0.85=%d rawValidity=%.1f%%%n",
+            totCand, totExactInKG, totTextGrounded85, 100.0 * totExactInKG / Math.max(1, totCand));
         System.out.println("DONE");
     }
 
     static void report(String name, SimText st, Exp e, List<String> cands,
                         Map<String,String> gold, Set<String> goldNorm) {
-        for (double th : THETAS) {
+        for (int ti = 0; ti < THETAS.length; ti++) {
+            double th = THETAS[ti];
             List<String> exact = new ArrayList<>(), fuzzy = new ArrayList<>();
             for (String c : cands) {
                 String bestL = null; double best = -1;
@@ -80,8 +102,11 @@ public class ExperimentRunnerCompare {
                     if (isExact) exact.add(pair); else fuzzy.add(pair);
                 }
             }
+            int grounded = exact.size() + fuzzy.size();
+            agg(name, ti, grounded);
+            if ("Jaccard".equals(name) && Math.abs(th - 0.85) < 1e-9) totTextGrounded85 += grounded;
             System.out.printf(Locale.US, "METHOD id=%s sim=%s theta=%.2f grounded=%d exact=%d fuzzy=%d%n",
-                    e.id, name, th, exact.size()+fuzzy.size(), exact.size(), fuzzy.size());
+                    e.id, name, th, grounded, exact.size(), fuzzy.size());
             if (!fuzzy.isEmpty())
                 System.out.println("FUZZY id=" + e.id + " sim=" + name + " theta=" + String.format(Locale.US,"%.2f",th) + " " + fuzzy);
         }
