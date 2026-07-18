@@ -56,21 +56,21 @@ public class ExperimentRunner {
         }
 
         List<Exp> exps = Arrays.asList(
-            new Exp("physics_branches",
-                "List the major branches of physics. Return ONLY a JSON array of short names, e.g. [\"Quantum Mechanics\",\"Thermodynamics\"].",
-                "http://example.org/ResearchField"),
-            new Exp("research_fields",
-                "List 12 major scientific research fields. Return ONLY a JSON array of short names, e.g. [\"Mathematics\",\"Biology\"].",
-                "http://example.org/ResearchField"),
-            new Exp("awards",
-                "List 15 famous scientific awards and prizes. Return ONLY a JSON array of full names, e.g. [\"Nobel Prize in Physics\",\"Fields Medal\"].",
-                "http://example.org/Award"),
-            new Exp("institutions",
-                "List 15 world-renowned universities and research institutes. Return ONLY a JSON array of names, e.g. [\"Stanford University\",\"MIT\"].",
-                "http://example.org/Institution"),
-            new Exp("nobel_categories",
-                "List the categories of the Nobel Prize. Return ONLY a JSON array, e.g. [\"Nobel Prize in Physics\"].",
-                "http://example.org/Award")
+            new Exp("wc_winners",
+                "List 20 footballers who have won the FIFA World Cup. Return ONLY a JSON array of player names, e.g. [\"Lionel Messi\",\"Pele\"].",
+                "http://example.org/Athlete"),
+            new Exp("national_teams",
+                "List 15 national football teams that have won a World Cup or continental title. Return ONLY a JSON array of country names, e.g. [\"Brazil\",\"Germany\"].",
+                "http://example.org/Team"),
+            new Exp("clubs",
+                "List 15 famous football clubs. Return ONLY a JSON array of club names, e.g. [\"Real Madrid\",\"Liverpool\"].",
+                "http://example.org/Club"),
+            new Exp("trophies",
+                "List 12 major football trophies and competitions. Return ONLY a JSON array of names, e.g. [\"World Cup\",\"Champions League\"].",
+                "http://example.org/Trophy"),
+            new Exp("birthplaces",
+                "List 15 cities that are birthplaces of famous footballers. Return ONLY a JSON array of city names, e.g. [\"Rosario\",\"Funchal\"].",
+                "http://example.org/City")
         );
 
         ObjectMapper om = new ObjectMapper();

@@ -1,0 +1,128 @@
+EMBEDDING backend: nomic-embed-text
+RESULT id=wc_winners candidates=20 exactInKG=8
+METHOD id=wc_winners sim=Jaccard theta=0.50 grounded=10 exact=8 fuzzy=2
+FUZZY id=wc_winners sim=Jaccard theta=0.50 [Ronaldo=>Cristiano Ronaldo(0.50), Xavi=>Xavi Hernandez(0.50)]
+METHOD id=wc_winners sim=Jaccard theta=0.60 grounded=8 exact=8 fuzzy=0
+METHOD id=wc_winners sim=Jaccard theta=0.70 grounded=8 exact=8 fuzzy=0
+METHOD id=wc_winners sim=Jaccard theta=0.80 grounded=8 exact=8 fuzzy=0
+METHOD id=wc_winners sim=Jaccard theta=0.85 grounded=8 exact=8 fuzzy=0
+METHOD id=wc_winners sim=Jaccard theta=0.90 grounded=8 exact=8 fuzzy=0
+METHOD id=wc_winners sim=Jaccard theta=0.95 grounded=8 exact=8 fuzzy=0
+METHOD id=wc_winners sim=Jaccard theta=1.00 grounded=8 exact=8 fuzzy=0
+METHOD id=wc_winners sim=Embedding theta=0.50 grounded=20 exact=8 fuzzy=12
+FUZZY id=wc_winners sim=Embedding theta=0.50 [Ronaldo=>Cristiano Ronaldo(0.95), Franz Beckenbauer=>Manuel Neuer(0.78), Gerd Muller=>Thomas Muller(0.85), Johan Cruyff=>Cristiano Ronaldo(0.80), Paolo Rossi=>Sergio Ramos(0.77), Dino Zoff=>Zinedine Zidane(0.75), Carlos Alberto=>Cristiano Ronaldo(0.80), Romario=>Ronaldinho(0.76), Rivaldo=>Cristiano Ronaldo(0.78), Xavi=>Xavi Hernandez(0.92), Iker Casillas=>Andres Iniesta(0.76), Miroslav Klose=>Zinedine Zidane(0.76)]
+METHOD id=wc_winners sim=Embedding theta=0.60 grounded=20 exact=8 fuzzy=12
+FUZZY id=wc_winners sim=Embedding theta=0.60 [Ronaldo=>Cristiano Ronaldo(0.95), Franz Beckenbauer=>Manuel Neuer(0.78), Gerd Muller=>Thomas Muller(0.85), Johan Cruyff=>Cristiano Ronaldo(0.80), Paolo Rossi=>Sergio Ramos(0.77), Dino Zoff=>Zinedine Zidane(0.75), Carlos Alberto=>Cristiano Ronaldo(0.80), Romario=>Ronaldinho(0.76), Rivaldo=>Cristiano Ronaldo(0.78), Xavi=>Xavi Hernandez(0.92), Iker Casillas=>Andres Iniesta(0.76), Miroslav Klose=>Zinedine Zidane(0.76)]
+METHOD id=wc_winners sim=Embedding theta=0.70 grounded=20 exact=8 fuzzy=12
+FUZZY id=wc_winners sim=Embedding theta=0.70 [Ronaldo=>Cristiano Ronaldo(0.95), Franz Beckenbauer=>Manuel Neuer(0.78), Gerd Muller=>Thomas Muller(0.85), Johan Cruyff=>Cristiano Ronaldo(0.80), Paolo Rossi=>Sergio Ramos(0.77), Dino Zoff=>Zinedine Zidane(0.75), Carlos Alberto=>Cristiano Ronaldo(0.80), Romario=>Ronaldinho(0.76), Rivaldo=>Cristiano Ronaldo(0.78), Xavi=>Xavi Hernandez(0.92), Iker Casillas=>Andres Iniesta(0.76), Miroslav Klose=>Zinedine Zidane(0.76)]
+METHOD id=wc_winners sim=Embedding theta=0.80 grounded=12 exact=8 fuzzy=4
+FUZZY id=wc_winners sim=Embedding theta=0.80 [Ronaldo=>Cristiano Ronaldo(0.95), Gerd Muller=>Thomas Muller(0.85), Johan Cruyff=>Cristiano Ronaldo(0.80), Xavi=>Xavi Hernandez(0.92)]
+METHOD id=wc_winners sim=Embedding theta=0.85 grounded=11 exact=8 fuzzy=3
+FUZZY id=wc_winners sim=Embedding theta=0.85 [Ronaldo=>Cristiano Ronaldo(0.95), Gerd Muller=>Thomas Muller(0.85), Xavi=>Xavi Hernandez(0.92)]
+METHOD id=wc_winners sim=Embedding theta=0.90 grounded=10 exact=8 fuzzy=2
+FUZZY id=wc_winners sim=Embedding theta=0.90 [Ronaldo=>Cristiano Ronaldo(0.95), Xavi=>Xavi Hernandez(0.92)]
+METHOD id=wc_winners sim=Embedding theta=0.95 grounded=9 exact=8 fuzzy=1
+FUZZY id=wc_winners sim=Embedding theta=0.95 [Ronaldo=>Cristiano Ronaldo(0.95)]
+METHOD id=wc_winners sim=Embedding theta=1.00 grounded=8 exact=8 fuzzy=0
+RESULT id=national_teams candidates=15 exactInKG=8
+METHOD id=national_teams sim=Jaccard theta=0.50 grounded=8 exact=8 fuzzy=0
+METHOD id=national_teams sim=Jaccard theta=0.60 grounded=8 exact=8 fuzzy=0
+METHOD id=national_teams sim=Jaccard theta=0.70 grounded=8 exact=8 fuzzy=0
+METHOD id=national_teams sim=Jaccard theta=0.80 grounded=8 exact=8 fuzzy=0
+METHOD id=national_teams sim=Jaccard theta=0.85 grounded=8 exact=8 fuzzy=0
+METHOD id=national_teams sim=Jaccard theta=0.90 grounded=8 exact=8 fuzzy=0
+METHOD id=national_teams sim=Jaccard theta=0.95 grounded=8 exact=8 fuzzy=0
+METHOD id=national_teams sim=Jaccard theta=1.00 grounded=8 exact=8 fuzzy=0
+METHOD id=national_teams sim=Embedding theta=0.50 grounded=15 exact=8 fuzzy=7
+FUZZY id=national_teams sim=Embedding theta=0.50 [Uruguay=>Argentina(0.84), Mexico=>Spain(0.81), Cameroon=>Brazil(0.81), Nigeria=>Brazil(0.83), Ghana=>Egypt(0.80), Japan=>Brazil(0.80), Australia=>Argentina(0.81)]
+METHOD id=national_teams sim=Embedding theta=0.60 grounded=15 exact=8 fuzzy=7
+FUZZY id=national_teams sim=Embedding theta=0.60 [Uruguay=>Argentina(0.84), Mexico=>Spain(0.81), Cameroon=>Brazil(0.81), Nigeria=>Brazil(0.83), Ghana=>Egypt(0.80), Japan=>Brazil(0.80), Australia=>Argentina(0.81)]
+METHOD id=national_teams sim=Embedding theta=0.70 grounded=15 exact=8 fuzzy=7
+FUZZY id=national_teams sim=Embedding theta=0.70 [Uruguay=>Argentina(0.84), Mexico=>Spain(0.81), Cameroon=>Brazil(0.81), Nigeria=>Brazil(0.83), Ghana=>Egypt(0.80), Japan=>Brazil(0.80), Australia=>Argentina(0.81)]
+METHOD id=national_teams sim=Embedding theta=0.80 grounded=13 exact=8 fuzzy=5
+FUZZY id=national_teams sim=Embedding theta=0.80 [Uruguay=>Argentina(0.84), Mexico=>Spain(0.81), Cameroon=>Brazil(0.81), Nigeria=>Brazil(0.83), Australia=>Argentina(0.81)]
+METHOD id=national_teams sim=Embedding theta=0.85 grounded=8 exact=8 fuzzy=0
+METHOD id=national_teams sim=Embedding theta=0.90 grounded=8 exact=8 fuzzy=0
+METHOD id=national_teams sim=Embedding theta=0.95 grounded=8 exact=8 fuzzy=0
+METHOD id=national_teams sim=Embedding theta=1.00 grounded=8 exact=8 fuzzy=0
+RESULT id=clubs candidates=15 exactInKG=7
+METHOD id=clubs sim=Jaccard theta=0.50 grounded=11 exact=7 fuzzy=4
+FUZZY id=clubs sim=Jaccard theta=0.50 [Liverpool FC=>Liverpool(0.50), Juventus FC=>Juventus(0.50), Chelsea FC=>Chelsea(0.50), Arsenal FC=>Arsenal(0.50)]
+METHOD id=clubs sim=Jaccard theta=0.60 grounded=7 exact=7 fuzzy=0
+METHOD id=clubs sim=Jaccard theta=0.70 grounded=7 exact=7 fuzzy=0
+METHOD id=clubs sim=Jaccard theta=0.80 grounded=7 exact=7 fuzzy=0
+METHOD id=clubs sim=Jaccard theta=0.85 grounded=7 exact=7 fuzzy=0
+METHOD id=clubs sim=Jaccard theta=0.90 grounded=7 exact=7 fuzzy=0
+METHOD id=clubs sim=Jaccard theta=0.95 grounded=7 exact=7 fuzzy=0
+METHOD id=clubs sim=Jaccard theta=1.00 grounded=7 exact=7 fuzzy=0
+METHOD id=clubs sim=Embedding theta=0.50 grounded=15 exact=7 fuzzy=8
+FUZZY id=clubs sim=Embedding theta=0.50 [Liverpool FC=>Liverpool(0.95), Juventus FC=>Juventus(0.97), Chelsea FC=>Chelsea(0.96), Manchester City=>Manchester United(0.85), Arsenal FC=>Arsenal(0.97), Inter Milan=>AC Milan(0.89), Atletico Madrid=>Real Madrid(0.89), Tottenham Hotspur=>Borussia Dortmund(0.79)]
+METHOD id=clubs sim=Embedding theta=0.60 grounded=15 exact=7 fuzzy=8
+FUZZY id=clubs sim=Embedding theta=0.60 [Liverpool FC=>Liverpool(0.95), Juventus FC=>Juventus(0.97), Chelsea FC=>Chelsea(0.96), Manchester City=>Manchester United(0.85), Arsenal FC=>Arsenal(0.97), Inter Milan=>AC Milan(0.89), Atletico Madrid=>Real Madrid(0.89), Tottenham Hotspur=>Borussia Dortmund(0.79)]
+METHOD id=clubs sim=Embedding theta=0.70 grounded=15 exact=7 fuzzy=8
+FUZZY id=clubs sim=Embedding theta=0.70 [Liverpool FC=>Liverpool(0.95), Juventus FC=>Juventus(0.97), Chelsea FC=>Chelsea(0.96), Manchester City=>Manchester United(0.85), Arsenal FC=>Arsenal(0.97), Inter Milan=>AC Milan(0.89), Atletico Madrid=>Real Madrid(0.89), Tottenham Hotspur=>Borussia Dortmund(0.79)]
+METHOD id=clubs sim=Embedding theta=0.80 grounded=14 exact=7 fuzzy=7
+FUZZY id=clubs sim=Embedding theta=0.80 [Liverpool FC=>Liverpool(0.95), Juventus FC=>Juventus(0.97), Chelsea FC=>Chelsea(0.96), Manchester City=>Manchester United(0.85), Arsenal FC=>Arsenal(0.97), Inter Milan=>AC Milan(0.89), Atletico Madrid=>Real Madrid(0.89)]
+METHOD id=clubs sim=Embedding theta=0.85 grounded=14 exact=7 fuzzy=7
+FUZZY id=clubs sim=Embedding theta=0.85 [Liverpool FC=>Liverpool(0.95), Juventus FC=>Juventus(0.97), Chelsea FC=>Chelsea(0.96), Manchester City=>Manchester United(0.85), Arsenal FC=>Arsenal(0.97), Inter Milan=>AC Milan(0.89), Atletico Madrid=>Real Madrid(0.89)]
+METHOD id=clubs sim=Embedding theta=0.90 grounded=11 exact=7 fuzzy=4
+FUZZY id=clubs sim=Embedding theta=0.90 [Liverpool FC=>Liverpool(0.95), Juventus FC=>Juventus(0.97), Chelsea FC=>Chelsea(0.96), Arsenal FC=>Arsenal(0.97)]
+METHOD id=clubs sim=Embedding theta=0.95 grounded=11 exact=7 fuzzy=4
+FUZZY id=clubs sim=Embedding theta=0.95 [Liverpool FC=>Liverpool(0.95), Juventus FC=>Juventus(0.97), Chelsea FC=>Chelsea(0.96), Arsenal FC=>Arsenal(0.97)]
+METHOD id=clubs sim=Embedding theta=1.00 grounded=7 exact=7 fuzzy=0
+RESULT id=trophies candidates=12 exactInKG=2
+METHOD id=trophies sim=Jaccard theta=0.50 grounded=5 exact=2 fuzzy=3
+FUZZY id=trophies sim=Jaccard theta=0.50 [FIFA World Cup=>World Cup(0.67), UEFA Champions League=>Champions League(0.67), UEFA European Championship=>European Championship(0.67)]
+METHOD id=trophies sim=Jaccard theta=0.60 grounded=5 exact=2 fuzzy=3
+FUZZY id=trophies sim=Jaccard theta=0.60 [FIFA World Cup=>World Cup(0.67), UEFA Champions League=>Champions League(0.67), UEFA European Championship=>European Championship(0.67)]
+METHOD id=trophies sim=Jaccard theta=0.70 grounded=2 exact=2 fuzzy=0
+METHOD id=trophies sim=Jaccard theta=0.80 grounded=2 exact=2 fuzzy=0
+METHOD id=trophies sim=Jaccard theta=0.85 grounded=2 exact=2 fuzzy=0
+METHOD id=trophies sim=Jaccard theta=0.90 grounded=2 exact=2 fuzzy=0
+METHOD id=trophies sim=Jaccard theta=0.95 grounded=2 exact=2 fuzzy=0
+METHOD id=trophies sim=Jaccard theta=1.00 grounded=2 exact=2 fuzzy=0
+METHOD id=trophies sim=Embedding theta=0.50 grounded=12 exact=2 fuzzy=10
+FUZZY id=trophies sim=Embedding theta=0.50 [FIFA World Cup=>World Cup(0.98), UEFA Champions League=>Champions League(0.98), UEFA European Championship=>European Championship(0.97), Premier League=>Champions League(0.86), La Liga=>Champions League(0.83), Bundesliga=>Champions League(0.80), Serie A=>Champions League(0.81), Africa Cup of Nations=>World Cup(0.86), AFC Asian Cup=>World Cup(0.86), CONCACAF Gold Cup=>Copa America(0.83)]
+METHOD id=trophies sim=Embedding theta=0.60 grounded=12 exact=2 fuzzy=10
+FUZZY id=trophies sim=Embedding theta=0.60 [FIFA World Cup=>World Cup(0.98), UEFA Champions League=>Champions League(0.98), UEFA European Championship=>European Championship(0.97), Premier League=>Champions League(0.86), La Liga=>Champions League(0.83), Bundesliga=>Champions League(0.80), Serie A=>Champions League(0.81), Africa Cup of Nations=>World Cup(0.86), AFC Asian Cup=>World Cup(0.86), CONCACAF Gold Cup=>Copa America(0.83)]
+METHOD id=trophies sim=Embedding theta=0.70 grounded=12 exact=2 fuzzy=10
+FUZZY id=trophies sim=Embedding theta=0.70 [FIFA World Cup=>World Cup(0.98), UEFA Champions League=>Champions League(0.98), UEFA European Championship=>European Championship(0.97), Premier League=>Champions League(0.86), La Liga=>Champions League(0.83), Bundesliga=>Champions League(0.80), Serie A=>Champions League(0.81), Africa Cup of Nations=>World Cup(0.86), AFC Asian Cup=>World Cup(0.86), CONCACAF Gold Cup=>Copa America(0.83)]
+METHOD id=trophies sim=Embedding theta=0.80 grounded=12 exact=2 fuzzy=10
+FUZZY id=trophies sim=Embedding theta=0.80 [FIFA World Cup=>World Cup(0.98), UEFA Champions League=>Champions League(0.98), UEFA European Championship=>European Championship(0.97), Premier League=>Champions League(0.86), La Liga=>Champions League(0.83), Bundesliga=>Champions League(0.80), Serie A=>Champions League(0.81), Africa Cup of Nations=>World Cup(0.86), AFC Asian Cup=>World Cup(0.86), CONCACAF Gold Cup=>Copa America(0.83)]
+METHOD id=trophies sim=Embedding theta=0.85 grounded=8 exact=2 fuzzy=6
+FUZZY id=trophies sim=Embedding theta=0.85 [FIFA World Cup=>World Cup(0.98), UEFA Champions League=>Champions League(0.98), UEFA European Championship=>European Championship(0.97), Premier League=>Champions League(0.86), Africa Cup of Nations=>World Cup(0.86), AFC Asian Cup=>World Cup(0.86)]
+METHOD id=trophies sim=Embedding theta=0.90 grounded=5 exact=2 fuzzy=3
+FUZZY id=trophies sim=Embedding theta=0.90 [FIFA World Cup=>World Cup(0.98), UEFA Champions League=>Champions League(0.98), UEFA European Championship=>European Championship(0.97)]
+METHOD id=trophies sim=Embedding theta=0.95 grounded=5 exact=2 fuzzy=3
+FUZZY id=trophies sim=Embedding theta=0.95 [FIFA World Cup=>World Cup(0.98), UEFA Champions League=>Champions League(0.98), UEFA European Championship=>European Championship(0.97)]
+METHOD id=trophies sim=Embedding theta=1.00 grounded=2 exact=2 fuzzy=0
+RESULT id=birthplaces candidates=15 exactInKG=4
+METHOD id=birthplaces sim=Jaccard theta=0.50 grounded=5 exact=4 fuzzy=1
+FUZZY id=birthplaces sim=Jaccard theta=0.50 [Porto=>Porto Alegre(0.50)]
+METHOD id=birthplaces sim=Jaccard theta=0.60 grounded=4 exact=4 fuzzy=0
+METHOD id=birthplaces sim=Jaccard theta=0.70 grounded=4 exact=4 fuzzy=0
+METHOD id=birthplaces sim=Jaccard theta=0.80 grounded=4 exact=4 fuzzy=0
+METHOD id=birthplaces sim=Jaccard theta=0.85 grounded=4 exact=4 fuzzy=0
+METHOD id=birthplaces sim=Jaccard theta=0.90 grounded=4 exact=4 fuzzy=0
+METHOD id=birthplaces sim=Jaccard theta=0.95 grounded=4 exact=4 fuzzy=0
+METHOD id=birthplaces sim=Jaccard theta=1.00 grounded=4 exact=4 fuzzy=0
+METHOD id=birthplaces sim=Embedding theta=0.50 grounded=15 exact=4 fuzzy=11
+FUZZY id=birthplaces sim=Embedding theta=0.50 [Buenos Aires=>Brasilia(0.81), Madrid=>Rio de Janeiro(0.77), São Paulo=>Sao Paulo(1.00), Barcelona=>Rio de Janeiro(0.79), Manchester=>London(0.76), Munich=>Marseille(0.77), Lisbon=>Brasilia(0.79), Porto=>Porto Alegre(0.87), Moscow=>London(0.78), Turin=>Warsaw(0.79), Stockholm=>London(0.77)]
+METHOD id=birthplaces sim=Embedding theta=0.60 grounded=15 exact=4 fuzzy=11
+FUZZY id=birthplaces sim=Embedding theta=0.60 [Buenos Aires=>Brasilia(0.81), Madrid=>Rio de Janeiro(0.77), São Paulo=>Sao Paulo(1.00), Barcelona=>Rio de Janeiro(0.79), Manchester=>London(0.76), Munich=>Marseille(0.77), Lisbon=>Brasilia(0.79), Porto=>Porto Alegre(0.87), Moscow=>London(0.78), Turin=>Warsaw(0.79), Stockholm=>London(0.77)]
+METHOD id=birthplaces sim=Embedding theta=0.70 grounded=15 exact=4 fuzzy=11
+FUZZY id=birthplaces sim=Embedding theta=0.70 [Buenos Aires=>Brasilia(0.81), Madrid=>Rio de Janeiro(0.77), São Paulo=>Sao Paulo(1.00), Barcelona=>Rio de Janeiro(0.79), Manchester=>London(0.76), Munich=>Marseille(0.77), Lisbon=>Brasilia(0.79), Porto=>Porto Alegre(0.87), Moscow=>London(0.78), Turin=>Warsaw(0.79), Stockholm=>London(0.77)]
+METHOD id=birthplaces sim=Embedding theta=0.80 grounded=7 exact=4 fuzzy=3
+FUZZY id=birthplaces sim=Embedding theta=0.80 [Buenos Aires=>Brasilia(0.81), São Paulo=>Sao Paulo(1.00), Porto=>Porto Alegre(0.87)]
+METHOD id=birthplaces sim=Embedding theta=0.85 grounded=6 exact=4 fuzzy=2
+FUZZY id=birthplaces sim=Embedding theta=0.85 [São Paulo=>Sao Paulo(1.00), Porto=>Porto Alegre(0.87)]
+METHOD id=birthplaces sim=Embedding theta=0.90 grounded=5 exact=4 fuzzy=1
+FUZZY id=birthplaces sim=Embedding theta=0.90 [São Paulo=>Sao Paulo(1.00)]
+METHOD id=birthplaces sim=Embedding theta=0.95 grounded=5 exact=4 fuzzy=1
+FUZZY id=birthplaces sim=Embedding theta=0.95 [São Paulo=>Sao Paulo(1.00)]
+METHOD id=birthplaces sim=Embedding theta=1.00 grounded=5 exact=4 fuzzy=1
+FUZZY id=birthplaces sim=Embedding theta=1.00 [São Paulo=>Sao Paulo(1.00)]
+AGG sim=Jaccard 0.50:39 0.60:32 0.70:29 0.80:29 0.85:29 0.90:29 0.95:29 1.00:29
+AGG sim=Embedding 0.50:77 0.60:77 0.70:77 0.80:58 0.85:47 0.90:39 0.95:38 1.00:30
+TABLE2A totalCand=77 totalInKG=29 textGrounded@0.85=29 rawValidity=37.7%
+DONE

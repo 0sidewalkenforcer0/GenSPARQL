@@ -2,7 +2,7 @@
 # Reproduce the paper's Preliminary Evaluation (E1-E4).
 # Requires: OPENROUTER_API_KEY in the environment (this repo ships no key).
 #   export OPENROUTER_API_KEY=sk-or-...
-# E1/E2/E4 use the bundled scientists KG. E3 needs the FB15k-237+H data, which is
+# E1/E2/E4 use the bundled football KG. E3 needs the FB15k-237+H data, which is
 # NOT shipped in this repo (too large); pass its directory as $FB15K_DIR to run E3.
 #
 # Grounding uses text similarity (Jaccard) by default. To use embedding-cosine
@@ -13,7 +13,7 @@
 set -e
 PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 EVAL_DIR="$PROJECT_ROOT/eval"
-DATA="${DATA:-$PROJECT_ROOT/gensparql-example/data/scientists_awards_large.ttl}"
+DATA="${DATA:-$PROJECT_ROOT/gensparql-example/data/footballers_eval.ttl}"
 
 if [ -z "$OPENROUTER_API_KEY" ]; then
   echo "ERROR: set OPENROUTER_API_KEY first." >&2; exit 1
@@ -30,10 +30,15 @@ for m in core llm parser engine functions example; do
 done
 
 echo ">> compiling eval drivers"
-javac -cp "$CP" -d "$EVAL_DIR" "$EVAL_DIR"/ExperimentRunner.java "$EVAL_DIR"/QueryTimer.java "$EVAL_DIR"/E3Runner.java
+javac -cp "$CP" -d "$EVAL_DIR" "$EVAL_DIR"/ExperimentRunner.java \
+    "$EVAL_DIR"/ExperimentRunnerCompare.java "$EVAL_DIR"/QueryTimer.java "$EVAL_DIR"/E3Runner.java
 
-echo ">> E1 + E2 (grounding precision + threshold sweep)"
+echo ">> E1 + E2 (grounding precision + threshold sweep, text default)"
 java -cp "$CP:$EVAL_DIR" ExperimentRunner "$DATA"
+
+echo ">> E1/E2/backend combined + text-vs-embedding (single generation, both backends)"
+echo "   (set OPENAI_BASE_URL to a text-embedder for the embedding rows; e.g. Ollama)"
+java -cp "$CP:$EVAL_DIR" ExperimentRunnerCompare "$DATA"
 
 echo ">> E4 (end-to-end latency, cold/warm)"
 java -cp "$CP:$EVAL_DIR" QueryTimer "$DATA"

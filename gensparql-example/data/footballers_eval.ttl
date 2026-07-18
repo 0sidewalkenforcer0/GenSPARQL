@@ -1,7 +1,9 @@
 # Larger football knowledge graph for the GenSPARQL evaluation (grounding
-# precision / threshold sweep). ~20 well-known players plus their national teams,
-# birthplaces, and major trophies. Facts are illustrative and should be
-# sanity-checked before use in a camera-ready evaluation.
+# precision / threshold sweep / text-vs-embedding backend). Five KG-present
+# types the base-mode GENOP queries generate into: Athlete, Team (national),
+# Club, Trophy, City. Labels are clean rdfs:label. Some well-known sibling
+# entities are deliberately OMITTED (e.g. "Manchester City", "Inter Milan",
+# "Europa League") so embedding grounding has real near-misses to over-match.
 @prefix ex:   <http://example.org/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
@@ -26,6 +28,12 @@ ex:kane         a ex:Athlete ; rdfs:label "Harry Kane" ;        ex:bornAt ex:lon
 ex:haaland      a ex:Athlete ; rdfs:label "Erling Haaland" ;    ex:bornAt ex:leeds ;         ex:playsFor ex:norway .
 ex:debruyne     a ex:Athlete ; rdfs:label "Kevin De Bruyne" ;   ex:bornAt ex:drongen ;       ex:playsFor ex:belgium .
 ex:henry        a ex:Athlete ; rdfs:label "Thierry Henry" ;     ex:bornAt ex:lesulis ;       ex:playsFor ex:france .
+ex:cannavaro    a ex:Athlete ; rdfs:label "Fabio Cannavaro" ;   ex:bornAt ex:naples ;        ex:playsFor ex:italy .
+ex:pirlo        a ex:Athlete ; rdfs:label "Andrea Pirlo" ;      ex:bornAt ex:flero ;         ex:playsFor ex:italy .
+ex:kroos        a ex:Athlete ; rdfs:label "Toni Kroos" ;        ex:bornAt ex:greifswald ;    ex:playsFor ex:germany .
+ex:muller       a ex:Athlete ; rdfs:label "Thomas Muller" ;     ex:bornAt ex:weilheim ;      ex:playsFor ex:germany .
+ex:kaka         a ex:Athlete ; rdfs:label "Kaka" ;              ex:bornAt ex:brasilia ;      ex:playsFor ex:brazil .
+ex:cafu         a ex:Athlete ; rdfs:label "Cafu" ;              ex:bornAt ex:saopaulo ;      ex:playsFor ex:brazil .
 
 #################### National teams (label, trophies won) ####################
 ex:argentina a ex:Team ; rdfs:label "Argentina" ; ex:teamWonTrophy ex:worldCup , ex:copaAmerica .
@@ -33,6 +41,7 @@ ex:brazil    a ex:Team ; rdfs:label "Brazil" ;    ex:teamWonTrophy ex:worldCup ,
 ex:france    a ex:Team ; rdfs:label "France" ;    ex:teamWonTrophy ex:worldCup , ex:europeanChampionship .
 ex:spain     a ex:Team ; rdfs:label "Spain" ;     ex:teamWonTrophy ex:worldCup , ex:europeanChampionship .
 ex:germany   a ex:Team ; rdfs:label "Germany" ;   ex:teamWonTrophy ex:worldCup , ex:europeanChampionship .
+ex:italy     a ex:Team ; rdfs:label "Italy" ;     ex:teamWonTrophy ex:worldCup , ex:europeanChampionship .
 ex:portugal  a ex:Team ; rdfs:label "Portugal" ;  ex:teamWonTrophy ex:europeanChampionship .
 ex:croatia   a ex:Team ; rdfs:label "Croatia" .
 ex:poland    a ex:Team ; rdfs:label "Poland" .
@@ -41,12 +50,31 @@ ex:england   a ex:Team ; rdfs:label "England" ;   ex:teamWonTrophy ex:worldCup .
 ex:norway    a ex:Team ; rdfs:label "Norway" .
 ex:belgium   a ex:Team ; rdfs:label "Belgium" .
 
-#################### Trophies ####################
+#################### Clubs (label). Siblings OMITTED on purpose: Manchester City,
+#################### Inter Milan, Atletico Madrid, Real Sociedad, Bayer Leverkusen. ####
+ex:realmadrid a ex:Club ; rdfs:label "Real Madrid" .
+ex:barcelona  a ex:Club ; rdfs:label "FC Barcelona" .
+ex:manutd     a ex:Club ; rdfs:label "Manchester United" .
+ex:bayern     a ex:Club ; rdfs:label "Bayern Munich" .
+ex:liverpool  a ex:Club ; rdfs:label "Liverpool" .
+ex:juventus   a ex:Club ; rdfs:label "Juventus" .
+ex:psg        a ex:Club ; rdfs:label "Paris Saint-Germain" .
+ex:acmilan    a ex:Club ; rdfs:label "AC Milan" .
+ex:chelsea    a ex:Club ; rdfs:label "Chelsea" .
+ex:arsenal    a ex:Club ; rdfs:label "Arsenal" .
+ex:ajax       a ex:Club ; rdfs:label "Ajax" .
+ex:dortmund   a ex:Club ; rdfs:label "Borussia Dortmund" .
+
+#################### Trophies. Siblings OMITTED: Europa League, Club World Cup,
+#################### UEFA Nations League, Golden Ball. ####################
 ex:worldCup             a ex:Trophy ; rdfs:label "World Cup" .
 ex:europeanChampionship a ex:Trophy ; rdfs:label "European Championship" .
 ex:copaAmerica          a ex:Trophy ; rdfs:label "Copa America" .
 ex:championsLeague      a ex:Trophy ; rdfs:label "Champions League" .
 ex:ballonDor            a ex:Trophy ; rdfs:label "Ballon d'Or" .
+ex:faCup                a ex:Trophy ; rdfs:label "FA Cup" .
+ex:copaLibertadores     a ex:Trophy ; rdfs:label "Copa Libertadores" .
+ex:goldenBoot           a ex:Trophy ; rdfs:label "Golden Boot" .
 
 #################### Cities (birthplaces) ####################
 ex:rosario a ex:City ; rdfs:label "Rosario" .            ex:funchal a ex:City ; rdfs:label "Funchal" .
@@ -59,3 +87,6 @@ ex:warsaw a ex:City ; rdfs:label "Warsaw" .              ex:nagrig a ex:City ; r
 ex:camas a ex:City ; rdfs:label "Camas" .                ex:gelsenkirchen a ex:City ; rdfs:label "Gelsenkirchen" .
 ex:london a ex:City ; rdfs:label "London" .              ex:leeds a ex:City ; rdfs:label "Leeds" .
 ex:drongen a ex:City ; rdfs:label "Drongen" .            ex:lesulis a ex:City ; rdfs:label "Les Ulis" .
+ex:naples a ex:City ; rdfs:label "Naples" .              ex:flero a ex:City ; rdfs:label "Flero" .
+ex:greifswald a ex:City ; rdfs:label "Greifswald" .      ex:weilheim a ex:City ; rdfs:label "Weilheim" .
+ex:brasilia a ex:City ; rdfs:label "Brasilia" .          ex:saopaulo a ex:City ; rdfs:label "Sao Paulo" .
