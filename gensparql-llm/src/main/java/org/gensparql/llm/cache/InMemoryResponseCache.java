@@ -42,7 +42,12 @@ public class InMemoryResponseCache implements ResponseCache {
 
     @Override
     public CachedResponse get(CacheKey key) {
-        lock.readLock().lock();
+        // NOTE: the backing LinkedHashMap is in access-order mode, so cache.get()
+        // structurally reorders the linked list — it is a MUTATION, not a read. It must
+        // therefore run under the write lock; using the read lock here allowed concurrent
+        // threads to corrupt the list (lost updates, broken iteration, potential infinite
+        // loop) under parallel query execution.
+        lock.writeLock().lock();
         try {
             CachedResponse response = cache.get(key);
             if (response == null) {
@@ -52,23 +57,15 @@ public class InMemoryResponseCache implements ResponseCache {
 
             // Check if expired
             if (response.isExpired()) {
-                // Remove expired entry (need to upgrade to write lock)
-                lock.readLock().unlock();
-                lock.writeLock().lock();
-                try {
-                    cache.remove(key);
-                    statistics.recordMiss();
-                    return null;
-                } finally {
-                    lock.readLock().lock();
-                    lock.writeLock().unlock();
-                }
+                cache.remove(key);
+                statistics.recordMiss();
+                return null;
             }
 
             statistics.recordHit();
             return response;
         } finally {
-            lock.readLock().unlock();
+            lock.writeLock().unlock();
         }
     }
 

@@ -138,7 +138,16 @@ public class OpenAIProvider implements LLMProvider {
             }
 
             JsonNode root = objectMapper.readTree(responseBody);
-            String content = root.path("choices").get(0).path("message").path("content").asText();
+            JsonNode choices = root.path("choices");
+            if (!choices.isArray() || choices.isEmpty()) {
+                // Error payloads and content-filter responses omit choices; guard against
+                // the NPE that root.path("choices").get(0) would otherwise throw.
+                String errMsg = root.path("error").path("message").asText("no choices returned");
+                LOG.error("OpenAI API returned no choices: {}", responseBody);
+                throw new LLMException("OpenAI API returned no choices: " + errMsg,
+                        "openai", model, response.code());
+            }
+            String content = choices.get(0).path("message").path("content").asText();
 
             // Parse usage info
             JsonNode usage = root.path("usage");

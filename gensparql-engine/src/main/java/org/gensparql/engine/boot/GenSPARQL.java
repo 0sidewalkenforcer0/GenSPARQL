@@ -83,6 +83,13 @@ public class GenSPARQL {
         // Register our OpExecutorFactory
         registerOpExecutorFactory();
 
+        // Register the gen:* extension functions if the (optional) gensparql-functions
+        // module is on the classpath. Done reflectively so the engine keeps no compile-time
+        // dependency on gensparql-functions (which itself depends on the engine — a direct
+        // call would be a dependency cycle). ARQ is already initialized here, so the global
+        // FunctionRegistry exists and the registration is picked up by query execution.
+        registerExtensionFunctions();
+
         // Set default configuration
         setDefaultConfiguration();
 
@@ -116,6 +123,22 @@ public class GenSPARQL {
         );
         QC.setFactory(context, factory);
         LOG.debug("Registered GenSPARQL OpExecutorFactory");
+    }
+
+    /**
+     * Register the {@code gen:*} SPARQL extension functions, if the gensparql-functions
+     * module is present on the classpath. No-op (debug log) when it is absent.
+     */
+    private static void registerExtensionFunctions() {
+        try {
+            Class<?> fns = Class.forName("org.gensparql.function.GenSPARQLFunctions");
+            fns.getMethod("register").invoke(null);
+            LOG.info("Registered gen:* extension functions");
+        } catch (ClassNotFoundException e) {
+            LOG.debug("gensparql-functions not on classpath; gen:* functions unavailable");
+        } catch (ReflectiveOperationException e) {
+            LOG.warn("Failed to register gen:* extension functions", e);
+        }
     }
 
     /**
