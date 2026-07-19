@@ -63,6 +63,10 @@ public class QueryIterSimJoin extends QueryIteratorBase {
     private final boolean approximate;
     private final Map<String, List<TypedBinding>> rightIndex = new HashMap<>();
     private final List<String> rightKeys = new ArrayList<>(); // aligned with rightBindings
+    // True if any right binding could not be indexed because a join variable was
+    // unbound/null (heterogeneous variable domains). Such bindings are still join-compatible
+    // on the shared bound subset and must be scanned even in exact-only mode.
+    private boolean hasUnindexedRights = false;
 
     private Iterator<TypedBinding> leftIter;
     private TypedBinding currentLeft;
@@ -181,6 +185,8 @@ public class QueryIterSimJoin extends QueryIteratorBase {
             rightKeys.add(key);
             if (key != null) {
                 rightIndex.computeIfAbsent(key, k -> new ArrayList<>()).add(tb);
+            } else {
+                hasUnindexedRights = true;
             }
         }
     }
@@ -303,6 +309,20 @@ public class QueryIterSimJoin extends QueryIteratorBase {
             // Exact-only mode but the left key is unbound: scan to honour the
             // null==null compatibility semantics of SimScore.
             for (TypedBinding right : rightBindings) {
+                if (areCompatible(left, right)) {
+                    compatible.add(right);
+                }
+            }
+        } else if (hasUnindexedRights) {
+            // Exact-only mode with a fully-bound left key: phase 1 covered the right
+            // bindings that share the same exact key. Right bindings that could NOT be
+            // indexed (a join variable was unbound) are absent from the index yet remain
+            // join-compatible on the shared bound subset, so scan just those.
+            for (int i = 0; i < rightBindings.size(); i++) {
+                if (rightKeys.get(i) != null) {
+                    continue; // indexed rights already handled in phase 1
+                }
+                TypedBinding right = rightBindings.get(i);
                 if (areCompatible(left, right)) {
                     compatible.add(right);
                 }

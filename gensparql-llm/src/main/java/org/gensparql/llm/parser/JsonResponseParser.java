@@ -47,6 +47,11 @@ public class JsonResponseParser implements ResponseParser {
 
             JsonNode json = objectMapper.readTree(jsonContent);
 
+            // A syntactically valid JSON array or object is an authoritative, structured
+            // response: honour its contents verbatim, including the empty case. An empty
+            // array MUST yield zero bindings (the model saying "no matches") — it must NOT
+            // fall through to the raw-text fallback, which would fabricate a single bogus
+            // row containing the literal text "[]".
             if (json.isArray()) {
                 LOG.debug("Parsing JSON array with {} elements", json.size());
                 for (JsonNode item : json) {
@@ -55,25 +60,26 @@ public class JsonResponseParser implements ResponseParser {
                         bindings.add(binding);
                     }
                 }
+                LOG.info("Parsed {} bindings from JSON array ({} elements)", bindings.size(), json.size());
+                return bindings;
             } else if (json.isObject()) {
                 LOG.debug("Parsing single JSON object");
                 Map<String, String> binding = parseJsonObject(json, outputVars);
                 if (!binding.isEmpty()) {
                     bindings.add(binding);
                 }
-            }
-
-            if (!bindings.isEmpty()) {
-                LOG.info("Successfully parsed {} bindings from JSON", bindings.size());
+                LOG.info("Parsed {} bindings from JSON object", bindings.size());
                 return bindings;
-            } else {
-                LOG.warn("JSON parsed but no valid bindings found for vars: {}", outputVars);
             }
+            // Otherwise the extracted content was a bare scalar / non-structured JSON:
+            // fall through to the raw-text fallback below.
+            LOG.debug("Extracted JSON was neither array nor object; using raw-text fallback");
         } catch (Exception e) {
             LOG.warn("Failed to parse JSON: {}", e.getMessage());
         }
 
-        // Fallback: use raw text for first variable
+        // Fallback: use raw text for first variable (only reached when the content was
+        // not a valid JSON array/object).
         LOG.debug("Falling back to raw text for first variable");
         bindings.add(Map.of(outputVars.get(0), content.trim()));
         return bindings;
