@@ -39,3 +39,7 @@ gensparql-benchmark/GENSPARQL_Data/NELL995+H/
 .env
 *.key
 .orkey
+
+# vLLM server logs from deploy/*.slurm
+vllm_llm_*.out
+vllm_emb_*.out
