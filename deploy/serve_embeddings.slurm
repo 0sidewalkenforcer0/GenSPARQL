@@ -22,6 +22,8 @@ VLLM_ENV="${VLLM_ENV:-vllm}"
 
 export HF_HOME="${HF_HOME:-$HOME/hf_cache}"
 mkdir -p "$HF_HOME"
+export VLLM_USE_FLASHINFER_SAMPLER="${VLLM_USE_FLASHINFER_SAMPLER:-0}"
+export HF_HUB_OFFLINE="${HF_HUB_OFFLINE:-1}"
 
 source "$(conda info --base)/etc/profile.d/conda.sh"
 conda activate "$VLLM_ENV"
@@ -38,6 +40,6 @@ echo "   # (OPENAI_EMBEDDING_API_KEY defaults to OPENAI_API_KEY / 'dummy')"
 echo "=============================================================="
 
 exec vllm serve "$MODEL" \
-    --task embed \
+    --runner pooling \
     --host 0.0.0.0 --port "$PORT" \
     --served-model-name "$MODEL"

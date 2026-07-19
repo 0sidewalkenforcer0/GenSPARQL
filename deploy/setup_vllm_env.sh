@@ -19,7 +19,8 @@ conda activate "$ENV_NAME"
 pip install --upgrade pip
 # vLLM serves both chat models (/v1/chat/completions) and embedding models
 # (/v1/embeddings with --task embed), so this single package covers both roles.
-pip install "vllm>=0.6.3"
+# Install the LATEST vLLM so recent Qwen3 architectures are supported.
+pip install -U vllm
 
 echo
 echo "Done. Serve models with the SLURM scripts in this directory:"

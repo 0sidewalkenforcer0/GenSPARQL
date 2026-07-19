@@ -2,8 +2,8 @@
 # Serve an open-weight chat model with vLLM as an OpenAI-compatible endpoint.
 # GenSPARQL talks to it via the "openai" provider (set OPENAI_BASE_URL below).
 #
-#   MODEL=Qwen/Qwen2.5-7B-Instruct TP=1 sbatch deploy/serve_llm.slurm
-#   MODEL=Qwen/Qwen2.5-72B-Instruct-AWQ TP=2 sbatch deploy/serve_llm.slurm
+#   MODEL=Qwen/Qwen3-8B TP=1 sbatch deploy/serve_llm.slurm
+#   MODEL=Qwen/Qwen3-30B-A3B-Instruct-2507 TP=2 sbatch deploy/serve_llm.slurm
 #
 #SBATCH --job-name=gensparql-llm
 #SBATCH --partition=slowlane
@@ -15,7 +15,7 @@
 set -euo pipefail
 
 # --- config (override via environment) ---------------------------------------
-MODEL="${MODEL:-Qwen/Qwen2.5-7B-Instruct}"   # HF repo id (also the model name clients send)
+MODEL="${MODEL:-Qwen/Qwen3-8B}"              # HF repo id (also the model name clients send)
 PORT="${PORT:-8000}"
 TP="${TP:-1}"                                # tensor-parallel size = number of GPUs requested
 DTYPE="${DTYPE:-bfloat16}"
@@ -25,6 +25,12 @@ VLLM_ENV="${VLLM_ENV:-vllm}"
 # Keep the (large) HF weight cache off the small quota'd default location.
 export HF_HOME="${HF_HOME:-$HOME/hf_cache}"
 mkdir -p "$HF_HOME"
+
+# Compute nodes here have no CUDA compiler (nvcc), so FlashInfer's runtime JIT of its
+# sampling kernel fails ("ninja ... exit 127"). Use the native PyTorch sampler instead.
+export VLLM_USE_FLASHINFER_SAMPLER="${VLLM_USE_FLASHINFER_SAMPLER:-0}"
+# Cached weights are on shared storage; don't phone home from the compute node.
+export HF_HUB_OFFLINE="${HF_HUB_OFFLINE:-1}"
 
 source "$(conda info --base)/etc/profile.d/conda.sh"
 conda activate "$VLLM_ENV"
