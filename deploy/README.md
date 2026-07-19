@@ -22,8 +22,8 @@ and served by the same tool.
 
 ```bash
 # Chat model (pick per VRAM; A100 here is 40 GB, A40 is 48 GB, up to 8 GPUs/node → TP up to 8)
-MODEL=Qwen/Qwen2.5-7B-Instruct        TP=1 sbatch deploy/serve_llm.slurm     # single GPU, fast iteration
-# MODEL=Qwen/Qwen2.5-72B-Instruct-AWQ TP=2 sbatch deploy/serve_llm.slurm     # best quality, 4-bit, 2 GPUs
+MODEL=Qwen/Qwen3-8B                       TP=1 sbatch deploy/serve_llm.slurm  # single GPU, fast iteration
+# MODEL=Qwen/Qwen3-30B-A3B-Instruct-2507  TP=2 sbatch deploy/serve_llm.slurm  # fast MoE (3B active), stronger
 
 # Embedding model (small, one GPU)
 MODEL=BAAI/bge-large-en-v1.5 sbatch deploy/serve_embeddings.slurm
@@ -61,7 +61,8 @@ GENOP("List one tool used in {?field}.", (?tool), <model:openai:Qwen/Qwen2.5-7B-
 
 | Role | Default | Bigger / better | Notes |
 |------|---------|-----------------|-------|
-| Chat | `Qwen/Qwen2.5-7B-Instruct` | `Qwen/Qwen2.5-72B-Instruct[-AWQ]`, `meta-llama/Llama-3.3-70B-Instruct` | Qwen = strong JSON/instruction following |
+| Chat | `Qwen/Qwen3-8B` | `Qwen/Qwen3-30B-A3B-Instruct-2507` (MoE), `Qwen/Qwen3-32B` | Qwen3 = strong JSON/instruction following; well supported by vLLM |
+| Newest (check vLLM support) | — | `Qwen/Qwen3.5-*`, `Qwen/Qwen3.6-*` (incl. `-FP8` for 40 GB) | brand-new arch (`Qwen3_5*`); needs a very recent vLLM and may be multimodal — verify before relying on it |
 | Reasoning ablation | — | `deepseek-ai/DeepSeek-R1-Distill-Qwen-32B` | compare "reasoning vs direct" |
 | Embeddings | `BAAI/bge-large-en-v1.5` | `BAAI/bge-m3` (multilingual), `Alibaba-NLP/gte-large-en-v1.5` | English KG → bge-large is light & fast |
 
@@ -74,5 +75,7 @@ GENOP("List one tool used in {?field}.", (?tool), <model:openai:Qwen/Qwen2.5-7B-
 - **Reachability:** the client must be able to reach the compute node's hostname/port
   (run the client from a login node or another SLURM job on the same network).
 - **Determinism:** GenSPARQL already sends `temperature=0`; keep it for reproducible eval.
-- Embeddings can also be served with `--task embed` on the *same* node as the chat model on a
-  spare GPU; just give it a different `PORT`.
+- Embeddings can also be served with `--runner pooling` on the *same* node as the chat model on
+  a spare GPU; just give it a different `PORT`.
+- On compute nodes without a CUDA compiler (`nvcc`), FlashInfer's runtime JIT fails; the scripts
+  set `VLLM_USE_FLASHINFER_SAMPLER=0` to use the native PyTorch sampler instead.
