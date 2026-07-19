@@ -64,7 +64,8 @@ entities. GenSPARQL also registers `gen:*` SPARQL functions
 
 - Java 17+
 - Maven 3.8+
-- An LLM API key (OpenRouter by default). The `mock` provider needs no key.
+- An LLM backend: a hosted API key (OpenRouter by default), a local **open-weight** model
+  served with vLLM (see [`deploy/`](deploy/README.md)), or the `mock` provider (no key).
 
 ## Build
 
@@ -84,6 +85,21 @@ cd gensparql-example
 
 The demo dataset lives in `gensparql-example/data/scientists_awards.ttl` and the
 example queries in `gensparql-example/queries/`.
+
+### Using open-weight models (vLLM)
+
+To run the chat model *and* the embedding model as local open-weight models on a SLURM
+cluster instead of a hosted API, see [`deploy/README.md`](deploy/README.md). In short: serve
+the models with vLLM (`deploy/serve_llm.slurm`, `deploy/serve_embeddings.slurm`), then point
+the `openai` provider at them:
+
+```bash
+export OPENAI_API_KEY=dummy
+export OPENAI_BASE_URL=http://<llm-node>:8000/v1
+export OPENAI_EMBEDDING_BASE_URL=http://<emb-node>:8001/v1
+export OPENAI_EMBEDDING_MODEL=BAAI/bge-large-en-v1.5
+# query model spec: <model:openai:Qwen/Qwen2.5-7B-Instruct>
+```
 
 Programmatic use:
 

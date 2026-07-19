@@ -34,6 +34,12 @@ public class OpenAIProvider implements LLMProvider {
     private final ObjectMapper objectMapper;
     private final String apiKey;
     private final String baseUrl;
+    // Chat and embeddings are frequently served by two different OpenAI-compatible
+    // servers (e.g. a vLLM chat server and a separate vLLM/TEI embedding server), so the
+    // embedding endpoint and key can be pointed independently. They fall back to the chat
+    // base URL / API key when not set, preserving the single-server case.
+    private final String embeddingBaseUrl;
+    private final String embeddingApiKey;
     private final ResponseParser responseParser;
 
     public OpenAIProvider() {
@@ -49,6 +55,12 @@ public class OpenAIProvider implements LLMProvider {
     public OpenAIProvider(String apiKey, String baseUrl) {
         this.apiKey = apiKey;
         this.baseUrl = baseUrl != null ? baseUrl : DEFAULT_BASE_URL;
+        // OPENAI_EMBEDDING_BASE_URL / OPENAI_EMBEDDING_API_KEY override the endpoint used for
+        // embeddings; if unset, embeddings reuse the chat base URL and key.
+        String embUrl = System.getenv("OPENAI_EMBEDDING_BASE_URL");
+        this.embeddingBaseUrl = (embUrl != null && !embUrl.isEmpty()) ? embUrl : this.baseUrl;
+        String embKey = System.getenv("OPENAI_EMBEDDING_API_KEY");
+        this.embeddingApiKey = (embKey != null && !embKey.isEmpty()) ? embKey : apiKey;
         this.objectMapper = new ObjectMapper();
         this.responseParser = new JsonResponseParser();
         this.client = new OkHttpClient.Builder()
@@ -202,8 +214,8 @@ public class OpenAIProvider implements LLMProvider {
         String json = objectMapper.writeValueAsString(body);
 
         Request httpRequest = new Request.Builder()
-                .url(baseUrl + "/embeddings")
-                .addHeader("Authorization", "Bearer " + apiKey)
+                .url(embeddingBaseUrl + "/embeddings")
+                .addHeader("Authorization", "Bearer " + embeddingApiKey)
                 .addHeader("Content-Type", "application/json")
                 .post(RequestBody.create(json, MediaType.parse("application/json")))
                 .build();
