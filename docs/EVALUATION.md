@@ -158,3 +158,26 @@ export OPENROUTER_API_KEY=sk-or-...
 # add E3 (supply FB15k-237+H data directory):
 FB15K_DIR=/path/to/FB15k-237+H ./eval/run_eval.sh
 ```
+
+### With a local open-weight backend (vLLM)
+
+`ExperimentRunner` takes the generation backend from `GS_GEN_PROVIDER` / `GS_GEN_MODEL`
+(default `openrouter` / `deepseek/deepseek-chat`), so the whole eval can run on local
+open-weight models served by vLLM (see [`../deploy/`](../deploy/README.md)):
+
+```bash
+export OPENAI_API_KEY=dummy
+export OPENAI_BASE_URL=http://<llm-node>:8000/v1        # local chat server
+export GS_GEN_PROVIDER=openai
+export GS_GEN_MODEL=Qwen/Qwen3-30B-A3B-Instruct-2507    # non-thinking instruct model
+# Jaccard (text) grounding is the default. For embedding-cosine grounding, add a
+# local embedding server (grounding switches automatically):
+export OPENAI_EMBEDDING_BASE_URL=http://<emb-node>:8001/v1
+export OPENAI_EMBEDDING_MODEL=BAAI/bge-large-en-v1.5
+export GS_GROUNDING=embedding
+java -cp "$CP:eval" ExperimentRunner gensparql-example/data/footballers_eval.ttl
+```
+
+Verified E1 on this backend (Qwen3-30B-A3B-Instruct-2507, Jaccard, θ=0.85): 77 LLM
+candidates → **32 grounded, all sim=1.00 to a real KG entity, 0 hallucination leak** —
+reproducing the mechanism reported above with a fully open-source stack.
