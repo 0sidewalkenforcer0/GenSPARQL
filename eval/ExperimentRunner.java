@@ -37,15 +37,23 @@ public class ExperimentRunner {
         Dataset ds = DatasetFactory.create(model);
         System.out.println("LOADED triples=" + model.size());
 
-        LLMProvider prov = LLMProviderRegistry.get("openrouter");
+        // Generation backend: OpenRouter/deepseek by default; override to any provider
+        // (e.g. a local vLLM openai-compatible server) via GS_GEN_PROVIDER / GS_GEN_MODEL.
+        String genProvider = System.getenv().getOrDefault("GS_GEN_PROVIDER", "openrouter");
+        String genModel = System.getenv().getOrDefault("GS_GEN_MODEL", "deepseek/deepseek-chat");
+        LLMProvider prov = LLMProviderRegistry.get(genProvider);
         // temperature 0 for deterministic, reproducible candidate sets
-        ModelSpec spec = ModelSpec.builder().provider("openrouter")
-                .model("deepseek/deepseek-chat").temperature(0.0).build();
-        // Grounding similarity: text (Jaccard) by default, or embedding cosine when
-        // an OpenAI-compatible embedding backend is configured.
+        ModelSpec spec = ModelSpec.builder().provider(genProvider)
+                .model(genModel).temperature(0.0).build();
+        System.out.println("GEN " + genProvider + ":" + genModel);
+        // Grounding similarity: text (Jaccard) by default, or embedding cosine when a
+        // dedicated OpenAI-compatible embedding endpoint is configured (OPENAI_EMBEDDING_BASE_URL)
+        // or grounding is explicitly requested (GS_GROUNDING=embedding). Keyed on the embedding
+        // endpoint (not OPENAI_BASE_URL) so using an openai-compatible *chat* server for
+        // generation does not force embedding grounding.
         SimText st;
         if (System.getenv("OPENAI_API_KEY") != null
-                && (System.getenv("OPENAI_BASE_URL") != null
+                && (System.getenv("OPENAI_EMBEDDING_BASE_URL") != null
                     || "embedding".equalsIgnoreCase(System.getenv("GS_GROUNDING")))) {
             LLMProviderRegistry.setDefault(LLMProviderRegistry.get("openai"));
             st = new EmbeddingSimText();
