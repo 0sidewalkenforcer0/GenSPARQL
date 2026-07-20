@@ -44,6 +44,63 @@ public class LiveVllmSmokeTest {
     }
 
     @Test
+    void compositionFilterQuery_bgpPlusGenopPlusFilter() {
+        // X2: composition — closed-world BGP (Group A teams + their squad players) + open-world
+        // GENOP (each player's position, absent from the KG) + FILTER on the generated value.
+        // Runs as ONE declarative query; plain SPARQL cannot express it (no position predicate).
+        String kg = System.getenv().getOrDefault("WC_KG",
+                "gensparql-example/data/worldcup2026.ttl");
+        org.apache.jena.rdf.model.Model model = ModelFactory.createDefaultModel();
+        org.apache.jena.riot.RDFDataMgr.read(model, kg);
+        GenSPARQL.init();
+        String group = System.getenv().getOrDefault("WC_GROUP", "Group A");
+
+        String q = """
+                PREFIX ex: <http://example.org/>
+                PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+                SELECT ?team ?player ?pos WHERE {
+                  ?t a ex:Team ; ex:inGroup ?g ; rdfs:label ?team .
+                  ?g rdfs:label "%s" .
+                  ?p a ex:Athlete ; ex:playsFor ?t ; rdfs:label ?player .
+                  GENOP("What position does {?player} play? Answer with exactly one of: Goalkeeper, Defender, Midfielder, Forward, or Unknown if unsure.",
+                        (?pos), <model:openai:%s>)
+                  FILTER(?pos = "Defender")
+                }
+                """.formatted(group, model());
+
+        int defenders = 0;
+        java.util.Map<String,Integer> posCounts = new java.util.TreeMap<>();
+        try (QueryExecution qe = GenSPARQL.createQueryExecution(GenSPARQLQueryFactory.create(q), model)) {
+            ResultSet rs = qe.execSelect();
+            while (rs.hasNext()) {
+                QuerySolution s = rs.next();
+                String pos = s.get("pos") != null ? s.get("pos").toString() : "(null)";
+                posCounts.merge(pos, 1, Integer::sum);
+                System.out.println("[x2] " + s.get("team") + " · " + s.get("player") + " -> pos=" + pos);
+                defenders++;
+            }
+        }
+        // denominator: total Group-A squad players (plain BGP, no LLM)
+        String countQ = """
+                PREFIX ex: <http://example.org/>
+                PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+                SELECT ?player WHERE {
+                  ?t a ex:Team ; ex:inGroup ?g . ?g rdfs:label "%s" .
+                  ?p a ex:Athlete ; ex:playsFor ?t ; rdfs:label ?player .
+                }""".formatted(group);
+        int total = 0;
+        try (QueryExecution qe = GenSPARQL.createQueryExecution(GenSPARQLQueryFactory.create(countQ), model)) {
+            ResultSet rs = qe.execSelect();
+            while (rs.hasNext()) { rs.next(); total++; }
+        }
+        System.out.println("[x2] " + defenders + " defenders / " + total + " " + group
+                + " players; pos-values seen: " + posCounts
+                + "  (SPARQL-only: 0 — KG has no position predicate)");
+        assertTrue(defenders >= 1, "composition BGP+GENOP+FILTER should return >=1 defender");
+        assertTrue(defenders < total, "FILTER must drop non-defenders (not return everyone)");
+    }
+
+    @Test
     void hybridWorldCupQuery_bgpPlusGenopPlusJoin() {
         // Use-case figure query: closed-world BGP (KG: teams in a group) + open-world GENOP
         // (LLM: a star player) + join back to the KG (?p a ex:Athlete). The join keeps only
