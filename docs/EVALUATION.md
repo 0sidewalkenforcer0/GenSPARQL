@@ -31,16 +31,21 @@ GENOP supplies a column the KG does not model — each player's playing position
 against P413 at the coarse 4-class level {Goalkeeper, Defender, Midfielder, Forward}. An
 open-ended prompt with an explicit *Unknown* abstention avoids option-position bias.
 
-| Metric | Value |
-|---|---|
-| SPARQL-only answers (no position predicate) | **0** |
-| Answer rate (commits a position) | **77%** (635/825; 190 abstain) |
-| Accuracy on answered players with gold | **70.4%** (420/597); random 4-class = 25% |
-| Gold coverage (players with P413) | 90% |
+Robustness across model sizes and families (825 players, 90% with P413 gold; random
+4-class baseline = 25%; SPARQL-only = **0** for all):
 
-*Reading:* plain SPARQL returns nothing; GENOP fills the column, answers where it is
-confident (abstaining otherwise), and is right ~2.8× above chance — and, crucially, this
-is **measurable** because position has an external ground truth. Driver:
+| Model | Family | Answer rate | Accuracy on answered |
+|---|---|---:|---:|
+| Qwen3-30B-A3B-Instruct-2507 | Qwen | 77% | 70% |
+| Qwen3-8B | Qwen | 44% | 69% |
+| Mistral-7B-Instruct-v0.3 | Mistral | 26% | **91%** |
+
+*Reading:* plain SPARQL returns nothing; GENOP fills the column and, because position has an
+external ground truth, its accuracy is **measurable**. Across sizes and families the answered
+accuracy is consistently well above chance (69–91%), and a clear coverage/precision trade-off
+emerges — broader models answer more at moderate precision, conservative models abstain more
+(via the explicit *Unknown*) and are more precise on what they commit. The abstention lets each
+model self-calibrate rather than guess. Driver:
 [`../eval/wc2026_x1_position.py`](../eval/wc2026_x1_position.py).
 
 ## X2 — Composition: one query, KG ⨝ LLM

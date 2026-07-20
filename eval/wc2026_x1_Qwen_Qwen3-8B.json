@@ -1,0 +1,7302 @@
+{
+  "summary": {
+    "model": "Qwen/Qwen3-8B",
+    "players_total": 825,
+    "players_with_gold": 743,
+    "coverage_gold": 0.901,
+    "answered": 366,
+    "abstained_unknown": 459,
+    "answer_rate": 0.444,
+    "evaluable": 350,
+    "correct": 240,
+    "accuracy_on_answered_with_gold": 0.686,
+    "random_baseline_4class": 0.25,
+    "sparql_only_answers": 0
+  },
+  "records": [
+    {
+      "qid": "Q100271491",
+      "name": "Lukáš Horníček",
+      "gold": [],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q100273072",
+      "name": "Zineddine Belaïd",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q101033685",
+      "name": "Fabian Rieder",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q101035007",
+      "name": "Folarin Balogun",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Defender",
+      "correct": false
+    },
+    {
+      "qid": "Q101053044",
+      "name": "Piero Hincapié",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q101064617",
+      "name": "Mohamed Amine Ben Hmida",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q101067809",
+      "name": "Ange-Yoan Bonny",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q101247266",
+      "name": "Anthony Valencia",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q101249011",
+      "name": "Viktor Johansson",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q101764291",
+      "name": "Luiz Henrique",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q101791178",
+      "name": "Juan José Cáceres",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q102257634",
+      "name": "Marko Stamenic",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q10268484",
+      "name": "Douglas Santos",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q1033783",
+      "name": "Gustavo Gómez",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q103979811",
+      "name": "Yasin Ayari",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q104215027",
+      "name": "Elye Wahi",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q104488728",
+      "name": "Mojmír Chytil",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q104531012",
+      "name": "Jeremy Antonisse",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q104604531",
+      "name": "Tete Yengi",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q104745615",
+      "name": "Samir Chergui",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q104762954",
+      "name": "Elliot Anderson",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q104780374",
+      "name": "Jearl Margaritha",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q104784108",
+      "name": "Chadi Riad",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q104903216",
+      "name": "José Manuel López",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q105082472",
+      "name": "Mortadha Ben Ouanes",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q105127935",
+      "name": "Isak Hien",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q105161343",
+      "name": "Yahia Fofana",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q10526787",
+      "name": "Wataru Endō",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q10544594",
+      "name": "Jackson Irvine",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q10544852",
+      "name": "Ken Sema",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q10547335",
+      "name": "John McGinn",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q10549264",
+      "name": "Igor Sergeev",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q10554558",
+      "name": "Jonathan Osorio",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q10556049",
+      "name": "Jason Geria",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q105658245",
+      "name": "Jehad Thakri",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q105704210",
+      "name": "Tomoki Hayakawa",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q105834415",
+      "name": "Musab Al-Juwayr",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q105846503",
+      "name": "Melvin Mastil",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q105896342",
+      "name": "Eom Ji-sung",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q105920173",
+      "name": "Pedro Vite",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q105939150",
+      "name": "Gilson Benchimol",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q105955374",
+      "name": "Bilal El Khannouss",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q106030853",
+      "name": "Rafik Belghali",
+      "gold": [],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q106061470",
+      "name": "Denis Višinský",
+      "gold": [
+        "Forward",
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q106173160",
+      "name": "Ibrahim Sadeh",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q106173174",
+      "name": "Noor Al-Rawabdeh",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q106372516",
+      "name": "Herman Johansson",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q106778770",
+      "name": "Obed Vargas",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q106779330",
+      "name": "Lee Han-beom",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q106804819",
+      "name": "Matías Galarza",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q106805131",
+      "name": "Anthony Elanga",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q106882153",
+      "name": "Zeki Amdouni",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q106916460",
+      "name": "Nishan Velupillay",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q106939313",
+      "name": "Ben Old",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q106967174",
+      "name": "Daniel Svensson",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q107130635",
+      "name": "Ali Olwan",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q107285723",
+      "name": "Mohamed Amoura",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q107316383",
+      "name": "Gustaf Lagerbielke",
+      "gold": [],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q107334828",
+      "name": "João Paulo Fernandes",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q107365",
+      "name": "Manuel Neuer",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Goalkeeper",
+      "correct": true
+    },
+    {
+      "qid": "Q107542811",
+      "name": "Valentín Barco",
+      "gold": [],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q107558242",
+      "name": "Alex Paulsen",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q107647351",
+      "name": "Robin Hranáč",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q107739233",
+      "name": "Israel Reyes",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q107742783",
+      "name": "Simon Adingra",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q107745867",
+      "name": "Neil El Aynaoui",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q107746612",
+      "name": "Ismaël Gharbi",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q107806484",
+      "name": "Kelvin Pires",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q107930811",
+      "name": "Tino Livramento",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q107985608",
+      "name": "James Trafford",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q108109586",
+      "name": "Azzedine Ounahi",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q108156269",
+      "name": "Zakaria El Ouahdi",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q108395046",
+      "name": "Kevin Pina",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q10856523",
+      "name": "Antonio Sanabria",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q108653548",
+      "name": "Mohamed Belhadj Mahmoud",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q108698128",
+      "name": "Marvin Keller",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q108800542",
+      "name": "Livano Comenencia",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q108858343",
+      "name": "Tyrick Bodak",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q108910786",
+      "name": "Maghnes Akliouche",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q109301509",
+      "name": "Nilson Angulo",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q109327842",
+      "name": "Abde Ezzalzouli",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q109548002",
+      "name": "Aria Yousefi",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q109594121",
+      "name": "Junnosuke Suzuki",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q109768459",
+      "name": "Jordan Bos",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q109906009",
+      "name": "Taha Ali",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q109924046",
+      "name": "Cristian Volpato",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q109968695",
+      "name": "Finn Surman",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q109986890",
+      "name": "Yacine Titraoui",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q110160871",
+      "name": "Ramón Sosa",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q110184199",
+      "name": "Logan Costa",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q110244202",
+      "name": "Mohamed Abdel Monem",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q110263543",
+      "name": "Mostafa Shobeir",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q110486192",
+      "name": "Nestor Irankunda",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q110531201",
+      "name": "Oumar Diakité",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q110644260",
+      "name": "Endrick",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q110739094",
+      "name": "Ben Gannon-Doak",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q110813058",
+      "name": "Azizbek Amonov",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q110882542",
+      "name": "Wesley França",
+      "gold": [],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q11091593",
+      "name": "Júnior Alonso",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q110943455",
+      "name": "Dailon Livramento",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q110964329",
+      "name": "Youssef Belammari",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q111009946",
+      "name": "Ismaël Koné",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q111020508",
+      "name": "Alessandro Circati",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q111280241",
+      "name": "Warren Zaïre-Emery",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q111336539",
+      "name": "Nico Paz",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q111479885",
+      "name": "Abdukodir Khusanov",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q111604014",
+      "name": "Alex Freeman",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q111672750",
+      "name": "Giuliano Simeone",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Defender",
+      "correct": false
+    },
+    {
+      "qid": "Q111741178",
+      "name": "Ali Ahmed",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q111805882",
+      "name": "Aurèle Amenda",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q112079646",
+      "name": "Mohammad Ghorbani",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q112170256",
+      "name": "Désiré Doué",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q112654481",
+      "name": "Adel Boulbina",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q112654639",
+      "name": "Ahmed Nadhir Benbouali",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q112813857",
+      "name": "Jarell Quansah",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q112988067",
+      "name": "Promise David",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q113013535",
+      "name": "Lee Ki-hyuk",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q113127167",
+      "name": "Yang Hyun-jun",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q113390994",
+      "name": "Joel Ordóñez",
+      "gold": [],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q113474248",
+      "name": "Farès Chaïbi",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q113510254",
+      "name": "Chemsdine Talbi",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q113564288",
+      "name": "Tani Oluwaseyi",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q113952820",
+      "name": "Besfort Zeneli",
+      "gold": [],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q114386",
+      "name": "Silvan Widmer",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q114703020",
+      "name": "Kobbie Mainoo",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q114713721",
+      "name": "Štěpán Chaloupek",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q114736627",
+      "name": "Keisuke Goto",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q115059438",
+      "name": "Jorrel Hato",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q115132592",
+      "name": "Kevin Rodríguez",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q115371638",
+      "name": "Lucas Bergvall",
+      "gold": [],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q115803591",
+      "name": "Elias Saad",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q115937989",
+      "name": "Rayan",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q115978703",
+      "name": "Diego Gómez",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q116054089",
+      "name": "Alan Minda",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q116146104",
+      "name": "Moïse Bombito",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q116215237",
+      "name": "Deveron Fonville",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q116215934",
+      "name": "Carlos Andrés Gómez",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q116223348",
+      "name": "Damián Bobadilla",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q116235098",
+      "name": "Yaimar Medina",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q116447721",
+      "name": "Gustavo Puerta",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q116466426",
+      "name": "Kendry Páez",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q116605365",
+      "name": "Guéla Doué",
+      "gold": [],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q116621640",
+      "name": "Marwan Attia",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q116753805",
+      "name": "Ousmane Diomande",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q116908746",
+      "name": "Nathan Saliba",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Defender",
+      "correct": false
+    },
+    {
+      "qid": "Q117000107",
+      "name": "Paul Okon-Engstler",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q117035133",
+      "name": "Mahmoud Saber",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q117280421",
+      "name": "Abbosbek Fayzullaev",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q117289166",
+      "name": "Kevin Castaño",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q117309867",
+      "name": "Max Arfsten",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q117322318",
+      "name": "Richard Ríos",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q117789805",
+      "name": "Elliot Stroud",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q117830854",
+      "name": "Niko Sigur",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q117835987",
+      "name": "Denil Castillo",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q118118504",
+      "name": "Ibrahim Maza",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q118287620",
+      "name": "Jesse Randall",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q118593930",
+      "name": "Juan Portilla",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q118645253",
+      "name": "Nico O'Reilly",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q118935199",
+      "name": "Alex Arce",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q118978780",
+      "name": "Bae Jun-ho",
+      "gold": [
+        "Forward",
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q119079226",
+      "name": "Owen Goodman",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q120389429",
+      "name": "Redouane Halhal",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q120753803",
+      "name": "José Raul Rangel",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q121068701",
+      "name": "Aleksandar Pavlović",
+      "gold": [],
+      "gen": "Defender",
+      "correct": false
+    },
+    {
+      "qid": "Q121353909",
+      "name": "Tyler Bindon",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q121410218",
+      "name": "Jeremy Arévalo",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q121537482",
+      "name": "Mostafa Ziko",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q121829403",
+      "name": "Luc de Fougerolles",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q121907216",
+      "name": "Hélio Varela",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q121946144",
+      "name": "Anis Hadj Moussa",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q122055800",
+      "name": "Jakhongir Urozov",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q122152591",
+      "name": "Abdulla Abdullaev",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q122160785",
+      "name": "Luca Jaquez",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q122351097",
+      "name": "Nathaniel Brown",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q122789696",
+      "name": "Robin Roefs",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q122971833",
+      "name": "Ayyoub Bouaddi",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q123203666",
+      "name": "Ibrahim Sabrah",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q123436577",
+      "name": "Moutaz Neffati",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q123469788",
+      "name": "Amir Mohammad Razzaghinia",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q123571870",
+      "name": "Lachlan Bayliss",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q123995807",
+      "name": "Avazbek Ulmasaliev",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q124101458",
+      "name": "Sherzod Nasrullaev",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q124151324",
+      "name": "Farès Ghedjemis",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q124242129",
+      "name": "Abdallah Nasib",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q124247293",
+      "name": "Mohammad Abu Hashish",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q124283356",
+      "name": "Armando González",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q124302622",
+      "name": "Nizar Al-Rashdan",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q124382289",
+      "name": "Sidny Lopes Cabral",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q124397380",
+      "name": "Mohannad Abu Taha",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q124420330",
+      "name": "Mateo Chávez",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q124745247",
+      "name": "Robin Risser",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q125376751",
+      "name": "Johan Manzambi",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q125805788",
+      "name": "Bazoumana Touré",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q12597820",
+      "name": "Paik Seung-ho",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q126284601",
+      "name": "Patrick Beach",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q126365092",
+      "name": "Mohamed Koné",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q126369438",
+      "name": "Wagner Pina",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q126436400",
+      "name": "Gessime Yassine",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q127179158",
+      "name": "Gustavo Caballero",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q127388493",
+      "name": "Kento Shiogai",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q128133456",
+      "name": "Sherzod Esanov",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q129116",
+      "name": "Oliver Baumann",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q129652337",
+      "name": "Gilberto Mora",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q13014035",
+      "name": "Jordan Pickford",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Goalkeeper",
+      "correct": true
+    },
+    {
+      "qid": "Q130210573",
+      "name": "Saed Al-Rosan",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q130244944",
+      "name": "Husam Abu Dahab",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q130465245",
+      "name": "Yannick Semedo",
+      "gold": [],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q130495887",
+      "name": "Amer Jamous",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q130508829",
+      "name": "Odeh Al-Fakhouri",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q130776450",
+      "name": "Lennart Karl",
+      "gold": [
+        "Forward",
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q131432595",
+      "name": "Alexandr Sojka",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q131470768",
+      "name": "Bekhruz Karimov",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q131822292",
+      "name": "Ali Al-Azaizeh",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q131863254",
+      "name": "Findlay Curtis",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q133105064",
+      "name": "Lucas Herrington",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q13360752",
+      "name": "Tomáš Holeš",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q133698867",
+      "name": "Yan Diomande",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q133903",
+      "name": "Virgil van Dijk",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q13422031",
+      "name": "Guillermo Varela",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q134513932",
+      "name": "Hamza Abdelkarim",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q134657698",
+      "name": "Tyrese Noslin",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q134699960",
+      "name": "Hazem Mastouri",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q134711363",
+      "name": "Khalil Ayari",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q134932034",
+      "name": "Rayan Elloumi",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q13546781",
+      "name": "Brandley Kuwas",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q1354960",
+      "name": "Mohamed Salah",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q135616172",
+      "name": "Samir El Mourabet",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q13578003",
+      "name": "Giorgian de Arrascaeta",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q135971385",
+      "name": "Anas Badawi",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q136038808",
+      "name": "Christ Inao Oulaï",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q136092007",
+      "name": "Adem Arous",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q1362064",
+      "name": "Grant Hanley",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q13634114",
+      "name": "José María Giménez",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q136375048",
+      "name": "Alexandro Maidana",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q136399691",
+      "name": "Mohammed Abu Al-Shamat",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q136462891",
+      "name": "Achref Abada",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q137384640",
+      "name": "Tyler Fletcher",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q137705019",
+      "name": "Ayoube Amaimouni",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q137779066",
+      "name": "Danial Eiri",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q13865408",
+      "name": "Joshua Kimmich",
+      "gold": [
+        "Defender",
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q138757935",
+      "name": "Hugo Sochůrek",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q1392925",
+      "name": "Ryan Mendes",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q139815184",
+      "name": "Sabri Ben Hessen",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q139815346",
+      "name": "Mouhib Chamakh",
+      "gold": [],
+      "gen": "Defender",
+      "correct": false
+    },
+    {
+      "qid": "Q139816192",
+      "name": "Raed Chikhaoui",
+      "gold": [],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q1398221",
+      "name": "Kristoffer Nordfeldt",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q139986016",
+      "name": "Tarek Alaa",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q140008336",
+      "name": "Mohamed Alaa",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q142794",
+      "name": "Neymar",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q14309492",
+      "name": "Miloš Degenek",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q14371131",
+      "name": "Steven Moreira",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q14517123",
+      "name": "Gervane Kastaneer",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q14592575",
+      "name": "Edison borj",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q14640027",
+      "name": "Jonathan Tah",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q15113326",
+      "name": "Vladimír Coufal",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q15410320",
+      "name": "Nabil Bentaleb",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q15622446",
+      "name": "Jo Hyeon-woo",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q15627817",
+      "name": "Brice Samba",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q1587689",
+      "name": "Mathew Ryan",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Goalkeeper",
+      "correct": true
+    },
+    {
+      "qid": "Q15915040",
+      "name": "Andy Robertson",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q15956282",
+      "name": "Breel Embolo",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q15981797",
+      "name": "Rouzbeh Cheshmi",
+      "gold": [
+        "Defender",
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q15983763",
+      "name": "Raja'i Ayed",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q16145667",
+      "name": "Miguel Almirón",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q16174734",
+      "name": "Lee Kang-in",
+      "gold": [
+        "Forward",
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q16234741",
+      "name": "Lee Jae-sung",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q16234825",
+      "name": "Mohammad Al-Dawud",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q16235461",
+      "name": "Jamshid Iskanderov",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q16236181",
+      "name": "Ihsan Haddad",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q16236380",
+      "name": "Yvon Mvogo",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q16236700",
+      "name": "Ryan Christie",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q16239766",
+      "name": "Alex Rufer",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q16239819",
+      "name": "Ivan Toney",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q16297591",
+      "name": "Fabián Balbuena",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q16298600",
+      "name": "Andrés Cubas",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q16300824",
+      "name": "Jefferson Lerma",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q16499882",
+      "name": "Leroy Sané",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q16595441",
+      "name": "Remo Freuler",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q16632974",
+      "name": "Saman Ghoddos",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q16633144",
+      "name": "Jesper Karlström",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q16633442",
+      "name": "Carl Starfelt",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q16648816",
+      "name": "Yerry Mina",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q16665941",
+      "name": "N'Golo Kanté",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q16910257",
+      "name": "Patrik Schick",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q16911979",
+      "name": "Ollie Watkins",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q16935084",
+      "name": "Cyle Larin",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q17037384",
+      "name": "Tomáš Chorý",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q17070837",
+      "name": "Mehdi Taremi",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q17074511",
+      "name": "Ederson Santana de Moraes",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Goalkeeper",
+      "correct": true
+    },
+    {
+      "qid": "Q17086753",
+      "name": "Sergio Rochet",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q17151209",
+      "name": "Mohamed El-Shenawy",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Defender",
+      "correct": false
+    },
+    {
+      "qid": "Q17160970",
+      "name": "Shōgo Taniguchi",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q17274709",
+      "name": "Mike Maignan",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Goalkeeper",
+      "correct": true
+    },
+    {
+      "qid": "Q17350507",
+      "name": "Ali Abdi",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q17386078",
+      "name": "Yasser Ibrahim",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q17429290",
+      "name": "Zizo",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q17484446",
+      "name": "Ramy Bensebaini",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q17496350",
+      "name": "Cameron Burgess",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q17523896",
+      "name": "Milad Mohammadi",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q1755683",
+      "name": "Nathan Aké",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q176304",
+      "name": "Mathew Leckie",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q177331",
+      "name": "Craig Gordon",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Goalkeeper",
+      "correct": true
+    },
+    {
+      "qid": "Q18011169",
+      "name": "Gustaf Nilsson",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q18020415",
+      "name": "Gastón Olveira",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q18044401",
+      "name": "Franck Kessié",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q18062338",
+      "name": "Munir Mohand Mohamedi",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q18145133",
+      "name": "Eric Smith",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q18199184",
+      "name": "Léo Pereira",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q182063",
+      "name": "Nicolás Otamendi",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q18210581",
+      "name": "Mahdi Torabi",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q18224489",
+      "name": "Orbelín Pineda",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q18225149",
+      "name": "Karim Hafez",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q18237361",
+      "name": "Alisson Becker",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Goalkeeper",
+      "correct": true
+    },
+    {
+      "qid": "Q18331623",
+      "name": "Lawrence Shankland",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q18428483",
+      "name": "Sofyan Amrabat",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q18551518",
+      "name": "Hwang Hee-chan",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q18635274",
+      "name": "Seko Fofana",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Defender",
+      "correct": false
+    },
+    {
+      "qid": "Q18637312",
+      "name": "Diney",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q18637339",
+      "name": "Nico Elvedi",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q18683792",
+      "name": "Ché Adams",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q18705249",
+      "name": "Mohamed Hany",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q18753041",
+      "name": "Farrukh Sayfiev",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q18817134",
+      "name": "Rodrigo Bentancur",
+      "gold": [],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q1885",
+      "name": "Jürgen Locadia",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q18924954",
+      "name": "Lucas Hernandez",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q1894",
+      "name": "Memphis Depay",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q18962",
+      "name": "Adrien Rabiot",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q19158746",
+      "name": "Guillermo Martínez Ayala",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q1925465",
+      "name": "Raúl Jiménez",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q19266811",
+      "name": "Déiver Machado",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q19274473",
+      "name": "Nadiem Amiri",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q19280531",
+      "name": "Juninho Bacuna",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q19319791",
+      "name": "Alejandro Romero Gamarra",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q19345715",
+      "name": "Exequiel Palacios",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q19362872",
+      "name": "Jorge Carrascal",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q19509544",
+      "name": "Federico Valverde",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q19519224",
+      "name": "Cristian Roldan",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q19603924",
+      "name": "Hwang In-beom",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q19787021",
+      "name": "Haji Wright",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q19831829",
+      "name": "Jaloliddin Masharipov",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q19866530",
+      "name": "Maxime Crépeau",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Goalkeeper",
+      "correct": true
+    },
+    {
+      "qid": "Q19871581",
+      "name": "Tyler Adams",
+      "gold": [
+        "Defender",
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q19882816",
+      "name": "Denzel Dumfries",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q19888012",
+      "name": "Kieran Tierney",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q19898898",
+      "name": "Frenkie de Jong",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q19903718",
+      "name": "Marcus Thuram",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q19938984",
+      "name": "Manuel Akanji",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q19952334",
+      "name": "Luca Zidane",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q19969384",
+      "name": "Kenji Gorré",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q19972593",
+      "name": "Alejandro Zendejas",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q20027858",
+      "name": "Jack Hendry",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q20038711",
+      "name": "Kō Itakura",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q20039495",
+      "name": "Daichi Kamada",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q2025900",
+      "name": "John Stones",
+      "gold": [
+        "Defender",
+        "Midfielder"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q20306806",
+      "name": "Dostonbek Khamdamov",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q203749",
+      "name": "Fernando Muslera",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Goalkeeper",
+      "correct": true
+    },
+    {
+      "qid": "Q20435178",
+      "name": "Alexander Nübel",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Goalkeeper",
+      "correct": true
+    },
+    {
+      "qid": "Q20630956",
+      "name": "Ritsu Dōan",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q20641191",
+      "name": "Shahriar Moghanlou",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q20641306",
+      "name": "Nicolas Pépé",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q20641483",
+      "name": "Eldor Shomurodov",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q20641500",
+      "name": "Ellyes Skhiri",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q20645743",
+      "name": "putaso monterito",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q20676495",
+      "name": "Laros Duarte",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q2070073",
+      "name": "Rodrigo Aguirre",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q20723878",
+      "name": "Dayot Upamecano",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q20737387",
+      "name": "Dávinson Sánchez",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q20743436",
+      "name": "Giovani Lo Celso",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q20807705",
+      "name": "Angus Gunn",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Goalkeeper",
+      "correct": true
+    },
+    {
+      "qid": "Q20816441",
+      "name": "César Montes",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q20851003",
+      "name": "Ousmane Dembélé",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q20860081",
+      "name": "Tomáš Souček",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q20888302",
+      "name": "Gustavo Velásquez",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q2092409",
+      "name": "Juan Fernando Quintero",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q20972384",
+      "name": "Sherel Floranus",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q209847",
+      "name": "Jhon Córdoba",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q20994037",
+      "name": "Nicolás de la Cruz",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q20994068",
+      "name": "Pervis Estupiñán",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q21004804",
+      "name": "Roberto Alvarado",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q21066260",
+      "name": "Denis Zakaria",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q21286402",
+      "name": "Takehiro Tomiyasu",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q21484126",
+      "name": "Lautaro Martínez",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q215522",
+      "name": "Guillermo Ochoa",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Goalkeeper",
+      "correct": true
+    },
+    {
+      "qid": "Q21573188",
+      "name": "Jhon Lucumí",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q21590318",
+      "name": "Alban Lafont",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Goalkeeper",
+      "correct": true
+    },
+    {
+      "qid": "Q21621941",
+      "name": "Mahmoud Al-Mardi",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q21913126",
+      "name": "Junya Itō",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q21916759",
+      "name": "Kim Jin-gyu",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q22082590",
+      "name": "Nahuel Molina",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q22082627",
+      "name": "Julián Quiñones",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q22092264",
+      "name": "Luis Chávez",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q22092356",
+      "name": "Jesús Gallardo",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q22096162",
+      "name": "Richie Laryea",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q2210473",
+      "name": "Wout Weghorst",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q22127681",
+      "name": "Koki Ogawa",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q22278509",
+      "name": "Mohamed Kanno",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q22279773",
+      "name": "Christian Pulisic",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q22340706",
+      "name": "Sultan Mendash",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q22677970",
+      "name": "Mohammed Al-Owais",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q22812479",
+      "name": "Ali Lajami",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q22812486",
+      "name": "Alaa Al Hejji",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q22951255",
+      "name": "Marcus Rashford",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q22965497",
+      "name": "Cedric Itten",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q23007684",
+      "name": "Nuno da Costa",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q23007824",
+      "name": "Dominic Hyam",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q2342765",
+      "name": "Joshua Brenet",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q23540953",
+      "name": "Alphonso Davies",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q23541080",
+      "name": "Jamiro Monteiro",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q23559699",
+      "name": "Waldemar Anton",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q23679804",
+      "name": "Mathías Olivera",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q23703372",
+      "name": "Théo Hernandez",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q23712679",
+      "name": "Hassan Kadesh",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q23712857",
+      "name": "Ahmed Al-Kassar",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q23759917",
+      "name": "Alexander Isak",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q23772014",
+      "name": "Yazeed Abulaila",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q23799433",
+      "name": "Alexis Vega",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q23915221",
+      "name": "Mattias Svanberg",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q24007335",
+      "name": "Auston Trusty",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q24034870",
+      "name": "Jorge Sánchez Ramos",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q24052364",
+      "name": "Eray Cömert",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q24073962",
+      "name": "Anthony Ralston",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q24084205",
+      "name": "Harry Souttar",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q24084301",
+      "name": "Donyell Malen",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q24084667",
+      "name": "Scott McKenna",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q24663885",
+      "name": "Matt Turner",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Goalkeeper",
+      "correct": true
+    },
+    {
+      "qid": "Q249344",
+      "name": "Leandro Bacuna",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q24961840",
+      "name": "Tahith Chong",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q2502118",
+      "name": "Santiago Arias",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q25175970",
+      "name": "Gabriel Magalhães",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q25367692",
+      "name": "Santiago Bueno",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q26209536",
+      "name": "Otabek Shukurov",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q26255087",
+      "name": "Gonzalo Montiel",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q26266244",
+      "name": "Noussair Mazraoui",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q26385193",
+      "name": "Guus Til",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q26405109",
+      "name": "Lyndon Dykes",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q26405549",
+      "name": "Dylan Bronn",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q2642525",
+      "name": "Tim Payne",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q26485052",
+      "name": "Aiden O'Neill",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q26704562",
+      "name": "Jovane Cabral",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q26707107",
+      "name": "Carlos Acevedo",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q26838705",
+      "name": "Agustín Canobbio",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q26932598",
+      "name": "Achraf Hakimi",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q26934107",
+      "name": "Justin Kluivert",
+      "gold": [
+        "Forward",
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q26964668",
+      "name": "Jean-Philippe Mateta",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q26973015",
+      "name": "Brahim Díaz",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q27037962",
+      "name": "Cucho Hernández",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q27063854",
+      "name": "Ezri Konsa",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q27067753",
+      "name": "Takefusa Kubo",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q27306208",
+      "name": "Christian Fassnacht",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q27310755",
+      "name": "Kai Havertz",
+      "gold": [
+        "Forward",
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q273715",
+      "name": "Jordan Henderson",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q27448075",
+      "name": "Liam Kelly",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q27469951",
+      "name": "Michel Aebischer",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q27514541",
+      "name": "Armando Obispo",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q27585643",
+      "name": "Ahmed Aboul Fotouh",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q2762113",
+      "name": "Ehsan Hajsafi",
+      "gold": [
+        "Defender",
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q278239",
+      "name": "Vladimír Darida",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q27832634",
+      "name": "Ibrahim Sangaré",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q27859514",
+      "name": "Edson Álvarez",
+      "gold": [
+        "Defender",
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q27909473",
+      "name": "Musa Al-Taamari",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q27914873",
+      "name": "George Hirst",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q27919903",
+      "name": "Ladislav Krejčí",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q27920148",
+      "name": "Ao Tanaka",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q27921765",
+      "name": "Santiago Mele",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q27927442",
+      "name": "Houssem Aouar شيبان",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q27960175",
+      "name": "Manuel Ugarte",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q27990906",
+      "name": "Daizen Maeda",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q27990922",
+      "name": "Ayumu Seko",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q27995699",
+      "name": "Djibril Sow",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q27995843",
+      "name": "Mark McKenzie",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q28056787",
+      "name": "Facundo Medina",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q28058687",
+      "name": "Cristian Romero",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q28059260",
+      "name": "Dean Henderson",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Goalkeeper",
+      "correct": true
+    },
+    {
+      "qid": "Q28065104",
+      "name": "Omar Marmoush",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q28098786",
+      "name": "Azizjon Ganiev",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q281734",
+      "name": "Yūto Nagatomo",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q2843080",
+      "name": "Enner Valencia",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q28445512",
+      "name": "Eberechi Eze",
+      "gold": [
+        "Forward",
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q28529932",
+      "name": "Ahmed Reda Tagnaouti",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q28531111",
+      "name": "Luis Díaz",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q28540571",
+      "name": "David Raum",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q285684",
+      "name": "Marten de Roon",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q28663925",
+      "name": "Matías Viña",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q28699707",
+      "name": "Kim Min-jae",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q28716544",
+      "name": "Abdullah Al-Khaibari",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q28736721",
+      "name": "Luis Suárez",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q2876432",
+      "name": "Aïssa Mandi",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q28800473",
+      "name": "Sarpreet Singh",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q28801927",
+      "name": "Cody Gakpo",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q28801942",
+      "name": "Michal Sadílek",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q28861547",
+      "name": "Raphinha",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q28872567",
+      "name": "Nayef Aguerd",
+      "gold": [
+        "Defender",
+        "Midfielder"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q28971436",
+      "name": "Evan Ndicka",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q28973866",
+      "name": "Vinícius Júnior",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q29109911",
+      "name": "Ajdin Hrustic",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q29113776",
+      "name": "Francis de Vries",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q29158696",
+      "name": "Ghislain Konan",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q29318963",
+      "name": "Gabriel Gudmundsson",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q29441778",
+      "name": "Noa Lang",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q2947963",
+      "name": "Aziz Behich",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q29624459",
+      "name": "Scott McTominay",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q29901014",
+      "name": "Derek Cornelius",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q29998966",
+      "name": "Weston McKennie",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q30007142",
+      "name": "Declan Rice",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q30045780",
+      "name": "Amine Gouiri",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q30050934",
+      "name": "Jaminton Campaz",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q30082508",
+      "name": "Firas Al-Buraikan",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q30089624",
+      "name": "Lucas Paquetá",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q30118244",
+      "name": "Montassar Talbi",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q30122953",
+      "name": "Miles Robinson",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q30160479",
+      "name": "Mehdi Ghayedi",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q3018091",
+      "name": "Vozinha",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q30301454",
+      "name": "Ibrahima Konaté",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q30308980",
+      "name": "Abdulelah Al-Amri",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q30346214",
+      "name": "Jordy Caicedo",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q30881092",
+      "name": "Lisandro Martínez",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q30916190",
+      "name": "Félix Torres",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q30925365",
+      "name": "Keisuke Osako",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q30933054",
+      "name": "Hiroki Itō",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q31146726",
+      "name": "Kim Moon-hwan",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q31871265",
+      "name": "Timothy Weah",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q3238952",
+      "name": "John Souttar",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q32666318",
+      "name": "Juriën Gaari",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q3275904",
+      "name": "Emiliano Martínez",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Goalkeeper",
+      "correct": true
+    },
+    {
+      "qid": "Q33124960",
+      "name": "Salim Obaid",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q33129609",
+      "name": "Brenden Aaronson",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q33296979",
+      "name": "Santiago Giménez",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q33297140",
+      "name": "Alexis Mac Allister",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q33541239",
+      "name": "Nour Bani Attiah",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q3431767",
+      "name": "Riechedly Bazoer",
+      "gold": [
+        "Defender",
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q35009041",
+      "name": "Stephen Eustáquio",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q35066458",
+      "name": "Joaquín Piquerez",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q3571952",
+      "name": "Yassine Bounou",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Goalkeeper",
+      "correct": true
+    },
+    {
+      "qid": "Q35778151",
+      "name": "Antonee Robinson",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q35831063",
+      "name": "Matheus Cunha",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q35841433",
+      "name": "Hamdi Fathi",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q36184031",
+      "name": "Gregor Kobel",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Goalkeeper",
+      "correct": true
+    },
+    {
+      "qid": "Q368441",
+      "name": "James Rodríguez",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q38053896",
+      "name": "Ruben Vargas",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q38693097",
+      "name": "Bremer",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q3876530",
+      "name": "Nicolás Tagliafico",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q39076401",
+      "name": "Reece James",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q39082970",
+      "name": "Deroy Duarte",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q39161128",
+      "name": "Johan Vázquez",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q39230",
+      "name": "Marquinhos",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q3943100",
+      "name": "Ryan Thomas",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q3945419",
+      "name": "Salem Al-Dawsari",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q39498277",
+      "name": "Teun Koopmeiners",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q39500352",
+      "name": "Tijjani Reijnders",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q41023561",
+      "name": "Mohanad Lasheen",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q41187975",
+      "name": "Nabil Emad",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q4125587",
+      "name": "Victor Lindelöf",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q41791648",
+      "name": "Christopher Opéri",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q41800131",
+      "name": "Omar Alderete",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q42948040",
+      "name": "Ayoub El Kaabi",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q43303848",
+      "name": "Jacob Italiano",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q43374160",
+      "name": "Payam Niazmand",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q43381082",
+      "name": "Nicolás González",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q436987",
+      "name": "David Ospina",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Goalkeeper",
+      "correct": true
+    },
+    {
+      "qid": "Q437329",
+      "name": "Danilo",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q439722",
+      "name": "Son Heung-min",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q4406552",
+      "name": "Alireza Jahanbakhsh",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q44737396",
+      "name": "Marc Guéhi",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q44821118",
+      "name": "Willy Semedo",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q45045358",
+      "name": "Jan Kuchta",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q45108287",
+      "name": "Hassan Tombakti",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q45179405",
+      "name": "Anthony Gordon",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q45288740",
+      "name": "Lukáš Provod",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q45819496",
+      "name": "Keito Nakamura",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q4621784",
+      "name": "Garry Mendes Rodrigues",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q462503",
+      "name": "Tommy Smith",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q46372260",
+      "name": "Darwin Núñez",
+      "gold": [],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q46709013",
+      "name": "Kevin Felida",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q46951844",
+      "name": "Aurélien Tchouaméni",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q4702779",
+      "name": "El-Mahdy Soliman",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q47074246",
+      "name": "Nasser Al-Dawsari",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q47075606",
+      "name": "Viktor Gyökeres",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q47105682",
+      "name": "Yazan Abu Arab",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q47126518",
+      "name": "Ross Stewart",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Defender",
+      "correct": false
+    },
+    {
+      "qid": "Q47170176",
+      "name": "Jules Koundé",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q4724643",
+      "name": "Ali Alipour",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q4726869",
+      "name": "Alireza Beiranvand",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q47467341",
+      "name": "Lewis Ferguson",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q47499719",
+      "name": "Abdullah Al-Hamdan",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q47499724",
+      "name": "Ali Majrashi",
+      "gold": [
+        "Defender",
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q47501392",
+      "name": "Odiljon Hamrobekov",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q47544166",
+      "name": "Liberato Cacace",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q4830013",
+      "name": "Awer Mabil",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q49167084",
+      "name": "Miro Muheim",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q49562244",
+      "name": "Song Bum-keun",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q50073536",
+      "name": "Yukinari Sugawara",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q50105161",
+      "name": "José María Canale",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q501274",
+      "name": "Ramy Rabia",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q50233588",
+      "name": "Leonardo Balerdi",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q5026758",
+      "name": "Camilo Vargas",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q50505969",
+      "name": "Liam Millar",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q50820392",
+      "name": "César Huerta",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q50825738",
+      "name": "Rayan Aït-Nouri",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q50829202",
+      "name": "Callum McCowatt",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q509489",
+      "name": "Pascal Groß",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q51213832",
+      "name": "Connor Metcalfe",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q514427",
+      "name": "Granit Xhaka",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q51670751",
+      "name": "Botirali Ergashev",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q520721",
+      "name": "Leon Goretzka",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q5213217",
+      "name": "Dan Burn",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q524730",
+      "name": "Michael Boxall",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q53952196",
+      "name": "Jurriën Timber",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q53996595",
+      "name": "Quinten Timber",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q54861644",
+      "name": "Joe Scally",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q54862548",
+      "name": "Michael Woud",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q551192",
+      "name": "Alex Sandro",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q55138415",
+      "name": "Rustam Ashurmatov",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q55286732",
+      "name": "Noah Okafor",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q55363875",
+      "name": "Roger Ibañez",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q55433904",
+      "name": "Márcio Rosa",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q55760452",
+      "name": "Mathieu Choinière",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q55955918",
+      "name": "Deniz Undav",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q56085180",
+      "name": "Jonathan David",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q56164119",
+      "name": "Alan Franco",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q56222105",
+      "name": "Alfie Jones",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q56222532",
+      "name": "Djed Spence",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q56223703",
+      "name": "Dennis Eckert Ayensa",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q56247602",
+      "name": "Soufiane Rahimi",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q56253139",
+      "name": "Tsuyoshi Watanabe",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q56257870",
+      "name": "Ryan Gravenberch",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q56332606",
+      "name": "Ronald Araújo",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q56433831",
+      "name": "Luis Romo",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q56512017",
+      "name": "Jindřich Staněk",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q56599873",
+      "name": "Angelo Preciado",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q56641379",
+      "name": "Hjalmar Ekdal",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q56703599",
+      "name": "Daniel Muñoz",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q56787768",
+      "name": "Roshon van Eijma",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q56868118",
+      "name": "William Saliba",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q57017726",
+      "name": "Cameron Devlin",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q57293140",
+      "name": "Thiago Almada",
+      "gold": [
+        "Forward",
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q5742434",
+      "name": "Hernán Galíndez",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q57456989",
+      "name": "Sergiño Dest",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q57456997",
+      "name": "Brian Brobbey",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q58011140",
+      "name": "Sebastián Cáceres",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q58011167",
+      "name": "Maximiliano Araújo",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q5811691",
+      "name": "Mark Flekken",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q58215731",
+      "name": "John Yeboah",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q58323172",
+      "name": "Bruno Guimarães",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q5865783",
+      "name": "Hossein Hosseini",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q58767078",
+      "name": "Mats Wieffer",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q5879014",
+      "name": "Gerónimo Rulli",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Goalkeeper",
+      "correct": true
+    },
+    {
+      "qid": "Q58815643",
+      "name": "Firas Chaouat",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q59268317",
+      "name": "Yan Valery",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q59306386",
+      "name": "Bukayo Saka",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q59306433",
+      "name": "Hicham Boudaoui",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q5932872",
+      "name": "Johan Mojica",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q5938042",
+      "name": "Mohammad Hossein Kanaanizadegan",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q59381180",
+      "name": "Julián Alvarez",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q5951550",
+      "name": "Juan Musso",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Goalkeeper",
+      "correct": true
+    },
+    {
+      "qid": "Q59782306",
+      "name": "Adam Hložek",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q59914031",
+      "name": "Matěj Kovář",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q60047739",
+      "name": "Godfried Roemeratoe",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q60048828",
+      "name": "Abdallah Al-Fakhouri",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q60286976",
+      "name": "Maxence Lacroix",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q60298555",
+      "name": "Utkir Yusupov",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q60407856",
+      "name": "Saud Abdulhamid",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q60583915",
+      "name": "Dayne St. Clair",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q60664537",
+      "name": "Crysencio Summerville",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q60677561",
+      "name": "Benjamin Nygren",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q60736591",
+      "name": "Brian RodríguezF",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q60791524",
+      "name": "Pavel Sulc",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q60828724",
+      "name": "Braian Ojeda",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q60839691",
+      "name": "Chris Richards",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q60841788",
+      "name": "Juan Manuel Sanabria",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q60842077",
+      "name": "Orlando Gill",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q60842106",
+      "name": "Moisés Ramírez",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q60842110",
+      "name": "Jackson Porozo",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q60842120",
+      "name": "Gonzalo Plata",
+      "gold": [
+        "Forward",
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q60842122",
+      "name": "Jordy Alcívar",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q60842159",
+      "name": "Rodrigo Zalazar",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q60889488",
+      "name": "Felix Nmecha",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q61100362",
+      "name": "Lee Tae-seok",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q6110670",
+      "name": "Rodrigo De Paul",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q61439485",
+      "name": "Dan Ndoye",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q61460651",
+      "name": "Gabriel Martinelli",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q615",
+      "name": "Lionel Messi",
+      "gold": [
+        "Forward",
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q61598452",
+      "name": "Morgan Rogers",
+      "gold": [
+        "Forward",
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q6160707",
+      "name": "Jaroslav Zelený",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q616664",
+      "name": "Casemiro",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q6171506",
+      "name": "Jean Seri",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q62006806",
+      "name": "Callan Elliot",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q62015814",
+      "name": "Nico Schlotterbeck",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q62016194",
+      "name": "Tajon Buchanan",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q62036070",
+      "name": "Matt Freese",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q62050484",
+      "name": "Michael Olise",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q62085431",
+      "name": "Ayase Ueda",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q62364798",
+      "name": "Mo Abualnadi",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q62445814",
+      "name": "CJ dos Santos",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q62594816",
+      "name": "Federico Viñas",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q62597239",
+      "name": "Ricardo Pepi",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q62629839",
+      "name": "Ben Waine",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q62714742",
+      "name": "Shurandy Sambo",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q62961021",
+      "name": "Lee Dong-gyeong",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q630170",
+      "name": "Leandro Paredes",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q63344470",
+      "name": "Oh Hyeon-gyu",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q63700064",
+      "name": "Joel Waterman",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q6391158",
+      "name": "Kenny McLean",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q64009388",
+      "name": "Odilon Kossounou",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q64009768",
+      "name": "Jacob Shaffelburg",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q64010525",
+      "name": "Aaron Hickey",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q64029237",
+      "name": "Manu Koné",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q64031850",
+      "name": "Elijah Just",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q64031855",
+      "name": "Nando Pijnaker",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q6409355",
+      "name": "Kim Seung-gyu",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q641425",
+      "name": "Fabinho",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q64147458",
+      "name": "Khalid Al-Ghannam",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q64224437",
+      "name": "Sontje Hansen",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q64433070",
+      "name": "Joe Bell",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q64520753",
+      "name": "Aymen Dahmen",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q64681287",
+      "name": "Emam Ashour",
+      "gold": [
+        "Forward",
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q64736321",
+      "name": "Rayan Cherki",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q64740426",
+      "name": "Elias Achouri",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q64853255",
+      "name": "Khojiakbar Alijonov",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q65029955",
+      "name": "Kaishu Sano",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q65030956",
+      "name": "Oston Urunov",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q65131685",
+      "name": "Anass Salah-Eddine",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q65195011",
+      "name": "Ali Nemati",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q65378670",
+      "name": "Jhon Arias",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q65515898",
+      "name": "Mohammad Mohebi",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q65718498",
+      "name": "Maurício",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q65964628",
+      "name": "Jamie Leweling",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q66241169",
+      "name": "Jude Bellingham",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q666506",
+      "name": "Ricardo Rodriguez",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q66735853",
+      "name": "Amir Hossein Hosseinzadeh",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q66801705",
+      "name": "Noni Madueke",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q66828825",
+      "name": "Jan Paul van Hecke",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q6734350",
+      "name": "Trézéguet",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q67498669",
+      "name": "Zion Suzuki",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q6794678",
+      "name": "Max Crocombe",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q68168547",
+      "name": "Ayman Yahya",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q68676722",
+      "name": "Angelo Stiller",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q69523791",
+      "name": "Emmanuel Agbadou",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q69696822",
+      "name": "Cho Gue-sung",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q69696842",
+      "name": "Park Jin-seop",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q69812902",
+      "name": "Micky van de Ven",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q70226579",
+      "name": "Saleh Hardani",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q7151477",
+      "name": "Paul Izzo",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q716113",
+      "name": "Tim Ream",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q72091732",
+      "name": "Facundo Pellistri",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q72603655",
+      "name": "Amad Diallo",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q72648",
+      "name": "Lucas Digne",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q73149048",
+      "name": "Ramiz Zerrouki",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q7398276",
+      "name": "Saeid Ezzatollahi",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q7403894",
+      "name": "Saleh Al-Shehri",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q74548",
+      "name": "Chris Wood",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q7500146",
+      "name": "Shojae Khalilzadeh",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q75019636",
+      "name": "Giovanni Reyna",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q76591341",
+      "name": "Alexander Bernhardsson",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q771396",
+      "name": "Kosta Barbarouses",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q781683",
+      "name": "Gatito Fernández",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q78255759",
+      "name": "Wilfried Singo",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q78459310",
+      "name": "Nawaf Boushal",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q78752401",
+      "name": "Malo Gusto",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q79880395",
+      "name": "Willer Ditta",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q79904514",
+      "name": "Kim Tae-hyeon",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q80314837",
+      "name": "Maximilian Beier",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q8040741",
+      "name": "Weverton",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Goalkeeper",
+      "correct": true
+    },
+    {
+      "qid": "Q81659662",
+      "name": "Mohamed Amine Tougai",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q81878309",
+      "name": "Alistair Johnston",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q82251502",
+      "name": "Nawaf Al-Aqidi",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q83264648",
+      "name": "Nathan Patterson",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q8338725",
+      "name": "Riyad Mahrez",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q83639138",
+      "name": "Igor Thiago",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q83787036",
+      "name": "Mohammad Abu Zrayq",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q84158344",
+      "name": "Nick Woltemade",
+      "gold": [
+        "Forward",
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q84312754",
+      "name": "David Zima",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q84593316",
+      "name": "Mohamed Touré",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q84601192",
+      "name": "Oussama Benbot",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q85410990",
+      "name": "Anis Ben Slimane",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q85797565",
+      "name": "Roberto Lopes",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q85872272",
+      "name": "Julio César Enciso",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q85884126",
+      "name": "Yuito Suzuki",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q862963",
+      "name": "Eloy Room",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q86301356",
+      "name": "Sebastian Berhalter",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q86312",
+      "name": "Rani Khedira",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q87119732",
+      "name": "Gonzalo Valle",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q87268125",
+      "name": "Malick Thiaw",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q87400019",
+      "name": "Kai Trewin",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q87715532",
+      "name": "Moisés Caicedo",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q87767569",
+      "name": "Willian Pacho",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q89047062",
+      "name": "Umar Eshmurodov",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q90916422",
+      "name": "Ibrahim Adel",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q918049",
+      "name": "Stopira",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q94699949",
+      "name": "Florian Wirtz",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q95223261",
+      "name": "Trevor Doornbusch",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q95618487",
+      "name": "Jacob Widell Zetterström",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q96070453",
+      "name": "David Jurásek",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q96072055",
+      "name": "Jamal Musiala",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q96091702",
+      "name": "Matthew Garbett",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q96105248",
+      "name": "Enzo Fernández",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q96337717",
+      "name": "Sebastian Tounekti",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q96391665",
+      "name": "Malik Tillman",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q96613620",
+      "name": "David Douděra",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q96678415",
+      "name": "Omar Rekik",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q96755",
+      "name": "Antonio Rüdiger",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Defender",
+      "correct": true
+    },
+    {
+      "qid": "Q96755704",
+      "name": "Hannibal Mejbri",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q969725",
+      "name": "Harry Kane",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q97205258",
+      "name": "Seol Young-woo",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q97312966",
+      "name": "Lukáš Červ",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q97577478",
+      "name": "Parfait Guiagon",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q97580948",
+      "name": "Telmo Arcanjo",
+      "gold": [],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q97608024",
+      "name": "Emiliano Martínez Toranza",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Goalkeeper",
+      "correct": false
+    },
+    {
+      "qid": "Q97698786",
+      "name": "Moteb Al-Harbi",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q98092491",
+      "name": "Álvaro Fidalgo",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q98191389",
+      "name": "Ziyad Al-Johani",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q98536293",
+      "name": "Brian Gutiérrez",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Forward",
+      "correct": false
+    },
+    {
+      "qid": "Q98561102",
+      "name": "Jaouen Hadjam",
+      "gold": [
+        "Defender"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q98593181",
+      "name": "Erik Lira",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q98593672",
+      "name": "Evann Guessand",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Midfielder",
+      "correct": false
+    },
+    {
+      "qid": "Q98594864",
+      "name": "Chris Brady",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q98682558",
+      "name": "Bart Verbruggen",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q98781677",
+      "name": "Ar'jany Martha",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q98784065",
+      "name": "Ismael Saibari",
+      "gold": [
+        "Forward",
+        "Midfielder"
+      ],
+      "gen": "Midfielder",
+      "correct": true
+    },
+    {
+      "qid": "Q98816361",
+      "name": "Ardon Jashari",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q98829565",
+      "name": "Jens Castrop",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q98887333",
+      "name": "Abduvohid Nematov",
+      "gold": [
+        "Goalkeeper"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q98937753",
+      "name": "Hossam Abdelmaguid",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q99096411",
+      "name": "Isidro Pitta",
+      "gold": [],
+      "gen": "Unknown",
+      "correct": false
+    },
+    {
+      "qid": "Q99670930",
+      "name": "Bradley Barcola",
+      "gold": [
+        "Forward"
+      ],
+      "gen": "Forward",
+      "correct": true
+    },
+    {
+      "qid": "Q99777968",
+      "name": "Akmal Mozgovoy",
+      "gold": [
+        "Midfielder"
+      ],
+      "gen": "Unknown",
+      "correct": false
+    }
+  ]
+}

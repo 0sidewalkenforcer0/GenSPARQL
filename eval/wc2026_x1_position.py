@@ -105,21 +105,28 @@ print(f"players with gold position: {len(gold)}", file=sys.stderr)
 def llm_position(name):
     # Open-ended prompt (no fixed option list) to avoid first-option position bias, with an
     # explicit abstention so "don't know" is separated from a guess.
-    body = json.dumps({
+    payload = {
         "model": MODEL,
         "messages": [{"role": "user", "content":
             f"On which position does the footballer {name} primarily play? "
             f"Give the specific position (e.g. centre-back, winger, defensive midfielder, "
             f"goalkeeper). If you do not know this player, reply exactly: Unknown."}],
-        "temperature": 0.0, "max_tokens": 16,
-    }).encode()
+        "temperature": 0.0, "max_tokens": 24,
+    }
+    # Qwen3 hybrid models emit a <think> trace by default; disable it via the chat template.
+    # Only sent for Qwen3 (other templates reject the unknown kwarg).
+    if "qwen3" in MODEL.lower():
+        payload["chat_template_kwargs"] = {"enable_thinking": False}
+    body = json.dumps(payload).encode()
     req = urllib.request.Request(LLM + "/chat/completions", data=body,
                                  headers={"Content-Type": "application/json",
                                           "Authorization": "Bearer dummy"})
     for _ in range(3):
         try:
             with urllib.request.urlopen(req, timeout=60) as r:
-                txt = json.load(r)["choices"][0]["message"]["content"].strip()
+                txt = json.load(r)["choices"][0]["message"]["content"]
+            # belt-and-suspenders: strip any <think>...</think> block
+            txt = re.sub(r"<think>.*?</think>", "", txt, flags=re.S).strip()
             if txt.lower().startswith("unknown"):
                 return "Unknown"
             return coarse(txt) or ("Unknown" if not txt else txt.strip())
@@ -167,7 +174,8 @@ summary = {
     "random_baseline_4class": 0.25,
     "sparql_only_answers": 0,
 }
-out = os.path.join(HERE, "wc2026_x1_results.json")
+safe = MODEL.replace("/", "_").replace(":", "_")
+out = os.path.join(HERE, f"wc2026_x1_{safe}.json")
 with open(out, "w") as f:
     json.dump({"summary": summary, "records": records}, f, indent=2, ensure_ascii=False)
 
