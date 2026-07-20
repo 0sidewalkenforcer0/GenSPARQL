@@ -52,7 +52,10 @@ public class ModelSpec {
     }
 
     public double getTemperature() {
-        return getNumber("temperature", 0.7).doubleValue();
+        // Default to 0.0 for deterministic, reproducible generation (GenSPARQL is used for
+        // KG completion / structured extraction, where sampling variance hurts). Override
+        // per query with e.g. "model:openai:...?temperature=0.7".
+        return getNumber("temperature", 0.0).doubleValue();
     }
 
     public int getMaxTokens() {
