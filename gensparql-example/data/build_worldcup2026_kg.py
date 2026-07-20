@@ -2,10 +2,11 @@
 """
 Build a 2026 FIFA World Cup knowledge graph (Turtle) from Wikidata.
 
-Pre-kickoff STRUCTURAL facts only (teams, groups, host cities, venues) plus a small
-set of NOTABLE players per team (ranked by Wikipedia sitelink count) — no match
-results / winners. Source: Wikidata SPARQL (real QIDs + clean rdfs:label), so the KG
-is verifiable and reproducible, not LLM-generated.
+Pre-kickoff / structural facts + the real 26-man squads:
+  48 teams, 12 groups, host cities (+ metro aliases), venues, and each team's
+  official 2026 squad (Wikidata `participant` on the "X at the 2026 FIFA World Cup"
+  items). No match results / winner. Source: Wikidata SPARQL (real QIDs + clean
+  rdfs:label) — verifiable and reproducible, not LLM-generated.
 
 Output: worldcup2026.ttl next to this script.
 """
@@ -19,10 +20,16 @@ import urllib.request
 WD = "https://query.wikidata.org/sparql"
 UA = "GenSPARQL-KG-Builder/1.0 (research; ac-claude-3@ki.uni-stuttgart.de)"
 WC = "wd:Q5020214"  # 2026 FIFA World Cup
-PLAYERS_PER_TEAM = 8
-
 EX = "http://example.org/"
 WDENT = "http://www.wikidata.org/entity/"
+
+# Stadium municipality -> common metropolitan name (added as an extra rdfs:label so the
+# popular host-city name grounds too, e.g. "Dallas" as well as "Arlington").
+CITY_ALIAS = {
+    "Arlington": "Dallas", "Inglewood": "Los Angeles", "Santa Clara": "San Francisco",
+    "Zapopan": "Guadalajara", "Miami Gardens": "Miami", "Foxborough": "Boston",
+    "East Rutherford": "New York", "Paradise": "Las Vegas", "Guadalupe": "Monterrey",
+}
 
 
 def sparql(query, retries=3):
@@ -32,7 +39,7 @@ def sparql(query, retries=3):
         try:
             req = urllib.request.Request(url, headers={"User-Agent": UA,
                                                        "Accept": "application/sparql-results+json"})
-            with urllib.request.urlopen(req, timeout=90) as r:
+            with urllib.request.urlopen(req, timeout=120) as r:
                 return json.load(r)["results"]["bindings"]
         except Exception as e:  # noqa
             last = e
@@ -46,61 +53,54 @@ def qid(uri):
 
 TEAM_SUFFIX_RE = re.compile(
     r"\s+(men's\s+)?national\s+(association\s+)?(football|soccer)\s+team$", re.I)
-
-
-# Fix Wikidata label quirks (e.g. the Canada men's team's English label is a demonym).
 LABEL_FIX = {"Canadian": "Canada"}
 
 
 def clean_team(label):
-    lab = TEAM_SUFFIX_RE.sub("", label).strip()
-    return LABEL_FIX.get(lab, lab)
+    lab = LABEL_FIX.get(label, label)
+    return LABEL_FIX.get(TEAM_SUFFIX_RE.sub("", lab).strip(), TEAM_SUFFIX_RE.sub("", lab).strip())
 
 
 def esc(s):
     return s.replace("\\", "\\\\").replace('"', '\\"')
 
 
-# ---- 1. Groups A-L and their national teams -------------------------------------
+# ---- 1. Groups A-L, their national teams, and each team's nation key ------------
 print("[1/4] groups + teams ...", file=sys.stderr)
 group_rows = sparql(f"""
-SELECT ?g ?gLabel ?t ?tLabel WHERE {{
+SELECT ?g ?gLabel ?t ?tLabel ?nation WHERE {{
   {WC} wdt:P527 ?g .
-  ?g wdt:P31 wd:Q1867571 .            # instance of: group of a sports competition
-  ?g wdt:P1923 ?t .                   # participating team (national team)
-  SERVICE wikibase:label {{ bd:serviceParam wikibase:language "en". }}
+  ?g rdfs:label ?gLabel . FILTER(LANG(?gLabel)="en" && CONTAINS(?gLabel,"Group"))
+  ?g wdt:P1923 ?t .                   # participating national team
+  ?t rdfs:label ?tLabel . FILTER(LANG(?tLabel)="en")
+  OPTIONAL {{ ?t wdt:P1532 ?nation . }}   # country for sport (stable join key)
 }}""")
 
-# Fallback: if the P31 filter yields nothing, match by label "... Group X"
-if not group_rows:
-    group_rows = sparql(f"""
-    SELECT ?g ?gLabel ?t ?tLabel WHERE {{
-      {WC} wdt:P527 ?g . ?g wdt:P1923 ?t .
-      ?g rdfs:label ?gLabel . FILTER(LANG(?gLabel)="en" && CONTAINS(?gLabel,"Group"))
-      ?t rdfs:label ?tLabel . FILTER(LANG(?tLabel)="en")
-    }}""")
-
-groups = {}       # gqid -> label
-teams = {}        # tqid -> {label, group}
+groups = {}                 # gqid -> label
+teams = {}                  # tqid -> {label, group, nation}
+nation2team = {}            # nationQID -> tqid
 for r in group_rows:
     g, gl = qid(r["g"]["value"]), r["gLabel"]["value"]
     if "Group" not in gl:
         continue
-    t, tl = qid(r["t"]["value"]), clean_team(r["tLabel"]["value"])
+    t = qid(r["t"]["value"])
+    tl = clean_team(r["tLabel"]["value"])
+    nation = qid(r["nation"]["value"]) if "nation" in r else None
     groups[g] = gl
-    teams[t] = {"label": tl, "group": g}
-print(f"      groups={len(groups)} teams={len(teams)}", file=sys.stderr)
+    teams[t] = {"label": tl, "group": g, "nation": nation}
+    if nation:
+        nation2team[nation] = t
+print(f"      groups={len(groups)} teams={len(teams)} nation-keys={len(nation2team)}", file=sys.stderr)
 
 # ---- 2. Venues + host cities ----------------------------------------------------
 print("[2/4] venues + host cities ...", file=sys.stderr)
 venue_rows = sparql(f"""
 SELECT DISTINCT ?v ?vLabel ?c ?cLabel WHERE {{
   {WC} wdt:P276 ?v .
-  OPTIONAL {{ ?v wdt:P131 ?c . ?c wdt:P31/wdt:P279* wd:Q515 . }}   # located in a city
+  OPTIONAL {{ ?v wdt:P131 ?c . ?c wdt:P31/wdt:P279* wd:Q515 . }}
   SERVICE wikibase:label {{ bd:serviceParam wikibase:language "en". }}
 }}""")
-venues = {}   # vqid -> {label, city}
-cities = {}   # cqid -> label
+venues, cities = {}, {}
 for r in venue_rows:
     v, vl = qid(r["v"]["value"]), r["vLabel"]["value"]
     c = qid(r["c"]["value"]) if "c" in r else None
@@ -109,39 +109,39 @@ for r in venue_rows:
     venues.setdefault(v, {"label": vl, "city": c})
 print(f"      venues={len(venues)} cities={len(cities)}", file=sys.stderr)
 
-# ---- 3. Notable players per team ------------------------------------------------
-print("[3/4] notable players (top %d/team by sitelinks) ..." % PLAYERS_PER_TEAM, file=sys.stderr)
+# ---- 3. Real 2026 squads (participant P710 on the participation items) -----------
+print("[3/4] official 2026 squads ...", file=sys.stderr)
+squad_rows = sparql(f"""
+SELECT ?nation ?player ?playerLabel WHERE {{
+  {WC} wdt:P1923 ?part .
+  ?part wdt:P1532 ?nation .            # participation's nation (join key)
+  ?part wdt:P710 ?player .             # squad member
+  ?player wdt:P106 wd:Q937857 .        # occupation: association football player
+  SERVICE wikibase:label {{ bd:serviceParam wikibase:language "en". }}
+}}""")
 players = {}          # pqid -> label
 plays_for = []        # (pqid, tqid)
-for i, (t, info) in enumerate(sorted(teams.items())):
-    rows = sparql(f"""
-    SELECT ?p ?pLabel ?sl WHERE {{
-      ?p wdt:P54 wd:{t} ; wdt:P106 wd:Q937857 .   # member of team; occupation: footballer
-      ?p wikibase:sitelinks ?sl .
-      SERVICE wikibase:label {{ bd:serviceParam wikibase:language "en". }}
-    }} ORDER BY DESC(?sl) LIMIT {PLAYERS_PER_TEAM}""")
-    for r in rows:
-        p, pl = qid(r["p"]["value"]), r["pLabel"]["value"]
-        if pl.startswith("Q") and pl[1:].isdigit():
-            continue  # skip label-less items
-        players[p] = pl
-        plays_for.append((p, t))
-    if (i + 1) % 12 == 0:
-        print(f"      {i+1}/{len(teams)} teams done", file=sys.stderr)
-    time.sleep(0.2)
-print(f"      players={len(players)} playsFor={len(plays_for)}", file=sys.stderr)
+unlinked = 0
+for r in squad_rows:
+    nation = qid(r["nation"]["value"])
+    p, pl = qid(r["player"]["value"]), r["playerLabel"]["value"]
+    if pl.startswith("Q") and pl[1:].isdigit():
+        continue
+    t = nation2team.get(nation)
+    if not t:
+        unlinked += 1
+        continue
+    players[p] = pl
+    plays_for.append((p, t))
+print(f"      players={len(players)} playsFor={len(plays_for)} unlinked={unlinked}", file=sys.stderr)
 
 # ---- 4. Emit Turtle -------------------------------------------------------------
 print("[4/4] writing Turtle ...", file=sys.stderr)
-out = []
-out.append("@prefix ex: <%s> ." % EX)
-out.append("@prefix wd: <%s> ." % WDENT)
-out.append("@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .")
-out.append("@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .")
-out.append("")
-out.append("# 2026 FIFA World Cup KG — built from Wikidata (%s)." % WC.replace("wd:", ""))
-out.append("# Structural pre-kickoff facts + notable players. Real Wikidata IRIs + rdfs:label.")
-out.append("")
+out = ["@prefix ex: <%s> ." % EX, "@prefix wd: <%s> ." % WDENT,
+       "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .",
+       "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .", "",
+       "# 2026 FIFA World Cup KG from Wikidata (Q5020214): structural facts + real 26-man squads.",
+       "# Real Wikidata IRIs + clean rdfs:label. No match results / winner.", ""]
 
 out.append("# --- Groups (%d) ---" % len(groups))
 for g, gl in sorted(groups.items()):
@@ -154,9 +154,12 @@ for t, info in sorted(teams.items(), key=lambda kv: kv[1]["label"]):
                % (t, esc(info["label"]), info["group"]))
 out.append("")
 
-out.append("# --- Host cities (%d) ---" % len(cities))
+out.append("# --- Host cities (%d; +metro alias label where applicable) ---" % len(cities))
 for c, cl in sorted(cities.items(), key=lambda kv: kv[1]):
-    out.append('wd:%s a ex:City ; rdfs:label "%s" .' % (c, esc(cl)))
+    labels = 'rdfs:label "%s"' % esc(cl)
+    if cl in CITY_ALIAS:
+        labels += ' ; rdfs:label "%s"' % esc(CITY_ALIAS[cl])
+    out.append('wd:%s a ex:City ; %s .' % (c, labels))
 out.append("")
 
 out.append("# --- Venues / stadiums (%d) ---" % len(venues))
@@ -167,22 +170,20 @@ for v, info in sorted(venues.items(), key=lambda kv: kv[1]["label"]):
     out.append(line + " .")
 out.append("")
 
-out.append("# --- Notable players (%d) ---" % len(players))
-byteam = {}
+out.append("# --- 2026 squad players (%d) ---" % len(players))
+byplayer = {}
 for p, t in plays_for:
-    byteam.setdefault(p, []).append(t)
+    byplayer.setdefault(p, []).append(t)
 for p, pl in sorted(players.items(), key=lambda kv: kv[1]):
     line = 'wd:%s a ex:Athlete ; rdfs:label "%s"' % (p, esc(pl))
-    ts = byteam.get(p, [])
-    if ts:
-        line += " ; " + " ; ".join("ex:playsFor wd:%s" % t for t in ts)
+    for t in byplayer.get(p, []):
+        line += " ; ex:playsFor wd:%s" % t
     out.append(line + " .")
 out.append("")
 
 path = __file__.rsplit("/", 1)[0] + "/worldcup2026.ttl"
 with open(path, "w") as f:
     f.write("\n".join(out) + "\n")
-
 total = len(groups) + len(teams) + len(cities) + len(venues) + len(players)
 print("WROTE %s" % path, file=sys.stderr)
 print("ENTITIES groups=%d teams=%d cities=%d venues=%d players=%d TOTAL=%d"
