@@ -44,6 +44,64 @@ public class LiveVllmSmokeTest {
     }
 
     @Test
+    void hybridWorldCupQuery_bgpPlusGenopPlusJoin() {
+        // Use-case figure query: closed-world BGP (KG: teams in a group) + open-world GENOP
+        // (LLM: a star player) + join back to the KG (?p a ex:Athlete). The join keeps only
+        // generated names that are real KG squad players — SPARQL alone has no star-player
+        // relation, so it would return nothing.
+        String kg = System.getenv().getOrDefault("WC_KG",
+                "gensparql-example/data/worldcup2026.ttl");
+        org.apache.jena.rdf.model.Model model = ModelFactory.createDefaultModel();
+        org.apache.jena.riot.RDFDataMgr.read(model, kg);
+        GenSPARQL.init();
+
+        String group = System.getenv().getOrDefault("WC_GROUP", "Group A");
+        if ("1".equals(System.getenv("WC_BGP_ONLY"))) {
+            String bq = """
+                    PREFIX ex: <http://example.org/>
+                    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+                    SELECT ?teamName WHERE {
+                      ?team a ex:Team ; rdfs:label ?teamName ; ex:inGroup ?g .
+                      ?g rdfs:label "%s" .
+                    }""".formatted(group);
+            try (QueryExecution qe = GenSPARQL.createQueryExecution(GenSPARQLQueryFactory.create(bq), model)) {
+                ResultSet rs = qe.execSelect();
+                int n = 0;
+                while (rs.hasNext()) { System.out.println("[bgp] " + rs.next().get("teamName")); n++; }
+                System.out.println("[bgp] teams in " + group + " = " + n);
+            }
+            return;
+        }
+        String joinLine = "1".equals(System.getenv("WC_NOJOIN"))
+                ? "" : "  ?p a ex:Athlete ; rdfs:label ?star .\n";
+        String q = """
+                PREFIX ex: <http://example.org/>
+                PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+                SELECT ?teamName ?star WHERE {
+                  ?team a ex:Team ; rdfs:label ?teamName ; ex:inGroup ?g .
+                  ?g rdfs:label "%s" .
+                  GENOP("Name one well-known player in the %s 2026 World Cup squad. Reply with just the player's full name.",
+                        (?star), <model:openai:%s>)
+                %s}
+                """.formatted(group, "{?teamName}", model(), joinLine);
+
+        Query query = GenSPARQLQueryFactory.create(q);
+        int rows = 0;
+        try (QueryExecution qe = GenSPARQL.createQueryExecution(query, model)) {
+            ResultSet rs = qe.execSelect();
+            while (rs.hasNext()) {
+                QuerySolution s = rs.next();
+                System.out.println("[hybrid] " + s.get("teamName") + " -> " + s.get("star")
+                        + "  (KG-validated)");
+                rows++;
+            }
+        }
+        System.out.println("[hybrid] validated rows = " + rows + " for " + group);
+        // At least one Group-A team's generated star should be a real KG squad member.
+        assertTrue(rows >= 1, "expected >=1 KG-validated star player from the hybrid query");
+    }
+
+    @Test
     void contextModeGenopReturnsDescriptions() {
         GenSPARQL.init();
 

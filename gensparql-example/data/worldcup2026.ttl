@@ -7,18 +7,18 @@
 # Real Wikidata IRIs + clean rdfs:label. No match results / winner.
 
 # --- Groups (12) ---
-wd:Q128810064 a ex:Group ; rdfs:label "2026 FIFA World Cup Group A" .
-wd:Q128810065 a ex:Group ; rdfs:label "2026 FIFA World Cup Group B" .
-wd:Q128810066 a ex:Group ; rdfs:label "2026 FIFA World Cup Group C" .
-wd:Q128810067 a ex:Group ; rdfs:label "2026 FIFA World Cup Group D" .
-wd:Q128810069 a ex:Group ; rdfs:label "2026 FIFA World Cup Group E" .
-wd:Q128810070 a ex:Group ; rdfs:label "2026 FIFA World Cup Group F" .
-wd:Q128810071 a ex:Group ; rdfs:label "2026 FIFA World Cup Group G" .
-wd:Q128810072 a ex:Group ; rdfs:label "2026 FIFA World Cup Group H" .
-wd:Q130380885 a ex:Group ; rdfs:label "2026 FIFA World Cup Group I" .
-wd:Q130380886 a ex:Group ; rdfs:label "2026 FIFA World Cup Group J" .
-wd:Q135028931 a ex:Group ; rdfs:label "2026 FIFA World Cup Group K" .
-wd:Q135028937 a ex:Group ; rdfs:label "2026 FIFA World Cup Group L" .
+wd:Q128810064 a ex:Group ; rdfs:label "Group A" .
+wd:Q128810065 a ex:Group ; rdfs:label "Group B" .
+wd:Q128810066 a ex:Group ; rdfs:label "Group C" .
+wd:Q128810067 a ex:Group ; rdfs:label "Group D" .
+wd:Q128810069 a ex:Group ; rdfs:label "Group E" .
+wd:Q128810070 a ex:Group ; rdfs:label "Group F" .
+wd:Q128810071 a ex:Group ; rdfs:label "Group G" .
+wd:Q128810072 a ex:Group ; rdfs:label "Group H" .
+wd:Q130380885 a ex:Group ; rdfs:label "Group I" .
+wd:Q130380886 a ex:Group ; rdfs:label "Group J" .
+wd:Q135028931 a ex:Group ; rdfs:label "Group K" .
+wd:Q135028937 a ex:Group ; rdfs:label "Group L" .
 
 # --- National teams (48) ---
 wd:Q181903 a ex:Team ; rdfs:label "Algeria" ; ex:inGroup wd:Q130380886 .
