@@ -72,18 +72,22 @@ public class LiveVllmSmokeTest {
             }
             return;
         }
-        String joinLine = "1".equals(System.getenv("WC_NOJOIN"))
-                ? "" : "  ?p a ex:Athlete ; rdfs:label ?star .\n";
+        // Sim-join form (cf. query9): the KG binds each team's squad players' labels to ?star,
+        // GENOP generates a star name into the SAME ?star, and the engine sim-joins them
+        // (approximate match on the shared variable), so near-misses like
+        // "Santiago Gimenez" -> "Santiago Giménez" resolve. Closed-world constraint:
+        // ex:inGroup + ex:playsFor keep only real squad members of the group's teams.
         String q = """
                 PREFIX ex: <http://example.org/>
                 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-                SELECT ?teamName ?star WHERE {
+                SELECT DISTINCT ?teamName ?star WHERE {
                   ?team a ex:Team ; rdfs:label ?teamName ; ex:inGroup ?g .
                   ?g rdfs:label "%s" .
+                  ?p a ex:Athlete ; ex:playsFor ?team ; rdfs:label ?star .
                   GENOP("Name one well-known player in the %s 2026 World Cup squad. Reply with just the player's full name.",
                         (?star), <model:openai:%s>)
-                %s}
-                """.formatted(group, "{?teamName}", model(), joinLine);
+                }
+                """.formatted(group, "{?teamName}", model());
 
         Query query = GenSPARQLQueryFactory.create(q);
         int rows = 0;
