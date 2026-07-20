@@ -63,23 +63,45 @@ public class ExperimentRunner {
             System.out.println("SIMTEXT " + st.getName());
         }
 
-        List<Exp> exps = Arrays.asList(
-            new Exp("wc_winners",
-                "List 20 footballers who have won the FIFA World Cup. Return ONLY a JSON array of player names, e.g. [\"Lionel Messi\",\"Pele\"].",
-                "http://example.org/Athlete"),
-            new Exp("national_teams",
-                "List 15 national football teams that have won a World Cup or continental title. Return ONLY a JSON array of country names, e.g. [\"Brazil\",\"Germany\"].",
-                "http://example.org/Team"),
-            new Exp("clubs",
-                "List 15 famous football clubs. Return ONLY a JSON array of club names, e.g. [\"Real Madrid\",\"Liverpool\"].",
-                "http://example.org/Club"),
-            new Exp("trophies",
-                "List 12 major football trophies and competitions. Return ONLY a JSON array of names, e.g. [\"World Cup\",\"Champions League\"].",
-                "http://example.org/Trophy"),
-            new Exp("birthplaces",
-                "List 15 cities that are birthplaces of famous footballers. Return ONLY a JSON array of city names, e.g. [\"Rosario\",\"Funchal\"].",
-                "http://example.org/City")
-        );
+        // Two experiment profiles: the original football-legends KG, and the larger
+        // 2026 World Cup KG (GS_PROFILE=wc2026). Types match each KG's rdfs:label sets.
+        String profile = System.getenv().getOrDefault("GS_PROFILE", "football");
+        List<Exp> exps;
+        if ("wc2026".equalsIgnoreCase(profile)) {
+            exps = Arrays.asList(
+                new Exp("wc2026_teams",
+                    "List the national teams that qualified for the 2026 FIFA World Cup. Return ONLY a JSON array of country names, e.g. [\"Brazil\",\"United States\"].",
+                    "http://example.org/Team"),
+                new Exp("wc2026_players",
+                    "List 30 well-known footballers expected to play at the 2026 FIFA World Cup. Return ONLY a JSON array of player names, e.g. [\"Lionel Messi\",\"Kylian Mbappe\"].",
+                    "http://example.org/Athlete"),
+                new Exp("wc2026_venues",
+                    "List the stadiums hosting matches at the 2026 FIFA World Cup. Return ONLY a JSON array of stadium names, e.g. [\"MetLife Stadium\",\"SoFi Stadium\"].",
+                    "http://example.org/Venue"),
+                new Exp("wc2026_cities",
+                    "List the host cities/municipalities of the 2026 FIFA World Cup. Return ONLY a JSON array of city names, e.g. [\"Atlanta\",\"Seattle\"].",
+                    "http://example.org/City")
+            );
+        } else {
+            exps = Arrays.asList(
+                new Exp("wc_winners",
+                    "List 20 footballers who have won the FIFA World Cup. Return ONLY a JSON array of player names, e.g. [\"Lionel Messi\",\"Pele\"].",
+                    "http://example.org/Athlete"),
+                new Exp("national_teams",
+                    "List 15 national football teams that have won a World Cup or continental title. Return ONLY a JSON array of country names, e.g. [\"Brazil\",\"Germany\"].",
+                    "http://example.org/Team"),
+                new Exp("clubs",
+                    "List 15 famous football clubs. Return ONLY a JSON array of club names, e.g. [\"Real Madrid\",\"Liverpool\"].",
+                    "http://example.org/Club"),
+                new Exp("trophies",
+                    "List 12 major football trophies and competitions. Return ONLY a JSON array of names, e.g. [\"World Cup\",\"Champions League\"].",
+                    "http://example.org/Trophy"),
+                new Exp("birthplaces",
+                    "List 15 cities that are birthplaces of famous footballers. Return ONLY a JSON array of city names, e.g. [\"Rosario\",\"Funchal\"].",
+                    "http://example.org/City")
+            );
+        }
+        System.out.println("PROFILE " + profile);
 
         ObjectMapper om = new ObjectMapper();
 
