@@ -62,7 +62,13 @@ GENOP("List one tool used in {?field}.", (?tool), <model:openai:Qwen/Qwen2.5-7B-
 | Role | Default | Bigger / better | Notes |
 |------|---------|-----------------|-------|
 | Chat | `Qwen/Qwen3-8B` | `Qwen/Qwen3-30B-A3B-Instruct-2507` (MoE), `Qwen/Qwen3-32B` | Qwen3 = strong JSON/instruction following; well supported by vLLM |
-| Newest (check vLLM support) | — | `Qwen/Qwen3.5-*`, `Qwen/Qwen3.6-*` (incl. `-FP8` for 40 GB) | brand-new arch (`Qwen3_5*`); needs a very recent vLLM and may be multimodal — verify before relying on it |
+| Newest (check vLLM support) | — | `Qwen/Qwen3.5-*`, `Qwen/Qwen3.6-*` (incl. `-FP8` for 40 GB) | brand-new arch (`Qwen3_5*`); NOT supported by vllm 0.25.1 (and may be multimodal) — verify before relying on it |
+
+> **Thinking vs. non-thinking.** Hybrid-reasoning Qwen3 models (e.g. plain `Qwen3-8B`) emit a
+> `<think>…</think>` trace by default, which pollutes GENOP output and slows per-binding calls.
+> For structured extraction / KG completion prefer a **non-thinking instruct** model such as
+> `Qwen/Qwen3-30B-A3B-Instruct-2507` (verified: clean one-sentence output, ~1.5 s/2 calls),
+> or disable thinking on a hybrid model (`--reasoning-parser` / `enable_thinking=false`).
 | Reasoning ablation | — | `deepseek-ai/DeepSeek-R1-Distill-Qwen-32B` | compare "reasoning vs direct" |
 | Embeddings | `BAAI/bge-large-en-v1.5` | `BAAI/bge-m3` (multilingual), `Alibaba-NLP/gte-large-en-v1.5` | English KG → bge-large is light & fast |
 
