@@ -83,6 +83,7 @@ for r in group_rows:
     g, gl = qid(r["g"]["value"]), r["gLabel"]["value"]
     if "Group" not in gl:
         continue
+    gl = gl.replace("2026 FIFA World Cup ", "").strip()   # -> "Group A"
     t = qid(r["t"]["value"])
     tl = clean_team(r["tLabel"]["value"])
     nation = qid(r["nation"]["value"]) if "nation" in r else None
