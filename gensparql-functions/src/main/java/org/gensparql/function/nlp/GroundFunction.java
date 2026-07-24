@@ -1,5 +1,7 @@
 package org.gensparql.function.nlp;
 
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase1;
 import org.gensparql.core.model.GenerateRequest;
@@ -50,15 +52,23 @@ public class GroundFunction extends FunctionBase1 {
             GenerateResponse response = provider.generateSync(request);
 
             if (response.isSuccess() && response.getRawText() != null) {
-                String result = response.getRawText().trim();
-                // Try to construct a valid URI
-                return NodeValue.makeString(toEntityURI(result));
+                String uri = toEntityURI(response.getRawText().trim());
+                if (!uri.isEmpty()) {
+                    // Return a genuine IRI node (not a string literal) so downstream triple
+                    // patterns and BIND-to-?entityURI treat it as a resource.
+                    return NodeValue.makeNode(NodeFactory.createURI(uri));
+                }
             }
+        } catch (ExprEvalException e) {
+            throw e;
         } catch (Exception e) {
             LOG.error("Entity grounding failed", e);
         }
 
-        return NodeValue.makeString("");
+        // No entity could be grounded: raise an evaluation error so the value stays unbound
+        // (BIND leaves the variable unset; FILTER drops the row) rather than binding a bogus
+        // empty string literal.
+        throw new ExprEvalException("gen:ground: no entity could be grounded");
     }
 
     private String buildGroundingPrompt(String text) {

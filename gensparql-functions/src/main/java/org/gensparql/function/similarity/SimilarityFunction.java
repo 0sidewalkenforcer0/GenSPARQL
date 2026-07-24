@@ -126,8 +126,9 @@ public class SimilarityFunction extends FunctionBase2 {
         }
 
         double similarity = dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
-        // Normalize to [0, 1] range (cosine similarity is [-1, 1])
-        return (similarity + 1) / 2;
+        // Raw cosine clamped to [0, 1], consistent with EmbeddingSimText / EntityEmbeddingIndex
+        // so gen:similarity and gen:approxEq thresholds mean the same thing as the engine's.
+        return Math.max(0.0, Math.min(1.0, similarity));
     }
 
     /**

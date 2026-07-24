@@ -1,0 +1,201 @@
+<title>GenSPARQL — what prior approaches can't do, and we can</title>
+<style>
+  :root{
+    --paper:#FBFAF7; --panel:#FFFFFF; --ink:#18202A; --muted:#5C6874;
+    --line:#E6E2DA; --line-strong:#D2CCC1;
+    --us:#0E7C86; --us-soft:#E1F0F0;          /* GenSPARQL / KG */
+    --llm:#B26B00;                             /* open-world LLM */
+    --no:#AE3E37; --no-soft:#F7E7E5;           /* can't do */
+    --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --paper:#0E1417; --panel:#151D22; --ink:#E7ECEE; --muted:#94A1A9;
+      --line:#243036; --line-strong:#33434B;
+      --us:#3FB5BE; --us-soft:#123037; --llm:#E3A63C;
+      --no:#E0716A; --no-soft:#331E1C;
+    }
+  }
+  :root[data-theme="light"]{
+    --paper:#FBFAF7; --panel:#FFFFFF; --ink:#18202A; --muted:#5C6874;
+    --line:#E6E2DA; --line-strong:#D2CCC1; --us:#0E7C86; --us-soft:#E1F0F0;
+    --llm:#B26B00; --no:#AE3E37; --no-soft:#F7E7E5;
+  }
+  :root[data-theme="dark"]{
+    --paper:#0E1417; --panel:#151D22; --ink:#E7ECEE; --muted:#94A1A9;
+    --line:#243036; --line-strong:#33434B; --us:#3FB5BE; --us-soft:#123037;
+    --llm:#E3A63C; --no:#E0716A; --no-soft:#331E1C;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.5;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:1060px;margin:0 auto;padding:40px 24px 60px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--us);margin:0 0 8px}
+  h1{font-size:27px;line-height:1.16;margin:0 0 8px;font-weight:680;letter-spacing:-.01em;text-wrap:balance}
+  .sub{color:var(--muted);margin:0;max-width:70ch}
+
+  .task{border:1px solid var(--line-strong);border-radius:12px;background:var(--panel);margin-top:26px;
+    padding:18px 20px}
+  .task .lab{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--muted);margin:0 0 8px}
+  .task .q{font-family:var(--mono);font-size:13px;font-weight:600;margin:0;color:var(--ink)}
+  .task .note{margin:10px 0 0;font-size:13px;color:var(--muted)}
+  .task .note b{color:var(--no)}
+
+  h2.section{font-size:13px;font-family:var(--mono);letter-spacing:.08em;text-transform:uppercase;
+    color:var(--muted);margin:30px 0 12px;font-weight:600}
+
+  .rows{display:flex;flex-direction:column;gap:10px}
+  .row{display:grid;grid-template-columns:190px 1fr 26px;gap:16px;align-items:start;
+    border:1px solid var(--line);border-radius:10px;background:var(--panel);padding:13px 16px}
+  .row.no{border-left:3px solid var(--no)}
+  .row.yes{border:1.5px solid var(--us);background:var(--us-soft)}
+  .who{min-width:0}
+  .who .name{font-weight:650;font-size:14px}
+  .who .kind{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:2px}
+  .what{min-width:0;font-size:13.5px}
+  .what .out{font-family:var(--mono);font-size:12.5px;padding:6px 9px;border-radius:6px;
+    background:var(--no-soft);color:var(--ink);display:inline-block;margin-bottom:6px;max-width:100%;
+    overflow-x:auto;white-space:pre}
+  .row.yes .what .out{background:transparent;padding:0}
+  .what .why{color:var(--muted)}
+  .row.yes .what .why{color:var(--ink)}
+  .mark{font-size:19px;font-weight:800;text-align:center;line-height:1.3}
+  .row.no .mark{color:var(--no)} .row.yes .mark{color:var(--us)}
+  .res{font-family:var(--mono);font-size:12.5px;color:var(--us);font-weight:600;margin-top:2px}
+  .res .dim{color:var(--muted);font-weight:400}
+
+  /* capability matrix */
+  .mtx-wrap{overflow-x:auto;border:1px solid var(--line-strong);border-radius:12px;margin-top:14px}
+  table{border-collapse:collapse;width:100%;font-size:12.5px;min-width:640px}
+  th,td{padding:9px 10px;text-align:center;border-bottom:1px solid var(--line)}
+  th:first-child,td:first-child{text-align:left;font-weight:600;white-space:nowrap}
+  thead th{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;
+    color:var(--muted);font-weight:600;vertical-align:bottom}
+  tbody tr:last-child td{border-bottom:none}
+  tr.us{background:var(--us-soft)} tr.us td:first-child{color:var(--us);font-weight:700}
+  .y{color:var(--us);font-weight:800} .n{color:var(--no);font-weight:800}
+  .cap{margin-top:10px;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:8px;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+  .legend span{display:inline-flex;gap:6px;align-items:center}
+  .sw{width:11px;height:11px;border-radius:3px;display:inline-block}
+  @media (max-width:720px){
+    .row{grid-template-columns:1fr 24px;grid-template-areas:"who mark" "what mark"}
+    .who{grid-area:who}.what{grid-area:what}.mark{grid-area:mark}
+  }
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">GenSPARQL · motivation</p>
+  <h1>One query the KG can't answer alone — and how each approach fares</h1>
+  <p class="sub">Knowledge graphs are incomplete and static: SPARQL can only return triples that
+  already exist. Take a query that needs a fact the KG does not store, and see what every prior
+  approach produces versus GenSPARQL.</p>
+
+  <div class="task">
+    <p class="lab">The task</p>
+    <p class="q">"List the Group-A players who are <span style="color:var(--llm)">defenders</span>, with their national team."</p>
+    <p class="note">The 2026 World Cup KG stores teams, groups and squads — but <b>no player
+    position</b>. Position is world knowledge an LLM has; the KG does not.</p>
+  </div>
+
+  <h2 class="section">What each approach returns for this task</h2>
+  <div class="rows">
+
+    <div class="row no">
+      <div class="who"><div class="name">Pure SPARQL / KGQA</div><div class="kind">query the graph</div></div>
+      <div class="what">
+        <span class="out">?p ex:position ?pos . FILTER(?pos="Defender")  →  ∅</span>
+        <div class="why">No <code>position</code> predicate exists → empty. Bounded by KG completeness.</div>
+      </div>
+      <div class="mark">✕</div>
+    </div>
+
+    <div class="row no">
+      <div class="who"><div class="name">KG embeddings</div><div class="kind">TransE · ComplEx · ULTRA</div></div>
+      <div class="what">
+        <span class="out">(player, playsFor, ?) → 0.83, 0.71, …</span>
+        <div class="why">Predict links among <i>existing</i> entities/relations; produce scores, not the
+        value "defender", and can't be filtered or returned.</div>
+      </div>
+      <div class="mark">✕</div>
+    </div>
+
+    <div class="row no">
+      <div class="who"><div class="name">RAG / LLM-over-text</div><div class="kind">retrieve → free text</div></div>
+      <div class="what">
+        <span class="out">"Group A defenders include Kim Min-jae, César Montes, …"</span>
+        <div class="why">Free text: re-derives Group A itself (may be stale), not bound to variables,
+        not linked to KG nodes, can't be joined/filtered by the engine.</div>
+      </div>
+      <div class="mark">✕</div>
+    </div>
+
+    <div class="row no">
+      <div class="who"><div class="name">Text-to-SPARQL</div><div class="kind">LLM writes the query</div></div>
+      <div class="what">
+        <span class="out">SELECT … WHERE { ?p ex:position ?pos }  →  ∅</span>
+        <div class="why">Can only compose from existing vocabulary; there is no position predicate to
+        write against, so the generated query is still empty.</div>
+      </div>
+      <div class="mark">✕</div>
+    </div>
+
+    <div class="row no">
+      <div class="who"><div class="name">LLM tool / function calls</div><div class="kind">imperative glue code</div></div>
+      <div class="what">
+        <span class="out">for p in players: pos = llm(p); if pos=="DEF": keep</span>
+        <div class="why">Works, but as an ad-hoc script — not declarative, no set semantics, no query
+        optimizer, result isn't a reusable relation.</div>
+      </div>
+      <div class="mark">✕</div>
+    </div>
+
+    <div class="row yes">
+      <div class="who"><div class="name">GenSPARQL (GENOP)</div><div class="kind">LLM as a first-class operator</div></div>
+      <div class="what">
+        <span class="out">?p ex:playsFor ?t . ?t ex:inGroup ?g . ?g rdfs:label "Group A" .
+GENOP("position of {?player}?", (?pos), &lt;model&gt;) . FILTER(?pos="Defender")</span>
+        <div class="res">→ 41 defenders / 77 Group-A players <span class="dim">· one declarative query · SPARQL-only: 0</span></div>
+        <div class="why">KG owns the structure; the LLM fills only the missing column; the engine joins
+        &amp; filters — and runs the LLM only on the KG-selected bindings.</div>
+      </div>
+      <div class="mark">✓</div>
+    </div>
+  </div>
+
+  <h2 class="section">Why — capability comparison</h2>
+  <div class="mtx-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Approach</th>
+          <th>Answers the<br>missing-attribute query</th>
+          <th>Binds to<br>query variables</th>
+          <th>Composes<br>(join / filter)</th>
+          <th>Results<br>linked to KG</th>
+          <th>KG selectivity<br>cuts LLM cost</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Pure SPARQL / KGQA</td><td class="n">✕</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td>—</td></tr>
+        <tr><td>KG embeddings (KGE)</td><td class="n">✕</td><td class="n">✕</td><td class="n">✕</td><td class="y">✓</td><td>—</td></tr>
+        <tr><td>RAG / LLM-over-text</td><td class="y">✓</td><td class="n">✕</td><td class="n">✕</td><td class="n">✕</td><td class="n">✕</td></tr>
+        <tr><td>Text-to-SPARQL</td><td class="n">✕</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="n">✕</td></tr>
+        <tr><td>LLM tool / function calls</td><td class="y">✓</td><td class="n">✕</td><td class="n">✕</td><td class="n">✕</td><td class="n">✕</td></tr>
+        <tr class="us"><td>GenSPARQL</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="legend">
+    <span><i class="sw" style="background:var(--us)"></i>GenSPARQL / KG (closed world)</span>
+    <span><i class="sw" style="background:var(--llm)"></i>LLM knowledge (open world)</span>
+    <span><i class="sw" style="background:var(--no)"></i>cannot do it</span>
+  </div>
+  <p class="cap">Only GenSPARQL does all five: it answers the KG-missing query (coverage), binds the
+  answer to a variable and composes it with SPARQL join/filter (composition), keeps results linked to
+  KG nodes (entity consistency), and lets KG selectivity minimise LLM calls — 825→26, 31×
+  (efficiency). Data: 2026 World Cup KG · Qwen3-30B-A3B-Instruct-2507 (self-hosted).</p>
+</div>

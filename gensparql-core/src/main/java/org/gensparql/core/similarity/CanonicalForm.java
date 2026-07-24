@@ -152,15 +152,25 @@ public class CanonicalForm {
      * For Freebase URIs like m_0407yj__Cars_2, extracts the label part (-> "Cars 2").
      *
      * <p>The Freebase local name is {@code m_<mid>_<label>} or {@code m_<mid>__<label>},
-     * where {@code <mid>} is the machine id (lowercase alphanumeric). The label is the
-     * whole remainder after the first underscore that follows the mid. Two previous bugs
-     * are fixed here:
+     * where {@code <mid>} is the machine id. This extraction is inherently <b>best-effort</b>:
+     * the mid uses a base-32 alphabet that itself contains underscores, so a URI such as
+     * {@code m_0_2v_Asian_Development_Bank} (mid {@code 0_2v}) cannot be split unambiguously
+     * from the string alone. For FB15k, supply an external MID&rarr;name map via
+     * {@link #setLabelLookup(Function)} / {@link #canon(Node, Function)} — that lookup is the
+     * authoritative path and this method is only the fallback.
+     *
+     * <p>Handled here:
      * <ul>
-     *   <li>the label may start with a digit (e.g. "3 Idiots", "(500) Days of Summer"),
-     *       so we must NOT scan for the first {@code _[A-Z]} (which dropped the digits);</li>
-     *   <li>labels contain percent escapes (e.g. %26 -&gt; '&amp;', %2F -&gt; '/',
-     *       %3A -&gt; ':'), so we URL-decode them.</li>
+     *   <li><b>Double-underscore separator preferred.</b> The common FB15k encoding separates
+     *       mid and label with {@code __} (e.g. {@code m_0407yj__Cars_2} &rarr; "Cars 2"); when
+     *       present this is unambiguous and used first.</li>
+     *   <li>the label may start with a digit (e.g. "3 Idiots"), so we do NOT scan for the
+     *       first {@code _[A-Z]} (which dropped leading digits);</li>
+     *   <li>labels contain percent escapes (%26 -&gt; '&amp;', %2F -&gt; '/', %3A -&gt; ':'),
+     *       so we URL-decode them.</li>
      * </ul>
+     * The single-underscore fallback below can still misfire on underscore-containing mids —
+     * that case is genuinely unrecoverable without the label lookup.
      */
     private static String extractLocalName(String uri) {
         int hashIdx = uri.lastIndexOf('#');
@@ -171,16 +181,16 @@ public class CanonicalForm {
 
             // Freebase URIs: m_<mid>_<label> or m_<mid>__<label>
             if (localName.startsWith("m_")) {
-                int sep = localName.indexOf('_', 2); // first underscore after the mid
-                if (sep > 0) {
-                    int labelStart = sep + 1;
-                    // skip the second underscore of a "__" separator
-                    if (labelStart < localName.length() && localName.charAt(labelStart) == '_') {
-                        labelStart++;
-                    }
-                    if (labelStart < localName.length()) {
-                        return cleanLabel(localName.substring(labelStart));
-                    }
+                // Preferred, unambiguous: split on the double-underscore separator.
+                int dbl = localName.indexOf("__", 2);
+                if (dbl > 0 && dbl + 2 < localName.length()) {
+                    return cleanLabel(localName.substring(dbl + 2));
+                }
+                // Best-effort fallback: single-underscore split after the mid. May misfire
+                // when the mid contains underscores (unrecoverable without a label lookup).
+                int sep = localName.indexOf('_', 2);
+                if (sep > 0 && sep + 1 < localName.length()) {
+                    return cleanLabel(localName.substring(sep + 1));
                 }
                 // no label component -> fall through to generic handling
             }
@@ -208,8 +218,10 @@ public class CanonicalForm {
         } catch (RuntimeException e) {
             decoded = label;
         }
-        return decoded.replace('_', ' ').replace('-', ' ').replaceAll("\\s+", " ").trim();
+        return WHITESPACE.matcher(decoded.replace('_', ' ').replace('-', ' ')).replaceAll(" ").trim();
     }
+
+    private static final java.util.regex.Pattern WHITESPACE = java.util.regex.Pattern.compile("\\s+");
 
     /**
      * Get lexical form of a term.

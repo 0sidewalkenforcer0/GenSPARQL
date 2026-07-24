@@ -49,9 +49,16 @@ public class ValidateFunction extends FunctionBase2 {
 
             if (response.isSuccess() && response.getRawText() != null) {
                 String result = response.getRawText().trim().toLowerCase();
-                boolean isValid = result.contains("true") ||
-                                 result.contains("yes") ||
-                                 result.contains("valid");
+                // Check explicit negatives FIRST. A loose substring match would score the
+                // word "invalid" as valid (it contains "valid"); word-boundary matching and
+                // negative-first ordering avoid that.
+                if (containsWord(result, "false") || containsWord(result, "no")
+                        || containsWord(result, "invalid") || result.contains("not valid")) {
+                    return NodeValue.makeBoolean(false);
+                }
+                boolean isValid = containsWord(result, "true")
+                        || containsWord(result, "yes")
+                        || containsWord(result, "valid");
                 return NodeValue.makeBoolean(isValid);
             }
         } catch (Exception e) {
@@ -59,6 +66,13 @@ public class ValidateFunction extends FunctionBase2 {
         }
 
         return NodeValue.makeBoolean(false);
+    }
+
+    /** Whole-word (word-boundary) containment, so "valid" does not match inside "invalid". */
+    private static boolean containsWord(String haystack, String word) {
+        return java.util.regex.Pattern
+                .compile("\\b" + java.util.regex.Pattern.quote(word) + "\\b")
+                .matcher(haystack).find();
     }
 
     private String buildValidationPrompt(String value, String schema) {

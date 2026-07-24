@@ -220,8 +220,12 @@ public class EmbeddingSimText implements SimText {
         }
 
         double similarity = dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
-        // Normalize to [0, 1] range (cosine similarity is [-1, 1])
-        return (similarity + 1) / 2;
+        // Raw cosine clamped to [0, 1]. A similarity threshold like 0.85 therefore means
+        // "cosine >= 0.85"; negative cosine (dissimilar) clamps to 0. This is the SAME
+        // convention EntityEmbeddingIndex uses for grounding, so a given numeric threshold
+        // has identical strictness in the sim-join and in grounding. (Previously this used
+        // (cos+1)/2, which made the same threshold far more lenient here than in grounding.)
+        return Math.max(0.0, Math.min(1.0, similarity));
     }
 
     @Override

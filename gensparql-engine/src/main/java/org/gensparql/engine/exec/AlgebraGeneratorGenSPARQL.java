@@ -72,7 +72,14 @@ public class AlgebraGeneratorGenSPARQL {
         ExprList filters = new ExprList();
         Op current = OpTable.unit();
 
-        for (Element e : group.getElements()) {
+        // Cost-based placement of GENOP: because context-mode GENOP issues one LLM call per
+        // input binding, we push it AFTER every KG pattern that constrains its inputs (and does
+        // not depend on its outputs), so the LLM fires only on the already-filtered bindings.
+        // Applied only to "simple" groups (plain BGP/path + GENOP + FILTER) where basic-pattern
+        // joins commute, so the rewrite is semantics-preserving.
+        List<Element> elements = reorderGenopLast(group.getElements());
+
+        for (Element e : elements) {
             if (e instanceof ElementFilter) {
                 filters.add(((ElementFilter) e).getExpr());
             } else {
@@ -84,6 +91,53 @@ public class AlgebraGeneratorGenSPARQL {
             current = OpFilter.filterBy(filters, current);
         }
         return current;
+    }
+
+    /**
+     * Reorder a group's elements so each ElementGenerate runs after every plain KG pattern
+     * that does NOT depend on its output variables. Since basic-pattern joins commute, moving
+     * GENOP-independent triple/path blocks ahead of GENOP is semantics-preserving, and it means
+     * context-mode GENOP fires only on the bindings the KG has already constrained — turning an
+     * O(all-entities) fan-out into O(selected). Applied only to "simple" groups (triple/path
+     * blocks, GENOP, FILTER); any OPTIONAL/UNION/MINUS/BIND/etc. leaves the order untouched.
+     */
+    private static List<Element> reorderGenopLast(List<Element> original) {
+        boolean hasGenop = false;
+        for (Element e : original) {
+            if (e instanceof ElementGenerate) { hasGenop = true; }
+            else if (!(e instanceof ElementFilter || e instanceof ElementTriplesBlock
+                       || e instanceof ElementPathBlock)) {
+                return original;   // complex group -> preserve author order
+            }
+        }
+        if (!hasGenop) {
+            return original;
+        }
+        Set<Var> genOut = new HashSet<>();
+        for (Element e : original) {
+            if (e instanceof ElementGenerate) {
+                genOut.addAll(((ElementGenerate) e).getOutputVariables());
+            }
+        }
+        List<Element> before = new ArrayList<>(), gens = new ArrayList<>(),
+                after = new ArrayList<>(), filters = new ArrayList<>();
+        for (Element e : original) {
+            if (e instanceof ElementFilter) {
+                filters.add(e);
+            } else if (e instanceof ElementGenerate) {
+                gens.add(e);
+            } else {
+                Set<Var> v = new HashSet<>(PatternVars.vars(e));
+                v.retainAll(genOut);
+                (v.isEmpty() ? before : after).add(e);   // depends on GENOP output -> after
+            }
+        }
+        List<Element> ordered = new ArrayList<>(original.size());
+        ordered.addAll(before);
+        ordered.addAll(gens);
+        ordered.addAll(after);
+        ordered.addAll(filters);
+        return ordered;
     }
 
     /**

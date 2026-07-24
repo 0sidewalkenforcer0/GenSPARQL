@@ -1,160 +1,129 @@
-# Preliminary Evaluation — setup, raw results, and how to reproduce
+# Preliminary Evaluation — setup, results, and how to reproduce
 
-This documents the numbers reported in the demo paper's *Preliminary Evaluation*
-section. Drivers live in [`../eval/`](../eval); run them with
-[`../eval/run_eval.sh`](../eval/run_eval.sh).
+Evidence for the demo paper's *Preliminary Evaluation* section. The story is
+**problem-oriented**: knowledge graphs are incomplete and static, so SPARQL can only
+return triples that already exist. GenSPARQL makes an LLM a first-class data source
+inside the query algebra, so a single declarative query can answer things the KG alone
+cannot. We evaluate three claimed benefits and are candid about the limitation.
+
+| Benefit | Experiment | Headline |
+|---|---|---|
+| **Coverage** — answer what the KG can't express | **X1** column extension (player position) | SPARQL-only **0** → GENOP **70%** correct on the **77%** it answers (vs Wikidata P413) |
+| **Composition** — KG structure ⨝ LLM value in one query | **X2** `BGP + GENOP + FILTER` | 41 defenders / 77 Group-A players; SPARQL-only **0** |
+| **Efficiency** — LLM only on the bindings the KG keeps | **X4** cost-aware GENOP placement | **825 → 26** LLM calls (**31×**) by pushing KG selectivity before GENOP |
+| **Entity consistency** (correctness anchor) | **X3** constrained selection / grounding | every returned entity is a real KG node; 0 hallucination leak |
 
 ## Setup
 
-- **Model:** `deepseek/deepseek-chat` via OpenRouter.
-- **Grounding:** the engine's `JaccardSimText` (word-set) similarity at
-  threshold `θ`. We use text similarity, **not** embeddings, because OpenRouter
-  exposes no embedding endpoint (`supportsEmbedding=false`); this is the engine's
-  default grounding path when no embedding provider is configured.
-- **KG (E1/E2/E4):** `gensparql-example/data/footballers_eval.ttl`
-  (26 athletes, 13 national teams, 12 clubs, 8 trophies, 26 cities; clean
-  `rdfs:label`). Some well-known sibling entities are deliberately omitted
-  (e.g. "Manchester City", "Inter Milan", "Europa League") so embedding grounding
-  has real near-misses to over-match.
-- **KG (E3):** FB15k-237+H (`entity2text.txt`, 14,951 entities). Not shipped in
-  this repo — obtain separately and pass via `FB15K_DIR`.
-- Numbers below are from a single representative run; LLM output is
-  non-deterministic, so candidate counts vary slightly between runs.
+- **KG:** 2026 FIFA World Cup, built from Wikidata (`Q5020214`) — 48 teams, 12 groups,
+  16 venues, 12 host cities (+metro aliases), 825 official squad players; 913 entities /
+  2,716 triples, real Wikidata IRIs + clean `rdfs:label`. Builder:
+  [`gensparql-example/data/build_worldcup2026_kg.py`](../gensparql-example/data/build_worldcup2026_kg.py).
+- **Generation:** `Qwen/Qwen3-30B-A3B-Instruct-2507`, self-hosted with vLLM
+  (OpenAI-compatible), non-thinking, `temperature=0`. See [`../deploy/`](../deploy/README.md).
+- **Grounding / linking:** `JaccardSimText` (default) or bge-large embeddings via a local
+  server; threshold θ = 0.85.
+- **Ground truth (X1):** Wikidata `P413` (position played on team).
 
-## Grounding backend: text similarity vs. embeddings
+## X1 — Coverage: column extension (the linchpin)
 
-Grounding maps an LLM's free-text output to a KG node, so it needs a **text**
-similarity, not a knowledge-graph structural embedding. Two modes are supported:
+GENOP supplies a column the KG does not model — each player's playing position — scored
+against P413 at the coarse 4-class level {Goalkeeper, Defender, Midfielder, Forward}. An
+open-ended prompt with an explicit *Unknown* abstention avoids option-position bias.
 
-- **Text similarity (default, no key):** `JaccardSimText` — deterministic,
-  reproducible, used for the numbers in this document.
-- **Embedding cosine (optional):** a **foundation text embedder** via any
-  OpenAI-compatible `/embeddings` endpoint. This can rescue near-misses that
-  Jaccard drops (e.g. "Quantum Physics"→"Quantum Mechanics", "MIT"→"Massachusetts
-  Institute of Technology"). Generation stays on deepseek/OpenRouter; only
-  grounding uses the embedder.
+Robustness across model sizes and families (825 players, 90% with P413 gold; random
+4-class baseline = 25%; SPARQL-only = **0** for all):
 
-Enable embeddings by pointing the OpenAI-compatible client at a backend:
+| Model | Family | Answer rate | Accuracy on answered |
+|---|---|---:|---:|
+| Qwen3-30B-A3B-Instruct-2507 | Qwen | 77% | 70% |
+| Qwen3-8B | Qwen | 44% | 69% |
+| Mistral-7B-Instruct-v0.3 | Mistral | 26% | **91%** |
 
-```bash
-# Local, free, offline — a foundation embedding model via Ollama:
-#   ollama pull nomic-embed-text
-export OPENAI_API_KEY=ollama                       # any placeholder for local
-export OPENAI_BASE_URL=http://localhost:11434/v1
-export OPENAI_EMBEDDING_MODEL=nomic-embed-text     # or bge-m3, mxbai-embed-large
-./eval/run_eval.sh                                 # driver auto-switches to embedding cosine
+*Reading:* plain SPARQL returns nothing; GENOP fills the column and, because position has an
+external ground truth, its accuracy is **measurable**. Across sizes and families the answered
+accuracy is consistently well above chance (69–91%), and a clear coverage/precision trade-off
+emerges — broader models answer more at moderate precision, conservative models abstain more
+(via the explicit *Unknown*) and are more precise on what they commit. The abstention lets each
+model self-calibrate rather than guess. Driver:
+[`../eval/wc2026_x1_position.py`](../eval/wc2026_x1_position.py).
 
-# Cloud alternative (turnkey): just an OpenAI key, default model text-embedding-3-small
-export OPENAI_API_KEY=sk-...
+## X2 — Composition: one query, KG ⨝ LLM
+
+```sparql
+SELECT ?team ?player WHERE {
+  ?t a ex:Team ; ex:inGroup ?g ; rdfs:label ?team .   # KG (authoritative)
+  ?g rdfs:label "Group A" .
+  ?p a ex:Athlete ; ex:playsFor ?t ; rdfs:label ?player .
+  GENOP("What position does {?player} play? …", (?pos), <model:openai:…>)  # LLM
+  FILTER(?pos = "Defender")                                                # compose
+}
 ```
 
-> **Not for grounding: KG foundation models / KGE.** ULTRA, TransE, ComplEx, etc.
-> embed *graph structure*, not text — they can't consume a generated string. They
-> are the right tool for the *complementary* task of structural link prediction
-> (the FB15k completion where the LLM path scores low in E3), and are a natural
-> future-work pairing (LLM proposes candidates, a KGE scores their structural
-> plausibility) rather than a grounding replacement.
+Runs as **one** declarative query: 41 defenders / 77 Group-A players (FILTER correctly
+drops the rest). Plain SPARQL returns **0** (no position predicate); RAG/tool-calling
+cannot re-enter the result into the relational algebra to join/filter it. Driver:
+`LiveVllmSmokeTest#compositionFilterQuery…`.
 
-## E1 — Grounding precision (θ = 0.85)
+## X4 — Efficiency: GENOP-aware planning
 
-Five base-mode `GENOP` queries generate entities of a KG-present type. Every
-returned answer grounds to a real KG entity; candidates with no KG counterpart
-are dropped.
+Context-mode GENOP issues one LLM call per input binding, so the number of bindings that
+*reach* GENOP dominates cost. Same query semantics ("one team's midfielders"), two
+authorings, LLM calls counted with a mock provider:
 
-| Base-mode GENOP query   | LLM cand. | in KG | returned | KG-valid |
-|-------------------------|:---------:|:-----:|:--------:|:--------:|
-| World Cup winners       | 20 | 8 | 8 | 100% |
-| national teams          | 15 | 8 | 8 | 100% |
-| famous clubs            | 15 | 7 | 7 | 100% |
-| major trophies          | 12 | 2 | 2 | 100% |
-| player birthplaces      | 15 | 4 | 4 | 100% |
-| **Total**               | **77** | **29** | **29** | **100%** |
+| Authoring | LLM calls |
+|---|---|
+| Selective BGP first | 26 |
+| GENOP first, *before* the fix | **825** |
+| GENOP first, *after* the fix | **26** |
 
-Raw-LLM KG-validity = 29/77 = **38%**; GenSPARQL = **100%**, 0 hallucination leak.
-Text (Jaccard) grounding; single representative run (deepseek non-determinism
-shifts candidate counts slightly between runs).
+The engine now reorders a simple group so each GENOP runs after the KG patterns that
+constrain its inputs (basic-pattern joins commute → semantics-preserving), turning an
+O(all-entities) fan-out into O(selected): **31× fewer LLM calls**, automatically,
+regardless of how the query is written. This is expensive-predicate optimization with the
+LLM as the expensive operator. Driver: `CostReorderTest`.
 
-## E2 — Threshold sensitivity (total grounded across the 5 queries)
+## X3 — Entity consistency (correctness anchor)
 
-Same candidates, grounded at each θ by both backends (`ExperimentRunnerCompare`):
+When GENOP output must join back to the KG, grounding/sim-join maps the generated string to
+a KG node; base-mode generation over a KG type keeps only entities the KG contains. On the
+WC KG (θ = 0.85, Jaccard): every grounded answer maps to a real KG entity (sim = 1.00),
+e.g. teams 28/44 candidates, players 10, venues 11, cities 11/12 grounded — 0 hallucination
+leak. Note this guarantees the **entity** is real, not that an *additive fact* is true (see
+Limitations). The hybrid sim-join recovers accented near-misses (Group A: South Korea → Son
+Heung-min, Mexico → Javier Hernández, Czechia → Tomáš Vaclík). Driver: `ExperimentRunner`
+(`GS_PROFILE=wc2026`), `LiveVllmSmokeTest#hybridWorldCupQuery…`.
 
-| θ (backend)  | 0.50 | 0.60 | 0.70 | 0.80 | 0.85 | 0.90 | 0.95 | 1.00 |
-|--------------|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|
-| Jaccard      | 39 | 32 | 29 | 29 | 29 | 29 | 29 | 29 |
-| Embedding    | 77 | 77 | 77 | 58 | 47 | 39 | 38 | 30 |
+## Limitations (stated, not hidden)
 
-Embedding recall is θ-sensitive: a low θ grounds many candidates (recall ↑) at the
-risk of spurious matches, and collapses toward text similarity as θ rises. Jaccard
-grounds only near-exact matches and is almost flat.
-
-## E4 — Systems performance (football KG)
-
-| Query | Mode | LLM calls | wall-clock | note |
-|-------|------|:---------:|:----------:|------|
-| base-mode + grounding | base + grounding | 1 | ~4–8 s | one generation, then grounding |
-| context enrichment    | context | one per binding | scales with bindings | ≈2 s / binding |
-
-- SimScore (Jaccard) grounding over a candidate set: **3–10 ms** — negligible
-  vs. the LLM.
-- No cross-execution response-cache speedup observed (warm ≈ cold); latency is
-  LLM-bound and scales with the number of generated bindings.
-
-## Text vs. embedding grounding (fair comparison)
-
-Same LLM candidates grounded both ways (`eval/ExperimentRunnerCompare.java`),
-embeddings via local Ollama `nomic-embed-text`. Fuzzy (non-exact) matches were
-classified correct/wrong by inspection; the driver prints every pair.
-
-| Grounding backend | grounded | correct | precision |
-|---|---|---|---|
-| Text (Jaccard), θ=0.85 | 29 | 29 | **100%** |
-| Embedding, θ=0.85 | 47 | 38 | 81% |
-| Embedding, θ=0.90 | 39 | 38 | 97% |
-| Embedding, θ=0.95 | 38 | 37 | 97% |
-
-**Genuine recoveries embeddings add (Jaccard scores low):**
-`Liverpool FC`→`Liverpool` (0.95), `Juventus FC`→`Juventus` (0.97),
-`FIFA World Cup`→`World Cup` (0.98), `UEFA Champions League`→`Champions League`
-(0.98), `São Paulo`→`Sao Paulo` (1.00, accent), `Xavi`→`Xavi Hernandez` (0.92).
-
-**Semantic over-matching (false positives at θ≈0.85):**
-`Manchester City`→Manchester United (0.85), `Inter Milan`→AC Milan (0.89),
-`Atletico Madrid`→Real Madrid (0.89), `Premier League`→Champions League (0.86),
-`AFC Asian Cup`→World Cup (0.86), `Porto`→Porto Alegre (0.87).
-
-**Takeaway.** Embeddings' correct recoveries and false positives sit in the same
-similarity band (~0.85–0.90), so no single θ separates them cleanly; matching
-Jaccard's precision needs θ≈0.95, recovering only a little extra. Grounding
-quality is bounded by the similarity space — neither backend dominates. Enable
-embeddings with the env vars above; the E1/E2 driver auto-switches.
-
-## E3 — Label-quality boundary (FB15k-237)
-
-**Part A — structural (θ = 0.85, 306-entity sample).** Can a correct generated
-name ground to its own KG entity?
-
-| KG entity label | grounding recall |
-|-----------------|:----------------:|
-| raw MID (`/m/06rf7`) | **0%** |
-| human-readable label | **100%** |
-
-**Part B — end-to-end (15 sampled test triples, human labels + Jaccard).**
-Hits@any = **2/15 (13%)**. Grounding works, but the LLM rarely predicts the
-dataset-specific answer (e.g. "England →location contains→ Pontefract": it lists
-20 English towns, grounds 19, misses the gold one).
-
-**Takeaway.** Label recovery is *necessary but not sufficient*: opaque MIDs make
-grounding structurally impossible (0%), and even with labels most benchmark
-relations are not answerable from LLM world knowledge. This is why the fully
-automated pipeline scores near zero on KG-completion benchmarks — a boundary we
-report rather than obscure.
+- For **additive** facts the KG does not contain (a player's position, a 2026 result), the
+  KG cannot verify them — correctness rests on the LLM. X1 quantifies this honestly (70% /
+  abstains on 23%); grounding only guarantees **entity-level** consistency, not fact truth.
+- Freshness is bounded by the LLM's training cutoff.
+- FB15k-237 remains a near-zero boundary (opaque MIDs, non-world-knowledge relations); we
+  report it rather than obscure it.
 
 ## Reproduce
 
 ```bash
-export OPENROUTER_API_KEY=sk-or-...
-# E1 + E2 + E4 (bundled football KG):
-./eval/run_eval.sh
-# add E3 (supply FB15k-237+H data directory):
-FB15K_DIR=/path/to/FB15k-237+H ./eval/run_eval.sh
+# 0) build the KG (needs internet to Wikidata) and serve the models (see deploy/README.md)
+python gensparql-example/data/build_worldcup2026_kg.py
+sbatch deploy/serve_llm.slurm ; sbatch deploy/serve_embeddings.slurm
+
+export OPENAI_API_KEY=dummy
+export OPENAI_BASE_URL=http://<llm-node>:8000/v1
+export GS_GEN_MODEL=Qwen/Qwen3-30B-A3B-Instruct-2507
+
+# X1 — column-extension accuracy vs Wikidata P413
+python eval/wc2026_x1_position.py
+
+# X2 / X3 — composition + hybrid (live, gated on OPENAI_BASE_URL)
+mvn -pl gensparql-integration-tests test \
+  -Dtest='LiveVllmSmokeTest#compositionFilterQuery_bgpPlusGenopPlusFilter+hybridWorldCupQuery_bgpPlusGenopPlusJoin'
+
+# X4 — cost-aware placement (mock provider, no server needed)
+mvn -pl gensparql-integration-tests test -Dtest=CostReorderTest
+
+# E1/E2 grounding-backend sweep on the bundled football KG (original drivers)
+OPENROUTER_API_KEY=sk-or-... ./eval/run_eval.sh
 ```

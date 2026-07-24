@@ -114,6 +114,26 @@ class JsonResponseParserTest {
     }
 
     @Test
+    void testParseEmptyJsonArray_YieldsZeroBindings() {
+        // Regression: a model returning "[]" means "no matches" and MUST produce zero
+        // bindings, not a single bogus row containing the literal text "[]".
+        List<Map<String, String>> bindings = parser.parse("[]", List.of("scientist", "award"));
+        assertTrue(bindings.isEmpty(), "Empty JSON array must yield zero bindings");
+    }
+
+    @Test
+    void testParseEmptyJsonArrayInCodeBlock_YieldsZeroBindings() {
+        List<Map<String, String>> bindings = parser.parse("```json\n[]\n```", List.of("x"));
+        assertTrue(bindings.isEmpty(), "Empty JSON array in a code block must yield zero bindings");
+    }
+
+    @Test
+    void testParseEmptyJsonObject_YieldsZeroBindings() {
+        List<Map<String, String>> bindings = parser.parse("{}", List.of("x", "y"));
+        assertTrue(bindings.isEmpty(), "Empty JSON object must yield zero bindings");
+    }
+
+    @Test
     void testParseNoOutputVars_UsesDefaultResult() {
         String content = "Some result";
         List<Map<String, String>> bindings = parser.parse(content, null);

@@ -37,15 +37,23 @@ public class ExperimentRunner {
         Dataset ds = DatasetFactory.create(model);
         System.out.println("LOADED triples=" + model.size());
 
-        LLMProvider prov = LLMProviderRegistry.get("openrouter");
+        // Generation backend: OpenRouter/deepseek by default; override to any provider
+        // (e.g. a local vLLM openai-compatible server) via GS_GEN_PROVIDER / GS_GEN_MODEL.
+        String genProvider = System.getenv().getOrDefault("GS_GEN_PROVIDER", "openrouter");
+        String genModel = System.getenv().getOrDefault("GS_GEN_MODEL", "deepseek/deepseek-chat");
+        LLMProvider prov = LLMProviderRegistry.get(genProvider);
         // temperature 0 for deterministic, reproducible candidate sets
-        ModelSpec spec = ModelSpec.builder().provider("openrouter")
-                .model("deepseek/deepseek-chat").temperature(0.0).build();
-        // Grounding similarity: text (Jaccard) by default, or embedding cosine when
-        // an OpenAI-compatible embedding backend is configured.
+        ModelSpec spec = ModelSpec.builder().provider(genProvider)
+                .model(genModel).temperature(0.0).build();
+        System.out.println("GEN " + genProvider + ":" + genModel);
+        // Grounding similarity: text (Jaccard) by default, or embedding cosine when a
+        // dedicated OpenAI-compatible embedding endpoint is configured (OPENAI_EMBEDDING_BASE_URL)
+        // or grounding is explicitly requested (GS_GROUNDING=embedding). Keyed on the embedding
+        // endpoint (not OPENAI_BASE_URL) so using an openai-compatible *chat* server for
+        // generation does not force embedding grounding.
         SimText st;
         if (System.getenv("OPENAI_API_KEY") != null
-                && (System.getenv("OPENAI_BASE_URL") != null
+                && (System.getenv("OPENAI_EMBEDDING_BASE_URL") != null
                     || "embedding".equalsIgnoreCase(System.getenv("GS_GROUNDING")))) {
             LLMProviderRegistry.setDefault(LLMProviderRegistry.get("openai"));
             st = new EmbeddingSimText();
@@ -55,23 +63,45 @@ public class ExperimentRunner {
             System.out.println("SIMTEXT " + st.getName());
         }
 
-        List<Exp> exps = Arrays.asList(
-            new Exp("wc_winners",
-                "List 20 footballers who have won the FIFA World Cup. Return ONLY a JSON array of player names, e.g. [\"Lionel Messi\",\"Pele\"].",
-                "http://example.org/Athlete"),
-            new Exp("national_teams",
-                "List 15 national football teams that have won a World Cup or continental title. Return ONLY a JSON array of country names, e.g. [\"Brazil\",\"Germany\"].",
-                "http://example.org/Team"),
-            new Exp("clubs",
-                "List 15 famous football clubs. Return ONLY a JSON array of club names, e.g. [\"Real Madrid\",\"Liverpool\"].",
-                "http://example.org/Club"),
-            new Exp("trophies",
-                "List 12 major football trophies and competitions. Return ONLY a JSON array of names, e.g. [\"World Cup\",\"Champions League\"].",
-                "http://example.org/Trophy"),
-            new Exp("birthplaces",
-                "List 15 cities that are birthplaces of famous footballers. Return ONLY a JSON array of city names, e.g. [\"Rosario\",\"Funchal\"].",
-                "http://example.org/City")
-        );
+        // Two experiment profiles: the original football-legends KG, and the larger
+        // 2026 World Cup KG (GS_PROFILE=wc2026). Types match each KG's rdfs:label sets.
+        String profile = System.getenv().getOrDefault("GS_PROFILE", "football");
+        List<Exp> exps;
+        if ("wc2026".equalsIgnoreCase(profile)) {
+            exps = Arrays.asList(
+                new Exp("wc2026_teams",
+                    "List the national teams that qualified for the 2026 FIFA World Cup. Return ONLY a JSON array of country names, e.g. [\"Brazil\",\"United States\"].",
+                    "http://example.org/Team"),
+                new Exp("wc2026_players",
+                    "List 30 well-known footballers expected to play at the 2026 FIFA World Cup. Return ONLY a JSON array of player names, e.g. [\"Lionel Messi\",\"Kylian Mbappe\"].",
+                    "http://example.org/Athlete"),
+                new Exp("wc2026_venues",
+                    "List the stadiums hosting matches at the 2026 FIFA World Cup. Return ONLY a JSON array of stadium names, e.g. [\"MetLife Stadium\",\"SoFi Stadium\"].",
+                    "http://example.org/Venue"),
+                new Exp("wc2026_cities",
+                    "List the host cities/municipalities of the 2026 FIFA World Cup. Return ONLY a JSON array of city names, e.g. [\"Atlanta\",\"Seattle\"].",
+                    "http://example.org/City")
+            );
+        } else {
+            exps = Arrays.asList(
+                new Exp("wc_winners",
+                    "List 20 footballers who have won the FIFA World Cup. Return ONLY a JSON array of player names, e.g. [\"Lionel Messi\",\"Pele\"].",
+                    "http://example.org/Athlete"),
+                new Exp("national_teams",
+                    "List 15 national football teams that have won a World Cup or continental title. Return ONLY a JSON array of country names, e.g. [\"Brazil\",\"Germany\"].",
+                    "http://example.org/Team"),
+                new Exp("clubs",
+                    "List 15 famous football clubs. Return ONLY a JSON array of club names, e.g. [\"Real Madrid\",\"Liverpool\"].",
+                    "http://example.org/Club"),
+                new Exp("trophies",
+                    "List 12 major football trophies and competitions. Return ONLY a JSON array of names, e.g. [\"World Cup\",\"Champions League\"].",
+                    "http://example.org/Trophy"),
+                new Exp("birthplaces",
+                    "List 15 cities that are birthplaces of famous footballers. Return ONLY a JSON array of city names, e.g. [\"Rosario\",\"Funchal\"].",
+                    "http://example.org/City")
+            );
+        }
+        System.out.println("PROFILE " + profile);
 
         ObjectMapper om = new ObjectMapper();
 
