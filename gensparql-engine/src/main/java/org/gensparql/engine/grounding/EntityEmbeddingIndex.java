@@ -265,8 +265,9 @@ public class EntityEmbeddingIndex {
             dot += a[i] * b[i];
         }
 
-        // Clamp to [-1, 1] to handle floating point errors
-        return Math.max(-1, Math.min(1, dot));
+        // Clamp to [0, 1]: similarity thresholds are expressed in [0, 1], and a negative
+        // cosine (dissimilar) is never a grounding candidate. Matches EmbeddingSimText.
+        return Math.max(0, Math.min(1, dot));
     }
 
     /**

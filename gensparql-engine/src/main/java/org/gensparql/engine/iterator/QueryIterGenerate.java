@@ -225,39 +225,39 @@ public class QueryIterGenerate extends QueryIteratorBase {
             return true;
         }
 
-        // Accumulate bindings for a batch
-        while (batchInputs.size() < batchSize && input.hasNext()) {
-            Binding inputBinding = input.next();
+        // Keep accumulating and executing batches until one produces output bindings or the
+        // input is genuinely exhausted. A single batch that yields zero rows (all filtered,
+        // or the LLM call failed) must NOT terminate the iterator while input remains —
+        // otherwise every remaining input binding is silently dropped.
+        while (true) {
+            // Accumulate bindings for the next batch.
+            while (batchInputs.size() < batchSize && input.hasNext()) {
+                Binding inputBinding = input.next();
 
-            if (!template.allVariablesBound(inputBinding)) {
-                LOG.debug("Skipping binding - not all input variables bound");
-                continue;
-            }
-
-            String resolvedPrompt = template.resolve(inputBinding);
-            batchInputs.add(inputBinding);
-            batchPrompts.add(resolvedPrompt);
-        }
-
-        // Execute batch if we have accumulated bindings
-        if (!batchInputs.isEmpty()) {
-            boolean hasInput = input.hasNext();
-            if (batchInputs.size() >= batchSize || !hasInput) {
-                executeBatch();
-                if (batchResults != null && batchResults.hasNext()) {
-                    return true;
+                if (!template.allVariablesBound(inputBinding)) {
+                    LOG.debug("Skipping binding - not all input variables bound");
+                    continue;
                 }
+
+                batchInputs.add(inputBinding);
+                batchPrompts.add(template.resolve(inputBinding));
             }
-        }
 
-        // No more input and no pending results
-        if (!input.hasNext() && batchInputs.isEmpty() &&
-            (batchResults == null || !batchResults.hasNext())) {
-            exhausted = true;
-            return false;
-        }
+            // Nothing left to process: the inner loop drained the input without collecting
+            // any bindable rows for this batch.
+            if (batchInputs.isEmpty()) {
+                exhausted = true;
+                return false;
+            }
 
-        return batchResults != null && batchResults.hasNext();
+            // We have either a full batch or the final partial batch — run it.
+            // executeBatch() clears batchInputs/batchPrompts in all cases.
+            executeBatch();
+            if (batchResults != null && batchResults.hasNext()) {
+                return true;
+            }
+            // This batch produced no rows; loop to build the next batch (if input remains).
+        }
     }
 
     /**
@@ -302,9 +302,11 @@ public class QueryIterGenerate extends QueryIteratorBase {
             List<Map<String, String>> allResults = BatchedResponseParser.parse(
                 response.getRawText(), batchPrompts.size());
 
-            // Create bindings from results
+            // Create bindings from results. The parser may return fewer maps than prompts
+            // (a short/garbled batch response); only pair up as many as we actually got.
             List<Binding> results = new ArrayList<>();
-            for (int i = 0; i < batchInputs.size(); i++) {
+            int pairCount = Math.min(batchInputs.size(), allResults.size());
+            for (int i = 0; i < pairCount; i++) {
                 Map<String, String> outputBinding = allResults.get(i);
                 Map<String, String> validated = validateOutputBinding(outputBinding);
                 if (validated != null) {
@@ -517,7 +519,10 @@ public class QueryIterGenerate extends QueryIteratorBase {
 
         for (Var var : opGen.getOutputVariables()) {
             String value = outputValues.get(var.getName());
-            if (value != null) {
+            // Treat a missing OR empty field as unbound: leave the variable out of the
+            // binding rather than adding an empty literal. The row still survives on its
+            // other (bound) fields — an empty sibling field must not fabricate a "" value.
+            if (value != null && !value.isEmpty()) {
                 Node node;
 
                 // Apply embedding-based grounding if enabled, memoized per raw value so a

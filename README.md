@@ -40,7 +40,7 @@ A SPARQL query returns only what a knowledge graph (KG) explicitly stores, so it
 |-------------|---------|---------------|
 | Java (JDK)  | **17 or higher** | `java -version` |
 | Maven       | **3.8 or higher** | `mvn -version` |
-| LLM API key | one provider (or `mock`) | see [LLM Providers and Models](#llm-providers-and-models) |
+| LLM backend | a hosted key, a local vLLM model, or `mock` | see [LLM Providers and Models](#llm-providers-and-models) |
 
 ### Installing Java 17 (if needed)
 
@@ -106,6 +106,7 @@ To run a query that actually calls an LLM, set a provider key first (see [below]
 export OPENROUTER_API_KEY="sk-..."
 ./run_query2.sh          # context-mode GENOP over the demo dataset
 ```
+
 
 ---
 
@@ -227,10 +228,24 @@ The target model is named inline in the query as `<model:PROVIDER:MODEL>`. Suppo
 | OpenRouter | `<model:openrouter:deepseek/deepseek-chat>` | `OPENROUTER_API_KEY` |
 | OpenAI | `<model:openai:gpt-4o>` | `OPENAI_API_KEY` |
 | Anthropic | `<model:anthropic:claude-...>` | `ANTHROPIC_API_KEY` |
-| Self-hosted (vLLM, OpenAI-compatible) | `<model:Qwen/Qwen3-30B-A3B-Instruct-2507>` | `OPENAI_BASE_URL` (+ `OPENAI_API_KEY`) |
+| Self-hosted (vLLM, OpenAI-compatible) | `<model:openai:Qwen/Qwen3-30B-A3B-Instruct-2507>` | `OPENAI_BASE_URL` (+ `OPENAI_API_KEY`) |
 | Mock (no network) | `<model:mock:...>` | none |
 
-A response cache and request batching reduce repeated calls. To point the OpenAI-compatible client at a self-hosted vLLM server, set `OPENAI_BASE_URL` to its endpoint; `OPENAI_EMBEDDING_MODEL` selects the embedding model used by `gen:embedding` and embedding-based grounding.
+A response cache and request batching reduce repeated calls.
+
+### Using open-weight models (vLLM)
+
+To run the chat model *and* the embedding model as local open-weight models (for example on a SLURM cluster) instead of a hosted API, see [`deploy/README.md`](deploy/README.md). Serve the models with vLLM (`deploy/serve_llm.slurm`, `deploy/serve_embeddings.slurm`), then point the `openai` provider at them:
+
+```bash
+export OPENAI_API_KEY=dummy
+export OPENAI_BASE_URL=http://<llm-node>:8000/v1
+export OPENAI_EMBEDDING_BASE_URL=http://<emb-node>:8001/v1
+export OPENAI_EMBEDDING_MODEL=BAAI/bge-large-en-v1.5
+# query model spec: <model:openai:Qwen/Qwen2.5-7B-Instruct>
+```
+
+`OPENAI_EMBEDDING_MODEL` (and `OPENAI_EMBEDDING_BASE_URL`) select the embedding model used by `gen:embedding` and embedding-based grounding.
 
 ---
 
@@ -267,6 +282,8 @@ GenSPARQL/
 │   ├── queries/                  # Sample SPARQL queries
 │   └── run_query*.sh             # Per-query run scripts
 ├── gensparql-benchmark/          # KG-completion benchmark harness (FB15k-237, NELL-995)
+├── eval/                         # Experiment runner and evaluation result JSON (X1-X4)
+├── deploy/                       # vLLM serving scripts for local open-weight models (SLURM)
 ├── docs/                         # Evaluation notes and issue/fix history
 └── pom.xml                       # Maven build configuration
 ```
