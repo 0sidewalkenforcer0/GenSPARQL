@@ -6,8 +6,11 @@
 ![SPARQL](https://img.shields.io/badge/SPARQL-1.1-green.svg)
 ![Apache Jena](https://img.shields.io/badge/Apache%20Jena-5.1.0-red.svg)
 ![Status](https://img.shields.io/badge/status-research%20prototype-yellow.svg)
+[![Live demo](https://img.shields.io/badge/live-demo-0E7C86.svg)](https://0sidewalkenforcer0.github.io/GenSPARQL/)
 
 **A generative extension of SPARQL 1.1 for Apache Jena, with LLM generation and entity grounding as first-class query operators.**
+
+▶ **[Try the interactive demo](https://0sidewalkenforcer0.github.io/GenSPARQL/)** — explore the three query shapes over the 2026 World Cup KG, with a live grounding-threshold slider.
 
 A SPARQL query returns only what a knowledge graph (KG) explicitly stores, so it cannot return an attribute the KG never modeled or an entity it does not record. Large language models (LLMs) hold broad open-world knowledge, but they optimize likelihood over truth and can hallucinate. GenSPARQL bridges the two by adding two operators that live inside the query algebra: a first-class `GENOP` that calls an LLM during query evaluation and binds the generated values to query variables, and a type-aware similarity join that grounds generated entities to real KG nodes. Because `GENOP` is an operator rather than an external call, the query planner defers it behind selective graph patterns, so the LLM runs only on the bindings that survive.
 
