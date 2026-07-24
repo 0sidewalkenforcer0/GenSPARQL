@@ -11,8 +11,6 @@
 
 A SPARQL query returns only what a knowledge graph (KG) explicitly stores, so it cannot return an attribute the KG never modeled or an entity it does not record. Large language models (LLMs) hold broad open-world knowledge, but they optimize likelihood over truth and can hallucinate. GenSPARQL bridges the two by adding two operators that live inside the query algebra: a first-class `GENOP` that calls an LLM during query evaluation and binds the generated values to query variables, and a type-aware similarity join that grounds generated entities to real KG nodes. Because `GENOP` is an operator rather than an external call, the query planner defers it behind selective graph patterns, so the LLM runs only on the bindings that survive.
 
-> ⚠️ **Research prototype.** This is a proof-of-concept accompanying an ISWC 2026 demo paper. See [`docs/ISSUES_AND_FIXES.md`](docs/ISSUES_AND_FIXES.md) for known issues and the debugging history.
-
 ---
 
 ## Table of Contents
