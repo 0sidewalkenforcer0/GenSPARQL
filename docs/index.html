@@ -1,289 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GenSPARQL</title>
-<meta name="description" content="GenSPARQL — LLM generation and entity grounding as first-class SPARQL operators, over a 2026 FIFA World Cup knowledge graph.">
-<style>
-  :root{
-    --paper:#FBFAF7; --panel:#FFFFFF; --ink:#18202A; --muted:#63707C;
-    --line:#E7E3DB; --line-strong:#CFC9BE;
-    --kg:#0E7C86; --kg-soft:#E1F0F0; --llm:#B26B00; --llm-soft:#F6ECD9;
-    --drop:#AE3E37; --drop-soft:#F6E4E2;
-    --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
-    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  }
-  @media (prefers-color-scheme:dark){:root{
-    --paper:#0E1417; --panel:#151D22; --ink:#E7ECEE; --muted:#93A0A8;
-    --line:#243036; --line-strong:#32424A; --kg:#3FB5BE; --kg-soft:#123037;
-    --llm:#E3A63C; --llm-soft:#33280F; --drop:#E0716A; --drop-soft:#331E1C;}}
-  :root[data-theme="light"]{--paper:#FBFAF7;--panel:#FFFFFF;--ink:#18202A;--muted:#63707C;--line:#E7E3DB;--line-strong:#CFC9BE;--kg:#0E7C86;--kg-soft:#E1F0F0;--llm:#B26B00;--llm-soft:#F6ECD9;--drop:#AE3E37;--drop-soft:#F6E4E2;}
-  :root[data-theme="dark"]{--paper:#0E1417;--panel:#151D22;--ink:#E7ECEE;--muted:#93A0A8;--line:#243036;--line-strong:#32424A;--kg:#3FB5BE;--kg-soft:#123037;--llm:#E3A63C;--llm-soft:#33280F;--drop:#E0716A;--drop-soft:#331E1C;}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
-  .wrap{max-width:1120px;margin:0 auto;padding:36px 26px 72px}
-
-  header{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
-  h1{font-size:52px;font-weight:720;letter-spacing:-.02em;margin:0;line-height:1}
-  .tag{color:var(--muted);font-size:16px}
-  header .sp{flex:1}
-  .ln{font-family:var(--mono);font-size:13px;color:var(--ink);text-decoration:none;border:1px solid var(--line-strong);border-radius:9px;padding:7px 12px}
-  .ln:hover{border-color:var(--kg);color:var(--kg)}
-
-  .tabs{display:flex;gap:6px;margin:30px 0 16px;flex-wrap:wrap}
-  .tab{font-size:15px;font-weight:560;padding:9px 16px;border:1px solid var(--line-strong);border-radius:10px;background:transparent;color:var(--muted);cursor:pointer}
-  .tab[aria-selected="true"]{background:var(--kg);border-color:var(--kg);color:#fff}
-
-  .grid{display:grid;grid-template-columns:400px 1fr;gap:18px;align-items:start}
-  @media (max-width:860px){.grid{grid-template-columns:1fr}}
-  .card{border:1px solid var(--line-strong);border-radius:16px;background:var(--panel);padding:20px}
-  .card h2{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 12px;font-weight:600}
-
-  pre.q{font-family:var(--mono);font-size:16px;line-height:1.6;margin:0;white-space:pre-wrap;color:var(--ink)}
-  .q .kw{color:var(--kg);font-weight:600}.q .gen{color:var(--llm);font-weight:700}.q .cmt{color:var(--muted)}
-  .runrow{display:flex;align-items:center;gap:12px;margin-top:18px}
-  .run{font-size:15px;font-weight:640;color:#fff;background:var(--kg);border:none;border-radius:10px;padding:10px 20px;cursor:pointer}
-  .run:hover{filter:brightness(1.06)} .run:disabled{opacity:.5;cursor:default}
-  .thetawrap{margin-top:20px}
-  .thetawrap.off{display:none}
-  .thetarow{display:flex;justify-content:space-between;font-family:var(--mono);font-size:14px}
-  .thetarow .v{color:var(--kg);font-weight:700}
-  input[type=range]{width:100%;accent-color:var(--kg);margin-top:8px}
-
-  /* KG visualization */
-  .viz{padding:0;overflow:hidden;position:relative;min-height:440px;display:flex;flex-direction:column}
-  svg{width:100%;height:100%;flex:1;display:block}
-  .vlabel{font-family:var(--mono);font-size:13px;fill:var(--ink)}
-  .vlabel.muted{fill:var(--muted)}
-  .vlabel.drop{fill:var(--drop)}
-  .vsub{font-family:var(--mono);font-size:11px;fill:var(--muted)}
-  .footbar{display:flex;gap:20px;flex-wrap:wrap;padding:14px 20px;border-top:1px solid var(--line);font-family:var(--mono);font-size:13px}
-  .k-kg{color:var(--kg)} .k-drop{color:var(--drop)} .k-llm{color:var(--llm)}
-
-  /* big-number result panels (attribute / composition) */
-  .big{display:flex;flex-direction:column;justify-content:center;gap:18px;min-height:440px;padding:26px}
-  .rows{font-family:var(--mono);font-size:16px;display:flex;flex-direction:column;gap:10px}
-  .rows .r{display:flex;align-items:center;gap:12px}
-  .rows .nm{flex:1} .rows .pos{color:var(--llm);font-weight:640;min-width:110px}
-  .pill{font-size:12px;padding:2px 9px;border-radius:20px;font-weight:600}
-  .pill.ok{color:var(--kg);background:var(--kg-soft)} .pill.no{color:var(--drop);background:var(--drop-soft)} .pill.ab{color:var(--muted);background:var(--line)}
-  .huge{font-size:60px;font-weight:720;line-height:1.05;color:var(--kg)}
-  .huge small{font-size:19px;color:var(--muted);font-weight:400}
-  .bars{font-family:var(--mono);font-size:14px;display:flex;flex-direction:column;gap:6px;margin-top:4px}
-  .bar{height:12px;border-radius:7px;background:var(--line);overflow:hidden}
-  .bar i{display:block;height:100%}
-  .statduo{display:flex;gap:40px;flex-wrap:wrap}
-  .statduo .v{font-size:40px;font-weight:700} .statduo .k{font-family:var(--mono);font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
-
-  /* Live BYOK panel */
-  .live{margin-top:18px;border:1px solid var(--line-strong);border-radius:14px;background:var(--panel);overflow:hidden}
-  .live summary{list-style:none;cursor:pointer;padding:14px 18px;display:flex;align-items:center;gap:10px;font-size:15px;font-weight:560}
-  .live summary::-webkit-details-marker{display:none}
-  .dot{width:9px;height:9px;border-radius:50%;background:var(--muted)} .dot.on{background:var(--kg)}
-  .live .in{padding:0 18px 18px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  @media (max-width:860px){.live .in{grid-template-columns:1fr}}
-  .fld{display:flex;flex-direction:column;gap:5px}
-  .fld label{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
-  .fld input,.fld select{font-family:var(--mono);font-size:13px;padding:8px 10px;border:1px solid var(--line-strong);border-radius:9px;background:var(--paper);color:var(--ink)}
-  .fld.full{grid-column:1/-1}
-  .privacy{grid-column:1/-1;font-family:var(--mono);font-size:11.5px;color:var(--muted);margin:0}
-  .msg{grid-column:1/-1;font-family:var(--mono);font-size:12.5px;padding:9px 11px;border-radius:9px;display:none}
-  .msg.show{display:block}
-  .msg.err{background:var(--drop-soft);color:var(--drop)} .msg.ok{background:var(--kg-soft);color:var(--kg)}
-
-  .theme{font-family:var(--mono);font-size:12px;color:var(--muted);cursor:pointer;background:none;border:1px solid var(--line-strong);border-radius:8px;padding:6px 10px}
-  .note{font-family:var(--mono);font-size:12px;color:var(--muted);margin:16px 2px 0}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>GenSPARQL · Interactive KG Explorer</title>
+  <meta name="description" content="GenSPARQL interactive demo with the FIFA 2026 knowledge graph.">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <h1>GenSPARQL</h1>
-    <span class="tag">generation + grounding, inside SPARQL</span>
-    <span class="sp"></span>
-    <button class="theme" id="themeBtn">◐ theme</button>
-    <a class="ln" href="https://github.com/0sidewalkenforcer0/GenSPARQL">Code ↗</a>
-  </header>
-
-  <div class="tabs" id="tabs" role="tablist"></div>
-
-  <div class="grid">
-    <div>
-      <div class="card">
-        <h2 id="qh">Query</h2>
-        <pre class="q" id="query"></pre>
-        <div class="thetawrap" id="thetaWrap">
-          <div class="thetarow"><span>threshold θ</span><span class="v" id="thetaVal">0.85</span></div>
-          <input type="range" id="theta" min="0.05" max="1" step="0.01" value="0.85">
-        </div>
-        <div class="runrow">
-          <button class="run" id="run">Run ▶</button>
-          <span class="note" id="runmode" style="margin:0"></span>
-        </div>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-brand">
+        <img class="topbar-brand-icon" src="gensparql-icon.png" alt="" aria-hidden="true">
+        <span class="topbar-name topbar-wordmark">GenSPARQL</span>
+        <span class="topbar-sep"></span>
+        <span class="topbar-meta">Research demo</span>
       </div>
 
-      <details class="live" id="liveBox">
-        <summary><span class="dot" id="liveDot"></span> Live mode — use your own API key</summary>
-        <div class="in">
-          <p class="privacy">Your key stays in this browser, is sent only to the endpoint you name, and is never uploaded to us. Needs a provider that allows browser calls (OpenRouter works; OpenAI/Anthropic may block via CORS). Applies to the grounding query.</p>
-          <div class="fld full"><label>API key</label><input id="key" type="password" placeholder="sk-..." autocomplete="off"></div>
-          <div class="fld"><label>chat endpoint</label><input id="chatBase"></div>
-          <div class="fld"><label>chat model</label><input id="chatModel"></div>
-          <div class="fld"><label>embedding endpoint</label><input id="embBase"></div>
-          <div class="fld"><label>embedding model</label><select id="embModel"></select></div>
-          <div class="msg" id="msg"></div>
+      <div class="topbar-controls">
+        <div class="db-picker">
+          <span class="db-status" aria-hidden="true"></span>
+          <label for="databaseSelect">Database</label>
+          <select id="databaseSelect">
+            <option value="fifa2026">FIFA 2026</option>
+          </select>
         </div>
-      </details>
+        <button class="top-control" id="themeBtn" type="button">◐ Theme</button>
+        <a class="top-control" href="https://github.com/0sidewalkenforcer0/GenSPARQL" target="_blank" rel="noreferrer">Code ↗</a>
+      </div>
     </div>
-
-    <div class="card viz" id="stage"></div>
   </div>
 
-  <p class="note" id="caption"></p>
-</div>
+  <main class="wrap">
+    <header class="hero">
+      <h1>GenSPARQL</h1>
+      <p>Generative query answering for incomplete knowledge graphs</p>
+    </header>
 
-<script src="demo-data.js"></script>
-<script>
-(function(){
-  var D=window.DEMO_DATA, S=D.scenarios, cur=0, embCache={}, lastGrounded=null;
-  var $=function(id){return document.getElementById(id);};
-  var NS="http://www.w3.org/2000/svg";
+    <nav class="tabs" id="tabs" role="tablist"></nav>
 
-  /* theme */
-  $("themeBtn").onclick=function(){var r=document.documentElement;var n=r.getAttribute("data-theme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");r.setAttribute("data-theme",n==="dark"?"light":"dark");draw();};
+    <section class="workspace">
+      <div class="left-column">
+        <section class="panel query-panel">
+          <div class="panel-heading">
+            <div>
+              <div class="section-label">Query</div>
+              <div class="qmeta">
+                <span class="mode-title">GENOP mode</span>
+                <div class="mode-switch" aria-label="Detected GENOP mode">
+                  <span class="mode-option" id="baseMode">Base</span>
+                  <span class="mode-option" id="contextMode">Context</span>
+                </div>
+                <span class="mode-detail" id="modeDetail"></span>
+              </div>
+            </div>
+          </div>
 
-  /* live defaults */
-  $("chatBase").value=D.live.chatBase; $("chatModel").value=D.live.chatModel; $("embBase").value=D.live.embBase;
-  D.live.embModels.forEach(function(m){var o=document.createElement("option");o.value=o.textContent=m;$("embModel").appendChild(o);});
-  function liveOn(){return $("liveBox").open && $("key").value.trim().length>0;}
-  $("liveBox").addEventListener("toggle",function(){$("liveDot").classList.toggle("on",$("liveBox").open);setMode();});
-  $("key").addEventListener("input",setMode);
+          <p class="mode-help" id="modeHelp"></p>
 
-  /* SPARQL highlight */
-  function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
-  function hl(q){var t=esc(q);t=t.replace(/(#[^\n]*)/g,'<span class="cmt">$1</span>');t=t.replace(/\b(SELECT|WHERE|FILTER|a)\b/g,'<span class="kw">$1</span>');t=t.replace(/\b(GENOP)\b/g,'<span class="gen">$1</span>');return t;}
+          <div class="code-shell">
+            <div class="code-top">
+              <span>SPARQL / GenSPARQL</span>
+              <strong id="queryName">Sample query</strong>
+            </div>
+            <pre class="query-code" id="query"></pre>
+          </div>
 
-  /* similarity */
-  function norm(s){return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]/g,"");}
-  function tri(s){s=norm(s);var g={};if(s.length<3){g[s]=1;return g;}for(var i=0;i<=s.length-3;i++)g[s.substr(i,3)]=1;return g;}
-  function jac(a,b){var ga=tri(a),gb=tri(b),n=0,u={};for(var k in ga){u[k]=1;if(gb[k])n++;}for(var k2 in gb)u[k2]=1;var d=Object.keys(u).length;return d?n/d:0;}
-  function cos(a,b){var d=0,na=0,nb=0;for(var i=0;i<a.length;i++){d+=a[i]*b[i];na+=a[i]*a[i];nb+=b[i]*b[i];}return d/(Math.sqrt(na)*Math.sqrt(nb)||1);}
+          <div class="theta-wrap" id="thetaWrap">
+            <div class="theta-row">
+              <span>Grounding threshold θ</span>
+              <strong id="thetaVal">0.85</strong>
+            </div>
+            <input id="theta" type="range" min="0" max="1" step="0.01" value="0.85">
+          </div>
 
-  function groundTrigram(cands){return cands.map(function(n){var best=null,bs=-1;D.kgTeams.forEach(function(t){var s=jac(n,t);if(s>bs){bs=s;best=t;}});return {name:n,match:best,score:bs};});}
-  async function embed(texts){
-    var model=$("embModel").value, base=$("embBase").value.replace(/\/$/,""), key=$("key").value.trim();
-    var miss=texts.filter(function(t){return !embCache[model+"|"+t];});
-    if(miss.length){
-      var r=await fetch(base+"/embeddings",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+key},body:JSON.stringify({model:model,input:miss})});
-      if(!r.ok) throw new Error("embeddings "+r.status);
-      var j=await r.json(); j.data.forEach(function(d,i){embCache[model+"|"+miss[i]]=d.embedding;});
-    }
-    return texts.map(function(t){return embCache[model+"|"+t];});
-  }
-  async function groundEmbeddings(cands){
-    var vecs=await embed(cands.concat(D.kgTeams));
-    var cv=vecs.slice(0,cands.length), tv=vecs.slice(cands.length);
-    return cands.map(function(n,i){var best=null,bs=-1;D.kgTeams.forEach(function(t,j){var s=cos(cv[i],tv[j]);if(s>bs){bs=s;best=t;}});return {name:n,match:best,score:bs};});
-  }
-  async function generate(prompt){
-    var base=$("chatBase").value.replace(/\/$/,""), key=$("key").value.trim(), model=$("chatModel").value;
-    var r=await fetch(base+"/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+key},body:JSON.stringify({model:model,temperature:0,messages:[{role:"user",content:prompt}]})});
-    if(!r.ok) throw new Error("chat "+r.status);
-    var j=await r.json(), txt=j.choices[0].message.content;
-    var m=txt.match(/\[[\s\S]*\]/); var arr=JSON.parse(m?m[0]:txt);
-    return arr.map(function(x){return typeof x==="string"?x:(x.name||x.team||JSON.stringify(x));});
-  }
+          <div class="run-row" id="defaultRunRow">
+            <div class="run-action-cluster">
+              <button class="run-btn" id="runBtn" type="button">Run ▶</button>
+              <span class="execution-state run-state" id="runModeDefault">pre-recorded</span>
+            </div>
+          </div>
 
-  /* KG visualization */
-  function el(tag,attrs){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);return e;}
-  function renderGraph(grounded, theta){
-    var W=760,H=440,cx=515,cy=214,R=138;
-    var svg=el("svg",{viewBox:"0 0 "+W+" "+H}), ring=D.ring, pos={};
-    ring.forEach(function(t,i){var a=-Math.PI/2+i*2*Math.PI/ring.length;pos[t]={x:cx+R*Math.cos(a),y:cy+R*Math.sin(a)};});
-    var hitAt={}; grounded.forEach(function(g){if(g.score>=theta&&pos[g.match])hitAt[g.match]=true;});
-    var candX=150, n=grounded.length, top=42, gap=(H-84)/(n-1||1);
-    grounded.forEach(function(g,i){var y=top+i*gap;if(g.score>=theta&&pos[g.match]){var p=pos[g.match];svg.appendChild(el("path",{d:"M "+candX+" "+y+" C "+(candX+130)+" "+y+" "+(p.x-130)+" "+p.y+" "+p.x+" "+p.y,fill:"none",stroke:"var(--kg)","stroke-width":1.6,opacity:.5}));}});
-    ring.forEach(function(t){var p=pos[t],on=hitAt[t];
-      svg.appendChild(el("circle",{cx:p.x,cy:p.y,r:on?7:4.5,fill:on?"var(--kg)":"var(--panel)",stroke:"var(--kg)","stroke-width":on?0:1.5}));
-      var tx=el("text",{x:p.x+(p.x>=cx?11:-11),y:p.y+4,"text-anchor":p.x>=cx?"start":"end","class":"vsub"});tx.textContent=t;svg.appendChild(tx);});
-    var lbl=el("text",{x:cx,y:cy,"text-anchor":"middle","class":"vlabel muted"});lbl.textContent="KG · 48 teams";svg.appendChild(lbl);
-    grounded.forEach(function(g,i){var y=top+i*gap, keep=g.score>=theta;
-      svg.appendChild(el("circle",{cx:candX,cy:y,r:4.5,fill:keep?"var(--llm)":"var(--panel)",stroke:keep?"var(--llm)":"var(--drop)","stroke-width":1.5}));
-      var t=el("text",{x:candX-11,y:y+4,"text-anchor":"end","class":"vlabel"+(keep?"":" drop")});t.textContent=g.name;svg.appendChild(t);
-      var s=el("text",{x:candX-11,y:y+18,"text-anchor":"end","class":"vsub"});s.textContent=keep?("→ "+g.match+"  "+g.score.toFixed(2)):(g.score>0.05?g.score.toFixed(2)+" · dropped":"dropped");svg.appendChild(s);});
-    return svg;
-  }
-  function drawEntity(useLast){
-    var s=S[cur], theta=parseFloat($("theta").value);
-    var g = useLast&&lastGrounded ? lastGrounded : groundTrigram(s.generated);
-    if(!useLast) lastGrounded=null;
-    var kept=g.filter(function(x){return x.score>=theta;}).length;
-    var stage=$("stage"); stage.innerHTML="";
-    stage.appendChild(renderGraph(g,theta));
-    var fb=document.createElement("div");fb.className="footbar";
-    fb.innerHTML='<span class="k-llm">● generated '+g.length+'</span><span class="k-kg">● grounded '+kept+'</span><span class="k-drop">● dropped '+(g.length-kept)+'</span>';
-    stage.appendChild(fb);
-  }
-  function drawAttribute(){
-    var s=S[cur], pill={correct:'<span class="pill ok">✓</span>',wrong:'<span class="pill no">✕</span>',abstain:'<span class="pill ab">—</span>'};
-    var rows=s.rows.map(function(r){return '<div class="r"><span class="nm">'+r.name+'</span><span class="pos">'+r.gen+'</span>'+pill[r.state]+'</div>';}).join("");
-    $("stage").innerHTML='<div class="big"><div class="rows">'+rows+'</div>'
-      +'<div class="statduo"><div><div class="v" style="color:var(--kg)">'+s.stat.a+'</div><div class="k">answer rate</div></div>'
-      +'<div><div class="v" style="color:var(--kg)">'+s.stat.b+'</div><div class="k">accuracy vs P413</div></div>'
-      +'<div><div class="v" style="color:var(--muted)">0</div><div class="k">SPARQL alone</div></div></div></div>';
-  }
-  function drawComposition(){
-    var s=S[cur];
-    $("stage").innerHTML='<div class="big">'
-      +'<div class="huge">'+s.result.defenders+' <small>/ '+s.result.total+' Group-A players → Defender</small></div>'
-      +'<div class="bars"><div class="k-drop">GENOP-first · '+s.cost.genopFirst+' LLM calls</div>'
-      +'<div class="bar"><i style="width:100%;background:var(--drop)"></i></div>'
-      +'<div class="k-kg">planner-deferred · '+s.cost.planned+' LLM calls · '+s.cost.factor+' fewer</div>'
-      +'<div class="bar"><i style="width:'+(100*s.cost.planned/s.cost.genopFirst)+'%;background:var(--kg)"></i></div></div></div>';
-  }
+          <div class="compose-run" id="composeRun" hidden>
+            <div class="compose-run-head">
+              <span class="compose-run-title">Execution strategy</span>
+              <span class="compose-run-note">Same logical query · different physical order</span>
+            </div>
 
-  function setMode(){$("runmode").textContent=S[cur].hero?(liveOn()?"live · your key":"pre-recorded"):"";}
-  function draw(){
-    var s=S[cur], theta=parseFloat($("theta").value);
-    $("thetaVal").textContent=theta.toFixed(2);
-    $("query").innerHTML=hl(s.query.replace("{theta}",s.hero?theta.toFixed(2):"0.85").replace("<model>", s.hero&&liveOn()?"<model:live>":"<model:…>"));
-    $("thetaWrap").className="thetawrap"+(s.hero?"":" off");
-    $("run").style.display=s.hero?"":"none";
-    if(s.id==="entity") drawEntity(true);
-    else if(s.id==="attribute") drawAttribute();
-    else drawComposition();
-    var caps={entity:"Base-mode generation grounded to the 2026 World Cup KG. Drag θ to trade recall for precision. Turn on Live mode to run it for real with your own key.",
-      attribute:"Real GENOP output over 825 players (Qwen3-30B). Attributes are generated, not grounded — only as reliable as the model.",
-      composition:"GENOP joins and filters like any pattern; the planner defers it behind selective KG patterns."};
-    $("caption").textContent=caps[s.id]; setMode();
-  }
+            <div class="compose-buttons-row">
+              <div class="compose-buttons">
+                <button class="strategy-btn genop-first-btn" id="runGenopFirst" type="button">
+                  <span class="strategy-kicker">Baseline</span>
+                  <strong>Run GENOP first</strong>
+                  <small>GENOP → KG patterns → FILTER</small>
+                </button>
 
-  $("run").onclick=async function(){
-    var s=S[cur]; if(!s.hero) return;
-    var msg=$("msg"); msg.className="msg";
-    if(!liveOn()){ lastGrounded=null; drawEntity(false); return; }
-    $("run").disabled=true; $("run").textContent="Running…";
-    try{
-      var cands=await generate(s.prompt), g;
-      try{ g=await groundEmbeddings(cands); }
-      catch(e){ g=groundTrigram(cands); msg.textContent="Embeddings unavailable ("+e.message+") — grounded with text similarity."; msg.className="msg show err"; }
-      lastGrounded=g; drawEntity(true);
-      if(!msg.classList.contains("show")){ msg.textContent="Live: generated "+cands.length+" names, grounded with "+$("embModel").value+"."; msg.className="msg show ok"; }
-    }catch(e){
-      msg.textContent="Request failed: "+e.message+". Likely CORS or a bad key — showing pre-recorded."; msg.className="msg show err";
-      lastGrounded=null; drawEntity(false);
-    }finally{ $("run").disabled=false; $("run").textContent="Run ▶"; }
-  };
+                <button class="strategy-btn planner-btn" id="runPlanner" type="button">
+                  <span class="strategy-kicker">Optimized</span>
+                  <strong>Run Planner</strong>
+                  <small>KG patterns → GENOP → FILTER</small>
+                </button>
+              </div>
+            </div>
+          </div>
 
-  var tabsEl=$("tabs");
-  S.forEach(function(s,i){var b=document.createElement("button");b.className="tab";b.textContent=s.tab;b.setAttribute("role","tab");b.setAttribute("aria-selected",i===0?"true":"false");
-    b.onclick=function(){cur=i;[].forEach.call(tabsEl.children,function(c,j){c.setAttribute("aria-selected",j===i?"true":"false");});draw();};
-    tabsEl.appendChild(b);});
-  $("theta").addEventListener("input",function(){$("thetaVal").textContent=parseFloat(this.value).toFixed(2);if(S[cur].id==="entity")drawEntity(true);});
+          <section class="execution-result" id="executionResult" hidden aria-live="polite">
+            <div class="execution-result-head">
+              <div>
+                <span class="execution-eyebrow">Execution result</span>
+                <strong id="executionTitle">Planner</strong>
+              </div>
+              <span class="execution-badge" id="executionBadge">26 LLM calls</span>
+            </div>
 
-  draw();
-})();
-</script>
+            <div class="execution-order" id="executionOrder"></div>
+
+            <div class="execution-metrics">
+              <div class="execution-metric">
+                <span>LLM calls</span>
+                <strong id="executionCalls">26</strong>
+              </div>
+              <div class="execution-metric">
+                <span>Query result</span>
+                <strong id="executionQueryResult">41 / 77</strong>
+              </div>
+              <div class="execution-metric">
+                <span>Reduction</span>
+                <strong id="executionReduction">31×</strong>
+              </div>
+            </div>
+
+            <p class="execution-explanation" id="executionExplanation"></p>
+          </section>
+
+          <section class="attribute-result" id="attributeResult" hidden aria-live="polite">
+            <div class="attribute-result-head">
+              <div>
+                <span class="attribute-eyebrow">GENOP result</span>
+                <strong>Generated player positions</strong>
+              </div>
+              <span class="generated-pill">GENERATED</span>
+            </div>
+
+            <div class="attribute-metrics">
+              <div class="attribute-metric">
+                <span>Answer rate</span>
+                <strong id="attributeAnswerRate">77%</strong>
+              </div>
+              <div class="attribute-metric">
+                <span>Accuracy vs P413</span>
+                <strong id="attributeAccuracy">70%</strong>
+              </div>
+              <div class="attribute-metric">
+                <span>SPARQL alone</span>
+                <strong id="attributeSparqlAlone">0</strong>
+              </div>
+            </div>
+
+            <div class="sample-summary" id="attributeSampleSummary"></div>
+            <div class="attribute-rows" id="attributeRows"></div>
+
+            <p class="attribute-note">
+              Accuracy vs P413 is the recorded gold-label evaluation metric. SPARQL alone is 0 because player position is omitted from this KG. The rows above are a small displayed sample, not the full evaluation set.
+            </p>
+          </section>
+        </section>
+
+        <details class="live-panel" id="liveBox">
+          <summary>
+            <span class="live-dot"></span>
+            <span class="live-label">Live mode</span>
+            <span class="live-summary-copy">use your own API key</span>
+          </summary>
+
+          <div class="live-body">
+            <p class="privacy">
+              Your API key stays in your browser and is sent only to the endpoint you configure.
+              It is never uploaded to or stored by us.
+            </p>
+
+            <div class="field">
+              <label for="key">API key</label>
+              <input id="key" type="password" placeholder="sk-..." autocomplete="off">
+            </div>
+            <div class="field">
+              <label for="chatBase">Chat endpoint</label>
+              <input id="chatBase">
+            </div>
+            <div class="field">
+              <label for="chatModel">Chat model</label>
+              <input id="chatModel">
+            </div>
+
+            <fieldset class="grounding-method full">
+              <legend>Grounding method</legend>
+
+              <label class="ground-option" for="groundText">
+                <input type="radio" id="groundText" name="groundMethod" value="text" checked>
+                <span>
+                  <strong>Text (Jaccard)</strong>
+                  <small>Fast · no embedding API required</small>
+                </span>
+              </label>
+
+              <label class="ground-option" for="groundEmbedding">
+                <input type="radio" id="groundEmbedding" name="groundMethod" value="embedding">
+                <span>
+                  <strong>Embedding (BGE)</strong>
+                  <small>Semantic matching · better for aliases</small>
+                </span>
+              </label>
+
+              <div class="embedding-settings is-disabled" id="embeddingSettings">
+                <div class="field">
+                  <label for="embBase">Embedding endpoint</label>
+                  <input id="embBase" disabled>
+                </div>
+                <div class="field">
+                  <label for="embModel">Embedding model</label>
+                  <select id="embModel" disabled></select>
+                </div>
+              </div>
+            </fieldset>
+
+            <div class="message" id="message"></div>
+          </div>
+        </details>
+      </div>
+
+      <section class="panel graph-panel">
+        <div class="graph-toolbar">
+          <div>
+            <div class="section-label" id="graphTitle">Knowledge Graph</div>
+            <div class="graph-status" id="graphStatus">Loading graph…</div>
+          </div>
+          <div class="graph-controls">
+            <button id="zoomOut" type="button">−</button>
+            <button id="zoomIn" type="button">+</button>
+            <button id="fitGraph" type="button">Fit</button>
+            <button id="resetGraph" type="button">Reset</button>
+          </div>
+        </div>
+
+        <div class="graph-stage" id="graphStage">
+          <svg id="kgGraph" role="img" aria-label="Interactive knowledge graph"></svg>
+          <div class="tooltip" id="tooltip" hidden></div>
+          <div class="graph-help">Drag nodes · Pan canvas · Scroll to zoom · Click a node for 1-hop context</div>
+        </div>
+
+        <div class="legend">
+          <span><i class="lg-kg"></i>KG entity</span>
+          <span><i class="lg-result"></i>Query result</span>
+          <span><i class="lg-context"></i>Query context</span>
+          <span><i class="lg-llm"></i>Generated attribute</span>
+          <span><i class="lg-drop"></i>Dropped</span>
+        </div>
+      </section>
+    </section>
+
+    <p class="caption" id="caption"></p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="demo-data.js"></script>
+  <script src="fifa2026-data.js"></script>
+  <script src="database-adapters.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
