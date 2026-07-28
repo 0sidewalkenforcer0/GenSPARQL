@@ -4,12 +4,6 @@
  * with the viewer's own API key. The Java engine is not run on this static page.
  */
 window.DEMO_DATA = {
-  // Full KG team set — grounding targets. Non-qualifiers (Italy, Russia, ...) are absent by design.
-  kgTeams: ["Algeria","Argentina","Australia","Austria","Belgium","Bosnia and Herzegovina","Brazil","Canada","Cape Verde","Colombia","Croatia","Curaçao","Czechia","DR Congo","Ecuador","Egypt","England","France","Germany","Ghana","Haiti","Iran","Iraq","Ivory Coast","Japan","Jordan","Mexico","Morocco","Netherlands","New Zealand","Norway","Panama","Paraguay","Portugal","Qatar","Saudi Arabia","Scotland","Senegal","South Africa","South Korea","Spain","Sweden","Switzerland","Tunisia","Turkey","United States","Uruguay","Uzbekistan"],
-
-  // Team nodes drawn in the KG visualization (a legible subset of the 48).
-  ring: ["Brazil","Argentina","France","Spain","Germany","England","Portugal","Netherlands",
-         "United States","Mexico","Canada","Japan","South Korea","Morocco","Turkey","Czechia"],
 
   // Default OpenAI-compatible endpoints for Live mode (all editable in the UI).
   live: {
