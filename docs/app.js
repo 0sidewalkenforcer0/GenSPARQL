@@ -37,7 +37,10 @@
     let t=esc(q);
     t=t.replace(/(#[^\n]*)/g,'<span class="cmt">$1</span>');
     t=t.replace(/\b(SELECT|WHERE|FILTER|OPTIONAL|UNION|a)\b/g,'<span class="kw">$1</span>');
-    t=t.replace(/\b(GENOP|SIMJOIN)\b/g,'<span class="gen">$1</span>');
+    // GENOP only: it is the one generative construct written in a query. The similarity join
+    // that grounds its output is chosen by the engine and has no surface syntax, so
+    // highlighting it as a keyword would suggest a query could name it.
+    t=t.replace(/\b(GENOP)\b/g,'<span class="gen">$1</span>');
     return t;
   }
 
@@ -425,8 +428,8 @@
         `<div>evaluation: ${esc(d.evaluationState||"—")}</div>`+
         `<code>${esc(d.id)}</code>`;
     }else if(d.generatedCandidate){
-      const groundingDetail=d.suppressGroundingLink
-        ? `best similarity target: ${esc(d.bestLabel)} · link intentionally hidden`
+      const groundingDetail=!d.bestId
+        ? "no similar entity in the KG"
         : d.grounded
           ? "grounded to: "+esc(d.bestLabel)
           : "dropped below θ = "+Number($("theta").value).toFixed(2);
@@ -678,7 +681,11 @@
     const s=CFG.scenarios.find(x=>x.id==="entity");
     const teams=currentDb().graph.nodes.filter(n=>n.type==="Team");
     return (s.generated||[]).map(name=>{
-      let best=null,score=-1;
+      // Start at zero, not below it: a candidate sharing nothing with any KG label has no
+      // best match, and reporting the first team examined as one drew a grounding link to an
+      // arbitrary country. "Italy" scores 0.000 against all 48 teams, which is what the old
+      // per-name exception for it was hiding.
+      let best=null,score=0;
       teams.forEach(team=>{
         const aliases=[team.label,...(team.aliases||[])];
         const candidateScore=Math.max(...aliases.map(alias=>jac(name,alias)));
@@ -704,7 +711,8 @@
     const teamVectors=vectors.slice(names.length);
 
     return names.map((name,i)=>{
-      let best=null,score=-1;
+      // As in the text case, no similarity at all means no best match.
+      let best=null,score=0;
       teams.forEach((team,j)=>{
         const v=cosine(nameVectors[i],teamVectors[j]);
         if(v>score){score=v;best=team}
@@ -754,7 +762,7 @@
 
     candidates.forEach(candidate=>{
       candidate.grounded=Boolean(candidate.bestId&&candidate.score>=theta);
-      if(candidate.bestId&&!candidate.suppressGroundingLink){
+      if(candidate.bestId){
         potentialTargets.add(candidate.bestId);
         if(candidate.grounded)groundedTargets.add(candidate.bestId);
       }
@@ -839,7 +847,6 @@
 
     matches.forEach((match,index)=>{
       const grounded=Boolean(match.best&&match.score>=theta);
-      const suppressGroundingLink=norm(match.name)==="italy";
       const id=`generated:team:${state.dbKey}:${index}:${norm(match.name)}`;
       const old=oldPositions.get(id);
 
@@ -851,7 +858,6 @@
         generatedCandidate:true,
         score:match.score,
         grounded,
-        suppressGroundingLink,
         similarityMethod:method,
         bestId:match.best?.id||null,
         bestLabel:match.best?.label||"—"
@@ -870,9 +876,9 @@
 
       generatedNodes.push(generatedNode);
 
-      // Keep Italy as a generated node with its similarity value, but do not
-      // create or highlight a grounding relation for it.
-      if(match.best&&!suppressGroundingLink){
+      // A candidate with no best match keeps its node and its score, and simply has no
+      // relation to draw.
+      if(match.best){
         potentialTargets.add(match.best.id);
 
         if(grounded){
@@ -902,7 +908,6 @@
     // country as unlinked KG context on a separate outer ring.
     const relevantTargetIds=new Set(
       generatedNodes
-        .filter(n=>!n.suppressGroundingLink)
         .map(n=>n.bestId)
         .filter(Boolean)
     );
@@ -947,9 +952,7 @@
     const targetOrder=[];
     const targetSeen=new Set();
 
-    const candidateLayoutKey=candidate=>candidate.suppressGroundingLink
-      ? `unlinked:${candidate.id}`
-      : candidate.bestId||`unmatched:${candidate.id}`;
+    const candidateLayoutKey=candidate=>candidate.bestId||`unmatched:${candidate.id}`;
 
     generatedNodes.forEach(candidate=>{
       const key=candidateLayoutKey(candidate);

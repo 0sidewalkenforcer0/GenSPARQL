@@ -8,7 +8,9 @@ This static package presents three GenSPARQL workflows over the FIFA 2026 knowle
 
 ## Data
 
-- `worldcup2026.ttl` is the source knowledge graph.
+- `worldcup2026.ttl` is the source knowledge graph. It holds 825 players over 32 of the 48
+  teams: 25 teams have a 26-player squad, 7 have 25, and 16 have none yet. Player counts in
+  the demo are counts over those 825.
 - `fifa2026-data.js` is the browser-ready graph generated from that TTL file.
 - `demo-data.js` contains the fixed sample queries, generated examples, evaluation rows, composition metrics, and default Live-mode endpoint settings. It is not exposed as a second database.
 
@@ -20,6 +22,17 @@ view expands it into per-player rows over the Group A squads for display.
 The composition counts are derived from the KG: 825 is the number of
 `ex:Athlete` nodes, and 77 is the number of `?p` bindings that survive the
 Group A patterns.
+
+## Operators
+
+`GENOP` is the one generative construct a query writes. A trailing threshold on it stands for
+grounding the generated values by a similarity join at that threshold; the join is chosen by
+the engine and has no surface syntax of its own, so queries never name it and the editor does
+not highlight it as a keyword.
+
+A generated value that resembles nothing in the graph has no grounding target and simply gets
+no relation drawn. That is the ordinary case, not a special one: of the sample generated names,
+`Italy` shares no trigram with any team label in this graph.
 
 ## Interface notes
 
