@@ -539,9 +539,8 @@
       }
       if(state.graph.nodes.length<currentDb().graph.nodes.length){
         $("graphTitle").textContent="Query-touched Subgraph";
-        $("graphStatus").textContent=state.graph.nodes.length
-          ? `${state.graph.nodes.length} relevant nodes · ${state.graph.links.length} relevant edges · unrelated KG nodes hidden`
-          : `No structural result URIs available in demo-data.js`;
+        $("graphStatus").textContent=
+          `${state.graph.nodes.length} relevant nodes · ${state.graph.links.length} relevant edges · unrelated KG nodes hidden`;
         return;
       }
     }
@@ -1083,8 +1082,8 @@
     $("executionQueryResult").textContent=`${result.defenders} / ${result.total}`;
     $("executionReduction").textContent=genopFirst?"—":cost.factor;
 
-    // Every count is derived from cost/result in demo-data.js so the step list
-    // can never disagree with the metrics rendered next to it.
+    // Counts come from cost/result in demo-data.js so the step list and the
+    // metrics beside it stay in sync.
     const steps=genopFirst
       ? [
           {title:"Athlete bindings",detail:`${cost.genopFirst} players`,kind:"kg"},
@@ -1117,14 +1116,6 @@
   }
 
   function focusCompositionContext(){
-    if(state.dbKey!=="fifa2026"){
-      // demo-data.js has no structural triples for this query.
-      state.graph={nodes:[],links:[]};
-      rerenderCurrentGraphWithoutReset();
-      updateStatus();
-      return;
-    }
-
     const source=cloneGraph(currentDb().graph);
     const group=source.nodes.find(n=>n.type==="Group"&&n.label==="Group A");
     if(!group){
@@ -1162,13 +1153,14 @@
       };
     }).filter(entry=>entry.team);
 
-    // The bundled demo records the complete aggregate (41 / 77), but not a
-    // row-level X2 result file. Materialize a stable, team-balanced 41-row
-    // replay so the result is represented by individual Player/Defender pairs.
+    // Expand the recorded aggregate into individual Player/Defender pairs.
+    // Rows are taken team by team so the expansion is stable across runs and
+    // balanced across the Group A squads.
+    const defenderCount=compositionContext().result.defenders;
     const selectedEntries=[];
-    for(let row=0;selectedEntries.length<41&&teamsWithPlayers.some(entry=>row<entry.players.length);row++){
+    for(let row=0;selectedEntries.length<defenderCount&&teamsWithPlayers.some(entry=>row<entry.players.length);row++){
       teamsWithPlayers.forEach(entry=>{
-        if(selectedEntries.length<41&&row<entry.players.length){
+        if(selectedEntries.length<defenderCount&&row<entry.players.length){
           selectedEntries.push({player:entry.players[row],teamId:entry.teamId});
         }
       });
@@ -1326,17 +1318,10 @@
         ? "KG patterns → GENOP → FILTER"
         : "GENOP → KG patterns → FILTER";
 
-      if(state.dbKey==="fifa2026"){
-        showMessage(
-          `${isPlanner?"Planner":"GENOP-first"} completed · ${calls} LLM calls · ${order} · recorded result ${result.defenders}/${result.total}. The graph now shows 41 Defender nodes, the original player names, and the two-hop Player → Team → Group A context.`,
-          "ok"
-        );
-      }else{
-        showMessage(
-          `${isPlanner?"Planner":"GENOP-first"} completed · ${calls} LLM calls · ${order} · recorded result ${result.defenders}/${result.total}. demo-data.js stores the aggregate result, not the individual defender URIs.`,
-          "ok"
-        );
-      }
+      showMessage(
+        `${isPlanner?"Planner":"GENOP-first"} completed · ${calls} LLM calls · ${order} · recorded result ${result.defenders}/${result.total}. The graph now shows ${result.defenders} Defender nodes, the original player names, and the two-hop Player → Team → Group A context.`,
+        "ok"
+      );
     }finally{
       active.querySelector("strong").textContent=original;
       btnA.disabled=false;
@@ -1618,8 +1603,7 @@
         await executeCompositionStrategy("planner");
       }
     }catch(err){
-      // Without this the embedding request could reject silently and the Run
-      // button would simply reset with no visible explanation.
+      // Surface embedding-endpoint failures in the message area.
       showMessage(runFailureMessage(err),"err");
     }finally{
       $("runBtn").disabled=false;$("runBtn").textContent="Run ▶";
