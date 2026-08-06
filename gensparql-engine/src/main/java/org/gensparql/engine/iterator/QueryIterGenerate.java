@@ -513,6 +513,7 @@ public class QueryIterGenerate extends QueryIteratorBase {
      */
     private Binding createBinding(Binding inputBinding, Map<String, String> outputValues) {
         BindingBuilder builder = BindingFactory.builder(inputBinding);
+        int bound = 0;
 
         for (Var var : opGen.getOutputVariables()) {
             String value = outputValues.get(var.getName());
@@ -549,7 +550,22 @@ public class QueryIterGenerate extends QueryIteratorBase {
                 }
 
                 builder.add(var, node);
+                bound++;
             }
+        }
+
+        // A GENOP maps an input binding to bindings of Y. If nothing came back for any of Y
+        // there is no such mapping, so there is no row — the same as a pattern that does not
+        // match. Returning the input binding unchanged would make GENOP behave like OPTIONAL:
+        // the row would survive with the generated column missing, and a caller could not tell
+        // that apart from a value that happened to be absent.
+        //
+        // A row where only some of Y came back is still a row. That is deliberate, see
+        // validateOutputBinding: dropping a whole multi-variable result because one field was
+        // blank loses the fields that were answered.
+        if (bound == 0) {
+            LOG.debug("No output variable was bound; producing no row for this input binding");
+            return null;
         }
 
         return builder.build();
