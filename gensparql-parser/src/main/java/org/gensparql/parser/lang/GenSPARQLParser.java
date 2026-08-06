@@ -4,10 +4,13 @@ import org.apache.jena.query.Query;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.syntax.Element;
 import org.apache.jena.sparql.syntax.ElementGroup;
+import org.apache.jena.sparql.syntax.ElementMinus;
 import org.apache.jena.sparql.syntax.ElementNamedGraph;
 import org.apache.jena.sparql.syntax.ElementOptional;
 import org.apache.jena.sparql.syntax.ElementService;
+import org.apache.jena.sparql.syntax.ElementSubQuery;
 import org.apache.jena.sparql.syntax.ElementUnion;
+import org.apache.jena.sparql.syntax.PatternVars;
 import org.gensparql.core.exception.ParseException;
 import org.gensparql.parser.element.ElementGenerate;
 import org.gensparql.parser.javacc.GenSPARQLParserImpl;
@@ -15,7 +18,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Parser for GenSPARQL queries with native GENOP function support.
@@ -59,15 +64,115 @@ public class GenSPARQLParser {
      * @throws ParseException if parsing fails
      */
     public static Query parse(String queryString, String baseURI) {
+        return parse(queryString, baseURI, true);
+    }
+
+    /**
+     * @param checkPrompts whether prompt placeholders must name variables the query binds. A
+     *                     standalone GENOP fragment has no surrounding pattern to bind them, so
+     *                     the check applies to whole queries only.
+     */
+    private static Query parse(String queryString, String baseURI, boolean checkPrompts) {
         LOG.debug("Parsing GenSPARQL query:\n{}", queryString);
 
         try {
             Query query = GenSPARQLParserImpl.parse(queryString, baseURI);
             expandStarWithGeneratedVars(query);
+            if (checkPrompts) {
+                checkPromptVariables(query);
+            }
             LOG.debug("Successfully parsed GenSPARQL query");
             return query;
         } catch (org.gensparql.parser.javacc.ParseException e) {
             throw new ParseException("Failed to parse GenSPARQL query: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Reject a prompt placeholder naming a variable the query never mentions.
+     *
+     * <p>A GENOP's input variables are read out of the prompt string, so the grammar cannot
+     * check them: {@code GENOP("position of {?nmae}", ...)} parses. At execution the variable is
+     * never bound, every row is skipped, and the query returns an empty result having issued no
+     * calls, which looks exactly like a query whose pattern matched nothing.
+     *
+     * <p>The test is deliberately weak: the variable has to be absent from the entire pattern,
+     * not merely out of scope at that point. A variable that appears somewhere might still be
+     * bound at run time — one bound inside OPTIONAL, for instance — and rejecting those would
+     * turn working queries into errors. A variable that appears nowhere cannot ever be bound, so
+     * rejecting it cannot take away a query that would have worked.
+     */
+    private static void checkPromptVariables(Query query) {
+        Element pattern = query.getQueryPattern();
+        if (pattern == null) {
+            return;
+        }
+        Set<String> mentioned = new LinkedHashSet<>();
+        collectMentionedVars(pattern, mentioned);
+
+        List<ElementGenerate> genOps = new ArrayList<>();
+        collectGenOps(pattern, genOps);
+
+        for (ElementGenerate genOp : genOps) {
+            for (Var in : genOp.getInputVariables()) {
+                if (!mentioned.contains(in.getVarName())) {
+                    throw new ParseException(
+                            "GENOP prompt refers to {?" + in.getVarName() + "}, which the query "
+                          + "never binds. Variables in this query: " + mentioned);
+                }
+            }
+        }
+    }
+
+    /** Every variable the pattern mentions, GENOP inputs and outputs included. */
+    private static void collectMentionedVars(Element element, Set<String> out) {
+        if (element instanceof ElementGenerate) {
+            ElementGenerate genOp = (ElementGenerate) element;
+            genOp.getOutputVariables().forEach(v -> out.add(v.getVarName()));
+            return; // its inputs are what we are checking; they do not count as bindings
+        }
+        if (element instanceof ElementSubQuery) {
+            Query sub = ((ElementSubQuery) element).getQuery();
+            sub.getResultVars().forEach(out::add);
+            if (sub.getQueryPattern() != null) {
+                collectMentionedVars(sub.getQueryPattern(), out);
+            }
+            return;
+        }
+        PatternVars.vars(element).forEach(v -> out.add(v.getVarName()));
+        forEachChild(element, child -> collectMentionedVars(child, out));
+    }
+
+    /** Every GENOP in the pattern, at any depth. */
+    private static void collectGenOps(Element element, List<ElementGenerate> out) {
+        if (element instanceof ElementGenerate) {
+            out.add((ElementGenerate) element);
+            return;
+        }
+        if (element instanceof ElementSubQuery) {
+            Element sub = ((ElementSubQuery) element).getQuery().getQueryPattern();
+            if (sub != null) {
+                collectGenOps(sub, out);
+            }
+            return;
+        }
+        forEachChild(element, child -> collectGenOps(child, out));
+    }
+
+    /** Visit the nested patterns of a group-like element. */
+    private static void forEachChild(Element element, java.util.function.Consumer<Element> visit) {
+        if (element instanceof ElementGroup) {
+            ((ElementGroup) element).getElements().forEach(visit);
+        } else if (element instanceof ElementUnion) {
+            ((ElementUnion) element).getElements().forEach(visit);
+        } else if (element instanceof ElementOptional) {
+            visit.accept(((ElementOptional) element).getOptionalElement());
+        } else if (element instanceof ElementMinus) {
+            visit.accept(((ElementMinus) element).getMinusElement());
+        } else if (element instanceof ElementNamedGraph) {
+            visit.accept(((ElementNamedGraph) element).getElement());
+        } else if (element instanceof ElementService) {
+            visit.accept(((ElementService) element).getElement());
         }
     }
 
@@ -139,7 +244,7 @@ public class GenSPARQLParser {
      * @throws ParseException if the text is not exactly one GENOP
      */
     public static ElementGenerate parseGenOp(String genopText) {
-        Query wrapper = parse("SELECT * WHERE { " + genopText + " }");
+        Query wrapper = parse("SELECT * WHERE { " + genopText + " }", null, false);
 
         Element pattern = wrapper.getQueryPattern();
         if (pattern instanceof ElementGroup group
