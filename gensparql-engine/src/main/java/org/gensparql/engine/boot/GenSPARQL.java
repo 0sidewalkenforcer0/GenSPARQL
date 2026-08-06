@@ -305,30 +305,69 @@ public class GenSPARQL {
     }
 
     /**
-     * Apply query modifiers (SELECT, ORDER BY, LIMIT, etc.) to the algebra.
+     * Apply the solution modifiers on top of the pattern algebra.
+     *
+     * <p>The stages follow SPARQL 1.1 §18.2.4/§18.2.5: group, aggregate, having, the SELECT
+     * expressions, order, project, distinct/reduced, then offset/limit. The order is not
+     * cosmetic. ORDER BY has to run before projection so a query can sort on a variable it does
+     * not select, and DISTINCT has to run after projection so it deduplicates the selected
+     * columns rather than the wider intermediate rows.
+     *
+     * <p>Group and aggregation used to be missing here entirely, so any query with a GENOP in it
+     * took this path and quietly lost them: GROUP BY did not group, and aggregate variables came
+     * back unbound. Only the GENOP path is affected, since a query without one is compiled by
+     * Jena.
      */
     private static Op applyQueryModifiers(Query query, Op op) {
-        // Apply projection
-        if (query.isSelectType() && query.getProjectVars() != null && !query.getProjectVars().isEmpty()) {
-            op = new org.apache.jena.sparql.algebra.op.OpProject(op, query.getProjectVars());
+        // GROUP BY and aggregates. Jena's OpGroup carries both; the aggregator variables it
+        // introduces are what the SELECT expressions below refer to.
+        if (query.hasGroupBy() || query.hasAggregators()) {
+            op = org.apache.jena.sparql.algebra.op.OpGroup.create(
+                    op, query.getGroupBy(), query.getAggregators());
         }
 
-        // Apply DISTINCT
-        if (query.isDistinct()) {
-            op = org.apache.jena.sparql.algebra.op.OpDistinct.create(op);
+        // HAVING filters the grouped rows.
+        if (query.hasHaving()) {
+            for (org.apache.jena.sparql.expr.Expr expr : query.getHavingExprs()) {
+                op = org.apache.jena.sparql.algebra.op.OpFilter.filter(expr, op);
+            }
         }
 
-        // Apply REDUCED
-        if (query.isReduced()) {
-            op = org.apache.jena.sparql.algebra.op.OpReduced.create(op);
+        // SELECT expressions, e.g. (COUNT(*) AS ?n) or (?a + ?b AS ?c), bind their variables
+        // before ORDER BY and projection can refer to them.
+        org.apache.jena.sparql.core.VarExprList projectExprs = query.getProject();
+        if (projectExprs != null) {
+            org.apache.jena.sparql.core.VarExprList extend = new org.apache.jena.sparql.core.VarExprList();
+            for (org.apache.jena.sparql.core.Var v : projectExprs.getVars()) {
+                org.apache.jena.sparql.expr.Expr e = projectExprs.getExpr(v);
+                if (e != null) {
+                    extend.add(v, e);
+                }
+            }
+            if (!extend.isEmpty()) {
+                op = org.apache.jena.sparql.algebra.op.OpExtend.create(op, extend);
+            }
         }
 
-        // Apply ORDER BY
+        // ORDER BY, before projection so sorting on an unselected variable still works.
         if (query.hasOrderBy()) {
             op = new org.apache.jena.sparql.algebra.op.OpOrder(op, query.getOrderBy());
         }
 
-        // Apply LIMIT and OFFSET
+        // Projection.
+        if (query.isSelectType() && query.getProjectVars() != null && !query.getProjectVars().isEmpty()) {
+            op = new org.apache.jena.sparql.algebra.op.OpProject(op, query.getProjectVars());
+        }
+
+        // DISTINCT / REDUCED, after projection so they compare the selected columns.
+        if (query.isDistinct()) {
+            op = org.apache.jena.sparql.algebra.op.OpDistinct.create(op);
+        }
+        if (query.isReduced()) {
+            op = org.apache.jena.sparql.algebra.op.OpReduced.create(op);
+        }
+
+        // LIMIT and OFFSET last.
         if (query.hasLimit() || query.hasOffset()) {
             long start = query.hasOffset() ? query.getOffset() : 0;
             long length = query.hasLimit() ? query.getLimit() : Query.NOLIMIT;
