@@ -75,6 +75,9 @@ public class GenSPARQLParserImpl {
     public static Query parse(String queryString, String baseURI) throws ParseException {
         GenSPARQLParserImpl parser = new GenSPARQLParserImpl(new java.io.StringReader(queryString));
         Query query = QueryFactory.create();
+        // Tag the query as GenSPARQL so Query.toString() picks the serializer that can write
+        // GENOP; touching GenSPARQLSyntax also registers that serializer.
+        query.setSyntax(org.gensparql.parser.lang.GenSPARQLSyntax.syntaxGenSPARQL);
         parser.setQuery(query);
         if (baseURI != null) {
             parser.setBaseURI(baseURI);

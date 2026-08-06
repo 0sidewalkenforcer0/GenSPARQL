@@ -127,6 +127,44 @@ public class OpGenerate extends OpExt {
     }
 
     /**
+     * The similarity threshold grounding applies to this GenOp's generated values.
+     *
+     * <p>Most specific source wins: an explicit {@code grounding_threshold} option, then the
+     * positional theta on the GENOP, then the global default. The middle step is what makes
+     * {@code GENOP(prompt, Y, M, theta)} behave as sugar for a GenOp followed by a similarity
+     * join at theta; without it, theta reached only the ThresholdRegistry, which serves SimJoin
+     * and the SimScore filter, and neither of those runs for a context-mode GENOP.
+     *
+     * <p>A non-numeric {@code grounding_threshold} falls through to the next source rather than
+     * failing the query.
+     */
+    public double getEffectiveGroundingThreshold() {
+        Double explicit = asThreshold(options.get("grounding_threshold"));
+        if (explicit != null) {
+            return explicit;
+        }
+        Double theta = getThreshold();
+        if (theta != null) {
+            return theta;
+        }
+        return org.gensparql.engine.GenSPARQLConfig.getGroundingThreshold();
+    }
+
+    private static Double asThreshold(Object value) {
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof Number) {
+            return ((Number) value).doubleValue();
+        }
+        try {
+            return Double.valueOf(value.toString());
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    /**
      * Get all variables (input + output).
      */
     public Set<Var> getAllVariables() {

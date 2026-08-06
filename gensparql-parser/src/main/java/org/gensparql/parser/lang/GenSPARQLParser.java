@@ -1,10 +1,11 @@
 package org.gensparql.parser.lang;
 
 import org.apache.jena.query.Query;
+import org.apache.jena.sparql.syntax.Element;
+import org.apache.jena.sparql.syntax.ElementGroup;
 import org.gensparql.core.exception.ParseException;
 import org.gensparql.parser.element.ElementGenerate;
 import org.gensparql.parser.javacc.GenSPARQLParserImpl;
-import org.gensparql.parser.javacc.GenSPARQLTokenParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,15 +65,24 @@ public class GenSPARQLParser {
     /**
      * Parse a standalone GENOP function call.
      *
+     * <p>The fragment is parsed by the same grammar that parses whole queries, by wrapping it
+     * in a minimal query and lifting the element back out. A separate fragment grammar would be
+     * a second definition of what GENOP accepts, and the two would drift.
+     *
      * @param genopText the GENOP function text
      * @return parsed ElementGenerate
-     * @throws ParseException if parsing fails
+     * @throws ParseException if the text is not exactly one GENOP
      */
     public static ElementGenerate parseGenOp(String genopText) {
-        try {
-            return GenSPARQLTokenParser.parseGenOpFunction(genopText);
-        } catch (org.gensparql.parser.javacc.ParseException e) {
-            throw new ParseException("Failed to parse GENOP: " + e.getMessage(), e);
+        Query wrapper = parse("SELECT * WHERE { " + genopText + " }");
+
+        Element pattern = wrapper.getQueryPattern();
+        if (pattern instanceof ElementGroup group
+                && group.size() == 1
+                && group.get(0) instanceof ElementGenerate genOp) {
+            return genOp;
         }
+        // Trailing patterns would otherwise be accepted and silently discarded.
+        throw new ParseException("Expected exactly one GENOP, got: " + genopText);
     }
 }

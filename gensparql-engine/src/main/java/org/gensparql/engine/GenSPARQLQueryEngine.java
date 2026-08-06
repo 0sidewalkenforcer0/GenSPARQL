@@ -827,10 +827,12 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
         }
     }
 
-    /** Grounding threshold for a GENOP: its grounding_threshold option, else the global config. */
+    /**
+     * Grounding threshold for a GENOP, resolved the same way execution resolves it, so the
+     * survival prior the planner costs matches the threshold grounding will actually apply.
+     */
     private double groundingThresholdOf(OpGenerate g) {
-        Object thr = g.getOptions().get("grounding_threshold");
-        return thr != null ? Double.parseDouble(thr.toString()) : GenSPARQLConfig.getGroundingThreshold();
+        return g.getEffectiveGroundingThreshold();
     }
 
     /** Dedup ratio D/N for a GENOP's (single) input variable over the feeding BGP, or 1.0. */
