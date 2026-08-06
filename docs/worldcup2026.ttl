@@ -3,8 +3,12 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
-# 2026 FIFA World Cup KG from Wikidata (Q5020214): structural facts + real 26-man squads.
+# 2026 FIFA World Cup KG from Wikidata (Q5020214): structural facts and squads.
 # Real Wikidata IRIs + clean rdfs:label. No match results / winner.
+#
+# Squad coverage, as of this export: 825 players over 32 of the 48 teams.
+# 25 teams have 26 players, 7 have 25, and 16 have none yet. Queries that count
+# players are counting those 825, not a full 48 x 26.
 
 # --- Groups (12) ---
 wd:Q128810064 a ex:Group ; rdfs:label "Group A" .
