@@ -4,6 +4,7 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.syntax.Element;
 import org.apache.jena.sparql.syntax.ElementVisitor;
+import org.apache.jena.sparql.syntax.PatternVarsVisitor;
 import org.apache.jena.sparql.util.NodeIsomorphismMap;
 import org.gensparql.core.model.ModelSpec;
 import org.gensparql.core.util.PromptTemplate;
@@ -145,6 +146,17 @@ public class ElementGenerate extends Element {
         // Custom visitor pattern - standard visitor won't know about this element
         if (v instanceof GenSPARQLElementVisitor) {
             ((GenSPARQLElementVisitor) v).visit(this);
+            return;
+        }
+        // A GENOP binds its output variables, exactly as BIND binds one, so report them to
+        // Jena's variable collector.
+        //
+        // This is not on its own enough to make SELECT * project them: PatternVars wraps the
+        // collector in an ElementWalker and it is the walker, not the collector, that arrives
+        // here. GenSPARQLParser adds the generated variables to the result set explicitly for
+        // that reason. This case still covers a collector invoked directly.
+        if (v instanceof PatternVarsVisitor) {
+            ((PatternVarsVisitor) v).acc.addAll(outputVariables);
         }
     }
 
