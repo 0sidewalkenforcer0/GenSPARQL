@@ -5,6 +5,7 @@ import org.apache.jena.query.Dataset;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.engine.Plan;
@@ -364,52 +365,150 @@ public class GenSPARQL {
 
         @Override
         public Model execConstruct() {
-            throw new UnsupportedOperationException("CONSTRUCT not yet supported");
+            return execConstruct(ModelFactory.createDefaultModel());
         }
 
         @Override
         public Model execConstruct(Model model) {
-            throw new UnsupportedOperationException("CONSTRUCT not yet supported");
+            model.setNsPrefixes(query.getPrefixMapping());
+            java.util.Iterator<org.apache.jena.graph.Triple> triples = execConstructTriples();
+            while (triples.hasNext()) {
+                model.getGraph().add(triples.next());
+            }
+            return model;
         }
 
         @Override
         public org.apache.jena.query.Dataset execConstructDataset() {
-            throw new UnsupportedOperationException("CONSTRUCT not yet supported");
+            return execConstructDataset(org.apache.jena.query.DatasetFactory.createTxnMem());
         }
 
         @Override
-        public org.apache.jena.query.Dataset execConstructDataset(org.apache.jena.query.Dataset dataset) {
-            throw new UnsupportedOperationException("CONSTRUCT not yet supported");
+        public org.apache.jena.query.Dataset execConstructDataset(org.apache.jena.query.Dataset target) {
+            DatasetGraph dsg = target.asDatasetGraph();
+            java.util.Iterator<org.apache.jena.sparql.core.Quad> quads = execConstructQuads();
+            while (quads.hasNext()) {
+                dsg.add(quads.next());
+            }
+            return target;
         }
 
+        /**
+         * Instantiate the CONSTRUCT template once per solution.
+         *
+         * <p>Jena's TemplateLib does the substitution, including allocating fresh blank nodes
+         * per solution, so a template blank node does not collapse into one node across rows.
+         */
         @Override
         public java.util.Iterator<org.apache.jena.graph.Triple> execConstructTriples() {
-            throw new UnsupportedOperationException("CONSTRUCT not yet supported");
+            if (closed) {
+                throw new IllegalStateException("QueryExecution is closed");
+            }
+            org.apache.jena.sparql.syntax.Template template = query.getConstructTemplate();
+            if (template == null) {
+                return java.util.Collections.emptyIterator();
+            }
+            return org.apache.jena.sparql.modify.TemplateLib.calcTriples(
+                    template.getTriples(), plan.iterator());
         }
 
         @Override
         public java.util.Iterator<org.apache.jena.sparql.core.Quad> execConstructQuads() {
-            throw new UnsupportedOperationException("CONSTRUCT not yet supported");
+            java.util.Iterator<org.apache.jena.graph.Triple> triples = execConstructTriples();
+            java.util.List<org.apache.jena.sparql.core.Quad> quads = new java.util.ArrayList<>();
+            while (triples.hasNext()) {
+                quads.add(org.apache.jena.sparql.core.Quad.create(
+                        org.apache.jena.sparql.core.Quad.defaultGraphNodeGenerated, triples.next()));
+            }
+            return quads.iterator();
         }
 
         @Override
         public Model execDescribe() {
-            throw new UnsupportedOperationException("DESCRIBE not yet supported");
+            return execDescribe(ModelFactory.createDefaultModel());
         }
 
+        /**
+         * Describe the resources the query names and the ones its pattern binds.
+         *
+         * <p>What "describe" means is left to ARQ's registered describe handlers, the same ones
+         * a plain Jena query would use, so the output does not depend on whether the query
+         * happened to contain a GENOP.
+         */
         @Override
         public Model execDescribe(Model model) {
-            throw new UnsupportedOperationException("DESCRIBE not yet supported");
+            if (closed) {
+                throw new IllegalStateException("QueryExecution is closed");
+            }
+            model.setNsPrefixes(query.getPrefixMapping());
+
+            java.util.Set<org.apache.jena.graph.Node> resources = new java.util.LinkedHashSet<>();
+            resources.addAll(query.getResultURIs());
+
+            java.util.List<org.apache.jena.sparql.core.Var> describeVars = query.getProjectVars();
+            org.apache.jena.sparql.engine.QueryIterator qIter = plan.iterator();
+            try {
+                while (qIter.hasNext()) {
+                    Binding binding = qIter.next();
+                    if (describeVars == null || describeVars.isEmpty()) {
+                        binding.vars().forEachRemaining(v -> collectDescribed(binding, v, resources));
+                    } else {
+                        for (org.apache.jena.sparql.core.Var v : describeVars) {
+                            collectDescribed(binding, v, resources);
+                        }
+                    }
+                }
+            } finally {
+                qIter.close();
+            }
+
+            java.util.List<org.apache.jena.sparql.core.describe.DescribeHandler> handlers =
+                    org.apache.jena.sparql.core.describe.DescribeHandlerRegistry.get().newHandlerList();
+            Context describeCxt = ARQ.getContext().copy();
+            describeCxt.set(org.apache.jena.sparql.ARQConstants.sysCurrentDataset, dataset);
+
+            for (org.apache.jena.sparql.core.describe.DescribeHandler h : handlers) {
+                h.start(model, describeCxt);
+            }
+            for (org.apache.jena.graph.Node node : resources) {
+                if (node.isURI() || node.isBlank()) {
+                    for (org.apache.jena.sparql.core.describe.DescribeHandler h : handlers) {
+                        h.describe(model.getRDFNode(node).asResource());
+                    }
+                }
+            }
+            for (org.apache.jena.sparql.core.describe.DescribeHandler h : handlers) {
+                h.finish();
+            }
+            return model;
+        }
+
+        /** A described resource must be a node the graph can be about, so literals are skipped. */
+        private static void collectDescribed(Binding binding, org.apache.jena.sparql.core.Var v,
+                                             java.util.Set<org.apache.jena.graph.Node> out) {
+            org.apache.jena.graph.Node n = binding.get(v);
+            if (n != null && (n.isURI() || n.isBlank())) {
+                out.add(n);
+            }
         }
 
         @Override
         public java.util.Iterator<org.apache.jena.graph.Triple> execDescribeTriples() {
-            throw new UnsupportedOperationException("DESCRIBE not yet supported");
+            return execDescribe().getGraph().find(null, null, null);
         }
 
+        /** True as soon as one solution exists; the rest of the plan is not evaluated. */
         @Override
         public boolean execAsk() {
-            throw new UnsupportedOperationException("ASK not yet supported");
+            if (closed) {
+                throw new IllegalStateException("QueryExecution is closed");
+            }
+            org.apache.jena.sparql.engine.QueryIterator qIter = plan.iterator();
+            try {
+                return qIter.hasNext();
+            } finally {
+                qIter.close();
+            }
         }
 
         @Override
