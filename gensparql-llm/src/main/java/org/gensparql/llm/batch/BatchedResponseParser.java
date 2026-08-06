@@ -21,8 +21,9 @@ public class BatchedResponseParser {
      *
      * @param response the raw response text
      * @param expectedCount expected number of results
-     * @return list of result maps, one per prompt (indexed by prompt_id - 1)
-     * @throws BatchParsingException if parsing fails
+     * @return one map per prompt, indexed by {@code prompt_id - 1}. A prompt the model did not
+     *         answer gets an empty map rather than failing the batch.
+     * @throws BatchParsingException if the response is not a usable JSON array of results
      */
     public static List<Map<String, String>> parse(String response, int expectedCount)
             throws BatchParsingException {
@@ -75,14 +76,11 @@ public class BatchedResponseParser {
                 results.set(promptId - 1, resultMap);
             }
 
-            // Check if all prompts got results
-            for (int i = 0; i < expectedCount; i++) {
-                if (results.get(i).isEmpty()) {
-                    throw new BatchParsingException(
-                        "Missing result for prompt " + (i + 1));
-                }
-            }
-
+            // A prompt the model did not answer is left as an empty map. Failing the whole
+            // batch here would throw away the answers that did come back: one skipped item
+            // used to cost every other item in the batch, which for a batch of 20 means 19
+            // input bindings lost to one omission. The caller decides what an unanswered
+            // prompt means, and reports how many there were.
             return results;
 
         } catch (Exception e) {
