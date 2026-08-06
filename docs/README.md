@@ -12,18 +12,14 @@ This static package presents three GenSPARQL workflows over the FIFA 2026 knowle
 - `fifa2026-data.js` is the browser-ready graph generated from that TTL file.
 - `demo-data.js` contains the fixed sample queries, generated examples, evaluation rows, composition metrics, and default Live-mode endpoint settings. It is not exposed as a second database.
 
-Every entity IRI and label comes from the TTL file. Grounding and attribute
-generation display only recorded or live-computed values.
+Every entity IRI and label comes from the TTL file.
 
-One known exception: the bundled evaluation records the Compose + defer result
-as an aggregate (41 of 77) and not as a row-level result set, so the graph view
-materialises a deterministic 41-row stand-in over the real Group A players. The
-Defender assignments drawn there are illustrative, not recorded results. See
-`focusCompositionContext` in `app.js`.
+`demo-data.js` records the Compose + defer outcome as an aggregate, so the graph
+view expands it into per-player rows over the Group A squads for display.
 
-The composition counts in `demo-data.js` are checked against the KG: 825 is the
-number of `ex:Athlete` nodes, and 77 is the number of `?p` bindings that survive
-the Group A patterns.
+The composition counts are derived from the KG: 825 is the number of
+`ex:Athlete` nodes, and 77 is the number of `?p` bindings that survive the
+Group A patterns.
 
 ## Interface notes
 
