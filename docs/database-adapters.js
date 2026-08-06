@@ -16,9 +16,7 @@
       key:"fifa2026",
       label:"FIFA 2026",
       source:"worldcup2026.ttl",
-      graph:cloneGraph(FIFA),
-      fullGraph:true,
-      sparqlEndpoint:""
+      graph:cloneGraph(FIFA)
     }
   };
 
@@ -27,10 +25,7 @@
     name:
       s.id === "entity" ? "Entity completion" :
       s.id === "attribute" ? "Attribute completion" :
-      "Composition + planning",
-    resultVar:
-      s.id === "entity" ? "team" :
-      "p"
+      "Composition + planning"
   }));
 
   window.GENSPARQL_ADAPTERS = {

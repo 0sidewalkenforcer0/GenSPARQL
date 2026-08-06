@@ -110,23 +110,25 @@
                 <span class="execution-eyebrow">Execution result</span>
                 <strong id="executionTitle">Planner</strong>
               </div>
-              <span class="execution-badge" id="executionBadge">26 LLM calls</span>
+              <span class="execution-badge" id="executionBadge">—</span>
             </div>
 
             <div class="execution-order" id="executionOrder"></div>
 
+            <!-- Placeholders only. renderExecutionResult() fills every value
+                 from demo-data.js before this panel is unhidden. -->
             <div class="execution-metrics">
               <div class="execution-metric">
                 <span>LLM calls</span>
-                <strong id="executionCalls">26</strong>
+                <strong id="executionCalls">—</strong>
               </div>
               <div class="execution-metric">
                 <span>Query result</span>
-                <strong id="executionQueryResult">41 / 77</strong>
+                <strong id="executionQueryResult">—</strong>
               </div>
               <div class="execution-metric">
                 <span>Reduction</span>
-                <strong id="executionReduction">31×</strong>
+                <strong id="executionReduction">—</strong>
               </div>
             </div>
 
@@ -145,11 +147,11 @@
             <div class="attribute-metrics">
               <div class="attribute-metric">
                 <span>Answer rate</span>
-                <strong id="attributeAnswerRate">77%</strong>
+                <strong id="attributeAnswerRate">—</strong>
               </div>
               <div class="attribute-metric">
                 <span>Accuracy vs P413</span>
-                <strong id="attributeAccuracy">70%</strong>
+                <strong id="attributeAccuracy">—</strong>
               </div>
               <div class="attribute-metric">
                 <span>SPARQL alone</span>
@@ -261,7 +263,10 @@
     <p class="caption" id="caption"></p>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <!-- d3 is vendored so this page stays self-contained: no third-party script
+       shares a document with the Live-mode API-key field, and the demo also
+       works offline. -->
+  <script src="vendor/d3.v7.9.0.min.js"></script>
   <script src="demo-data.js"></script>
   <script src="fifa2026-data.js"></script>
   <script src="database-adapters.js"></script>

@@ -127,19 +127,21 @@
     CFG.live.embModels.forEach(m=>{const o=document.createElement("option");o.value=o.textContent=m;$("embModel").appendChild(o)});
     $("key").addEventListener("input",renderScenario);
     $("liveBox").addEventListener("toggle",renderScenario);
-    $("groundText").onchange=async()=>{
+    // Both radios need their own handler: a change event only fires on the
+    // input that became checked.
+    const onGroundingMethodChange=async()=>{
       syncGrounding();
       if(currentScenario()?.id==="entity"&&state.graph?.nodes.some(n=>n.generatedCandidate)){
         // No second Run required: recompute pass/fail and redraw relation edges live.
-        try{await buildGroundEntityView({preserveViewport:true})}catch(err){showMessage(err.message,"err")}
+        try{
+          await buildGroundEntityView({preserveViewport:true});
+        }catch(err){
+          showMessage(runFailureMessage(err),"err");
+        }
       }
     };
-    $("groundEmbedding").onchange=async()=>{
-      syncGrounding();
-      if(currentScenario()?.id==="entity"&&state.graph?.nodes.some(n=>n.generatedCandidate)){
-        try{await buildGroundEntityView({preserveViewport:true})}catch(err){showMessage(err.message,"err")}
-      }
-    };
+    $("groundText").onchange=onGroundingMethodChange;
+    $("groundEmbedding").onchange=onGroundingMethodChange;
     syncGrounding();
   }
 
@@ -489,30 +491,6 @@
       if(state.selectedId)return(s===state.selectedId||t===state.selectedId)?"link context-link":"link faded";
       return"link";
     });
-  }
-
-  function focus(ids,extraContext=[]){
-    const available=new Set(state.graph.nodes.map(n=>n.id));
-    state.resultIds=new Set([...new Set(ids)].filter(id=>available.has(id)));
-    state.contextIds=neighborIds(state.resultIds);
-    extraContext.forEach(id=>{if(available.has(id)&&!state.resultIds.has(id))state.contextIds.add(id)});
-    state.focusMode=true;state.selectedId=null;
-
-    const stage=$("graphStage"),cx=stage.clientWidth/2,cy=stage.clientHeight/2;
-    const results=state.graph.nodes.filter(n=>state.resultIds.has(n.id));
-    const context=state.graph.nodes.filter(n=>state.contextIds.has(n.id)&&!state.resultIds.has(n.id));
-    const other=state.graph.nodes.filter(n=>!state.resultIds.has(n.id)&&!state.contextIds.has(n.id));
-    ring(results,cx,cy,Math.min(100,28+results.length*8),-Math.PI/2);
-    ring(context,cx,cy,190,-Math.PI/2+.2);
-    ring(other,cx,cy,350,-Math.PI/2+.38);
-    state.graph.nodes.forEach(n=>{n.fx=n._fx;n.fy=n._fy});
-    state.simulation.alpha(.85).restart();applyClasses();updateStatus();
-    setTimeout(()=>fitGraph(true),450);
-  }
-
-  function ring(nodes,cx,cy,r,a0){
-    const n=Math.max(nodes.length,1);
-    nodes.forEach((d,i)=>{const a=a0+2*Math.PI*i/n;d._fx=cx+Math.cos(a)*r;d._fy=cy+Math.sin(a)*r});
   }
 
   function resetGraph(){
@@ -1078,37 +1056,15 @@
       setTimeout(()=>fitGroundingGraph(),520);
     }
 
-    const grounded=generatedNodes.filter(n=>n.grounded).length;
-    const dropped=generatedNodes.length-grounded;
-
-    showMessage(
-      ``,
-      "ok"
-    );
+    // The graph status line already reports grounded / dropped counts, so the
+    // message area is cleared rather than filled with a duplicate summary.
+    clearMessage();
   }
-
-  function groupAPlayers(){
-    if(state.dbKey!=="fifa2026")return[];
-    const group=state.graph.nodes.find(n=>n.type==="Group"&&n.label==="Group A");
-    if(!group)return[];
-    const teamIds=new Set();
-    state.graph.links.forEach(l=>{
-      const s=typeof l.source==="object"?l.source.id:l.source,t=typeof l.target==="object"?l.target.id:l.target;
-      if(l.predicate==="inGroup"&&t===group.id)teamIds.add(s);
-    });
-    const playerIds=[];
-    state.graph.links.forEach(l=>{
-      const s=typeof l.source==="object"?l.source.id:l.source,t=typeof l.target==="object"?l.target.id:l.target;
-      if(l.predicate==="playsFor"&&teamIds.has(t))playerIds.push(s);
-    });
-    return playerIds;
-  }
-
 
   function compositionContext(){
     const s=currentScenario();
     const result=s.result||{defenders:41,total:77};
-    const cost=s.cost||{genopFirst:825,planned:26,factor:"31×"};
+    const cost=s.cost||{genopFirst:825,planned:77,factor:"10.7×"};
     return {s,result,cost};
   }
 
@@ -1127,18 +1083,20 @@
     $("executionQueryResult").textContent=`${result.defenders} / ${result.total}`;
     $("executionReduction").textContent=genopFirst?"—":cost.factor;
 
+    // Every count is derived from cost/result in demo-data.js so the step list
+    // can never disagree with the metrics rendered next to it.
     const steps=genopFirst
       ? [
-          {title:"Athlete bindings",detail:"825 players",kind:"kg"},
-          {title:"GENOP",detail:"825 LLM calls",kind:"genop"},
+          {title:"Athlete bindings",detail:`${cost.genopFirst} players`,kind:"kg"},
+          {title:"GENOP",detail:`${cost.genopFirst} LLM calls`,kind:"genop"},
           {title:"KG selection",detail:"apply selective patterns",kind:"kg"},
           {title:"FILTER",detail:'?pos = "Defender"',kind:"filter"},
           {title:"Result",detail:`${result.defenders} / ${result.total} recorded`,kind:"result"}
         ]
       : [
           {title:"KG selection",detail:"selective patterns first",kind:"kg"},
-          {title:"Survivors",detail:"26 bindings",kind:"kg"},
-          {title:"GENOP",detail:"26 LLM calls",kind:"genop"},
+          {title:"Survivors",detail:`${cost.planned} bindings`,kind:"kg"},
+          {title:"GENOP",detail:`${cost.planned} LLM calls`,kind:"genop"},
           {title:"FILTER",detail:'?pos = "Defender"',kind:"filter"},
           {title:"Result",detail:`${result.defenders} / ${result.total} recorded`,kind:"result"}
         ];
@@ -1386,22 +1344,6 @@
     }
   }
 
-
-  function removeGeneratedAttributeNodes(){
-    if(!state.graph)return;
-
-    const generatedIds=new Set(
-      state.graph.nodes.filter(n=>n.generatedAttribute).map(n=>n.id)
-    );
-    if(!generatedIds.size)return;
-
-    state.graph.nodes=state.graph.nodes.filter(n=>!generatedIds.has(n.id));
-    state.graph.links=state.graph.links.filter(l=>{
-      const s=typeof l.source==="object"?l.source.id:l.source;
-      const t=typeof l.target==="object"?l.target.id:l.target;
-      return !generatedIds.has(s)&&!generatedIds.has(t)&&!l.generatedAttributeLink;
-    });
-  }
 
   function renderAttributeResult(rows,stat){
     $("attributeResult").hidden=false;
@@ -1654,6 +1596,15 @@
     showMessage(messageParts.join(" · ")+".","ok");
   }
 
+  function runFailureMessage(err){
+    const detail=err&&err.message?err.message:String(err);
+    // A rejected cross-origin fetch surfaces as a bare TypeError with no status,
+    // which in practice almost always means CORS or an unreachable endpoint.
+    return err instanceof TypeError
+      ? `Run failed: ${detail}. The embedding endpoint is unreachable or blocks browser requests (CORS). Check the endpoint URL, or switch back to Text (Jaccard) grounding.`
+      : `Run failed: ${detail}`;
+  }
+
   async function execute(){
     clearMessage();
     const s=currentScenario();
@@ -1666,6 +1617,10 @@
       }else{
         await executeCompositionStrategy("planner");
       }
+    }catch(err){
+      // Without this the embedding request could reject silently and the Run
+      // button would simply reset with no visible explanation.
+      showMessage(runFailureMessage(err),"err");
     }finally{
       $("runBtn").disabled=false;$("runBtn").textContent="Run ▶";
     }
