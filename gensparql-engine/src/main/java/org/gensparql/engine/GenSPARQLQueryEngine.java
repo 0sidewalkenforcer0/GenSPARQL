@@ -47,19 +47,27 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
     /**
      * Skip ARQ's optimizer for a plan containing a GENOP.
      *
-     * <p>The optimizer reasons about which variables an operator uses and binds, and for an
-     * OpExt it reads that off {@code effectiveOp()}. OpGenerate reports a unit table there, so
-     * the optimizer is told the GENOP neither reads nor binds anything and is free to drop the
-     * patterns that only feed it. That is what happened to
-     * {@code SELECT ?g { { SELECT ?g { ?s rdfs:label ?l . GENOP("...{?l}...", (?g), M) } } }}:
-     * the pattern binding ?l was pruned because nothing else projected it, the prompt then had
-     * an unbound variable, every row was skipped and the query returned nothing without
-     * issuing a single call. Projecting ?l as well made the same query work, which is not a
-     * distinction the semantics should draw.
+     * <p>Two things go wrong when ARQ rewrites such a plan, and both were measured by turning
+     * the optimizer on and running the suite.
      *
-     * <p>Rewriting a plan on an analysis that cannot see the operator is not worth the gain, so
-     * these plans keep their shape. GENOP placement is handled by the cost planner, which does
-     * understand the operator.
+     * <p>The first is correctness. A sub-select renames the variables that it does not project,
+     * so that an inner ?l becomes ?/l and cannot be captured from outside. ARQ applies that
+     * rename by walking the plan with a node transform, and an extension operator has no way to
+     * take part: {@code OpExt.apply(Transform)} is the only hook, it is handed a Transform that
+     * does not carry the mapping, and Jena ships no extension operator that implements it. The
+     * patterns are therefore renamed while the GENOP still refers to ?l, its prompt variable is
+     * never bound, every row is skipped, and the query returns nothing having issued no calls.
+     * Projecting ?l as well made the same query work, which is not a distinction the semantics
+     * should draw.
+     *
+     * <p>The second is that ARQ reorders the operators of a conjunctive fragment on its own
+     * cardinality estimates, which do not account for what a GENOP costs. That undoes the order
+     * the cost planner chose: on the WC2026 data the selective-patterns-first plan went back to
+     * firing the GENOP over all 825 athletes instead of one squad of 26.
+     *
+     * <p>So these plans keep the shape they were compiled with. What is given up is ARQ's
+     * KG-side rewriting, and the part of it that matters most here, pipelining a join instead of
+     * evaluating both sides independently, is done by the executor anyway.
      */
     @Override
     protected Op modifyOp(Op op) {

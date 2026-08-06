@@ -4,7 +4,14 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.OpVisitor;
 import org.apache.jena.sparql.algebra.op.OpExt;
+import org.apache.jena.sparql.algebra.op.OpExtend;
 import org.apache.jena.sparql.algebra.op.OpTable;
+import org.apache.jena.sparql.core.VarExprList;
+import org.apache.jena.sparql.expr.E_StrConcat;
+import org.apache.jena.sparql.expr.Expr;
+import org.apache.jena.sparql.expr.ExprList;
+import org.apache.jena.sparql.expr.ExprVar;
+import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.core.Var;
@@ -173,11 +180,42 @@ public class OpGenerate extends OpExt {
         return all;
     }
 
+    /**
+     * The equivalent plain-SPARQL shape, for the algorithms that analyse a plan.
+     *
+     * <p>A GENOP reads its input variables and binds its output variables, which is what an
+     * extend does, so that is what this reports: an extend binding each output variable to an
+     * expression over the inputs. The expression is never evaluated; it exists so that the
+     * inputs are counted as mentioned.
+     *
+     * <p>Reporting a unit table here, as this used to, told every caller that a GENOP neither
+     * reads nor binds anything. ARQ walks into this op to work out which variables a plan uses,
+     * so the operator was invisible to that analysis and a plan could be rewritten as if the
+     * patterns feeding it were unused.
+     */
     @Override
     public Op effectiveOp() {
-        // Return a table that indicates this operation produces bindings
-        // This is used by the optimizer
-        return OpTable.unit();
+        VarExprList bindings = new VarExprList();
+        Expr inputsMentioned = mentionInputs();
+        for (Var out : outputVariables) {
+            bindings.add(out, inputsMentioned);
+        }
+        if (bindings.isEmpty()) {
+            return OpTable.unit();
+        }
+        return OpExtend.create(OpTable.unit(), bindings);
+    }
+
+    /** An expression mentioning every input variable, so variable analysis sees them all. */
+    private Expr mentionInputs() {
+        if (inputVariables.isEmpty()) {
+            return NodeValue.makeString("");
+        }
+        ExprList args = new ExprList();
+        for (Var in : inputVariables) {
+            args.add(new ExprVar(in));
+        }
+        return new E_StrConcat(args);
     }
 
     @Override
