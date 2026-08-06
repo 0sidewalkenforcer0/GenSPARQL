@@ -1,6 +1,7 @@
 package org.gensparql.engine.iterator;
 
 import org.apache.jena.atlas.io.IndentedWriter;
+import org.apache.jena.query.QueryCancelledException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.sparql.core.Var;
@@ -27,6 +28,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 
 /**
  * Query iterator for OpGenerate execution.
@@ -85,6 +89,11 @@ public class QueryIterGenerate extends QueryIteratorBase {
     private Iterator<Binding> currentResults;
     private Binding currentInputBinding;
     private boolean exhausted = false;
+
+    // Cancellation. ARQ checks for a cancel between bindings, which never gets a turn while a
+    // call is in flight, so the call itself has to be abandonable.
+    private volatile boolean cancelled = false;
+    private volatile CompletableFuture<GenerateResponse> inFlight = null;
 
     public QueryIterGenerate(QueryIterator input, OpGenerate opGen, ExecutionContext execCxt) {
         this.input = input;
@@ -167,8 +176,8 @@ public class QueryIterGenerate extends QueryIteratorBase {
         }
 
         // If batching is enabled, use batch processing.
-        // NOTE: C3 cross-binding dedup (promptMemo) is applied on the standard path below;
-        // the batched path coalesces per batch and does not currently also apply dedup.
+        // C3 cross-binding dedup applies on both paths: the standard path memoises parsed
+        // outputs per prompt, the batched path sends each distinct prompt once per batch.
         if (batchingEnabled && !opGen.isBaseMode()) {
             LOG.debug("[DEBUG] Using batched processing");
             return hasNextBindingBatched();
@@ -258,7 +267,16 @@ public class QueryIterGenerate extends QueryIteratorBase {
     }
 
     /**
-     * Execute a batch of LLM requests.
+     * Execute one batch: a single LLM call carrying the accumulated prompts.
+     *
+     * <p>Identical prompts within the batch are sent once and the answer is fanned back out to
+     * every input binding that produced them, which is the same saving C3 makes on the
+     * non-batched path. Without it, turning batching on cost you the deduplication.
+     *
+     * <p>A prompt the model leaves unanswered costs its own row and no others, and is reported.
+     * A response that cannot be read at all costs the whole batch, which is also reported: those
+     * bindings are dropped rather than passed through unbound, since a GENOP that generated
+     * nothing produces no row.
      */
     private void executeBatch() {
         LOG.debug("Executing batch of {} prompts", batchPrompts.size());
@@ -268,45 +286,59 @@ public class QueryIterGenerate extends QueryIteratorBase {
             outputVarNames.add(v.getName());
         }
 
-        try {
-            // Build batched prompt
-            String batchedPrompt = BatchedPromptBuilder.buildBatchedPrompt(
-                batchPrompts, outputVarNames);
+        // Distinct prompts, each remembering which input bindings asked for it.
+        Map<String, List<Integer>> promptToInputs = new LinkedHashMap<>();
+        for (int i = 0; i < batchPrompts.size(); i++) {
+            promptToInputs.computeIfAbsent(batchPrompts.get(i), p -> new ArrayList<>()).add(i);
+        }
+        List<String> distinctPrompts = new ArrayList<>(promptToInputs.keySet());
+        int duplicatesAvoided = batchPrompts.size() - distinctPrompts.size();
+        if (duplicatesAvoided > 0) {
+            dedupSavedCalls += duplicatesAvoided;
+            LOG.debug("Batch carries {} distinct prompts for {} bindings",
+                    distinctPrompts.size(), batchPrompts.size());
+        }
 
-            // Create request
-            ModelSpec modelSpec = opGen.getModelSpec();
+        int batchInputCount = batchInputs.size();
+        try {
+            String batchedPrompt = BatchedPromptBuilder.buildBatchedPrompt(
+                distinctPrompts, outputVarNames);
+
             GenerateRequest request = GenerateRequest.builder()
                     .prompt(batchedPrompt)
-                    .modelSpec(modelSpec)
+                    .modelSpec(opGen.getModelSpec())
                     .outputVariables(outputVarNames)
                     .build();
 
-            // Call LLM once for entire batch
             long startTime = System.currentTimeMillis();
-            GenerateResponse response = provider.generateSync(request);
+            GenerateResponse response = callProvider(request);
             long latency = System.currentTimeMillis() - startTime;
 
-            // Record metrics for batch
-            recordMetrics(batchedPrompt, latency, response, true, batchPrompts.size());
+            recordMetrics(batchedPrompt, latency, response, true, distinctPrompts.size());
 
             if (!response.isSuccess()) {
-                LOG.warn("Batched LLM generation failed: {}", response.getErrorMessage());
+                LOG.warn("Batched generation failed, dropping {} binding(s): {}",
+                        batchInputCount, response.getErrorMessage());
                 batchResults = Collections.emptyIterator();
                 return;
             }
 
-            // Parse batched response
-            List<Map<String, String>> allResults = BatchedResponseParser.parse(
-                response.getRawText(), batchPrompts.size());
+            List<Map<String, String>> perPrompt = BatchedResponseParser.parse(
+                response.getRawText(), distinctPrompts.size());
 
-            // Create bindings from results. The parser may return fewer maps than prompts
-            // (a short/garbled batch response); only pair up as many as we actually got.
             List<Binding> results = new ArrayList<>();
-            int pairCount = Math.min(batchInputs.size(), allResults.size());
-            for (int i = 0; i < pairCount; i++) {
-                Map<String, String> outputBinding = allResults.get(i);
-                Map<String, String> validated = validateOutputBinding(outputBinding);
-                if (validated != null) {
+            int unanswered = 0;
+            for (int p = 0; p < distinctPrompts.size(); p++) {
+                Map<String, String> outputs = p < perPrompt.size() ? perPrompt.get(p) : null;
+                Map<String, String> validated =
+                        (outputs == null || outputs.isEmpty()) ? null : validateOutputBinding(outputs);
+                List<Integer> inputIndexes = promptToInputs.get(distinctPrompts.get(p));
+
+                if (validated == null) {
+                    unanswered += inputIndexes.size();
+                    continue;
+                }
+                for (int i : inputIndexes) {
                     Binding newBinding = createBinding(batchInputs.get(i), validated);
                     if (newBinding != null) {
                         results.add(newBinding);
@@ -314,18 +346,35 @@ public class QueryIterGenerate extends QueryIteratorBase {
                 }
             }
 
-            batchResults = results.iterator();
-            LOG.debug("Batch generated {} output bindings from {} prompts",
-                results.size(), batchPrompts.size());
+            if (unanswered > 0) {
+                LOG.warn("Batched generation answered {} of {} prompts; {} binding(s) produced no row",
+                        distinctPrompts.size() - countUnansweredPrompts(perPrompt),
+                        distinctPrompts.size(), unanswered);
+            }
 
+            batchResults = results.iterator();
+            LOG.debug("Batch produced {} row(s) from {} binding(s)", results.size(), batchInputCount);
+
+        } catch (QueryCancelledException e) {
+            throw e;   // a cancelled query must stop, not carry on producing no rows
         } catch (Exception e) {
-            LOG.error("Error during batched LLM generation", e);
+            LOG.warn("Could not read the batched response, dropping {} binding(s): {}",
+                    batchInputCount, e.getMessage());
             batchResults = Collections.emptyIterator();
         } finally {
-            // Clear batch state
             batchInputs.clear();
             batchPrompts.clear();
         }
+    }
+
+    private static int countUnansweredPrompts(List<Map<String, String>> perPrompt) {
+        int n = 0;
+        for (Map<String, String> m : perPrompt) {
+            if (m == null || m.isEmpty()) {
+                n++;
+            }
+        }
+        return n;
     }
 
     @Override
@@ -419,7 +468,7 @@ public class QueryIterGenerate extends QueryIteratorBase {
 
             LOG.debug("Calling LLM: {}", provider.getName());
             long startTime = System.currentTimeMillis();
-            GenerateResponse response = provider.generateSync(request);
+            GenerateResponse response = callProvider(request);
             long latency = System.currentTimeMillis() - startTime;
 
             recordMetrics(finalPrompt, latency, response, false, 1);
@@ -447,6 +496,8 @@ public class QueryIterGenerate extends QueryIteratorBase {
                     LOG.warn("Filtered out invalid raw text response: {}", truncate(rawText, 200));
                 }
             }
+        } catch (QueryCancelledException e) {
+            throw e;   // a cancelled query must stop, not carry on producing no rows
         } catch (Exception e) {
             LOG.error("Error during LLM generation", e);
             return null;
@@ -578,9 +629,48 @@ public class QueryIterGenerate extends QueryIteratorBase {
         }
     }
 
+    /**
+     * Stop generating.
+     *
+     * <p>ARQ calls this from another thread when a query is cancelled or its timeout fires, and
+     * checks between bindings whether to stop. That check never came round while a call was in
+     * flight, because the call blocks inside the iterator, so a timeout could not interrupt a
+     * slow model and a cancelled query kept issuing calls until its input ran out. The in-flight
+     * call is now abandoned and no further ones are started. The request may still be completing
+     * at the far end; what stops is this query waiting for it and paying for the next one.
+     */
     @Override
     protected void requestCancel() {
-        // Cancel not supported for LLM calls
+        cancelled = true;
+        CompletableFuture<GenerateResponse> pending = inFlight;
+        if (pending != null) {
+            pending.cancel(true);
+        }
+    }
+
+    /**
+     * Issue one call, abandonable by {@link #requestCancel()}.
+     *
+     * @throws QueryCancelledException if the query was cancelled before or during the call
+     */
+    private GenerateResponse callProvider(GenerateRequest request) {
+        if (cancelled) {
+            throw new QueryCancelledException();
+        }
+        CompletableFuture<GenerateResponse> pending = provider.generate(request);
+        inFlight = pending;
+        try {
+            return pending.join();
+        } catch (CancellationException e) {
+            throw new QueryCancelledException();
+        } catch (CompletionException e) {
+            if (cancelled) {
+                throw new QueryCancelledException();
+            }
+            throw e;
+        } finally {
+            inFlight = null;
+        }
     }
 
     @Override

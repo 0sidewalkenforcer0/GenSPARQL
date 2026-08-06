@@ -345,16 +345,40 @@ public class GenSPARQL {
         private final Plan plan;
         private boolean closed = false;
 
+        // Iterators this execution has handed out, so abort() and close() can reach them.
+        private final java.util.List<org.apache.jena.sparql.engine.QueryIterator> liveIterators =
+                java.util.Collections.synchronizedList(new java.util.ArrayList<>());
+        private volatile boolean aborted = false;
+
         GenSPARQLQueryExecution(Query query, Dataset dataset, Plan plan) {
             this.query = query;
             this.dataset = dataset;
             this.plan = plan;
         }
 
+        /**
+         * Start evaluating, tracking the iterator so it can be cancelled.
+         *
+         * <p>abort() used to be a no-op and nothing held the iterator, so a cancelled or timed
+         * out query ran to completion regardless. A GENOP query is the case where that shows:
+         * it keeps calling a model that the caller has already stopped waiting for.
+         */
+        private org.apache.jena.sparql.engine.QueryIterator openIterator() {
+            if (closed) {
+                throw new IllegalStateException("QueryExecution is closed");
+            }
+            org.apache.jena.sparql.engine.QueryIterator qIter = plan.iterator();
+            liveIterators.add(qIter);
+            if (aborted) {
+                qIter.cancel();
+            }
+            return qIter;
+        }
+
         @Override
         public org.apache.jena.query.ResultSet execSelect() {
             if (closed) throw new IllegalStateException("QueryExecution is closed");
-            org.apache.jena.sparql.engine.QueryIterator qIter = plan.iterator();
+            org.apache.jena.sparql.engine.QueryIterator qIter = openIterator();
             // Convert String list to Var list
             java.util.List<org.apache.jena.sparql.core.Var> vars = new java.util.ArrayList<>();
             for (String varName : query.getResultVars()) {
@@ -409,7 +433,7 @@ public class GenSPARQL {
                 return java.util.Collections.emptyIterator();
             }
             return org.apache.jena.sparql.modify.TemplateLib.calcTriples(
-                    template.getTriples(), plan.iterator());
+                    template.getTriples(), openIterator());
         }
 
         @Override
@@ -446,7 +470,7 @@ public class GenSPARQL {
             resources.addAll(query.getResultURIs());
 
             java.util.List<org.apache.jena.sparql.core.Var> describeVars = query.getProjectVars();
-            org.apache.jena.sparql.engine.QueryIterator qIter = plan.iterator();
+            org.apache.jena.sparql.engine.QueryIterator qIter = openIterator();
             try {
                 while (qIter.hasNext()) {
                     Binding binding = qIter.next();
@@ -503,7 +527,7 @@ public class GenSPARQL {
             if (closed) {
                 throw new IllegalStateException("QueryExecution is closed");
             }
-            org.apache.jena.sparql.engine.QueryIterator qIter = plan.iterator();
+            org.apache.jena.sparql.engine.QueryIterator qIter = openIterator();
             try {
                 return qIter.hasNext();
             } finally {
@@ -521,14 +545,37 @@ public class GenSPARQL {
             throw new UnsupportedOperationException("JSON not yet supported");
         }
 
+        /**
+         * Stop this execution. Safe to call from another thread, which is how a timeout and a
+         * user-initiated cancel both arrive.
+         */
         @Override
         public void abort() {
-            // No-op
+            aborted = true;
+            synchronized (liveIterators) {
+                for (org.apache.jena.sparql.engine.QueryIterator it : liveIterators) {
+                    try {
+                        it.cancel();
+                    } catch (RuntimeException e) {
+                        LOG.debug("Ignoring error while cancelling an iterator: {}", e.getMessage());
+                    }
+                }
+            }
         }
 
         @Override
         public void close() {
             closed = true;
+            synchronized (liveIterators) {
+                for (org.apache.jena.sparql.engine.QueryIterator it : liveIterators) {
+                    try {
+                        it.close();
+                    } catch (RuntimeException e) {
+                        LOG.debug("Ignoring error while closing an iterator: {}", e.getMessage());
+                    }
+                }
+                liveIterators.clear();
+            }
         }
 
         @Override
@@ -556,6 +603,10 @@ public class GenSPARQL {
             return ARQ.getContext();
         }
 
+        /**
+         * No timeout. Jena 5 sets one through the execution builder, which this execution is
+         * not built by, so there is none to report. Cancellation goes through {@link #abort()}.
+         */
         @Override
         public long getTimeout1() {
             return -1;
