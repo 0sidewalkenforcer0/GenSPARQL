@@ -65,7 +65,11 @@ window.DEMO_DATA = {
   FILTER(?pos = "Defender")
 }`,
       result: { defenders: 41, total: 77 },
-      cost: { genopFirst: 825, planned: 26, factor: "31×" }
+      // genopFirst = every ex:Athlete in worldcup2026.ttl (825).
+      // planned    = the ?p bindings that survive the Group A patterns (77),
+      //              i.e. the same 77 the recorded result is reported over.
+      // factor     = 825 / 77.
+      cost: { genopFirst: 825, planned: 77, factor: "10.7×" }
     }
   ]
 };
