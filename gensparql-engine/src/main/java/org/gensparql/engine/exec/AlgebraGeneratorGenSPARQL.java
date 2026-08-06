@@ -10,6 +10,7 @@ import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.expr.ExprList;
 import org.apache.jena.sparql.syntax.*;
+import org.gensparql.engine.GenSPARQLConfig;
 import org.gensparql.engine.op.OpGenerate;
 import org.gensparql.parser.element.ElementGenerate;
 
@@ -102,6 +103,14 @@ public class AlgebraGeneratorGenSPARQL {
      * blocks, GENOP, FILTER); any OPTIONAL/UNION/MINUS/BIND/etc. leaves the order untouched.
      */
     private static List<Element> reorderGenopLast(List<Element> original) {
+        // With cost-based planning on, leave the author's order alone. Moving GENOP to the end
+        // here makes the surrounding patterns adjacent, and adjacent patterns get merged into a
+        // single BGP downstream; once that happens the boundary between a selective pattern and
+        // a fan-out pattern is gone and no later stage can place the GENOP between them.
+        if (GenSPARQLConfig.isCostBasedPlanningEnabled()) {
+            return original;
+        }
+
         boolean hasGenop = false;
         for (Element e : original) {
             if (e instanceof ElementGenerate) { hasGenop = true; }

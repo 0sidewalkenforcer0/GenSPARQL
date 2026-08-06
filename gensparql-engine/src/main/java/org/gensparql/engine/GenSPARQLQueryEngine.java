@@ -172,6 +172,26 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                 return executeSimJoin(opJoin, input, execCxt);
             }
 
+            // Cost-based GENOP placement (C4). A group compiles to nested joins, never to an
+            // OpSequence, so a planner wired only to the sequence path never sees a real query.
+            // Flatten the conjunctive fragment and let the planner order it.
+            if (GenSPARQLConfig.isCostBasedPlanningEnabled()) {
+                List<Op> fragment = flattenConjunctiveFragment(opJoin);
+                if (fragment != null) {
+                    List<Op> ordered = reorderByCost(fragment, execCxt);
+                    if (ordered != null) {
+                        LOG.debug("Cost-based join order: {}", ordered.stream()
+                                .map(e -> e.getClass().getSimpleName())
+                                .collect(java.util.stream.Collectors.joining(", ")));
+                        QueryIterator current = input;
+                        for (Op e : ordered) {
+                            current = executeOp(e, current, execCxt);
+                        }
+                        return current;
+                    }
+                }
+            }
+
             LOG.debug("Using standard join (NOT SimJoin)");
             // Standard join: execute left, then right with left's output
             QueryIterator left = executeOp(opJoin.getLeft(), input, execCxt);
@@ -744,6 +764,7 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
             org.apache.jena.rdf.model.Model statsModel = null;
             String bgpPattern = null;
             long nAll = -1;
+            java.util.Map<Integer, Double> cardinalityFactors = new java.util.HashMap<>();
             try {
                 List<org.apache.jena.graph.Triple> triples = new ArrayList<>();
                 for (Op e : elements) {
@@ -756,15 +777,16 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                             .createModelForGraph(execCxt.getActiveGraph());
                     bgpPattern = org.gensparql.engine.cost.OpStats.buildPattern(triples);
                     nAll = org.gensparql.engine.cost.KgStats.bindings(statsModel, "", bgpPattern);
+                    cardinalityFactors = perPatternFactors(elements, statsModel);
                 }
             } catch (Exception statsEx) {
                 LOG.debug("KG stats unavailable for cost planning: {}", statsEx.getMessage());
                 statsModel = null;
+                cardinalityFactors = new java.util.HashMap<>();
             }
 
             List<org.gensparql.engine.cost.GenOpPlanner.PlanItem> items = new ArrayList<>();
             java.util.Map<String, Op> byLabel = new java.util.HashMap<>();
-            boolean firstBgp = true;
             for (int i = 0; i < elements.size(); i++) {
                 Op e = elements.get(i);
                 String label = "e" + i;
@@ -782,16 +804,8 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                 }
 
                 if (isBGPOnly(e)) {
-                    // Carry the real combined binding count on the first BGP so the GENOP
-                    // sees the true incoming cardinality; others are neutral (join
-                    // cardinality across multiple BGPs is approximated, see docs §8).
-                    double factor = 1.0;
-                    if (statsModel != null && firstBgp && nAll >= 0) {
-                        factor = Math.max(1.0, nAll);
-                        firstBgp = false;
-                    }
                     items.add(new org.gensparql.engine.cost.GenOpPlanner.KgPattern(
-                            label, requires, binds, factor));
+                            label, requires, binds, cardinalityFactors.getOrDefault(i, 1.0)));
                 } else {
                     OpGenerate g = findGenerate(e);
                     String prompt = g != null ? g.getPromptTemplate() : "";
@@ -825,6 +839,91 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                     ex.getMessage());
             return null;
         }
+    }
+
+    /**
+     * Flatten a join tree into the conjunctive fragment the planner can reorder, or null if
+     * this tree is not one.
+     *
+     * <p>Joins are commutative and associative, so any dependency-respecting order of the
+     * leaves computes the same result. The fragment qualifies only when every leaf is either a
+     * BGP-only op or a GENOP, and at least one is a GENOP: with no GENOP there is nothing
+     * expensive to place, and anything else (OPTIONAL, UNION, MINUS, SERVICE) is not freely
+     * reorderable and is left to the standard join.
+     */
+    private List<Op> flattenConjunctiveFragment(Op op) {
+        List<Op> leaves = new ArrayList<>();
+        if (!collectConjunctiveLeaves(op, leaves)) {
+            return null;
+        }
+        boolean hasGenOp = false;
+        for (Op leaf : leaves) {
+            if (!isBGPOnly(leaf)) {
+                hasGenOp = true;
+                break;
+            }
+        }
+        return (hasGenOp && leaves.size() > 1) ? leaves : null;
+    }
+
+    /** Collect join leaves; false as soon as a leaf is neither BGP-only nor a GENOP. */
+    private boolean collectConjunctiveLeaves(Op op, List<Op> out) {
+        if (op instanceof OpJoin) {
+            OpJoin join = (OpJoin) op;
+            return collectConjunctiveLeaves(join.getLeft(), out)
+                && collectConjunctiveLeaves(join.getRight(), out);
+        }
+        if (op instanceof OpTable && ((OpTable) op).isJoinIdentity()) {
+            return true; // unit table contributes nothing to the fragment
+        }
+        if (op instanceof OpGenerate || isBGPOnly(op)) {
+            out.add(op);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Per-pattern cardinality factors, keyed by element index.
+     *
+     * <p>The planner multiplies the factors of the patterns placed so far, so a factor has to
+     * be the multiplier that pattern contributes, not a standalone count. Factors are read off
+     * the cumulative joins in author order: with joint(i) the number of solutions of patterns
+     * 0..i taken together, pattern i contributes joint(i) / joint(i-1). The product over any
+     * prefix is then that prefix's real join cardinality, and the product over all of them is
+     * the real result size.
+     *
+     * <p>This is what lets the planner tell placements apart. Loading the full join count onto
+     * the first pattern and giving the rest 1.0 makes every placement after the first pattern
+     * look equally expensive, so a GENOP sitting before a fan-out pattern costs the same as one
+     * sitting after it and the planner cannot prefer the cheap order.
+     *
+     * <p>Non-prefix subsets reuse these factors, which is the usual independence approximation;
+     * exact join cardinality is not decomposable into per-pattern multipliers.
+     */
+    private java.util.Map<Integer, Double> perPatternFactors(
+            List<Op> elements, org.apache.jena.rdf.model.Model statsModel) {
+        java.util.Map<Integer, Double> factors = new java.util.HashMap<>();
+        List<org.apache.jena.graph.Triple> prefix = new ArrayList<>();
+        double previous = 1.0;
+
+        for (int i = 0; i < elements.size(); i++) {
+            Op e = elements.get(i);
+            if (!isBGPOnly(e)) {
+                continue; // a GENOP contributes its fan-out, not a KG cardinality
+            }
+            org.gensparql.engine.cost.OpStats.collectTriples(e, prefix);
+            if (prefix.isEmpty()) {
+                continue; // e.g. a unit table: neutral
+            }
+            long joint = org.gensparql.engine.cost.KgStats.bindings(
+                    statsModel, "", org.gensparql.engine.cost.OpStats.buildPattern(prefix));
+            // An empty prefix join makes the whole fragment empty; ordering is then irrelevant,
+            // so stay neutral rather than dividing by zero.
+            factors.put(i, previous > 0 ? joint / previous : 1.0);
+            previous = joint;
+        }
+        return factors;
     }
 
     /**

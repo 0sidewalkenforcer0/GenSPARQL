@@ -16,6 +16,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.File;
 
 /**
@@ -24,9 +26,12 @@ import java.io.File;
  * Same query semantics ("midfielders of one team"), two authorings:
  *   good: selective BGP first  -> GENOP should fire only on that team's squad
  *   bad : GENOP first          -> without reordering, GENOP fires on ALL athletes
- * We count LLM invocations with a Mock provider (deterministic, no server). The gap measures
- * how much the engine's cost-based reordering saves; if the counts differ, the planner is NOT
- * pushing the selective predicate ahead of GENOP for this (parsed group) query shape.
+ * We count LLM invocations with a Mock provider (deterministic, no server). Both spellings must
+ * cost the same: the engine places the GENOP after the selective patterns either way. A gap here
+ * means placement has started depending on how the query was written.
+ *
+ * See GenOpPlacementTest for the case this shape cannot show, where a later pattern fans out
+ * instead of filtering and the cheapest plan runs the GENOP first.
  */
 public class CostReorderTest {
 
@@ -88,11 +93,12 @@ public class CostReorderTest {
                 """;
         int callsGood = runCountCalls(good);
         int callsBad = runCountCalls(bad);
-        System.out.println("[x4] LLM calls — selective-BGP-first (good): " + callsGood);
-        System.out.println("[x4] LLM calls — GENOP-first (bad)         : " + callsBad);
-        System.out.println("[x4] reordering " + (callsGood == callsBad
-                ? "ACTIVE (both minimal)"
-                : "NOT firing for this query shape — " + callsBad + " vs " + callsGood
-                  + " (=" + (callsBad / Math.max(1, callsGood)) + "x avoidable calls)"));
+
+        int squad = 26; // Uruguay's squad in worldcup2026.ttl
+        assertEquals(squad, callsGood,
+                "the selective-first authoring must fire the GENOP only on that squad");
+        assertEquals(squad, callsBad,
+                "authoring order must not change cost here: the selective patterns still run "
+                + "before the GENOP, so both spellings cost the same");
     }
 }
