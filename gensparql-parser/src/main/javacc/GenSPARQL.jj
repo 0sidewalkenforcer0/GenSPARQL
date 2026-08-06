@@ -28,6 +28,7 @@ import java.util.*;
 import org.apache.jena.graph.*;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryFactory;
+import org.apache.jena.sparql.core.BasicPattern;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.core.VarExprList;
 import org.apache.jena.sparql.expr.*;
@@ -153,6 +154,40 @@ public class GenSPARQLParserImpl {
 
     private void addTriplePattern(Node s, Node p, Node o) {
         currentGroup().addTriplePattern(Triple.create(s, p, o));
+    }
+
+    /**
+     * Collect the plain triples of a group, for a CONSTRUCT template.
+     *
+     * <p>A template is a set of triples, not a graph pattern, so the triple productions are
+     * reused by parsing into a scratch group and lifting the triples back out. SPARQL does not
+     * allow a property path in a template, and a path here would otherwise be dropped without
+     * comment, so it is rejected.
+     */
+    private BasicPattern templateTriples(ElementGroup group) {
+        BasicPattern bgp = new BasicPattern();
+        for (Element e : group.getElements()) {
+            if (e instanceof ElementTriplesBlock) {
+                for (Triple t : ((ElementTriplesBlock) e).getPattern().getList()) {
+                    bgp.add(t);
+                }
+            } else if (e instanceof ElementPathBlock) {
+                for (org.apache.jena.sparql.core.TriplePath tp
+                        : ((ElementPathBlock) e).getPattern().getList()) {
+                    Triple t = tp.asTriple();
+                    if (t == null) {
+                        throw new RuntimeException(
+                            "A property path is not allowed in a CONSTRUCT template: " + tp);
+                    }
+                    bgp.add(t);
+                }
+            } else {
+                throw new RuntimeException(
+                    "Only triples are allowed in a CONSTRUCT template, got: "
+                    + e.getClass().getSimpleName());
+            }
+        }
+        return bgp;
     }
 
     /**
@@ -573,7 +608,9 @@ void SelectClause() :
  * [10] ConstructQuery ::= 'CONSTRUCT' ( ConstructTemplate DatasetClause* WhereClause SolutionModifier | DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier )
  */
 void ConstructQuery() :
-{}
+{
+    ElementGroup shortFormGroup;
+}
 {
     {
         query.setQueryConstructType();
@@ -586,10 +623,17 @@ void ConstructQuery() :
         WhereClause()
         SolutionModifier()
       |
+        // CONSTRUCT WHERE { ... }: the same triples are both the template and the pattern.
         ( DatasetClause() )*
         <WHERE> <LBRACE>
+        { pushGroup(); }
         [ TriplesTemplate() ]
         <RBRACE>
+        {
+            shortFormGroup = popGroup();
+            query.setConstructTemplate(new Template(templateTriples(shortFormGroup)));
+            query.setQueryPattern(shortFormGroup);
+        }
         SolutionModifier()
     )
 }
@@ -1652,16 +1696,31 @@ Node CollectionPath() :
 /**
  * ConstructTemplate
  */
+/**
+ * [73] ConstructTemplate ::= '{' ConstructTriples? '}'
+ *
+ * Parses into a scratch group so the ordinary triple productions can be reused, then hands the
+ * triples to the query as its template. Without this the triples were written to whatever group
+ * happened to be on the stack, and in a CONSTRUCT nothing has been pushed yet, so the first
+ * triple failed on a null group.
+ */
 void ConstructTemplate() :
-{}
+{
+    ElementGroup collected;
+}
 {
     <LBRACE>
+    { pushGroup(); }
     [ ConstructTriples() ]
     <RBRACE>
+    {
+        collected = popGroup();
+        query.setConstructTemplate(new Template(templateTriples(collected)));
+    }
 }
 
 /**
- * ConstructTriples
+ * [74] ConstructTriples ::= TriplesSameSubject ( '.' ConstructTriples? )?
  */
 void ConstructTriples() :
 {}
@@ -1671,7 +1730,7 @@ void ConstructTriples() :
 }
 
 /**
- * TriplesTemplate
+ * [52] TriplesTemplate ::= TriplesSameSubject ( '.' TriplesTemplate? )?
  */
 void TriplesTemplate() :
 {}
