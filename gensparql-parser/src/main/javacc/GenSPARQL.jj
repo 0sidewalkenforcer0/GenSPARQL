@@ -153,6 +153,63 @@ public class GenSPARQLParserImpl {
         currentGroup().addTriplePattern(Triple.create(s, p, o));
     }
 
+    /**
+     * What stood in predicate position: a plain node, or a property path.
+     *
+     * A single IRI, 'a', or a variable is a plain triple pattern. Anything built with the path
+     * operators has to stay a Path so it reaches the algebra as a TriplePath; flattening it to a
+     * predicate node would silently turn "ex:p/ex:q" into a one-step pattern.
+     */
+    static final class PredicateSpec {
+        final Node node;
+        final org.apache.jena.sparql.path.Path path;
+
+        private PredicateSpec(Node node, org.apache.jena.sparql.path.Path path) {
+            this.node = node;
+            this.path = path;
+        }
+
+        static PredicateSpec node(Node n) {
+            return new PredicateSpec(n, null);
+        }
+
+        /** A one-step link is still an ordinary triple pattern, so unwrap it. */
+        static PredicateSpec of(org.apache.jena.sparql.path.Path p) {
+            if (p instanceof org.apache.jena.sparql.path.P_Link) {
+                return new PredicateSpec(((org.apache.jena.sparql.path.P_Link) p).getNode(), null);
+            }
+            return new PredicateSpec(null, p);
+        }
+    }
+
+    private void addPredicatePattern(Node s, PredicateSpec p, Node o) {
+        if (p.node != null) {
+            addTriplePattern(s, p.node, o);
+        } else {
+            addTriplePathPattern(s, p.path, o);
+        }
+    }
+
+    /**
+     * Append a path pattern, reusing the trailing ElementPathBlock when there is one.
+     *
+     * Plain triples keep going to an ElementTriplesBlock, so a group mixing both ends up with
+     * two blocks. They are joined, which is the same answer.
+     */
+    private void addTriplePathPattern(Node s, org.apache.jena.sparql.path.Path path, Node o) {
+        ElementGroup g = currentGroup();
+        ElementPathBlock block = null;
+        List<Element> els = g.getElements();
+        if (!els.isEmpty() && els.get(els.size() - 1) instanceof ElementPathBlock) {
+            block = (ElementPathBlock) els.get(els.size() - 1);
+        }
+        if (block == null) {
+            block = new ElementPathBlock();
+            g.addElement(block);
+        }
+        block.addTriplePath(new org.apache.jena.sparql.core.TriplePath(s, path, o));
+    }
+
     private String unquote(String s) {
         if (s.startsWith("\"\"\"") || s.startsWith("'''")) {
             s = s.substring(3, s.length() - 3);
@@ -1155,7 +1212,7 @@ void PropertyListPath(Node s) :
  */
 void PropertyListPathNotEmpty(Node s) :
 {
-    Node p;
+    PredicateSpec p;
 }
 {
     p = VerbPath() ObjectListPath(s, p)
@@ -1170,9 +1227,9 @@ void PropertyListPathNotEmpty(Node s) :
 /**
  * [78] VerbPath ::= Path
  */
-Node VerbPath() :
+PredicateSpec VerbPath() :
 {
-    Node p;
+    PredicateSpec p;
 }
 {
     p = Path()
@@ -1180,32 +1237,172 @@ Node VerbPath() :
 }
 
 /**
- * Path (simplified - just IRIs and 'a')
+ * Predicate position.
+ *
+ * Returns a PredicateSpec: either a plain node (an IRI, 'a', or a variable, which is an
+ * ordinary triple pattern) or a Jena Path (which is a property path and becomes a TriplePath).
+ * A bare variable is only legal as a whole predicate, never inside a path, which is what
+ * SPARQL says and what PathPrimary enforces.
+ *
+ * [88] Path ::= PathAlternative
  */
-Node Path() :
+PredicateSpec Path() :
 {
-    Node p;
+    Node v;
+    org.apache.jena.sparql.path.Path p;
 }
 {
     (
-        p = Iri()
+        LOOKAHEAD(<VAR1> | <VAR2>)
+        v = VarNode() { return PredicateSpec.node(v); }
       |
-        <A_TOKEN> { p = NodeFactory.createURI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"); }
+        p = PathAlternative() { return PredicateSpec.of(p); }
     )
+}
+
+/**
+ * [89] PathAlternative ::= PathSequence ( '|' PathSequence )*
+ */
+org.apache.jena.sparql.path.Path PathAlternative() :
+{
+    org.apache.jena.sparql.path.Path left, right;
+}
+{
+    left = PathSequence()
+    (
+        <PIPE> right = PathSequence()
+        { left = org.apache.jena.sparql.path.PathFactory.pathAlt(left, right); }
+    )*
+    { return left; }
+}
+
+/**
+ * [90] PathSequence ::= PathEltOrInverse ( '/' PathEltOrInverse )*
+ */
+org.apache.jena.sparql.path.Path PathSequence() :
+{
+    org.apache.jena.sparql.path.Path left, right;
+}
+{
+    left = PathEltOrInverse()
+    (
+        <SLASH> right = PathEltOrInverse()
+        { left = org.apache.jena.sparql.path.PathFactory.pathSeq(left, right); }
+    )*
+    { return left; }
+}
+
+/**
+ * [92] PathEltOrInverse ::= PathElt | '^' PathElt
+ */
+org.apache.jena.sparql.path.Path PathEltOrInverse() :
+{
+    org.apache.jena.sparql.path.Path p;
+}
+{
+    (
+        <CARET> p = PathElt() { return org.apache.jena.sparql.path.PathFactory.pathInverse(p); }
+      |
+        p = PathElt() { return p; }
+    )
+}
+
+/**
+ * [91] PathElt ::= PathPrimary PathMod?
+ * [93] PathMod ::= '?' | '*' | '+'
+ */
+org.apache.jena.sparql.path.Path PathElt() :
+{
+    org.apache.jena.sparql.path.Path p;
+}
+{
+    p = PathPrimary()
+    [
+        <QUESTION> { p = org.apache.jena.sparql.path.PathFactory.pathZeroOrOne(p); }
+      | <STAR>     { p = org.apache.jena.sparql.path.PathFactory.pathZeroOrMore1(p); }
+      | <PLUS>     { p = org.apache.jena.sparql.path.PathFactory.pathOneOrMore1(p); }
+    ]
     { return p; }
+}
+
+/**
+ * [94] PathPrimary ::= iri | 'a' | '!' PathNegatedPropertySet | '(' Path ')'
+ */
+org.apache.jena.sparql.path.Path PathPrimary() :
+{
+    Node iri;
+    org.apache.jena.sparql.path.Path p;
+}
+{
+    (
+        iri = Iri() { return org.apache.jena.sparql.path.PathFactory.pathLink(iri); }
+      |
+        <A_TOKEN> {
+            return org.apache.jena.sparql.path.PathFactory.pathLink(
+                NodeFactory.createURI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"));
+        }
+      |
+        <BANG> p = PathNegatedPropertySet() { return p; }
+      |
+        <LPAREN> p = PathAlternative() <RPAREN> { return p; }
+    )
+}
+
+/**
+ * [95] PathNegatedPropertySet ::= PathOneInPropertySet
+ *                               | '(' ( PathOneInPropertySet ( '|' PathOneInPropertySet )* )? ')'
+ */
+org.apache.jena.sparql.path.Path PathNegatedPropertySet() :
+{
+    org.apache.jena.sparql.path.P_NegPropSet negSet = new org.apache.jena.sparql.path.P_NegPropSet();
+    org.apache.jena.sparql.path.P_Path0 one;
+}
+{
+    (
+        one = PathOneInPropertySet() { negSet.add(one); }
+      |
+        <LPAREN>
+        [
+            one = PathOneInPropertySet() { negSet.add(one); }
+            ( <PIPE> one = PathOneInPropertySet() { negSet.add(one); } )*
+        ]
+        <RPAREN>
+    )
+    { return negSet; }
+}
+
+/**
+ * [96] PathOneInPropertySet ::= iri | 'a' | '^' ( iri | 'a' )
+ */
+org.apache.jena.sparql.path.P_Path0 PathOneInPropertySet() :
+{
+    Node iri;
+    boolean inverse = false;
+}
+{
+    [ <CARET> { inverse = true; } ]
+    (
+        iri = Iri()
+      |
+        <A_TOKEN> { iri = NodeFactory.createURI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"); }
+    )
+    {
+        return inverse ? new org.apache.jena.sparql.path.P_ReverseLink(iri)
+                       : new org.apache.jena.sparql.path.P_Link(iri);
+    }
 }
 
 /**
  * [83] ObjectListPath ::= ObjectPath ( ',' ObjectPath )*
  */
-void ObjectListPath(Node s, Node p) :
+void ObjectListPath(Node s, PredicateSpec p) :
 {
     Node o;
 }
 {
-    o = ObjectPath() { addTriplePattern(s, p, o); }
+    o = ObjectPath() { addPredicatePattern(s, p, o); }
     (
-        <COMMA> o = ObjectPath() { addTriplePattern(s, p, o); }
+        <COMMA> o = ObjectPath() { addPredicatePattern(s, p, o); }
     )*
 }
 
