@@ -44,6 +44,60 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
         LOG.debug("[DEBUG GenSPARQLQueryEngine CONSTRUCTOR] Op: " + op.getClass().getSimpleName());
     }
 
+    /**
+     * Skip ARQ's optimizer for a plan containing a GENOP.
+     *
+     * <p>The optimizer reasons about which variables an operator uses and binds, and for an
+     * OpExt it reads that off {@code effectiveOp()}. OpGenerate reports a unit table there, so
+     * the optimizer is told the GENOP neither reads nor binds anything and is free to drop the
+     * patterns that only feed it. That is what happened to
+     * {@code SELECT ?g { { SELECT ?g { ?s rdfs:label ?l . GENOP("...{?l}...", (?g), M) } } }}:
+     * the pattern binding ?l was pruned because nothing else projected it, the prompt then had
+     * an unbound variable, every row was skipped and the query returned nothing without
+     * issuing a single call. Projecting ?l as well made the same query work, which is not a
+     * distinction the semantics should draw.
+     *
+     * <p>Rewriting a plan on an analysis that cannot see the operator is not worth the gain, so
+     * these plans keep their shape. GENOP placement is handled by the cost planner, which does
+     * understand the operator.
+     */
+    @Override
+    protected Op modifyOp(Op op) {
+        if (planContainsGenOp(op)) {
+            LOG.debug("Skipping ARQ optimization: plan contains a GENOP");
+            return op;
+        }
+        return super.modifyOp(op);
+    }
+
+    /**
+     * Whether a GENOP appears anywhere in the plan.
+     *
+     * <p>Walks by arity over Jena's Op1/Op2/OpN shapes rather than listing operator classes, so
+     * a construct nobody thought of still counts. Missing one here does not cost a better plan,
+     * it lets the optimizer loose on a tree it cannot analyse.
+     */
+    private static boolean planContainsGenOp(Op op) {
+        if (op instanceof OpGenerate) {
+            return true;
+        }
+        if (op instanceof org.apache.jena.sparql.algebra.op.Op1) {
+            return planContainsGenOp(((org.apache.jena.sparql.algebra.op.Op1) op).getSubOp());
+        }
+        if (op instanceof org.apache.jena.sparql.algebra.op.Op2) {
+            org.apache.jena.sparql.algebra.op.Op2 op2 = (org.apache.jena.sparql.algebra.op.Op2) op;
+            return planContainsGenOp(op2.getLeft()) || planContainsGenOp(op2.getRight());
+        }
+        if (op instanceof org.apache.jena.sparql.algebra.op.OpN) {
+            for (Op e : ((org.apache.jena.sparql.algebra.op.OpN) op).getElements()) {
+                if (planContainsGenOp(e)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     @Override
     public QueryIterator eval(Op op, DatasetGraph dsg, Binding input, Context context) {
         LOG.debug("[DEBUG GenSPARQLQueryEngine.eval] START - Op type: " + op.getClass().getSimpleName());
@@ -330,6 +384,34 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
             QueryIterator subIter = executeOp(opSlice.getSubOp(), input, execCxt);
             return new org.apache.jena.sparql.engine.iterator.QueryIterSlice(
                     subIter, opSlice.getStart(), opSlice.getLength(), execCxt);
+        }
+
+        // Handle OpGroup and OpExtend by executing the sub-operator here and letting ARQ apply
+        // only the operator itself, over a unit sub-plan.
+        //
+        // Handing the whole subtree to QC.execute instead would let ARQ evaluate it, and ARQ
+        // evaluates the right side of a join against the root binding rather than against the
+        // left side's results. A context-mode GENOP under such a join then sees its input
+        // variable unbound, skips every row and issues no calls, so an aggregate over a GENOP
+        // came back as zero.
+        if (op instanceof org.apache.jena.sparql.algebra.op.OpGroup) {
+            org.apache.jena.sparql.algebra.op.OpGroup opGroup =
+                    (org.apache.jena.sparql.algebra.op.OpGroup) op;
+            QueryIterator subIter = executeOp(opGroup.getSubOp(), input, execCxt);
+            return QC.execute(
+                    org.apache.jena.sparql.algebra.op.OpGroup.create(
+                            OpTable.unit(), opGroup.getGroupVars(), opGroup.getAggregators()),
+                    subIter, execCxt);
+        }
+
+        if (op instanceof org.apache.jena.sparql.algebra.op.OpExtend) {
+            org.apache.jena.sparql.algebra.op.OpExtend opExtend =
+                    (org.apache.jena.sparql.algebra.op.OpExtend) op;
+            QueryIterator subIter = executeOp(opExtend.getSubOp(), input, execCxt);
+            return QC.execute(
+                    org.apache.jena.sparql.algebra.op.OpExtend.create(
+                            OpTable.unit(), opExtend.getVarExprList()),
+                    subIter, execCxt);
         }
 
         // Handle OpDistinct - wrap subOp execution result
