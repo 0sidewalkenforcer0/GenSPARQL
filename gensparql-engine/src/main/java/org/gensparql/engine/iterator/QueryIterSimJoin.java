@@ -12,6 +12,8 @@ import org.gensparql.core.model.SourceType;
 import org.gensparql.core.model.TypedBinding;
 import org.gensparql.core.model.TypedValue;
 import org.gensparql.core.similarity.CanonicalForm;
+import org.gensparql.core.similarity.JaccardIndex;
+import org.gensparql.core.similarity.JaccardSimText;
 import org.gensparql.core.similarity.SimText;
 import org.gensparql.engine.similarity.EmbeddingSimText;
 import org.gensparql.engine.similarity.SimScoreEvaluator;
@@ -68,6 +70,15 @@ public class QueryIterSimJoin extends QueryIteratorBase {
     // on the shared bound subset and must be scanned even in exact-only mode.
     private boolean hasUnindexedRights = false;
 
+    // Exact pruning for the fuzzy scan. Null when it does not apply, in which case the scan
+    // behaves as it always did.
+    private JaccardIndex<TypedBinding> candidateIndex;
+    private Var prunedVar;
+    private double prunedThreshold;
+    // Rights whose pruned variable is unbound: they compare null against null, which the index
+    // cannot reason about, so they stay in every candidate set.
+    private final List<TypedBinding> unboundOnPrunedVar = new ArrayList<>();
+
     private Iterator<TypedBinding> leftIter;
     private TypedBinding currentLeft;
     private Iterator<TypedBinding> matchIter;
@@ -101,6 +112,7 @@ public class QueryIterSimJoin extends QueryIteratorBase {
         // Build the pre-computed index and decide whether a fuzzy scan is needed.
         this.joinVars = computeJoinVars();
         this.approximate = computeApproximate();
+        buildCandidateIndex();
         buildRightIndex();
         maybeWarmEmbeddings();
 
@@ -189,6 +201,77 @@ public class QueryIterSimJoin extends QueryIteratorBase {
                 hasUnindexedRights = true;
             }
         }
+    }
+
+    /**
+     * Right bindings worth comparing against this left binding.
+     *
+     * <p>Without the index this is every right binding, which is what made the scan cost the
+     * same at every threshold. With it, the entries that could not reach the threshold on the
+     * pruned variable are left out. Compatibility needs every shared variable to pass, so
+     * excluding on one of them cannot remove a pair that would have matched.
+     */
+    private List<TypedBinding> approximateCandidates(TypedBinding left) {
+        if (candidateIndex == null) {
+            return rightBindings;
+        }
+        String leftText = simTextForm(left, prunedVar);
+        if (leftText == null) {
+            return rightBindings; // null compares against null; the index cannot say
+        }
+        List<TypedBinding> candidates =
+                new ArrayList<>(candidateIndex.candidates(leftText, prunedThreshold));
+        candidates.addAll(unboundOnPrunedVar);
+        return candidates;
+    }
+
+    /**
+     * Index the right bindings for pruning, when the pruning is sound.
+     *
+     * <p>The bound belongs to Jaccard, so another similarity strategy is left alone. One join
+     * variable keeps the mapping from an entry to its indexed text unambiguous. A threshold of 1
+     * or more is already served by the exact index, and one of 0 or less excludes nothing.
+     */
+    private void buildCandidateIndex() {
+        if (!approximate || joinVars.size() != 1) {
+            return;
+        }
+        if (!(simScoreEvaluator.getSimText() instanceof JaccardSimText)) {
+            return;
+        }
+        Var var = joinVars.get(0);
+        double threshold = simScoreEvaluator.getThreshold(var);
+        if (threshold <= 0 || threshold >= 1.0) {
+            return;
+        }
+
+        JaccardIndex<TypedBinding> index = new JaccardIndex<>();
+        for (TypedBinding right : rightBindings) {
+            String text = simTextForm(right, var);
+            if (text == null) {
+                unboundOnPrunedVar.add(right);
+            } else {
+                index.add(text, right);
+            }
+        }
+        this.candidateIndex = index;
+        this.prunedVar = var;
+        this.prunedThreshold = threshold;
+        LOG.debug("SimJoin candidate index: {} indexed, {} unbound, var=?{}, threshold={}",
+                index.size(), unboundOnPrunedVar.size(), var.getName(), threshold);
+    }
+
+    /**
+     * The string the evaluator would compare for this binding and variable, or null if unbound.
+     * A generated value is compared by its lexical form and an RDF one by its canonical form,
+     * which depends only on that side, so it can be settled once and indexed.
+     */
+    private String simTextForm(TypedBinding tb, Var var) {
+        TypedValue tv = tb.getTypedValue(var);
+        if (tv == null || tv.getNode() == null) {
+            return null;
+        }
+        return tv.isGen() ? CanonicalForm.lex(tv.getNode()) : CanonicalForm.canon(tv.getNode());
     }
 
     /**
@@ -295,12 +378,10 @@ public class QueryIterSimJoin extends QueryIteratorBase {
 
         // Phase 2 -- approximate scan (skip the exact bucket already handled).
         if (approximate) {
-            for (int i = 0; i < rightBindings.size(); i++) {
-                String rKey = rightKeys.get(i);
-                if (leftKey != null && leftKey.equals(rKey)) {
+            for (TypedBinding right : approximateCandidates(left)) {
+                if (leftKey != null && leftKey.equals(keyOf(right))) {
                     continue; // already handled exactly in phase 1
                 }
-                TypedBinding right = rightBindings.get(i);
                 if (areCompatible(left, right)) {
                     compatible.add(right);
                 }

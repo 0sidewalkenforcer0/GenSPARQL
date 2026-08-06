@@ -149,6 +149,11 @@ public class SimScoreEvaluator {
         return simText.similarity(s1, s2);
     }
 
+    /** The text similarity strategy in use, so callers can tell which pruning is sound. */
+    public SimText getSimText() {
+        return simText;
+    }
+
     /**
      * Get the threshold for a variable.
      *
