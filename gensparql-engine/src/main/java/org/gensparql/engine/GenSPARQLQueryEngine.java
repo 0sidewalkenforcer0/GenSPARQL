@@ -266,18 +266,13 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
             List<Op> elements = new ArrayList<>(opSeq.getElements());
             LOG.debug("OpSequence with {} elements", elements.size());
 
-            // Check if any element contains OpGenerate (for SimJoin) - with or without threshold
+            // Does any element contain a GENOP, and does any need variables bound elsewhere?
             boolean hasGenOp = false;
-            boolean hasGenOpWithThreshold = false;
-            // Check if any element contains OpGenerate with input variables (needs reordering)
             boolean hasGenOpWithInputVars = false;
 
             for (Op elem : elements) {
                 if (containsGenOp(elem)) {
                     hasGenOp = true;
-                }
-                if (containsGenOpWithThreshold(elem)) {
-                    hasGenOpWithThreshold = true;
                 }
                 if (containsGenOpWithInputVars(elem)) {
                     hasGenOpWithInputVars = true;
@@ -330,18 +325,23 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                     .collect(java.util.stream.Collectors.joining(", ")));
             }
 
-            // Use SimJoin ONLY for base mode GENOP (no input variables)
-            // Context mode GENOP needs standard sequence to receive bindings from previous elements
-            if (isSimJoinEnabled(execCxt) && hasGenOp && !hasGenOpWithInputVars && elements.size() == 2) {
-                if (hasGenOpWithThreshold) {
-                    LOG.debug("Using SimJoin for OpSequence (base mode with explicit threshold)");
+            // A similarity join applies to a base-mode GENOP only: it matches generated values
+            // against KG values, and a context-mode GENOP has to receive its bindings from the
+            // preceding elements instead, which the standard sequence does.
+            //
+            // The two-element restriction is structural: the similarity join takes one generating
+            // side and one KG side, and with more elements there is no single pair to hand it.
+            // A longer sequence therefore runs as a standard sequence, which is the same answer
+            // without the join, so this reports itself rather than passing over in silence.
+            if (isSimJoinEnabled(execCxt) && hasGenOp && !hasGenOpWithInputVars) {
+                if (elements.size() != 2) {
+                    LOG.debug("Not using SimJoin: it pairs one generating side with one KG side, "
+                            + "and this sequence has {} elements", elements.size());
                 } else {
-                    LOG.debug("Using SimJoin for OpSequence (base mode with default threshold 0.8)");
+                    LOG.debug("Using SimJoin for a base-mode GENOP sequence");
+                    return executeSimJoinForSequence(elements.get(0), elements.get(1), input, execCxt);
                 }
-                // Treat as a join between the two elements (now in correct order)
-                return executeSimJoinForSequence(elements.get(0), elements.get(1), input, execCxt);
             }
-
             LOG.debug("Using standard sequence execution (hasGenOpWithInputVars={})", hasGenOpWithInputVars);
             // Standard sequence: execute elements in order, passing results through
             QueryIterator current = input;
@@ -550,48 +550,6 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                     return true;
                 }
             }
-        }
-
-        return false;
-    }
-
-    /**
-     * Check if the operation tree contains OpGenerate with explicit threshold
-     */
-    private boolean containsGenOpWithThreshold(Op op) {
-        if (op instanceof OpGenerate) {
-            return ((OpGenerate) op).hasThreshold();
-        }
-
-        // Check sub-operations recursively
-        if (op instanceof OpJoin) {
-            OpJoin opJoin = (OpJoin) op;
-            return containsGenOpWithThreshold(opJoin.getLeft()) ||
-                   containsGenOpWithThreshold(opJoin.getRight());
-        }
-
-        if (op instanceof OpProject) {
-            return containsGenOpWithThreshold(((OpProject) op).getSubOp());
-        }
-
-        if (op instanceof OpFilter) {
-            return containsGenOpWithThreshold(((OpFilter) op).getSubOp());
-        }
-
-        if (op instanceof OpSlice) {
-            return containsGenOpWithThreshold(((OpSlice) op).getSubOp());
-        }
-
-        if (op instanceof OpDistinct) {
-            return containsGenOpWithThreshold(((OpDistinct) op).getSubOp());
-        }
-
-        if (op instanceof OpReduced) {
-            return containsGenOpWithThreshold(((OpReduced) op).getSubOp());
-        }
-
-        if (op instanceof OpOrder) {
-            return containsGenOpWithThreshold(((OpOrder) op).getSubOp());
         }
 
         return false;
