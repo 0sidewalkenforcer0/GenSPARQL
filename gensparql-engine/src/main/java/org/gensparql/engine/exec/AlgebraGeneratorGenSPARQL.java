@@ -1,11 +1,9 @@
 package org.gensparql.engine.exec;
 
-import org.apache.jena.graph.Triple;
 import org.apache.jena.query.Query;
 import org.apache.jena.sparql.algebra.Algebra;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.*;
-import org.apache.jena.sparql.core.BasicPattern;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.expr.ExprList;
@@ -213,15 +211,17 @@ public class AlgebraGeneratorGenSPARQL {
         return accumulate(OpTable.unit(), bind);
     }
 
+    /**
+     * Compile a path block.
+     *
+     * <p>Jena's {@code PathLib.pathToTriples} does the right thing for a mixed block: runs of
+     * plain triples become BGPs and each genuine path step becomes an OpPath, sequenced
+     * together. Collecting {@code tp.asTriple()} instead would drop every step that is a real
+     * path, because that method returns null for those, and the query would then run as if the
+     * pattern had never been written.
+     */
     private static Op compilePathBlock(ElementPathBlock block) {
-        BasicPattern bgp = new BasicPattern();
-        block.getPattern().getList().forEach(tp -> {
-            Triple t = tp.asTriple();
-            if (t != null) {
-                bgp.add(t);
-            }
-        });
-        return new OpBGP(bgp);
+        return org.apache.jena.sparql.path.PathLib.pathToTriples(block.getPattern());
     }
 
     private static Op compileTriplesBlock(ElementTriplesBlock block) {
