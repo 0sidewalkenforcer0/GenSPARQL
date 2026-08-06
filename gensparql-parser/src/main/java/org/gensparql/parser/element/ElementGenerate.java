@@ -11,27 +11,22 @@ import org.gensparql.core.util.PromptTemplate;
 import java.util.*;
 
 /**
- * Syntax element representing a GENERATE clause or GENOP function in GenSPARQL.
+ * Syntax element for a GENOP in GenSPARQL.
  *
- * Supported syntax forms:
- *
- * 1. GENERATE clause (declarative style):
- *    GENERATE { ?var1 ?var2 ... }
- *    WITH PROMPT "template with {?placeholders}"
- *    USING MODEL <model:provider:model>
- *    [OPTIONS { key: value, ... }]
- *    [THRESHOLD value]
- *
- * 2. GENOP function (functional style):
- *    GENOP("prompt", ?output, <model>)
- *    GENOP("prompt", (?var1, ?var2), <model>, threshold)
+ * Syntax (see GenOpPattern in GenSPARQL.jj, which is the one definition of what GENOP accepts):
+ *   GENOP("prompt", ?output, &lt;model&gt;)
+ *   GENOP("prompt", (?var1, ?var2), &lt;model&gt;)
+ *   GENOP("prompt", (?var), &lt;model&gt;, threshold)
+ *   GENOP("prompt", (?var), &lt;model&gt;, key: value, ...)
  *
  * Modes:
  * - Base Mode: No input variables, direct LLM call (In(g) = ∅)
  * - Context Mode: Prompt contains {?x} placeholders bound by surrounding patterns
  * - Multi-variable Output: LLM output parsed into multiple variable bindings
  *
- * This element corresponds to GenOp(StrX, Y, M) in the paper.
+ * This element corresponds to GenOp(StrX, Y, M) in the paper. A trailing threshold θ is
+ * sugar for grounding the generated values by a similarity join at θ; see
+ * {@code OpGenerate.getEffectiveGroundingThreshold()}.
  */
 public class ElementGenerate extends Element {
 
@@ -179,31 +174,13 @@ public class ElementGenerate extends Element {
                Objects.equals(threshold, o.threshold);
     }
 
+    /**
+     * Renders as the GENOP syntax the grammar accepts, so that a printed element can be pasted
+     * back into a query.
+     */
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("GENERATE { ");
-        for (int i = 0; i < outputVariables.size(); i++) {
-            if (i > 0) sb.append(" ");
-            sb.append("?").append(outputVariables.get(i).getName());
-        }
-        sb.append(" }\n");
-        sb.append("WITH PROMPT \"").append(escapeString(promptTemplate)).append("\"\n");
-        sb.append("USING MODEL <").append(modelNode.getURI()).append(">");
-        if (!options.isEmpty()) {
-            sb.append("\nOPTIONS { ");
-            boolean first = true;
-            for (Map.Entry<String, Object> entry : options.entrySet()) {
-                if (!first) sb.append(", ");
-                sb.append(entry.getKey()).append(": ").append(entry.getValue());
-                first = false;
-            }
-            sb.append(" }");
-        }
-        if (threshold != null) {
-            sb.append("\nTHRESHOLD ").append(threshold);
-        }
-        return sb.toString();
+        return toGenOpSyntax();
     }
 
     /**
@@ -225,6 +202,18 @@ public class ElementGenerate extends Element {
         sb.append(", <").append(modelNode.getURI()).append(">");
         if (threshold != null) {
             sb.append(", ").append(threshold);
+        }
+        // Emit the remaining options as key: value pairs, matching GenOpOptions in the grammar.
+        // Without this a query carrying grounding_relation / grounding_threshold would come
+        // back from a serialize-then-reparse round trip having quietly lost them.
+        for (Map.Entry<String, Object> entry : new TreeMap<>(options).entrySet()) {
+            sb.append(", ").append(entry.getKey()).append(": ");
+            Object value = entry.getValue();
+            if (value instanceof Number) {
+                sb.append(value);
+            } else {
+                sb.append('"').append(escapeString(String.valueOf(value))).append('"');
+            }
         }
         sb.append(")");
         return sb.toString();

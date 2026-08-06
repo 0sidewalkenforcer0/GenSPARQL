@@ -136,11 +136,8 @@ public class QueryIterGenerate extends QueryIteratorBase {
         LOG.debug("[DEBUG] Grounding config check: isGroundingEnabled=" + GenSPARQLConfig.isGroundingEnabled() +
                 ", groundingRelation=" + groundingRelation);
 
-        // Get grounding threshold from options or config
-        Object thresholdObj = opGen.getOptions().get("grounding_threshold");
-        this.groundingThreshold = thresholdObj != null ?
-                Double.parseDouble(thresholdObj.toString()) :
-                GenSPARQLConfig.getGroundingThreshold();
+        // Explicit grounding_threshold, else the GENOP's own theta, else the global default.
+        this.groundingThreshold = opGen.getEffectiveGroundingThreshold();
 
         if (groundingEnabled) {
             LLMProvider embeddingProvider = this.provider;
