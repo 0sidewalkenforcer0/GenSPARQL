@@ -142,68 +142,116 @@ public class EntityEmbeddingIndex {
     /**
      * Find the top-K nearest entities to a query text.
      *
-     * @param queryText the query text
-     * @param k number of results to return
-     * @param provider LLM provider for query embedding
-     * @return list of grounding candidates sorted by similarity (descending)
+     * <p>Keeps only the k best rather than scoring everything into a list and sorting it, which
+     * for the k=1 that grounding asks for was N allocations and an N log N sort to read one
+     * element.
      */
     public List<GroundingCandidate> findNearest(String queryText, int k, LLMProvider provider) {
-        if (!initialized || entityEmbeddings.isEmpty()) {
+        if (!initialized || entityEmbeddings.isEmpty() || k <= 0) {
+            return Collections.emptyList();
+        }
+        float[] query = normalizedQueryOrNull(queryText, provider);
+        if (query == null) {
             return Collections.emptyList();
         }
 
-        // Get embedding for query
-        float[] queryEmbedding = getQueryEmbedding(queryText, provider);
-        if (queryEmbedding == null) {
-            return Collections.emptyList();
-        }
-
-        float[] normalizedQuery = normalize(queryEmbedding);
-
-        // Compute similarity against all entities
-        List<GroundingCandidate> candidates = new ArrayList<>();
-
+        // Worst-of-the-best on top, so the weakest kept candidate is the one to displace.
+        PriorityQueue<GroundingCandidate> kept =
+                new PriorityQueue<>(Comparator.comparingDouble(GroundingCandidate::getSimilarity));
         for (Map.Entry<String, float[]> entry : normalizedEmbeddings.entrySet()) {
-            String label = entry.getKey();
-            float[] normalizedEntity = entry.getValue();
-
-            double similarity = cosineSimilarity(normalizedQuery, normalizedEntity);
-            String uri = labelToUri.get(label);
-
-            candidates.add(new GroundingCandidate(label, uri, similarity));
+            double similarity = cosineSimilarity(query, entry.getValue());
+            if (kept.size() < k) {
+                kept.add(new GroundingCandidate(entry.getKey(), labelToUri.get(entry.getKey()), similarity));
+            } else if (similarity > kept.peek().getSimilarity()) {
+                kept.poll();
+                kept.add(new GroundingCandidate(entry.getKey(), labelToUri.get(entry.getKey()), similarity));
+            }
         }
 
-        // Sort by similarity descending and take top-K
-        candidates.sort((a, b) -> Double.compare(b.getSimilarity(), a.getSimilarity()));
-
-        if (candidates.size() > k) {
-            return candidates.subList(0, k);
-        }
-        return candidates;
+        List<GroundingCandidate> out = new ArrayList<>(kept);
+        out.sort((a, b) -> Double.compare(b.getSimilarity(), a.getSimilarity()));
+        return out;
     }
 
     /**
-     * Find the best matching entity above a similarity threshold.
+     * Find the single best match at or above {@code threshold}, or empty.
      *
-     * @param queryText the query text
-     * @param threshold minimum similarity threshold
-     * @param provider LLM provider for query embedding
-     * @return the best matching candidate, or empty if none above threshold
+     * <p>One pass, no list of every entity and no sort. The threshold is used while scanning
+     * rather than only at the end: a candidate whose score cannot reach the best seen so far,
+     * nor the threshold, is abandoned part way through its dot product.
+     *
+     * <p>The bound is exact. Vectors are unit length, so by Cauchy-Schwarz the remaining
+     * dimensions can contribute at most the norm of the query's own remaining dimensions. A
+     * candidate is dropped only when even that best case leaves it short, so the answer is the
+     * same as scoring everything in full.
      */
     public Optional<GroundingCandidate> findBestMatch(String queryText, double threshold,
-                                                       LLMProvider provider) {
-        List<GroundingCandidate> nearest = findNearest(queryText, 1, provider);
-
-        if (nearest.isEmpty()) {
+                                                      LLMProvider provider) {
+        if (!initialized || entityEmbeddings.isEmpty()) {
             return Optional.empty();
         }
+        float[] query = normalizedQueryOrNull(queryText, provider);
+        if (query == null) {
+            return Optional.empty();
+        }
+        double[] querySuffixNorm = suffixNorms(query);
 
-        GroundingCandidate best = nearest.get(0);
-        if (best.getSimilarity() >= threshold) {
-            return Optional.of(best);
+        String bestLabel = null;
+        double bestScore = -1;
+        for (Map.Entry<String, float[]> entry : normalizedEmbeddings.entrySet()) {
+            // Anything that cannot beat both the threshold and the incumbent is not wanted.
+            double floor = Math.max(threshold, bestScore);
+            double similarity = dotAtLeast(query, entry.getValue(), querySuffixNorm, floor);
+            if (similarity > bestScore) {
+                bestScore = similarity;
+                bestLabel = entry.getKey();
+            }
         }
 
-        return Optional.empty();
+        if (bestLabel == null || bestScore < threshold) {
+            return Optional.empty();
+        }
+        return Optional.of(new GroundingCandidate(bestLabel, labelToUri.get(bestLabel), bestScore));
+    }
+
+    /**
+     * Dot product of two unit vectors, abandoned once it cannot reach {@code floor}.
+     *
+     * @return the similarity, or a value below {@code floor} if it was abandoned. Either way it
+     *         is never above the true similarity, so a caller comparing against floor is safe.
+     */
+    private double dotAtLeast(float[] query, float[] candidate, double[] querySuffixNorm,
+                              double floor) {
+        if (candidate == null || candidate.length != query.length) {
+            return 0;
+        }
+        double partial = 0;
+        for (int i = 0; i < query.length; i++) {
+            partial += query[i] * candidate[i];
+            // The rest can add at most ||query tail|| * ||candidate tail||, and the candidate is
+            // unit length so its tail norm is at most 1.
+            if (partial + querySuffixNorm[i + 1] < floor) {
+                return Double.NEGATIVE_INFINITY;
+            }
+        }
+        return Math.max(0, Math.min(1, partial));
+    }
+
+    /** {@code out[i]} is the norm of {@code v[i..]}, so out[length] is 0. */
+    private static double[] suffixNorms(float[] v) {
+        double[] norms = new double[v.length + 1];
+        double sumSquares = 0;
+        for (int i = v.length - 1; i >= 0; i--) {
+            sumSquares += (double) v[i] * v[i];
+            norms[i] = Math.sqrt(sumSquares);
+        }
+        return norms;
+    }
+
+    /** The query embedding, normalized, or null if it could not be obtained. */
+    private float[] normalizedQueryOrNull(String queryText, LLMProvider provider) {
+        float[] raw = getQueryEmbedding(queryText, provider);
+        return raw == null ? null : normalize(raw);
     }
 
     /**
