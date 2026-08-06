@@ -257,9 +257,7 @@ public class GenSPARQL {
         Op op;
         if (containsElementGenerate(pattern)) {
             // Use our custom algebra generator
-            op = AlgebraGeneratorGenSPARQL.compile(pattern);
-            // Apply standard query modifications (PROJECT, ORDER BY, etc.)
-            op = applyQueryModifiers(query, op);
+            op = AlgebraGeneratorGenSPARQL.compileQuery(query);
         } else {
             // Fall back to standard compilation
             op = org.apache.jena.sparql.algebra.Algebra.compile(query);
@@ -274,7 +272,12 @@ public class GenSPARQL {
     }
 
     /**
-     * Check if the element tree contains any ElementGenerate.
+     * Does this pattern contain a GENOP anywhere?
+     *
+     * <p>The answer decides whether the query is compiled by GenSPARQL or handed to Jena, and
+     * Jena's compiler rejects ElementGenerate outright. Missing a nesting construct here does
+     * not degrade the plan, it fails the query, which is what happened for a GENOP inside
+     * GRAPH, a sub-select, SERVICE or MINUS.
      */
     private static boolean containsElementGenerate(org.apache.jena.sparql.syntax.Element element) {
         if (element == null) {
@@ -284,97 +287,52 @@ public class GenSPARQL {
             return true;
         }
         if (element instanceof org.apache.jena.sparql.syntax.ElementGroup) {
-            for (org.apache.jena.sparql.syntax.Element e : ((org.apache.jena.sparql.syntax.ElementGroup) element).getElements()) {
+            for (org.apache.jena.sparql.syntax.Element e
+                    : ((org.apache.jena.sparql.syntax.ElementGroup) element).getElements()) {
                 if (containsElementGenerate(e)) {
                     return true;
                 }
             }
+            return false;
+        }
+        if (element instanceof org.apache.jena.sparql.syntax.ElementUnion) {
+            for (org.apache.jena.sparql.syntax.Element e
+                    : ((org.apache.jena.sparql.syntax.ElementUnion) element).getElements()) {
+                if (containsElementGenerate(e)) {
+                    return true;
+                }
+            }
+            return false;
         }
         if (element instanceof org.apache.jena.sparql.syntax.ElementOptional) {
             return containsElementGenerate(
                     ((org.apache.jena.sparql.syntax.ElementOptional) element).getOptionalElement());
         }
-        if (element instanceof org.apache.jena.sparql.syntax.ElementUnion) {
-            for (org.apache.jena.sparql.syntax.Element e : ((org.apache.jena.sparql.syntax.ElementUnion) element).getElements()) {
-                if (containsElementGenerate(e)) {
-                    return true;
-                }
-            }
+        if (element instanceof org.apache.jena.sparql.syntax.ElementMinus) {
+            return containsElementGenerate(
+                    ((org.apache.jena.sparql.syntax.ElementMinus) element).getMinusElement());
+        }
+        if (element instanceof org.apache.jena.sparql.syntax.ElementNamedGraph) {
+            return containsElementGenerate(
+                    ((org.apache.jena.sparql.syntax.ElementNamedGraph) element).getElement());
+        }
+        if (element instanceof org.apache.jena.sparql.syntax.ElementService) {
+            return containsElementGenerate(
+                    ((org.apache.jena.sparql.syntax.ElementService) element).getElement());
+        }
+        if (element instanceof org.apache.jena.sparql.syntax.ElementSubQuery) {
+            return containsElementGenerate(
+                    ((org.apache.jena.sparql.syntax.ElementSubQuery) element).getQuery().getQueryPattern());
+        }
+        if (element instanceof org.apache.jena.sparql.syntax.ElementExists) {
+            return containsElementGenerate(
+                    ((org.apache.jena.sparql.syntax.ElementExists) element).getElement());
+        }
+        if (element instanceof org.apache.jena.sparql.syntax.ElementNotExists) {
+            return containsElementGenerate(
+                    ((org.apache.jena.sparql.syntax.ElementNotExists) element).getElement());
         }
         return false;
-    }
-
-    /**
-     * Apply the solution modifiers on top of the pattern algebra.
-     *
-     * <p>The stages follow SPARQL 1.1 §18.2.4/§18.2.5: group, aggregate, having, the SELECT
-     * expressions, order, project, distinct/reduced, then offset/limit. The order is not
-     * cosmetic. ORDER BY has to run before projection so a query can sort on a variable it does
-     * not select, and DISTINCT has to run after projection so it deduplicates the selected
-     * columns rather than the wider intermediate rows.
-     *
-     * <p>Group and aggregation used to be missing here entirely, so any query with a GENOP in it
-     * took this path and quietly lost them: GROUP BY did not group, and aggregate variables came
-     * back unbound. Only the GENOP path is affected, since a query without one is compiled by
-     * Jena.
-     */
-    private static Op applyQueryModifiers(Query query, Op op) {
-        // GROUP BY and aggregates. Jena's OpGroup carries both; the aggregator variables it
-        // introduces are what the SELECT expressions below refer to.
-        if (query.hasGroupBy() || query.hasAggregators()) {
-            op = org.apache.jena.sparql.algebra.op.OpGroup.create(
-                    op, query.getGroupBy(), query.getAggregators());
-        }
-
-        // HAVING filters the grouped rows.
-        if (query.hasHaving()) {
-            for (org.apache.jena.sparql.expr.Expr expr : query.getHavingExprs()) {
-                op = org.apache.jena.sparql.algebra.op.OpFilter.filter(expr, op);
-            }
-        }
-
-        // SELECT expressions, e.g. (COUNT(*) AS ?n) or (?a + ?b AS ?c), bind their variables
-        // before ORDER BY and projection can refer to them.
-        org.apache.jena.sparql.core.VarExprList projectExprs = query.getProject();
-        if (projectExprs != null) {
-            org.apache.jena.sparql.core.VarExprList extend = new org.apache.jena.sparql.core.VarExprList();
-            for (org.apache.jena.sparql.core.Var v : projectExprs.getVars()) {
-                org.apache.jena.sparql.expr.Expr e = projectExprs.getExpr(v);
-                if (e != null) {
-                    extend.add(v, e);
-                }
-            }
-            if (!extend.isEmpty()) {
-                op = org.apache.jena.sparql.algebra.op.OpExtend.create(op, extend);
-            }
-        }
-
-        // ORDER BY, before projection so sorting on an unselected variable still works.
-        if (query.hasOrderBy()) {
-            op = new org.apache.jena.sparql.algebra.op.OpOrder(op, query.getOrderBy());
-        }
-
-        // Projection.
-        if (query.isSelectType() && query.getProjectVars() != null && !query.getProjectVars().isEmpty()) {
-            op = new org.apache.jena.sparql.algebra.op.OpProject(op, query.getProjectVars());
-        }
-
-        // DISTINCT / REDUCED, after projection so they compare the selected columns.
-        if (query.isDistinct()) {
-            op = org.apache.jena.sparql.algebra.op.OpDistinct.create(op);
-        }
-        if (query.isReduced()) {
-            op = org.apache.jena.sparql.algebra.op.OpReduced.create(op);
-        }
-
-        // LIMIT and OFFSET last.
-        if (query.hasLimit() || query.hasOffset()) {
-            long start = query.hasOffset() ? query.getOffset() : 0;
-            long length = query.hasLimit() ? query.getLimit() : Query.NOLIMIT;
-            op = new org.apache.jena.sparql.algebra.op.OpSlice(op, start, length);
-        }
-
-        return op;
     }
 
     /**

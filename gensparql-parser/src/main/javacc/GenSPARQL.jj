@@ -33,6 +33,8 @@ import org.apache.jena.sparql.core.VarExprList;
 import org.apache.jena.sparql.expr.*;
 import org.apache.jena.sparql.expr.aggregate.*;
 import org.apache.jena.sparql.syntax.*;
+import org.apache.jena.sparql.engine.binding.Binding;
+import org.apache.jena.sparql.engine.binding.BindingBuilder;
 import org.apache.jena.sparql.path.*;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.gensparql.parser.element.ElementGenerate;
@@ -811,46 +813,104 @@ void OffsetClause() :
 
 /**
  * [28] ValuesClause ::= ( 'VALUES' DataBlock )?
+ *
+ * A trailing VALUES joins with the whole query pattern, so it is appended to the top-level
+ * group rather than discarded.
  */
 void ValuesClause() :
-{}
 {
-    <VALUES> DataBlock()
+    ElementData data = new ElementData();
+}
+{
+    <VALUES> DataBlock(data)
+    { addElement(data); }
 }
 
 /**
- * DataBlock (simplified)
+ * [62] DataBlock ::= InlineDataOneVar | InlineDataFull
+ *
+ * Builds the ElementData rather than only checking the shape. Returning an empty one, as this
+ * used to, made VALUES parse and then contribute no bindings, so the surrounding pattern
+ * silently matched nothing.
  */
-void DataBlock() :
+void DataBlock(ElementData data) :
 {}
 {
-    InlineDataOneVar() | InlineDataFull()
+    InlineDataOneVar(data) | InlineDataFull(data)
 }
 
-void InlineDataOneVar() :
+/**
+ * [63] InlineDataOneVar ::= Var '{' DataBlockValue* '}'
+ */
+void InlineDataOneVar(ElementData data) :
 {
     Var v;
+    Node value;
 }
 {
-    v = Var()
+    v = Var() { data.add(v); }
     <LBRACE>
-    ( DataBlockValue() )*
+    (
+        value = DataBlockValue()
+        {
+            BindingBuilder b = Binding.builder();
+            if (value != null) { b.add(v, value); }   // null is UNDEF: leave unbound
+            data.add(b.build());
+        }
+    )*
     <RBRACE>
 }
 
-void InlineDataFull() :
-{}
+/**
+ * [64] InlineDataFull ::= ( NIL | '(' Var* ')' ) '{' ( '(' DataBlockValue* ')' | NIL )* '}'
+ */
+void InlineDataFull(ElementData data) :
 {
-    <LPAREN> ( Var() )* <RPAREN>
+    Var v;
+    Node value;
+    List<Var> vars = new ArrayList<Var>();
+    List<Node> values;
+}
+{
+    <LPAREN> ( v = Var() { vars.add(v); data.add(v); } )* <RPAREN>
     <LBRACE>
-    ( <LPAREN> ( DataBlockValue() )* <RPAREN> )*
+    (
+        <LPAREN>
+        { values = new ArrayList<Node>(); }
+        ( value = DataBlockValue() { values.add(value); } )*
+        <RPAREN>
+        {
+            if (values.size() != vars.size()) {
+                throw new RuntimeException("VALUES row has " + values.size()
+                    + " values but " + vars.size() + " variables were declared");
+            }
+            BindingBuilder b = Binding.builder();
+            for (int i = 0; i < vars.size(); i++) {
+                if (values.get(i) != null) { b.add(vars.get(i), values.get(i)); }
+            }
+            data.add(b.build());
+        }
+    )*
     <RBRACE>
 }
 
-void DataBlockValue() :
-{}
+/**
+ * [65] DataBlockValue ::= iri | RDFLiteral | NumericLiteral | BooleanLiteral | 'UNDEF'
+ *
+ * Returns null for UNDEF, which leaves that variable unbound in the row.
+ */
+Node DataBlockValue() :
 {
-    Iri() | RDFLiteral() | NumericLiteral() | BooleanLiteral() | <UNDEF>
+    Node n;
+}
+{
+    (
+        n = Iri() { return n; }
+      | n = RDFLiteral() { return n; }
+      | n = NumericLiteral() { return n; }
+      | n = BooleanLiteral() { return n; }
+      | <UNDEF> { return null; }
+    )
 }
 
 /**
@@ -1079,10 +1139,12 @@ Element Bind() :
  * [61] InlineData ::= 'VALUES' DataBlock
  */
 Element InlineData() :
-{}
 {
-    <VALUES> DataBlock()
-    { return new ElementData(); }  // Simplified
+    ElementData data = new ElementData();
+}
+{
+    <VALUES> DataBlock(data)
+    { return data; }
 }
 
 /**
