@@ -160,7 +160,11 @@ public class SimScoreEvaluator {
     }
 
     /**
-     * Get the SimText strategy.
+     * The text similarity strategy in use.
+     *
+     * <p>Callers use this to tell which pruning is sound: the candidate index in the similarity
+     * join carries a bound that belongs to Jaccard, so it must not be applied to another
+     * strategy.
      *
      * @return sim text strategy
      */

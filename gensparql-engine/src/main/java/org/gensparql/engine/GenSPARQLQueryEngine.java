@@ -44,6 +44,68 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
         LOG.debug("[DEBUG GenSPARQLQueryEngine CONSTRUCTOR] Op: " + op.getClass().getSimpleName());
     }
 
+    /**
+     * Skip ARQ's optimizer for a plan containing a GENOP.
+     *
+     * <p>Two things go wrong when ARQ rewrites such a plan, and both were measured by turning
+     * the optimizer on and running the suite.
+     *
+     * <p>The first is correctness. A sub-select renames the variables that it does not project,
+     * so that an inner ?l becomes ?/l and cannot be captured from outside. ARQ applies that
+     * rename by walking the plan with a node transform, and an extension operator has no way to
+     * take part: {@code OpExt.apply(Transform)} is the only hook, it is handed a Transform that
+     * does not carry the mapping, and Jena ships no extension operator that implements it. The
+     * patterns are therefore renamed while the GENOP still refers to ?l, its prompt variable is
+     * never bound, every row is skipped, and the query returns nothing having issued no calls.
+     * Projecting ?l as well made the same query work, which is not a distinction the semantics
+     * should draw.
+     *
+     * <p>The second is that ARQ reorders the operators of a conjunctive fragment on its own
+     * cardinality estimates, which do not account for what a GENOP costs. That undoes the order
+     * the cost planner chose: on the WC2026 data the selective-patterns-first plan went back to
+     * firing the GENOP over all 825 athletes instead of one squad of 26.
+     *
+     * <p>So these plans keep the shape they were compiled with. What is given up is ARQ's
+     * KG-side rewriting, and the part of it that matters most here, pipelining a join instead of
+     * evaluating both sides independently, is done by the executor anyway.
+     */
+    @Override
+    protected Op modifyOp(Op op) {
+        if (planContainsGenOp(op)) {
+            LOG.debug("Skipping ARQ optimization: plan contains a GENOP");
+            return op;
+        }
+        return super.modifyOp(op);
+    }
+
+    /**
+     * Whether a GENOP appears anywhere in the plan.
+     *
+     * <p>Walks by arity over Jena's Op1/Op2/OpN shapes rather than listing operator classes, so
+     * a construct nobody thought of still counts. Missing one here does not cost a better plan,
+     * it lets the optimizer loose on a tree it cannot analyse.
+     */
+    private static boolean planContainsGenOp(Op op) {
+        if (op instanceof OpGenerate) {
+            return true;
+        }
+        if (op instanceof org.apache.jena.sparql.algebra.op.Op1) {
+            return planContainsGenOp(((org.apache.jena.sparql.algebra.op.Op1) op).getSubOp());
+        }
+        if (op instanceof org.apache.jena.sparql.algebra.op.Op2) {
+            org.apache.jena.sparql.algebra.op.Op2 op2 = (org.apache.jena.sparql.algebra.op.Op2) op;
+            return planContainsGenOp(op2.getLeft()) || planContainsGenOp(op2.getRight());
+        }
+        if (op instanceof org.apache.jena.sparql.algebra.op.OpN) {
+            for (Op e : ((org.apache.jena.sparql.algebra.op.OpN) op).getElements()) {
+                if (planContainsGenOp(e)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     @Override
     public QueryIterator eval(Op op, DatasetGraph dsg, Binding input, Context context) {
         LOG.debug("[DEBUG GenSPARQLQueryEngine.eval] START - Op type: " + op.getClass().getSimpleName());
@@ -172,6 +234,26 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                 return executeSimJoin(opJoin, input, execCxt);
             }
 
+            // Cost-based GENOP placement (C4). A group compiles to nested joins, never to an
+            // OpSequence, so a planner wired only to the sequence path never sees a real query.
+            // Flatten the conjunctive fragment and let the planner order it.
+            if (GenSPARQLConfig.isCostBasedPlanningEnabled()) {
+                List<Op> fragment = flattenConjunctiveFragment(opJoin);
+                if (fragment != null) {
+                    List<Op> ordered = reorderByCost(fragment, execCxt);
+                    if (ordered != null) {
+                        LOG.debug("Cost-based join order: {}", ordered.stream()
+                                .map(e -> e.getClass().getSimpleName())
+                                .collect(java.util.stream.Collectors.joining(", ")));
+                        QueryIterator current = input;
+                        for (Op e : ordered) {
+                            current = executeOp(e, current, execCxt);
+                        }
+                        return current;
+                    }
+                }
+            }
+
             LOG.debug("Using standard join (NOT SimJoin)");
             // Standard join: execute left, then right with left's output
             QueryIterator left = executeOp(opJoin.getLeft(), input, execCxt);
@@ -184,18 +266,13 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
             List<Op> elements = new ArrayList<>(opSeq.getElements());
             LOG.debug("OpSequence with {} elements", elements.size());
 
-            // Check if any element contains OpGenerate (for SimJoin) - with or without threshold
+            // Does any element contain a GENOP, and does any need variables bound elsewhere?
             boolean hasGenOp = false;
-            boolean hasGenOpWithThreshold = false;
-            // Check if any element contains OpGenerate with input variables (needs reordering)
             boolean hasGenOpWithInputVars = false;
 
             for (Op elem : elements) {
                 if (containsGenOp(elem)) {
                     hasGenOp = true;
-                }
-                if (containsGenOpWithThreshold(elem)) {
-                    hasGenOpWithThreshold = true;
                 }
                 if (containsGenOpWithInputVars(elem)) {
                     hasGenOpWithInputVars = true;
@@ -248,18 +325,23 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                     .collect(java.util.stream.Collectors.joining(", ")));
             }
 
-            // Use SimJoin ONLY for base mode GENOP (no input variables)
-            // Context mode GENOP needs standard sequence to receive bindings from previous elements
-            if (isSimJoinEnabled(execCxt) && hasGenOp && !hasGenOpWithInputVars && elements.size() == 2) {
-                if (hasGenOpWithThreshold) {
-                    LOG.debug("Using SimJoin for OpSequence (base mode with explicit threshold)");
+            // A similarity join applies to a base-mode GENOP only: it matches generated values
+            // against KG values, and a context-mode GENOP has to receive its bindings from the
+            // preceding elements instead, which the standard sequence does.
+            //
+            // The two-element restriction is structural: the similarity join takes one generating
+            // side and one KG side, and with more elements there is no single pair to hand it.
+            // A longer sequence therefore runs as a standard sequence, which is the same answer
+            // without the join, so this reports itself rather than passing over in silence.
+            if (isSimJoinEnabled(execCxt) && hasGenOp && !hasGenOpWithInputVars) {
+                if (elements.size() != 2) {
+                    LOG.debug("Not using SimJoin: it pairs one generating side with one KG side, "
+                            + "and this sequence has {} elements", elements.size());
                 } else {
-                    LOG.debug("Using SimJoin for OpSequence (base mode with default threshold 0.8)");
+                    LOG.debug("Using SimJoin for a base-mode GENOP sequence");
+                    return executeSimJoinForSequence(elements.get(0), elements.get(1), input, execCxt);
                 }
-                // Treat as a join between the two elements (now in correct order)
-                return executeSimJoinForSequence(elements.get(0), elements.get(1), input, execCxt);
             }
-
             LOG.debug("Using standard sequence execution (hasGenOpWithInputVars={})", hasGenOpWithInputVars);
             // Standard sequence: execute elements in order, passing results through
             QueryIterator current = input;
@@ -310,6 +392,34 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
             QueryIterator subIter = executeOp(opSlice.getSubOp(), input, execCxt);
             return new org.apache.jena.sparql.engine.iterator.QueryIterSlice(
                     subIter, opSlice.getStart(), opSlice.getLength(), execCxt);
+        }
+
+        // Handle OpGroup and OpExtend by executing the sub-operator here and letting ARQ apply
+        // only the operator itself, over a unit sub-plan.
+        //
+        // Handing the whole subtree to QC.execute instead would let ARQ evaluate it, and ARQ
+        // evaluates the right side of a join against the root binding rather than against the
+        // left side's results. A context-mode GENOP under such a join then sees its input
+        // variable unbound, skips every row and issues no calls, so an aggregate over a GENOP
+        // came back as zero.
+        if (op instanceof org.apache.jena.sparql.algebra.op.OpGroup) {
+            org.apache.jena.sparql.algebra.op.OpGroup opGroup =
+                    (org.apache.jena.sparql.algebra.op.OpGroup) op;
+            QueryIterator subIter = executeOp(opGroup.getSubOp(), input, execCxt);
+            return QC.execute(
+                    org.apache.jena.sparql.algebra.op.OpGroup.create(
+                            OpTable.unit(), opGroup.getGroupVars(), opGroup.getAggregators()),
+                    subIter, execCxt);
+        }
+
+        if (op instanceof org.apache.jena.sparql.algebra.op.OpExtend) {
+            org.apache.jena.sparql.algebra.op.OpExtend opExtend =
+                    (org.apache.jena.sparql.algebra.op.OpExtend) op;
+            QueryIterator subIter = executeOp(opExtend.getSubOp(), input, execCxt);
+            return QC.execute(
+                    org.apache.jena.sparql.algebra.op.OpExtend.create(
+                            OpTable.unit(), opExtend.getVarExprList()),
+                    subIter, execCxt);
         }
 
         // Handle OpDistinct - wrap subOp execution result
@@ -440,48 +550,6 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                     return true;
                 }
             }
-        }
-
-        return false;
-    }
-
-    /**
-     * Check if the operation tree contains OpGenerate with explicit threshold
-     */
-    private boolean containsGenOpWithThreshold(Op op) {
-        if (op instanceof OpGenerate) {
-            return ((OpGenerate) op).hasThreshold();
-        }
-
-        // Check sub-operations recursively
-        if (op instanceof OpJoin) {
-            OpJoin opJoin = (OpJoin) op;
-            return containsGenOpWithThreshold(opJoin.getLeft()) ||
-                   containsGenOpWithThreshold(opJoin.getRight());
-        }
-
-        if (op instanceof OpProject) {
-            return containsGenOpWithThreshold(((OpProject) op).getSubOp());
-        }
-
-        if (op instanceof OpFilter) {
-            return containsGenOpWithThreshold(((OpFilter) op).getSubOp());
-        }
-
-        if (op instanceof OpSlice) {
-            return containsGenOpWithThreshold(((OpSlice) op).getSubOp());
-        }
-
-        if (op instanceof OpDistinct) {
-            return containsGenOpWithThreshold(((OpDistinct) op).getSubOp());
-        }
-
-        if (op instanceof OpReduced) {
-            return containsGenOpWithThreshold(((OpReduced) op).getSubOp());
-        }
-
-        if (op instanceof OpOrder) {
-            return containsGenOpWithThreshold(((OpOrder) op).getSubOp());
         }
 
         return false;
@@ -744,6 +812,7 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
             org.apache.jena.rdf.model.Model statsModel = null;
             String bgpPattern = null;
             long nAll = -1;
+            java.util.Map<Integer, Double> cardinalityFactors = new java.util.HashMap<>();
             try {
                 List<org.apache.jena.graph.Triple> triples = new ArrayList<>();
                 for (Op e : elements) {
@@ -756,15 +825,16 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                             .createModelForGraph(execCxt.getActiveGraph());
                     bgpPattern = org.gensparql.engine.cost.OpStats.buildPattern(triples);
                     nAll = org.gensparql.engine.cost.KgStats.bindings(statsModel, "", bgpPattern);
+                    cardinalityFactors = perPatternFactors(elements, statsModel);
                 }
             } catch (Exception statsEx) {
                 LOG.debug("KG stats unavailable for cost planning: {}", statsEx.getMessage());
                 statsModel = null;
+                cardinalityFactors = new java.util.HashMap<>();
             }
 
             List<org.gensparql.engine.cost.GenOpPlanner.PlanItem> items = new ArrayList<>();
             java.util.Map<String, Op> byLabel = new java.util.HashMap<>();
-            boolean firstBgp = true;
             for (int i = 0; i < elements.size(); i++) {
                 Op e = elements.get(i);
                 String label = "e" + i;
@@ -782,16 +852,8 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                 }
 
                 if (isBGPOnly(e)) {
-                    // Carry the real combined binding count on the first BGP so the GENOP
-                    // sees the true incoming cardinality; others are neutral (join
-                    // cardinality across multiple BGPs is approximated, see docs §8).
-                    double factor = 1.0;
-                    if (statsModel != null && firstBgp && nAll >= 0) {
-                        factor = Math.max(1.0, nAll);
-                        firstBgp = false;
-                    }
                     items.add(new org.gensparql.engine.cost.GenOpPlanner.KgPattern(
-                            label, requires, binds, factor));
+                            label, requires, binds, cardinalityFactors.getOrDefault(i, 1.0)));
                 } else {
                     OpGenerate g = findGenerate(e);
                     String prompt = g != null ? g.getPromptTemplate() : "";
@@ -827,10 +889,97 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
         }
     }
 
-    /** Grounding threshold for a GENOP: its grounding_threshold option, else the global config. */
+    /**
+     * Flatten a join tree into the conjunctive fragment the planner can reorder, or null if
+     * this tree is not one.
+     *
+     * <p>Joins are commutative and associative, so any dependency-respecting order of the
+     * leaves computes the same result. The fragment qualifies only when every leaf is either a
+     * BGP-only op or a GENOP, and at least one is a GENOP: with no GENOP there is nothing
+     * expensive to place, and anything else (OPTIONAL, UNION, MINUS, SERVICE) is not freely
+     * reorderable and is left to the standard join.
+     */
+    private List<Op> flattenConjunctiveFragment(Op op) {
+        List<Op> leaves = new ArrayList<>();
+        if (!collectConjunctiveLeaves(op, leaves)) {
+            return null;
+        }
+        boolean hasGenOp = false;
+        for (Op leaf : leaves) {
+            if (!isBGPOnly(leaf)) {
+                hasGenOp = true;
+                break;
+            }
+        }
+        return (hasGenOp && leaves.size() > 1) ? leaves : null;
+    }
+
+    /** Collect join leaves; false as soon as a leaf is neither BGP-only nor a GENOP. */
+    private boolean collectConjunctiveLeaves(Op op, List<Op> out) {
+        if (op instanceof OpJoin) {
+            OpJoin join = (OpJoin) op;
+            return collectConjunctiveLeaves(join.getLeft(), out)
+                && collectConjunctiveLeaves(join.getRight(), out);
+        }
+        if (op instanceof OpTable && ((OpTable) op).isJoinIdentity()) {
+            return true; // unit table contributes nothing to the fragment
+        }
+        if (op instanceof OpGenerate || isBGPOnly(op)) {
+            out.add(op);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Per-pattern cardinality factors, keyed by element index.
+     *
+     * <p>The planner multiplies the factors of the patterns placed so far, so a factor has to
+     * be the multiplier that pattern contributes, not a standalone count. Factors are read off
+     * the cumulative joins in author order: with joint(i) the number of solutions of patterns
+     * 0..i taken together, pattern i contributes joint(i) / joint(i-1). The product over any
+     * prefix is then that prefix's real join cardinality, and the product over all of them is
+     * the real result size.
+     *
+     * <p>This is what lets the planner tell placements apart. Loading the full join count onto
+     * the first pattern and giving the rest 1.0 makes every placement after the first pattern
+     * look equally expensive, so a GENOP sitting before a fan-out pattern costs the same as one
+     * sitting after it and the planner cannot prefer the cheap order.
+     *
+     * <p>Non-prefix subsets reuse these factors, which is the usual independence approximation;
+     * exact join cardinality is not decomposable into per-pattern multipliers.
+     */
+    private java.util.Map<Integer, Double> perPatternFactors(
+            List<Op> elements, org.apache.jena.rdf.model.Model statsModel) {
+        java.util.Map<Integer, Double> factors = new java.util.HashMap<>();
+        List<org.apache.jena.graph.Triple> prefix = new ArrayList<>();
+        double previous = 1.0;
+
+        for (int i = 0; i < elements.size(); i++) {
+            Op e = elements.get(i);
+            if (!isBGPOnly(e)) {
+                continue; // a GENOP contributes its fan-out, not a KG cardinality
+            }
+            org.gensparql.engine.cost.OpStats.collectTriples(e, prefix);
+            if (prefix.isEmpty()) {
+                continue; // e.g. a unit table: neutral
+            }
+            long joint = org.gensparql.engine.cost.KgStats.bindings(
+                    statsModel, "", org.gensparql.engine.cost.OpStats.buildPattern(prefix));
+            // An empty prefix join makes the whole fragment empty; ordering is then irrelevant,
+            // so stay neutral rather than dividing by zero.
+            factors.put(i, previous > 0 ? joint / previous : 1.0);
+            previous = joint;
+        }
+        return factors;
+    }
+
+    /**
+     * Grounding threshold for a GENOP, resolved the same way execution resolves it, so the
+     * survival prior the planner costs matches the threshold grounding will actually apply.
+     */
     private double groundingThresholdOf(OpGenerate g) {
-        Object thr = g.getOptions().get("grounding_threshold");
-        return thr != null ? Double.parseDouble(thr.toString()) : GenSPARQLConfig.getGroundingThreshold();
+        return g.getEffectiveGroundingThreshold();
     }
 
     /** Dedup ratio D/N for a GENOP's (single) input variable over the feeding BGP, or 1.0. */

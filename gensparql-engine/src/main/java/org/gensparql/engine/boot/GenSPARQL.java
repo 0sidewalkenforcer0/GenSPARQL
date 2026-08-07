@@ -5,6 +5,7 @@ import org.apache.jena.query.Dataset;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.core.DatasetGraph;
 import org.apache.jena.sparql.engine.Plan;
@@ -257,9 +258,7 @@ public class GenSPARQL {
         Op op;
         if (containsElementGenerate(pattern)) {
             // Use our custom algebra generator
-            op = AlgebraGeneratorGenSPARQL.compile(pattern);
-            // Apply standard query modifications (PROJECT, ORDER BY, etc.)
-            op = applyQueryModifiers(query, op);
+            op = AlgebraGeneratorGenSPARQL.compileQuery(query);
         } else {
             // Fall back to standard compilation
             op = org.apache.jena.sparql.algebra.Algebra.compile(query);
@@ -274,7 +273,12 @@ public class GenSPARQL {
     }
 
     /**
-     * Check if the element tree contains any ElementGenerate.
+     * Does this pattern contain a GENOP anywhere?
+     *
+     * <p>The answer decides whether the query is compiled by GenSPARQL or handed to Jena, and
+     * Jena's compiler rejects ElementGenerate outright. Missing a nesting construct here does
+     * not degrade the plan, it fails the query, which is what happened for a GENOP inside
+     * GRAPH, a sub-select, SERVICE or MINUS.
      */
     private static boolean containsElementGenerate(org.apache.jena.sparql.syntax.Element element) {
         if (element == null) {
@@ -284,58 +288,52 @@ public class GenSPARQL {
             return true;
         }
         if (element instanceof org.apache.jena.sparql.syntax.ElementGroup) {
-            for (org.apache.jena.sparql.syntax.Element e : ((org.apache.jena.sparql.syntax.ElementGroup) element).getElements()) {
+            for (org.apache.jena.sparql.syntax.Element e
+                    : ((org.apache.jena.sparql.syntax.ElementGroup) element).getElements()) {
                 if (containsElementGenerate(e)) {
                     return true;
                 }
             }
+            return false;
+        }
+        if (element instanceof org.apache.jena.sparql.syntax.ElementUnion) {
+            for (org.apache.jena.sparql.syntax.Element e
+                    : ((org.apache.jena.sparql.syntax.ElementUnion) element).getElements()) {
+                if (containsElementGenerate(e)) {
+                    return true;
+                }
+            }
+            return false;
         }
         if (element instanceof org.apache.jena.sparql.syntax.ElementOptional) {
             return containsElementGenerate(
                     ((org.apache.jena.sparql.syntax.ElementOptional) element).getOptionalElement());
         }
-        if (element instanceof org.apache.jena.sparql.syntax.ElementUnion) {
-            for (org.apache.jena.sparql.syntax.Element e : ((org.apache.jena.sparql.syntax.ElementUnion) element).getElements()) {
-                if (containsElementGenerate(e)) {
-                    return true;
-                }
-            }
+        if (element instanceof org.apache.jena.sparql.syntax.ElementMinus) {
+            return containsElementGenerate(
+                    ((org.apache.jena.sparql.syntax.ElementMinus) element).getMinusElement());
+        }
+        if (element instanceof org.apache.jena.sparql.syntax.ElementNamedGraph) {
+            return containsElementGenerate(
+                    ((org.apache.jena.sparql.syntax.ElementNamedGraph) element).getElement());
+        }
+        if (element instanceof org.apache.jena.sparql.syntax.ElementService) {
+            return containsElementGenerate(
+                    ((org.apache.jena.sparql.syntax.ElementService) element).getElement());
+        }
+        if (element instanceof org.apache.jena.sparql.syntax.ElementSubQuery) {
+            return containsElementGenerate(
+                    ((org.apache.jena.sparql.syntax.ElementSubQuery) element).getQuery().getQueryPattern());
+        }
+        if (element instanceof org.apache.jena.sparql.syntax.ElementExists) {
+            return containsElementGenerate(
+                    ((org.apache.jena.sparql.syntax.ElementExists) element).getElement());
+        }
+        if (element instanceof org.apache.jena.sparql.syntax.ElementNotExists) {
+            return containsElementGenerate(
+                    ((org.apache.jena.sparql.syntax.ElementNotExists) element).getElement());
         }
         return false;
-    }
-
-    /**
-     * Apply query modifiers (SELECT, ORDER BY, LIMIT, etc.) to the algebra.
-     */
-    private static Op applyQueryModifiers(Query query, Op op) {
-        // Apply projection
-        if (query.isSelectType() && query.getProjectVars() != null && !query.getProjectVars().isEmpty()) {
-            op = new org.apache.jena.sparql.algebra.op.OpProject(op, query.getProjectVars());
-        }
-
-        // Apply DISTINCT
-        if (query.isDistinct()) {
-            op = org.apache.jena.sparql.algebra.op.OpDistinct.create(op);
-        }
-
-        // Apply REDUCED
-        if (query.isReduced()) {
-            op = org.apache.jena.sparql.algebra.op.OpReduced.create(op);
-        }
-
-        // Apply ORDER BY
-        if (query.hasOrderBy()) {
-            op = new org.apache.jena.sparql.algebra.op.OpOrder(op, query.getOrderBy());
-        }
-
-        // Apply LIMIT and OFFSET
-        if (query.hasLimit() || query.hasOffset()) {
-            long start = query.hasOffset() ? query.getOffset() : 0;
-            long length = query.hasLimit() ? query.getLimit() : Query.NOLIMIT;
-            op = new org.apache.jena.sparql.algebra.op.OpSlice(op, start, length);
-        }
-
-        return op;
     }
 
     /**
@@ -347,16 +345,40 @@ public class GenSPARQL {
         private final Plan plan;
         private boolean closed = false;
 
+        // Iterators this execution has handed out, so abort() and close() can reach them.
+        private final java.util.List<org.apache.jena.sparql.engine.QueryIterator> liveIterators =
+                java.util.Collections.synchronizedList(new java.util.ArrayList<>());
+        private volatile boolean aborted = false;
+
         GenSPARQLQueryExecution(Query query, Dataset dataset, Plan plan) {
             this.query = query;
             this.dataset = dataset;
             this.plan = plan;
         }
 
+        /**
+         * Start evaluating, tracking the iterator so it can be cancelled.
+         *
+         * <p>abort() used to be a no-op and nothing held the iterator, so a cancelled or timed
+         * out query ran to completion regardless. A GENOP query is the case where that shows:
+         * it keeps calling a model that the caller has already stopped waiting for.
+         */
+        private org.apache.jena.sparql.engine.QueryIterator openIterator() {
+            if (closed) {
+                throw new IllegalStateException("QueryExecution is closed");
+            }
+            org.apache.jena.sparql.engine.QueryIterator qIter = plan.iterator();
+            liveIterators.add(qIter);
+            if (aborted) {
+                qIter.cancel();
+            }
+            return qIter;
+        }
+
         @Override
         public org.apache.jena.query.ResultSet execSelect() {
             if (closed) throw new IllegalStateException("QueryExecution is closed");
-            org.apache.jena.sparql.engine.QueryIterator qIter = plan.iterator();
+            org.apache.jena.sparql.engine.QueryIterator qIter = openIterator();
             // Convert String list to Var list
             java.util.List<org.apache.jena.sparql.core.Var> vars = new java.util.ArrayList<>();
             for (String varName : query.getResultVars()) {
@@ -367,52 +389,150 @@ public class GenSPARQL {
 
         @Override
         public Model execConstruct() {
-            throw new UnsupportedOperationException("CONSTRUCT not yet supported");
+            return execConstruct(ModelFactory.createDefaultModel());
         }
 
         @Override
         public Model execConstruct(Model model) {
-            throw new UnsupportedOperationException("CONSTRUCT not yet supported");
+            model.setNsPrefixes(query.getPrefixMapping());
+            java.util.Iterator<org.apache.jena.graph.Triple> triples = execConstructTriples();
+            while (triples.hasNext()) {
+                model.getGraph().add(triples.next());
+            }
+            return model;
         }
 
         @Override
         public org.apache.jena.query.Dataset execConstructDataset() {
-            throw new UnsupportedOperationException("CONSTRUCT not yet supported");
+            return execConstructDataset(org.apache.jena.query.DatasetFactory.createTxnMem());
         }
 
         @Override
-        public org.apache.jena.query.Dataset execConstructDataset(org.apache.jena.query.Dataset dataset) {
-            throw new UnsupportedOperationException("CONSTRUCT not yet supported");
+        public org.apache.jena.query.Dataset execConstructDataset(org.apache.jena.query.Dataset target) {
+            DatasetGraph dsg = target.asDatasetGraph();
+            java.util.Iterator<org.apache.jena.sparql.core.Quad> quads = execConstructQuads();
+            while (quads.hasNext()) {
+                dsg.add(quads.next());
+            }
+            return target;
         }
 
+        /**
+         * Instantiate the CONSTRUCT template once per solution.
+         *
+         * <p>Jena's TemplateLib does the substitution, including allocating fresh blank nodes
+         * per solution, so a template blank node does not collapse into one node across rows.
+         */
         @Override
         public java.util.Iterator<org.apache.jena.graph.Triple> execConstructTriples() {
-            throw new UnsupportedOperationException("CONSTRUCT not yet supported");
+            if (closed) {
+                throw new IllegalStateException("QueryExecution is closed");
+            }
+            org.apache.jena.sparql.syntax.Template template = query.getConstructTemplate();
+            if (template == null) {
+                return java.util.Collections.emptyIterator();
+            }
+            return org.apache.jena.sparql.modify.TemplateLib.calcTriples(
+                    template.getTriples(), openIterator());
         }
 
         @Override
         public java.util.Iterator<org.apache.jena.sparql.core.Quad> execConstructQuads() {
-            throw new UnsupportedOperationException("CONSTRUCT not yet supported");
+            java.util.Iterator<org.apache.jena.graph.Triple> triples = execConstructTriples();
+            java.util.List<org.apache.jena.sparql.core.Quad> quads = new java.util.ArrayList<>();
+            while (triples.hasNext()) {
+                quads.add(org.apache.jena.sparql.core.Quad.create(
+                        org.apache.jena.sparql.core.Quad.defaultGraphNodeGenerated, triples.next()));
+            }
+            return quads.iterator();
         }
 
         @Override
         public Model execDescribe() {
-            throw new UnsupportedOperationException("DESCRIBE not yet supported");
+            return execDescribe(ModelFactory.createDefaultModel());
         }
 
+        /**
+         * Describe the resources the query names and the ones its pattern binds.
+         *
+         * <p>What "describe" means is left to ARQ's registered describe handlers, the same ones
+         * a plain Jena query would use, so the output does not depend on whether the query
+         * happened to contain a GENOP.
+         */
         @Override
         public Model execDescribe(Model model) {
-            throw new UnsupportedOperationException("DESCRIBE not yet supported");
+            if (closed) {
+                throw new IllegalStateException("QueryExecution is closed");
+            }
+            model.setNsPrefixes(query.getPrefixMapping());
+
+            java.util.Set<org.apache.jena.graph.Node> resources = new java.util.LinkedHashSet<>();
+            resources.addAll(query.getResultURIs());
+
+            java.util.List<org.apache.jena.sparql.core.Var> describeVars = query.getProjectVars();
+            org.apache.jena.sparql.engine.QueryIterator qIter = openIterator();
+            try {
+                while (qIter.hasNext()) {
+                    Binding binding = qIter.next();
+                    if (describeVars == null || describeVars.isEmpty()) {
+                        binding.vars().forEachRemaining(v -> collectDescribed(binding, v, resources));
+                    } else {
+                        for (org.apache.jena.sparql.core.Var v : describeVars) {
+                            collectDescribed(binding, v, resources);
+                        }
+                    }
+                }
+            } finally {
+                qIter.close();
+            }
+
+            java.util.List<org.apache.jena.sparql.core.describe.DescribeHandler> handlers =
+                    org.apache.jena.sparql.core.describe.DescribeHandlerRegistry.get().newHandlerList();
+            Context describeCxt = ARQ.getContext().copy();
+            describeCxt.set(org.apache.jena.sparql.ARQConstants.sysCurrentDataset, dataset);
+
+            for (org.apache.jena.sparql.core.describe.DescribeHandler h : handlers) {
+                h.start(model, describeCxt);
+            }
+            for (org.apache.jena.graph.Node node : resources) {
+                if (node.isURI() || node.isBlank()) {
+                    for (org.apache.jena.sparql.core.describe.DescribeHandler h : handlers) {
+                        h.describe(model.getRDFNode(node).asResource());
+                    }
+                }
+            }
+            for (org.apache.jena.sparql.core.describe.DescribeHandler h : handlers) {
+                h.finish();
+            }
+            return model;
+        }
+
+        /** A described resource must be a node the graph can be about, so literals are skipped. */
+        private static void collectDescribed(Binding binding, org.apache.jena.sparql.core.Var v,
+                                             java.util.Set<org.apache.jena.graph.Node> out) {
+            org.apache.jena.graph.Node n = binding.get(v);
+            if (n != null && (n.isURI() || n.isBlank())) {
+                out.add(n);
+            }
         }
 
         @Override
         public java.util.Iterator<org.apache.jena.graph.Triple> execDescribeTriples() {
-            throw new UnsupportedOperationException("DESCRIBE not yet supported");
+            return execDescribe().getGraph().find(null, null, null);
         }
 
+        /** True as soon as one solution exists; the rest of the plan is not evaluated. */
         @Override
         public boolean execAsk() {
-            throw new UnsupportedOperationException("ASK not yet supported");
+            if (closed) {
+                throw new IllegalStateException("QueryExecution is closed");
+            }
+            org.apache.jena.sparql.engine.QueryIterator qIter = openIterator();
+            try {
+                return qIter.hasNext();
+            } finally {
+                qIter.close();
+            }
         }
 
         @Override
@@ -425,14 +545,37 @@ public class GenSPARQL {
             throw new UnsupportedOperationException("JSON not yet supported");
         }
 
+        /**
+         * Stop this execution. Safe to call from another thread, which is how a timeout and a
+         * user-initiated cancel both arrive.
+         */
         @Override
         public void abort() {
-            // No-op
+            aborted = true;
+            synchronized (liveIterators) {
+                for (org.apache.jena.sparql.engine.QueryIterator it : liveIterators) {
+                    try {
+                        it.cancel();
+                    } catch (RuntimeException e) {
+                        LOG.debug("Ignoring error while cancelling an iterator: {}", e.getMessage());
+                    }
+                }
+            }
         }
 
         @Override
         public void close() {
             closed = true;
+            synchronized (liveIterators) {
+                for (org.apache.jena.sparql.engine.QueryIterator it : liveIterators) {
+                    try {
+                        it.close();
+                    } catch (RuntimeException e) {
+                        LOG.debug("Ignoring error while closing an iterator: {}", e.getMessage());
+                    }
+                }
+                liveIterators.clear();
+            }
         }
 
         @Override
@@ -460,6 +603,10 @@ public class GenSPARQL {
             return ARQ.getContext();
         }
 
+        /**
+         * No timeout. Jena 5 sets one through the execution builder, which this execution is
+         * not built by, so there is none to report. Cancellation goes through {@link #abort()}.
+         */
         @Override
         public long getTimeout1() {
             return -1;
