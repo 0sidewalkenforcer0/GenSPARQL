@@ -140,6 +140,29 @@ public class GenSPARQLParserTest {
             Query q = GenSPARQLParser.parse(query);
             assertNotNull(q);
         }
+
+        @Test
+        @DisplayName("Standalone GENOP accepts key-value options, same as in a full query")
+        void testParseGenOpKeyValueOptions() {
+            // parseGenOp routes through the query grammar, so the fragment form and the
+            // in-query form accept the same GENOP language. The retired fragment grammar
+            // took only a bare threshold and would have rejected this.
+            ElementGenerate element = GenSPARQLParser.parseGenOp(
+                    "GENOP(\"q {?n}\", (?x), <model:openai:gpt-4>, "
+                  + "grounding_relation: \"http://example.org/playsFor\", 0.6)");
+
+            assertEquals("http://example.org/playsFor",
+                    element.getOptions().get("grounding_relation"));
+            assertEquals(0.6, element.getThreshold(), 0.001);
+        }
+
+        @Test
+        @DisplayName("Standalone GENOP rejects trailing patterns instead of discarding them")
+        void testParseGenOpRejectsTrailingPatterns() {
+            assertThrows(org.gensparql.core.exception.ParseException.class,
+                    () -> GenSPARQLParser.parseGenOp(
+                            "GENOP(\"q\", ?x, <model:openai:gpt-4>) ?s ?p ?o"));
+        }
     }
 
     @Nested

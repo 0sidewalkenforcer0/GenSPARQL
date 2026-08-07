@@ -1,15 +1,13 @@
 package org.gensparql.engine.exec;
 
-import org.apache.jena.graph.Triple;
 import org.apache.jena.query.Query;
-import org.apache.jena.sparql.algebra.Algebra;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.*;
-import org.apache.jena.sparql.core.BasicPattern;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.expr.ExprList;
 import org.apache.jena.sparql.syntax.*;
+import org.gensparql.engine.GenSPARQLConfig;
 import org.gensparql.engine.op.OpGenerate;
 import org.gensparql.parser.element.ElementGenerate;
 
@@ -55,6 +53,10 @@ public class AlgebraGeneratorGenSPARQL {
             return compileService((ElementService) element);
         } else if (element instanceof ElementSubQuery) {
             return compileSubQuery((ElementSubQuery) element);
+        } else if (element instanceof ElementNamedGraph) {
+            return compileNamedGraph((ElementNamedGraph) element);
+        } else if (element instanceof ElementData) {
+            return compileData((ElementData) element);
         }
 
         // Fallback - shouldn't happen for valid queries
@@ -102,6 +104,14 @@ public class AlgebraGeneratorGenSPARQL {
      * blocks, GENOP, FILTER); any OPTIONAL/UNION/MINUS/BIND/etc. leaves the order untouched.
      */
     private static List<Element> reorderGenopLast(List<Element> original) {
+        // With cost-based planning on, leave the author's order alone. Moving GENOP to the end
+        // here makes the surrounding patterns adjacent, and adjacent patterns get merged into a
+        // single BGP downstream; once that happens the boundary between a selective pattern and
+        // a fan-out pattern is gone and no later stage can place the GENOP between them.
+        if (GenSPARQLConfig.isCostBasedPlanningEnabled()) {
+            return original;
+        }
+
         boolean hasGenop = false;
         for (Element e : original) {
             if (e instanceof ElementGenerate) { hasGenop = true; }
@@ -204,15 +214,17 @@ public class AlgebraGeneratorGenSPARQL {
         return accumulate(OpTable.unit(), bind);
     }
 
+    /**
+     * Compile a path block.
+     *
+     * <p>Jena's {@code PathLib.pathToTriples} does the right thing for a mixed block: runs of
+     * plain triples become BGPs and each genuine path step becomes an OpPath, sequenced
+     * together. Collecting {@code tp.asTriple()} instead would drop every step that is a real
+     * path, because that method returns null for those, and the query would then run as if the
+     * pattern had never been written.
+     */
     private static Op compilePathBlock(ElementPathBlock block) {
-        BasicPattern bgp = new BasicPattern();
-        block.getPattern().getList().forEach(tp -> {
-            Triple t = tp.asTriple();
-            if (t != null) {
-                bgp.add(t);
-            }
-        });
-        return new OpBGP(bgp);
+        return org.apache.jena.sparql.path.PathLib.pathToTriples(block.getPattern());
     }
 
     private static Op compileTriplesBlock(ElementTriplesBlock block) {
@@ -228,16 +240,100 @@ public class AlgebraGeneratorGenSPARQL {
         return new OpService(service.getServiceNode(), subOp, service.getSilent());
     }
 
-    private static Op compileSubQuery(ElementSubQuery subQuery) {
-        // In Jena 5.x, compile subquery to algebra and wrap with project
-        Query query = subQuery.getQuery();
-        Op subOp = Algebra.compile(query);
+    /** GRAPH ?g { ... } — the inner pattern evaluated against the named graph. */
+    private static Op compileNamedGraph(ElementNamedGraph namedGraph) {
+        return new OpGraph(namedGraph.getGraphNameNode(), compileElement(namedGraph.getElement()));
+    }
 
-        // Wrap in project if needed
-        List<Var> projectVars = query.getProjectVars();
-        if (projectVars != null && !projectVars.isEmpty()) {
-            return new OpProject(subOp, projectVars);
+    /** VALUES — an inline table of bindings, joined with the rest of the group. */
+    private static Op compileData(ElementData data) {
+        return OpTable.create(data.getTable());
+    }
+
+    /**
+     * A sub-select, compiled by this generator rather than by Jena's.
+     *
+     * <p>Jena's generator rejects ElementGenerate, so routing the subquery through it meant a
+     * GENOP inside a sub-select failed outright. Compiling it here also means the subquery's own
+     * modifiers apply, so its LIMIT, ORDER BY and aggregates behave the same inside as out.
+     */
+    private static Op compileSubQuery(ElementSubQuery subQuery) {
+        return compileQuery(subQuery.getQuery());
+    }
+
+    /**
+     * Compile a whole query: its pattern, then its solution modifiers.
+     */
+    public static Op compileQuery(Query query) {
+        return applyModifiers(query, compile(query.getQueryPattern()));
+    }
+
+    /**
+     * Apply the solution modifiers on top of a pattern's algebra.
+     *
+     * <p>The stages follow SPARQL 1.1 §18.2.4/§18.2.5: group, having, the SELECT expressions,
+     * order, project, distinct/reduced, then offset/limit. The order is not cosmetic. ORDER BY
+     * has to run before projection so a query can sort on a variable it does not select, and
+     * DISTINCT has to run after it so it deduplicates the selected columns rather than the wider
+     * intermediate rows.
+     */
+    public static Op applyModifiers(Query query, Op op) {
+        if (query.hasGroupBy() || query.hasAggregators()) {
+            op = OpGroup.create(op, query.getGroupBy(), query.getAggregators());
         }
-        return subOp;
+
+        if (query.hasHaving()) {
+            for (Expr expr : query.getHavingExprs()) {
+                op = OpFilter.filter(expr, op);
+            }
+        }
+
+        // (expr AS ?v) in the SELECT clause binds before ORDER BY and projection can use it.
+        org.apache.jena.sparql.core.VarExprList projectExprs = query.getProject();
+        if (projectExprs != null) {
+            org.apache.jena.sparql.core.VarExprList extend = new org.apache.jena.sparql.core.VarExprList();
+            for (Var v : projectExprs.getVars()) {
+                Expr e = projectExprs.getExpr(v);
+                if (e == null) {
+                    continue;
+                }
+                if (e instanceof org.apache.jena.sparql.expr.ExprAggregator) {
+                    // (COUNT(*) AS ?n) binds ?n to the value the group already computed, which
+                    // it left in the aggregator's own variable. Keeping the aggregator
+                    // expression here instead would re-evaluate it outside any group, where it
+                    // sees no rows and yields the identity — 0 for a count.
+                    Var aggVar = ((org.apache.jena.sparql.expr.ExprAggregator) e).getVar();
+                    extend.add(v, new org.apache.jena.sparql.expr.ExprVar(aggVar));
+                } else {
+                    extend.add(v, e);
+                }
+            }
+            if (!extend.isEmpty()) {
+                op = OpExtend.create(op, extend);
+            }
+        }
+
+        if (query.hasOrderBy()) {
+            op = new OpOrder(op, query.getOrderBy());
+        }
+
+        if (query.isSelectType() && query.getProjectVars() != null && !query.getProjectVars().isEmpty()) {
+            op = new OpProject(op, query.getProjectVars());
+        }
+
+        if (query.isDistinct()) {
+            op = OpDistinct.create(op);
+        }
+        if (query.isReduced()) {
+            op = OpReduced.create(op);
+        }
+
+        if (query.hasLimit() || query.hasOffset()) {
+            long start = query.hasOffset() ? query.getOffset() : 0;
+            long length = query.hasLimit() ? query.getLimit() : Query.NOLIMIT;
+            op = new OpSlice(op, start, length);
+        }
+
+        return op;
     }
 }

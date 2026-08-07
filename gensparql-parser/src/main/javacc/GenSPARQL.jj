@@ -28,11 +28,14 @@ import java.util.*;
 import org.apache.jena.graph.*;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryFactory;
+import org.apache.jena.sparql.core.BasicPattern;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.core.VarExprList;
 import org.apache.jena.sparql.expr.*;
 import org.apache.jena.sparql.expr.aggregate.*;
 import org.apache.jena.sparql.syntax.*;
+import org.apache.jena.sparql.engine.binding.Binding;
+import org.apache.jena.sparql.engine.binding.BindingBuilder;
 import org.apache.jena.sparql.path.*;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.gensparql.parser.element.ElementGenerate;
@@ -75,6 +78,9 @@ public class GenSPARQLParserImpl {
     public static Query parse(String queryString, String baseURI) throws ParseException {
         GenSPARQLParserImpl parser = new GenSPARQLParserImpl(new java.io.StringReader(queryString));
         Query query = QueryFactory.create();
+        // Tag the query as GenSPARQL so Query.toString() picks the serializer that can write
+        // GENOP; touching GenSPARQLSyntax also registers that serializer.
+        query.setSyntax(org.gensparql.parser.lang.GenSPARQLSyntax.syntaxGenSPARQL);
         parser.setQuery(query);
         if (baseURI != null) {
             parser.setBaseURI(baseURI);
@@ -148,6 +154,97 @@ public class GenSPARQLParserImpl {
 
     private void addTriplePattern(Node s, Node p, Node o) {
         currentGroup().addTriplePattern(Triple.create(s, p, o));
+    }
+
+    /**
+     * Collect the plain triples of a group, for a CONSTRUCT template.
+     *
+     * <p>A template is a set of triples, not a graph pattern, so the triple productions are
+     * reused by parsing into a scratch group and lifting the triples back out. SPARQL does not
+     * allow a property path in a template, and a path here would otherwise be dropped without
+     * comment, so it is rejected.
+     */
+    private BasicPattern templateTriples(ElementGroup group) {
+        BasicPattern bgp = new BasicPattern();
+        for (Element e : group.getElements()) {
+            if (e instanceof ElementTriplesBlock) {
+                for (Triple t : ((ElementTriplesBlock) e).getPattern().getList()) {
+                    bgp.add(t);
+                }
+            } else if (e instanceof ElementPathBlock) {
+                for (org.apache.jena.sparql.core.TriplePath tp
+                        : ((ElementPathBlock) e).getPattern().getList()) {
+                    Triple t = tp.asTriple();
+                    if (t == null) {
+                        throw new RuntimeException(
+                            "A property path is not allowed in a CONSTRUCT template: " + tp);
+                    }
+                    bgp.add(t);
+                }
+            } else {
+                throw new RuntimeException(
+                    "Only triples are allowed in a CONSTRUCT template, got: "
+                    + e.getClass().getSimpleName());
+            }
+        }
+        return bgp;
+    }
+
+    /**
+     * What stood in predicate position: a plain node, or a property path.
+     *
+     * A single IRI, 'a', or a variable is a plain triple pattern. Anything built with the path
+     * operators has to stay a Path so it reaches the algebra as a TriplePath; flattening it to a
+     * predicate node would silently turn "ex:p/ex:q" into a one-step pattern.
+     */
+    static final class PredicateSpec {
+        final Node node;
+        final org.apache.jena.sparql.path.Path path;
+
+        private PredicateSpec(Node node, org.apache.jena.sparql.path.Path path) {
+            this.node = node;
+            this.path = path;
+        }
+
+        static PredicateSpec node(Node n) {
+            return new PredicateSpec(n, null);
+        }
+
+        /** A one-step link is still an ordinary triple pattern, so unwrap it. */
+        static PredicateSpec of(org.apache.jena.sparql.path.Path p) {
+            if (p instanceof org.apache.jena.sparql.path.P_Link) {
+                return new PredicateSpec(((org.apache.jena.sparql.path.P_Link) p).getNode(), null);
+            }
+            return new PredicateSpec(null, p);
+        }
+    }
+
+    private void addPredicatePattern(Node s, PredicateSpec p, Node o) {
+        if (p.node != null) {
+            addTriplePattern(s, p.node, o);
+        } else {
+            addTriplePathPattern(s, p.path, o);
+        }
+    }
+
+    /**
+     * Append a path pattern, reusing the trailing ElementPathBlock when there is one.
+     *
+     * Plain triples keep going to an ElementTriplesBlock, so a group mixing both ends up with
+     * two blocks. They are joined, which is the same answer.
+     */
+    private void addTriplePathPattern(Node s, org.apache.jena.sparql.path.Path path, Node o) {
+        ElementGroup g = currentGroup();
+        ElementPathBlock block = null;
+        List<Element> els = g.getElements();
+        if (!els.isEmpty() && els.get(els.size() - 1) instanceof ElementPathBlock) {
+            block = (ElementPathBlock) els.get(els.size() - 1);
+        }
+        if (block == null) {
+            block = new ElementPathBlock();
+            g.addElement(block);
+        }
+        block.addTriplePath(new org.apache.jena.sparql.core.TriplePath(s, path, o));
     }
 
     private String unquote(String s) {
@@ -511,7 +608,9 @@ void SelectClause() :
  * [10] ConstructQuery ::= 'CONSTRUCT' ( ConstructTemplate DatasetClause* WhereClause SolutionModifier | DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier )
  */
 void ConstructQuery() :
-{}
+{
+    ElementGroup shortFormGroup;
+}
 {
     {
         query.setQueryConstructType();
@@ -524,10 +623,17 @@ void ConstructQuery() :
         WhereClause()
         SolutionModifier()
       |
+        // CONSTRUCT WHERE { ... }: the same triples are both the template and the pattern.
         ( DatasetClause() )*
         <WHERE> <LBRACE>
+        { pushGroup(); }
         [ TriplesTemplate() ]
         <RBRACE>
+        {
+            shortFormGroup = popGroup();
+            query.setConstructTemplate(new Template(templateTriples(shortFormGroup)));
+            query.setQueryPattern(shortFormGroup);
+        }
         SolutionModifier()
     )
 }
@@ -751,46 +857,104 @@ void OffsetClause() :
 
 /**
  * [28] ValuesClause ::= ( 'VALUES' DataBlock )?
+ *
+ * A trailing VALUES joins with the whole query pattern, so it is appended to the top-level
+ * group rather than discarded.
  */
 void ValuesClause() :
-{}
 {
-    <VALUES> DataBlock()
+    ElementData data = new ElementData();
+}
+{
+    <VALUES> DataBlock(data)
+    { addElement(data); }
 }
 
 /**
- * DataBlock (simplified)
+ * [62] DataBlock ::= InlineDataOneVar | InlineDataFull
+ *
+ * Builds the ElementData rather than only checking the shape. Returning an empty one, as this
+ * used to, made VALUES parse and then contribute no bindings, so the surrounding pattern
+ * silently matched nothing.
  */
-void DataBlock() :
+void DataBlock(ElementData data) :
 {}
 {
-    InlineDataOneVar() | InlineDataFull()
+    InlineDataOneVar(data) | InlineDataFull(data)
 }
 
-void InlineDataOneVar() :
+/**
+ * [63] InlineDataOneVar ::= Var '{' DataBlockValue* '}'
+ */
+void InlineDataOneVar(ElementData data) :
 {
     Var v;
+    Node value;
 }
 {
-    v = Var()
+    v = Var() { data.add(v); }
     <LBRACE>
-    ( DataBlockValue() )*
+    (
+        value = DataBlockValue()
+        {
+            BindingBuilder b = Binding.builder();
+            if (value != null) { b.add(v, value); }   // null is UNDEF: leave unbound
+            data.add(b.build());
+        }
+    )*
     <RBRACE>
 }
 
-void InlineDataFull() :
-{}
+/**
+ * [64] InlineDataFull ::= ( NIL | '(' Var* ')' ) '{' ( '(' DataBlockValue* ')' | NIL )* '}'
+ */
+void InlineDataFull(ElementData data) :
 {
-    <LPAREN> ( Var() )* <RPAREN>
+    Var v;
+    Node value;
+    List<Var> vars = new ArrayList<Var>();
+    List<Node> values;
+}
+{
+    <LPAREN> ( v = Var() { vars.add(v); data.add(v); } )* <RPAREN>
     <LBRACE>
-    ( <LPAREN> ( DataBlockValue() )* <RPAREN> )*
+    (
+        <LPAREN>
+        { values = new ArrayList<Node>(); }
+        ( value = DataBlockValue() { values.add(value); } )*
+        <RPAREN>
+        {
+            if (values.size() != vars.size()) {
+                throw new RuntimeException("VALUES row has " + values.size()
+                    + " values but " + vars.size() + " variables were declared");
+            }
+            BindingBuilder b = Binding.builder();
+            for (int i = 0; i < vars.size(); i++) {
+                if (values.get(i) != null) { b.add(vars.get(i), values.get(i)); }
+            }
+            data.add(b.build());
+        }
+    )*
     <RBRACE>
 }
 
-void DataBlockValue() :
-{}
+/**
+ * [65] DataBlockValue ::= iri | RDFLiteral | NumericLiteral | BooleanLiteral | 'UNDEF'
+ *
+ * Returns null for UNDEF, which leaves that variable unbound in the row.
+ */
+Node DataBlockValue() :
 {
-    Iri() | RDFLiteral() | NumericLiteral() | BooleanLiteral() | <UNDEF>
+    Node n;
+}
+{
+    (
+        n = Iri() { return n; }
+      | n = RDFLiteral() { return n; }
+      | n = NumericLiteral() { return n; }
+      | n = BooleanLiteral() { return n; }
+      | <UNDEF> { return null; }
+    )
 }
 
 /**
@@ -1019,10 +1183,12 @@ Element Bind() :
  * [61] InlineData ::= 'VALUES' DataBlock
  */
 Element InlineData() :
-{}
 {
-    <VALUES> DataBlock()
-    { return new ElementData(); }  // Simplified
+    ElementData data = new ElementData();
+}
+{
+    <VALUES> DataBlock(data)
+    { return data; }
 }
 
 /**
@@ -1152,7 +1318,7 @@ void PropertyListPath(Node s) :
  */
 void PropertyListPathNotEmpty(Node s) :
 {
-    Node p;
+    PredicateSpec p;
 }
 {
     p = VerbPath() ObjectListPath(s, p)
@@ -1167,9 +1333,9 @@ void PropertyListPathNotEmpty(Node s) :
 /**
  * [78] VerbPath ::= Path
  */
-Node VerbPath() :
+PredicateSpec VerbPath() :
 {
-    Node p;
+    PredicateSpec p;
 }
 {
     p = Path()
@@ -1177,32 +1343,172 @@ Node VerbPath() :
 }
 
 /**
- * Path (simplified - just IRIs and 'a')
+ * Predicate position.
+ *
+ * Returns a PredicateSpec: either a plain node (an IRI, 'a', or a variable, which is an
+ * ordinary triple pattern) or a Jena Path (which is a property path and becomes a TriplePath).
+ * A bare variable is only legal as a whole predicate, never inside a path, which is what
+ * SPARQL says and what PathPrimary enforces.
+ *
+ * [88] Path ::= PathAlternative
  */
-Node Path() :
+PredicateSpec Path() :
 {
-    Node p;
+    Node v;
+    org.apache.jena.sparql.path.Path p;
 }
 {
     (
-        p = Iri()
+        LOOKAHEAD(<VAR1> | <VAR2>)
+        v = VarNode() { return PredicateSpec.node(v); }
       |
-        <A_TOKEN> { p = NodeFactory.createURI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"); }
+        p = PathAlternative() { return PredicateSpec.of(p); }
     )
+}
+
+/**
+ * [89] PathAlternative ::= PathSequence ( '|' PathSequence )*
+ */
+org.apache.jena.sparql.path.Path PathAlternative() :
+{
+    org.apache.jena.sparql.path.Path left, right;
+}
+{
+    left = PathSequence()
+    (
+        <PIPE> right = PathSequence()
+        { left = org.apache.jena.sparql.path.PathFactory.pathAlt(left, right); }
+    )*
+    { return left; }
+}
+
+/**
+ * [90] PathSequence ::= PathEltOrInverse ( '/' PathEltOrInverse )*
+ */
+org.apache.jena.sparql.path.Path PathSequence() :
+{
+    org.apache.jena.sparql.path.Path left, right;
+}
+{
+    left = PathEltOrInverse()
+    (
+        <SLASH> right = PathEltOrInverse()
+        { left = org.apache.jena.sparql.path.PathFactory.pathSeq(left, right); }
+    )*
+    { return left; }
+}
+
+/**
+ * [92] PathEltOrInverse ::= PathElt | '^' PathElt
+ */
+org.apache.jena.sparql.path.Path PathEltOrInverse() :
+{
+    org.apache.jena.sparql.path.Path p;
+}
+{
+    (
+        <CARET> p = PathElt() { return org.apache.jena.sparql.path.PathFactory.pathInverse(p); }
+      |
+        p = PathElt() { return p; }
+    )
+}
+
+/**
+ * [91] PathElt ::= PathPrimary PathMod?
+ * [93] PathMod ::= '?' | '*' | '+'
+ */
+org.apache.jena.sparql.path.Path PathElt() :
+{
+    org.apache.jena.sparql.path.Path p;
+}
+{
+    p = PathPrimary()
+    [
+        <QUESTION> { p = org.apache.jena.sparql.path.PathFactory.pathZeroOrOne(p); }
+      | <STAR>     { p = org.apache.jena.sparql.path.PathFactory.pathZeroOrMore1(p); }
+      | <PLUS>     { p = org.apache.jena.sparql.path.PathFactory.pathOneOrMore1(p); }
+    ]
     { return p; }
+}
+
+/**
+ * [94] PathPrimary ::= iri | 'a' | '!' PathNegatedPropertySet | '(' Path ')'
+ */
+org.apache.jena.sparql.path.Path PathPrimary() :
+{
+    Node iri;
+    org.apache.jena.sparql.path.Path p;
+}
+{
+    (
+        iri = Iri() { return org.apache.jena.sparql.path.PathFactory.pathLink(iri); }
+      |
+        <A_TOKEN> {
+            return org.apache.jena.sparql.path.PathFactory.pathLink(
+                NodeFactory.createURI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"));
+        }
+      |
+        <BANG> p = PathNegatedPropertySet() { return p; }
+      |
+        <LPAREN> p = PathAlternative() <RPAREN> { return p; }
+    )
+}
+
+/**
+ * [95] PathNegatedPropertySet ::= PathOneInPropertySet
+ *                               | '(' ( PathOneInPropertySet ( '|' PathOneInPropertySet )* )? ')'
+ */
+org.apache.jena.sparql.path.Path PathNegatedPropertySet() :
+{
+    org.apache.jena.sparql.path.P_NegPropSet negSet = new org.apache.jena.sparql.path.P_NegPropSet();
+    org.apache.jena.sparql.path.P_Path0 one;
+}
+{
+    (
+        one = PathOneInPropertySet() { negSet.add(one); }
+      |
+        <LPAREN>
+        [
+            one = PathOneInPropertySet() { negSet.add(one); }
+            ( <PIPE> one = PathOneInPropertySet() { negSet.add(one); } )*
+        ]
+        <RPAREN>
+    )
+    { return negSet; }
+}
+
+/**
+ * [96] PathOneInPropertySet ::= iri | 'a' | '^' ( iri | 'a' )
+ */
+org.apache.jena.sparql.path.P_Path0 PathOneInPropertySet() :
+{
+    Node iri;
+    boolean inverse = false;
+}
+{
+    [ <CARET> { inverse = true; } ]
+    (
+        iri = Iri()
+      |
+        <A_TOKEN> { iri = NodeFactory.createURI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"); }
+    )
+    {
+        return inverse ? new org.apache.jena.sparql.path.P_ReverseLink(iri)
+                       : new org.apache.jena.sparql.path.P_Link(iri);
+    }
 }
 
 /**
  * [83] ObjectListPath ::= ObjectPath ( ',' ObjectPath )*
  */
-void ObjectListPath(Node s, Node p) :
+void ObjectListPath(Node s, PredicateSpec p) :
 {
     Node o;
 }
 {
-    o = ObjectPath() { addTriplePattern(s, p, o); }
+    o = ObjectPath() { addPredicatePattern(s, p, o); }
     (
-        <COMMA> o = ObjectPath() { addTriplePattern(s, p, o); }
+        <COMMA> o = ObjectPath() { addPredicatePattern(s, p, o); }
     )*
 }
 
@@ -1390,16 +1696,31 @@ Node CollectionPath() :
 /**
  * ConstructTemplate
  */
+/**
+ * [73] ConstructTemplate ::= '{' ConstructTriples? '}'
+ *
+ * Parses into a scratch group so the ordinary triple productions can be reused, then hands the
+ * triples to the query as its template. Without this the triples were written to whatever group
+ * happened to be on the stack, and in a CONSTRUCT nothing has been pushed yet, so the first
+ * triple failed on a null group.
+ */
 void ConstructTemplate() :
-{}
+{
+    ElementGroup collected;
+}
 {
     <LBRACE>
+    { pushGroup(); }
     [ ConstructTriples() ]
     <RBRACE>
+    {
+        collected = popGroup();
+        query.setConstructTemplate(new Template(templateTriples(collected)));
+    }
 }
 
 /**
- * ConstructTriples
+ * [74] ConstructTriples ::= TriplesSameSubject ( '.' ConstructTriples? )?
  */
 void ConstructTriples() :
 {}
@@ -1409,7 +1730,7 @@ void ConstructTriples() :
 }
 
 /**
- * TriplesTemplate
+ * [52] TriplesTemplate ::= TriplesSameSubject ( '.' TriplesTemplate? )?
  */
 void TriplesTemplate() :
 {}
