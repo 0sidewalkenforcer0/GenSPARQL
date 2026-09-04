@@ -36,8 +36,16 @@ public class PromptBuilder {
             return "";
         }
 
-        if (outputVars == null || outputVars.size() <= 1) {
+        if (outputVars == null || outputVars.isEmpty()) {
             return userPrompt;
+        }
+
+        if (outputVars.size() == 1) {
+            String var = outputVars.get(0);
+            return userPrompt + "\n\n[OUTPUT FORMAT REQUIREMENT]\n"
+                    + "Respond with ONLY one valid JSON object: {\"" + var + "\": \"value\"}.\n"
+                    + "The value must be only the requested concise scalar or category label, not a sentence.\n"
+                    + "Do NOT include markdown, reasoning, or explanation.";
         }
 
         StringBuilder sb = new StringBuilder(userPrompt);

@@ -102,40 +102,60 @@ wd:Q10862290 a ex:Venue ; rdfs:label "MetLife Stadium" .
 wd:Q1058864 a ex:Venue ; rdfs:label "NRG Stadium" ; ex:venueCity wd:Q16555 .
 wd:Q19520501 a ex:Venue ; rdfs:label "SoFi Stadium" ; ex:venueCity wd:Q621549 .
 
-# --- 2026 squad players (825) ---
+# --- 2026 squad players (1244) ---
 wd:Q64010525 a ex:Athlete ; rdfs:label "Aaron Hickey" ; ex:playsFor wd:Q34044 .
+wd:Q50137347 a ex:Athlete ; rdfs:label "Aaron Wan-Bissaka" ; ex:playsFor wd:Q270080 .
 wd:Q117280421 a ex:Athlete ; rdfs:label "Abbosbek Fayzullaev" ; ex:playsFor wd:Q487321 .
 wd:Q60048828 a ex:Athlete ; rdfs:label "Abdallah Al-Fakhouri" ; ex:playsFor wd:Q275940 .
 wd:Q124242129 a ex:Athlete ; rdfs:label "Abdallah Nasib" ; ex:playsFor wd:Q275940 .
 wd:Q109327842 a ex:Athlete ; rdfs:label "Abde Ezzalzouli" ; ex:playsFor wd:Q207337 .
+wd:Q17494543 a ex:Athlete ; rdfs:label "Abdoulaye Seck" ; ex:playsFor wd:Q207441 .
 wd:Q111479885 a ex:Athlete ; rdfs:label "Abdukodir Khusanov" ; ex:playsFor wd:Q487321 .
+wd:Q105812639 a ex:Athlete ; rdfs:label "Abdul Fatawu Issahak" ; ex:playsFor wd:Q172014 .
+wd:Q27064119 a ex:Athlete ; rdfs:label "Abdul Mumin" ; ex:playsFor wd:Q172014 .
+wd:Q4665805 a ex:Athlete ; rdfs:label "Abdulaziz Hatem" ; ex:playsFor wd:Q232731 .
 wd:Q30308980 a ex:Athlete ; rdfs:label "Abdulelah Al-Amri" ; ex:playsFor wd:Q189723 .
 wd:Q122152591 a ex:Athlete ; rdfs:label "Abdulla Abdullaev" ; ex:playsFor wd:Q487321 .
 wd:Q47499719 a ex:Athlete ; rdfs:label "Abdullah Al-Hamdan" ; ex:playsFor wd:Q189723 .
 wd:Q28716544 a ex:Athlete ; rdfs:label "Abdullah Al-Khaibari" ; ex:playsFor wd:Q189723 .
 wd:Q98887333 a ex:Athlete ; rdfs:label "Abduvohid Nematov" ; ex:playsFor wd:Q487321 .
+wd:Q318069 a ex:Athlete ; rdfs:label "Abdülkerim Bardakçı" ; ex:playsFor wd:Q483856 .
 wd:Q26932598 a ex:Athlete ; rdfs:label "Achraf Hakimi" ; ex:playsFor wd:Q207337 .
 wd:Q136462891 a ex:Athlete ; rdfs:label "Achref Abada" ; ex:playsFor wd:Q181903 .
+wd:Q59193510 a ex:Athlete ; rdfs:label "Adalberto Carrasquilla" ; ex:playsFor wd:Q223748 .
 wd:Q59782306 a ex:Athlete ; rdfs:label "Adam Hložek" ; ex:playsFor wd:Q483868 .
 wd:Q112654481 a ex:Athlete ; rdfs:label "Adel Boulbina" ; ex:playsFor wd:Q181903 .
 wd:Q136092007 a ex:Athlete ; rdfs:label "Adem Arous" ; ex:playsFor wd:Q27971 .
 wd:Q18962 a ex:Athlete ; rdfs:label "Adrien Rabiot" ; ex:playsFor wd:Q47774 .
 wd:Q26838705 a ex:Athlete ; rdfs:label "Agustín Canobbio" ; ex:playsFor wd:Q134916 .
+wd:Q105426667 a ex:Athlete ; rdfs:label "Ahmadou Bamba Dieng" ; ex:playsFor wd:Q207441 .
 wd:Q27585643 a ex:Athlete ; rdfs:label "Ahmed Aboul Fotouh" ; ex:playsFor wd:Q28089 .
+wd:Q61983513 a ex:Athlete ; rdfs:label "Ahmed Al-Ganehi" ; ex:playsFor wd:Q232731 .
 wd:Q23712857 a ex:Athlete ; rdfs:label "Ahmed Al-Kassar" ; ex:playsFor wd:Q189723 .
+wd:Q4695740 a ex:Athlete ; rdfs:label "Ahmed Alaaeldin" ; ex:playsFor wd:Q232731 .
+wd:Q105946025 a ex:Athlete ; rdfs:label "Ahmed Basil" ; ex:playsFor wd:Q186243 .
+wd:Q24005986 a ex:Athlete ; rdfs:label "Ahmed Fathi" ; ex:playsFor wd:Q232731 .
+wd:Q124273321 a ex:Athlete ; rdfs:label "Ahmed Maknzi" ; ex:playsFor wd:Q186243 .
 wd:Q112654639 a ex:Athlete ; rdfs:label "Ahmed Nadhir Benbouali" ; ex:playsFor wd:Q181903 .
+wd:Q106907687 a ex:Athlete ; rdfs:label "Ahmed Qasem" ; ex:playsFor wd:Q186243 .
 wd:Q28529932 a ex:Athlete ; rdfs:label "Ahmed Reda Tagnaouti" ; ex:playsFor wd:Q207337 .
 wd:Q26485052 a ex:Athlete ; rdfs:label "Aiden O'Neill" ; ex:playsFor wd:Q268208 .
+wd:Q85040729 a ex:Athlete ; rdfs:label "Aimar Sher" ; ex:playsFor wd:Q186243 .
 wd:Q29109911 a ex:Athlete ; rdfs:label "Ajdin Hrustic" ; ex:playsFor wd:Q268208 .
+wd:Q124350127 a ex:Athlete ; rdfs:label "Akam Hashim Rahman" ; ex:playsFor wd:Q186243 .
 wd:Q99777968 a ex:Athlete ; rdfs:label "Akmal Mozgovoy" ; ex:playsFor wd:Q487321 .
+wd:Q19882804 a ex:Athlete ; rdfs:label "Akram Afif" ; ex:playsFor wd:Q232731 .
+wd:Q133505943 a ex:Athlete ; rdfs:label "Al-Hashmi Al-Hussain" ; ex:playsFor wd:Q232731 .
 wd:Q22812486 a ex:Athlete ; rdfs:label "Alaa Al Hejji" ; ex:playsFor wd:Q189723 .
 wd:Q56164119 a ex:Athlete ; rdfs:label "Alan Franco" ; ex:playsFor wd:Q987584 .
 wd:Q116054089 a ex:Athlete ; rdfs:label "Alan Minda" ; ex:playsFor wd:Q987584 .
 wd:Q21590318 a ex:Athlete ; rdfs:label "Alban Lafont" ; ex:playsFor wd:Q175145 .
+wd:Q766988 a ex:Athlete ; rdfs:label "Alberto Quintero" ; ex:playsFor wd:Q223748 .
 wd:Q19319791 a ex:Athlete ; rdfs:label "Alejandro Romero Gamarra" ; ex:playsFor wd:Q172020 .
 wd:Q19972593 a ex:Athlete ; rdfs:label "Alejandro Zendejas" ; ex:playsFor wd:Q164134 .
 wd:Q121068701 a ex:Athlete ; rdfs:label "Aleksandar Pavlović" ; ex:playsFor wd:Q43310 .
 wd:Q111020508 a ex:Athlete ; rdfs:label "Alessandro Circati" ; ex:playsFor wd:Q268208 .
+wd:Q16528455 a ex:Athlete ; rdfs:label "Alessandro Schöpf" ; ex:playsFor wd:Q163534 .
 wd:Q118935199 a ex:Athlete ; rdfs:label "Alex Arce" ; ex:playsFor wd:Q172020 .
 wd:Q111604014 a ex:Athlete ; rdfs:label "Alex Freeman" ; ex:playsFor wd:Q164134 .
 wd:Q107558242 a ex:Athlete ; rdfs:label "Alex Paulsen" ; ex:playsFor wd:Q175315 .
@@ -144,31 +164,50 @@ wd:Q551192 a ex:Athlete ; rdfs:label "Alex Sandro" ; ex:playsFor wd:Q83459 .
 wd:Q76591341 a ex:Athlete ; rdfs:label "Alexander Bernhardsson" ; ex:playsFor wd:Q160826 .
 wd:Q23759917 a ex:Athlete ; rdfs:label "Alexander Isak" ; ex:playsFor wd:Q160826 .
 wd:Q20435178 a ex:Athlete ; rdfs:label "Alexander Nübel" ; ex:playsFor wd:Q43310 .
+wd:Q62006510 a ex:Athlete ; rdfs:label "Alexander Prass" ; ex:playsFor wd:Q163534 .
+wd:Q20745286 a ex:Athlete ; rdfs:label "Alexander Schlager" ; ex:playsFor wd:Q163534 .
+wd:Q13784739 a ex:Athlete ; rdfs:label "Alexander Sørloth" ; ex:playsFor wd:Q184387 .
 wd:Q131432595 a ex:Athlete ; rdfs:label "Alexandr Sojka" ; ex:playsFor wd:Q483868 .
+wd:Q112623666 a ex:Athlete ; rdfs:label "Alexandre Pierre" ; ex:playsFor wd:Q236006 .
 wd:Q136375048 a ex:Athlete ; rdfs:label "Alexandro Maidana" ; ex:playsFor wd:Q172020 .
 wd:Q33297140 a ex:Athlete ; rdfs:label "Alexis Mac Allister" ; ex:playsFor wd:Q79800 .
+wd:Q49166190 a ex:Athlete ; rdfs:label "Alexis Saelemaekers" ; ex:playsFor wd:Q166776 .
 wd:Q23799433 a ex:Athlete ; rdfs:label "Alexis Vega" ; ex:playsFor wd:Q164089 .
 wd:Q56222105 a ex:Athlete ; rdfs:label "Alfie Jones" ; ex:playsFor wd:Q208635 .
 wd:Q17350507 a ex:Athlete ; rdfs:label "Ali Abdi" ; ex:playsFor wd:Q27971 .
 wd:Q111741178 a ex:Athlete ; rdfs:label "Ali Ahmed" ; ex:playsFor wd:Q208635 .
 wd:Q131822292 a ex:Athlete ; rdfs:label "Ali Al-Azaizeh" ; ex:playsFor wd:Q275940 .
+wd:Q80661874 a ex:Athlete ; rdfs:label "Ali Al-Hamadi" ; ex:playsFor wd:Q186243 .
 wd:Q4724643 a ex:Athlete ; rdfs:label "Ali Alipour" ; ex:playsFor wd:Q184602 .
+wd:Q123281002 a ex:Athlete ; rdfs:label "Ali Jasim" ; ex:playsFor wd:Q186243 .
 wd:Q22812479 a ex:Athlete ; rdfs:label "Ali Lajami" ; ex:playsFor wd:Q189723 .
 wd:Q47499724 a ex:Athlete ; rdfs:label "Ali Majrashi" ; ex:playsFor wd:Q189723 .
 wd:Q65195011 a ex:Athlete ; rdfs:label "Ali Nemati" ; ex:playsFor wd:Q184602 .
 wd:Q107130635 a ex:Athlete ; rdfs:label "Ali Olwan" ; ex:playsFor wd:Q275940 .
+wd:Q96654340 a ex:Athlete ; rdfs:label "Ali Yousif" ; ex:playsFor wd:Q186243 .
+wd:Q102426988 a ex:Athlete ; rdfs:label "Alidu Seidu" ; ex:playsFor wd:Q172014 .
 wd:Q4726869 a ex:Athlete ; rdfs:label "Alireza Beiranvand" ; ex:playsFor wd:Q184602 .
 wd:Q4406552 a ex:Athlete ; rdfs:label "Alireza Jahanbakhsh" ; ex:playsFor wd:Q184602 .
 wd:Q18237361 a ex:Athlete ; rdfs:label "Alisson Becker" ; ex:playsFor wd:Q83459 .
 wd:Q81878309 a ex:Athlete ; rdfs:label "Alistair Johnston" ; ex:playsFor wd:Q208635 .
+wd:Q21011188 a ex:Athlete ; rdfs:label "Almoez Ali" ; ex:playsFor wd:Q232731 .
 wd:Q23540953 a ex:Athlete ; rdfs:label "Alphonso Davies" ; ex:playsFor wd:Q208635 .
+wd:Q57415806 a ex:Athlete ; rdfs:label "Altay Bayındır" ; ex:playsFor wd:Q483856 .
 wd:Q72603655 a ex:Athlete ; rdfs:label "Amad Diallo" ; ex:playsFor wd:Q175145 .
+wd:Q99328435 a ex:Athlete ; rdfs:label "Amadou Onana" ; ex:playsFor wd:Q166776 .
+wd:Q65948595 a ex:Athlete ; rdfs:label "Amar Dedić" ; ex:playsFor wd:Q181190 .
+wd:Q124051749 a ex:Athlete ; rdfs:label "Amar Memić" ; ex:playsFor wd:Q181190 .
 wd:Q130495887 a ex:Athlete ; rdfs:label "Amer Jamous" ; ex:playsFor wd:Q275940 .
 wd:Q30045780 a ex:Athlete ; rdfs:label "Amine Gouiri" ; ex:playsFor wd:Q181903 .
+wd:Q51756997 a ex:Athlete ; rdfs:label "Amir Al-Ammari" ; ex:playsFor wd:Q186243 .
+wd:Q22833412 a ex:Athlete ; rdfs:label "Amir Hadžiahmetović" ; ex:playsFor wd:Q181190 .
 wd:Q66735853 a ex:Athlete ; rdfs:label "Amir Hossein Hosseinzadeh" ; ex:playsFor wd:Q184602 .
 wd:Q123469788 a ex:Athlete ; rdfs:label "Amir Mohammad Razzaghinia" ; ex:playsFor wd:Q184602 .
 wd:Q135971385 a ex:Athlete ; rdfs:label "Anas Badawi" ; ex:playsFor wd:Q275940 .
 wd:Q65131685 a ex:Athlete ; rdfs:label "Anass Salah-Eddine" ; ex:playsFor wd:Q207337 .
+wd:Q106099213 a ex:Athlete ; rdfs:label "Andreas Schjelderup" ; ex:playsFor wd:Q184387 .
+wd:Q502898 a ex:Athlete ; rdfs:label "Andrej Kramarić" ; ex:playsFor wd:Q134479 .
+wd:Q38764408 a ex:Athlete ; rdfs:label "Andrés Andrade Cedeño" ; ex:playsFor wd:Q223748 .
 wd:Q16298600 a ex:Athlete ; rdfs:label "Andrés Cubas" ; ex:playsFor wd:Q172020 .
 wd:Q15915040 a ex:Athlete ; rdfs:label "Andy Robertson" ; ex:playsFor wd:Q34044 .
 wd:Q101067809 a ex:Athlete ; rdfs:label "Ange-Yoan Bonny" ; ex:playsFor wd:Q175145 .
@@ -177,73 +216,115 @@ wd:Q68676722 a ex:Athlete ; rdfs:label "Angelo Stiller" ; ex:playsFor wd:Q43310 
 wd:Q20807705 a ex:Athlete ; rdfs:label "Angus Gunn" ; ex:playsFor wd:Q34044 .
 wd:Q85410990 a ex:Athlete ; rdfs:label "Anis Ben Slimane" ; ex:playsFor wd:Q27971 .
 wd:Q121946144 a ex:Athlete ; rdfs:label "Anis Hadj Moussa" ; ex:playsFor wd:Q181903 .
+wd:Q17505049 a ex:Athlete ; rdfs:label "Ante Budimir" ; ex:playsFor wd:Q134479 .
 wd:Q106805131 a ex:Athlete ; rdfs:label "Anthony Elanga" ; ex:playsFor wd:Q160826 .
 wd:Q45179405 a ex:Athlete ; rdfs:label "Anthony Gordon" ; ex:playsFor wd:Q47762 .
 wd:Q24073962 a ex:Athlete ; rdfs:label "Anthony Ralston" ; ex:playsFor wd:Q34044 .
 wd:Q101247266 a ex:Athlete ; rdfs:label "Anthony Valencia" ; ex:playsFor wd:Q987584 .
+wd:Q114713518 a ex:Athlete ; rdfs:label "Antoine Mendy" ; ex:playsFor wd:Q207441 .
+wd:Q52990659 a ex:Athlete ; rdfs:label "Antoine Semenyo" ; ex:playsFor wd:Q172014 .
 wd:Q35778151 a ex:Athlete ; rdfs:label "Antonee Robinson" ; ex:playsFor wd:Q164134 .
+wd:Q107357509 a ex:Athlete ; rdfs:label "Antonio Nusa" ; ex:playsFor wd:Q184387 .
 wd:Q96755 a ex:Athlete ; rdfs:label "Antonio Rüdiger" ; ex:playsFor wd:Q43310 .
 wd:Q10856523 a ex:Athlete ; rdfs:label "Antonio Sanabria" ; ex:playsFor wd:Q172020 .
+wd:Q2759958 a ex:Athlete ; rdfs:label "Aníbal Godoy" ; ex:playsFor wd:Q223748 .
 wd:Q27920148 a ex:Athlete ; rdfs:label "Ao Tanaka" ; ex:playsFor wd:Q170566 .
 wd:Q98781677 a ex:Athlete ; rdfs:label "Ar'jany Martha" ; ex:playsFor wd:Q729640 .
 wd:Q98816361 a ex:Athlete ; rdfs:label "Ardon Jashari" ; ex:playsFor wd:Q165141 .
 wd:Q109548002 a ex:Athlete ; rdfs:label "Aria Yousefi" ; ex:playsFor wd:Q184602 .
 wd:Q124283356 a ex:Athlete ; rdfs:label "Armando González" ; ex:playsFor wd:Q164089 .
 wd:Q27514541 a ex:Athlete ; rdfs:label "Armando Obispo" ; ex:playsFor wd:Q729640 .
+wd:Q70251271 a ex:Athlete ; rdfs:label "Armin Gigović" ; ex:playsFor wd:Q181190 .
+wd:Q16010783 a ex:Athlete ; rdfs:label "Arthur Masuaku" ; ex:playsFor wd:Q270080 .
+wd:Q97724521 a ex:Athlete ; rdfs:label "Arthur Theate" ; ex:playsFor wd:Q166776 .
+wd:Q120509822 a ex:Athlete ; rdfs:label "Assane Diao" ; ex:playsFor wd:Q207441 .
+wd:Q21000530 a ex:Athlete ; rdfs:label "Assim Madibo" ; ex:playsFor wd:Q232731 .
+wd:Q26405966 a ex:Athlete ; rdfs:label "Aubrey Modiba" ; ex:playsFor wd:Q170327 .
+wd:Q90307470 a ex:Athlete ; rdfs:label "Augustine Boakye" ; ex:playsFor wd:Q172014 .
 wd:Q111805882 a ex:Athlete ; rdfs:label "Aurèle Amenda" ; ex:playsFor wd:Q165141 .
 wd:Q46951844 a ex:Athlete ; rdfs:label "Aurélien Tchouaméni" ; ex:playsFor wd:Q47774 .
 wd:Q24007335 a ex:Athlete ; rdfs:label "Auston Trusty" ; ex:playsFor wd:Q164134 .
 wd:Q123995807 a ex:Athlete ; rdfs:label "Avazbek Ulmasaliev" ; ex:playsFor wd:Q487321 .
 wd:Q4830013 a ex:Athlete ; rdfs:label "Awer Mabil" ; ex:playsFor wd:Q268208 .
+wd:Q27019988 a ex:Athlete ; rdfs:label "Axel Tuanzebe" ; ex:playsFor wd:Q270080 .
+wd:Q151838 a ex:Athlete ; rdfs:label "Axel Witsel" ; ex:playsFor wd:Q166776 .
 wd:Q62085431 a ex:Athlete ; rdfs:label "Ayase Ueda" ; ex:playsFor wd:Q170566 .
 wd:Q68168547 a ex:Athlete ; rdfs:label "Ayman Yahya" ; ex:playsFor wd:Q189723 .
 wd:Q64520753 a ex:Athlete ; rdfs:label "Aymen Dahmen" ; ex:playsFor wd:Q27971 .
+wd:Q21066439 a ex:Athlete ; rdfs:label "Aymen Hussein" ; ex:playsFor wd:Q186243 .
+wd:Q3855340 a ex:Athlete ; rdfs:label "Aymeric Laporte" ; ex:playsFor wd:Q42267 .
+wd:Q139770039 a ex:Athlete ; rdfs:label "Ayoub Al-Oui" ; ex:playsFor wd:Q232731 .
 wd:Q42948040 a ex:Athlete ; rdfs:label "Ayoub El Kaabi" ; ex:playsFor wd:Q207337 .
 wd:Q137705019 a ex:Athlete ; rdfs:label "Ayoube Amaimouni" ; ex:playsFor wd:Q207337 .
 wd:Q27990922 a ex:Athlete ; rdfs:label "Ayumu Seko" ; ex:playsFor wd:Q170566 .
 wd:Q122971833 a ex:Athlete ; rdfs:label "Ayyoub Bouaddi" ; ex:playsFor wd:Q207337 .
+wd:Q117304605 a ex:Athlete ; rdfs:label "Azarias Londoño" ; ex:playsFor wd:Q223748 .
 wd:Q2947963 a ex:Athlete ; rdfs:label "Aziz Behich" ; ex:playsFor wd:Q268208 .
 wd:Q110813058 a ex:Athlete ; rdfs:label "Azizbek Amonov" ; ex:playsFor wd:Q487321 .
 wd:Q28098786 a ex:Athlete ; rdfs:label "Azizjon Ganiev" ; ex:playsFor wd:Q487321 .
 wd:Q108109586 a ex:Athlete ; rdfs:label "Azzedine Ounahi" ; ex:playsFor wd:Q207337 .
 wd:Q2876432 a ex:Athlete ; rdfs:label "Aïssa Mandi" ; ex:playsFor wd:Q181903 .
+wd:Q317389 a ex:Athlete ; rdfs:label "Baba Rahman" ; ex:playsFor wd:Q172014 .
 wd:Q118978780 a ex:Athlete ; rdfs:label "Bae Jun-ho" ; ex:playsFor wd:Q543842 .
+wd:Q137733792 a ex:Athlete ; rdfs:label "Bara Sapoko Ndiaye" ; ex:playsFor wd:Q207441 .
 wd:Q98682558 a ex:Athlete ; rdfs:label "Bart Verbruggen" ; ex:playsFor wd:Q47050 .
+wd:Q107352615 a ex:Athlete ; rdfs:label "Barış Alper Yılmaz" ; ex:playsFor wd:Q483856 .
 wd:Q125805788 a ex:Athlete ; rdfs:label "Bazoumana Touré" ; ex:playsFor wd:Q175145 .
 wd:Q131470768 a ex:Athlete ; rdfs:label "Bekhruz Karimov" ; ex:playsFor wd:Q487321 .
 wd:Q110739094 a ex:Athlete ; rdfs:label "Ben Gannon-Doak" ; ex:playsFor wd:Q34044 .
 wd:Q106939313 a ex:Athlete ; rdfs:label "Ben Old" ; ex:playsFor wd:Q175315 .
 wd:Q62629839 a ex:Athlete ; rdfs:label "Ben Waine" ; ex:playsFor wd:Q175315 .
+wd:Q106212969 a ex:Athlete ; rdfs:label "Benjamin Asare" ; ex:playsFor wd:Q172014 .
 wd:Q60677561 a ex:Athlete ; rdfs:label "Benjamin Nygren" ; ex:playsFor wd:Q160826 .
+wd:Q115194574 a ex:Athlete ; rdfs:label "Benjamin Tahirović" ; ex:playsFor wd:Q181190 .
+wd:Q15521306 a ex:Athlete ; rdfs:label "Bernardo Silva" ; ex:playsFor wd:Q267245 .
 wd:Q113952820 a ex:Athlete ; rdfs:label "Besfort Zeneli" ; ex:playsFor wd:Q160826 .
 wd:Q105955374 a ex:Athlete ; rdfs:label "Bilal El Khannouss" ; ex:playsFor wd:Q207337 .
+wd:Q18719485 a ex:Athlete ; rdfs:label "Borja Iglesias" ; ex:playsFor wd:Q42267 .
 wd:Q51670751 a ex:Athlete ; rdfs:label "Botirali Ergashev" ; ex:playsFor wd:Q487321 .
+wd:Q3643114 a ex:Athlete ; rdfs:label "Boualem Khoukhi" ; ex:playsFor wd:Q232731 .
 wd:Q99670930 a ex:Athlete ; rdfs:label "Bradley Barcola" ; ex:playsFor wd:Q47774 .
+wd:Q117790110 a ex:Athlete ; rdfs:label "Bradley Cross" ; ex:playsFor wd:Q170327 .
 wd:Q26973015 a ex:Athlete ; rdfs:label "Brahim Díaz" ; ex:playsFor wd:Q207337 .
 wd:Q60828724 a ex:Athlete ; rdfs:label "Braian Ojeda" ; ex:playsFor wd:Q172020 .
 wd:Q13546781 a ex:Athlete ; rdfs:label "Brandley Kuwas" ; ex:playsFor wd:Q729640 .
+wd:Q13444905 a ex:Athlete ; rdfs:label "Brandon Mechele" ; ex:playsFor wd:Q166776 .
+wd:Q26251815 a ex:Athlete ; rdfs:label "Brandon Thomas-Asante" ; ex:playsFor wd:Q172014 .
 wd:Q15956282 a ex:Athlete ; rdfs:label "Breel Embolo" ; ex:playsFor wd:Q165141 .
 wd:Q38693097 a ex:Athlete ; rdfs:label "Bremer" ; ex:playsFor wd:Q83459 .
 wd:Q33129609 a ex:Athlete ; rdfs:label "Brenden Aaronson" ; ex:playsFor wd:Q164134 .
 wd:Q57456997 a ex:Athlete ; rdfs:label "Brian Brobbey" ; ex:playsFor wd:Q47050 .
+wd:Q127271091 a ex:Athlete ; rdfs:label "Brian Cipenga" ; ex:playsFor wd:Q270080 .
 wd:Q98536293 a ex:Athlete ; rdfs:label "Brian Gutiérrez" ; ex:playsFor wd:Q164089 .
 wd:Q60736591 a ex:Athlete ; rdfs:label "Brian RodríguezF" ; ex:playsFor wd:Q134916 .
 wd:Q15627817 a ex:Athlete ; rdfs:label "Brice Samba" ; ex:playsFor wd:Q47774 .
+wd:Q4979316 a ex:Athlete ; rdfs:label "Bruno Fernandes" ; ex:playsFor wd:Q267245 .
 wd:Q58323172 a ex:Athlete ; rdfs:label "Bruno Guimarães" ; ex:playsFor wd:Q83459 .
 wd:Q59306386 a ex:Athlete ; rdfs:label "Bukayo Saka" ; ex:playsFor wd:Q47762 .
 wd:Q62445814 a ex:Athlete ; rdfs:label "CJ dos Santos" ; ex:playsFor wd:Q330039 .
+wd:Q130337999 a ex:Athlete ; rdfs:label "Caleb Yirenkyi" ; ex:playsFor wd:Q172014 .
 wd:Q62006806 a ex:Athlete ; rdfs:label "Callan Elliot" ; ex:playsFor wd:Q175315 .
 wd:Q50829202 a ex:Athlete ; rdfs:label "Callum McCowatt" ; ex:playsFor wd:Q175315 .
 wd:Q17496350 a ex:Athlete ; rdfs:label "Cameron Burgess" ; ex:playsFor wd:Q268208 .
 wd:Q57017726 a ex:Athlete ; rdfs:label "Cameron Devlin" ; ex:playsFor wd:Q268208 .
 wd:Q5026758 a ex:Athlete ; rdfs:label "Camilo Vargas" ; ex:playsFor wd:Q212564 .
+wd:Q118799181 a ex:Athlete ; rdfs:label "Can Uzun" ; ex:playsFor wd:Q483856 .
+wd:Q111345092 a ex:Athlete ; rdfs:label "Carl Sainté" ; ex:playsFor wd:Q236006 .
 wd:Q16633442 a ex:Athlete ; rdfs:label "Carl Starfelt" ; ex:playsFor wd:Q160826 .
+wd:Q20740578 a ex:Athlete ; rdfs:label "Carlens Arcus" ; ex:playsFor wd:Q236006 .
 wd:Q26707107 a ex:Athlete ; rdfs:label "Carlos Acevedo" ; ex:playsFor wd:Q164089 .
 wd:Q116215934 a ex:Athlete ; rdfs:label "Carlos Andrés Gómez" ; ex:playsFor wd:Q212564 .
+wd:Q61990402 a ex:Athlete ; rdfs:label "Carlos Harvey" ; ex:playsFor wd:Q223748 .
+wd:Q106915801 a ex:Athlete ; rdfs:label "Carney Chukwuemeka" ; ex:playsFor wd:Q163534 .
 wd:Q616664 a ex:Athlete ; rdfs:label "Casemiro" ; ex:playsFor wd:Q83459 .
+wd:Q969014 a ex:Athlete ; rdfs:label "Cecilio Waterman" ; ex:playsFor wd:Q223748 .
 wd:Q22965497 a ex:Athlete ; rdfs:label "Cedric Itten" ; ex:playsFor wd:Q165141 .
 wd:Q104784108 a ex:Athlete ; rdfs:label "Chadi Riad" ; ex:playsFor wd:Q207337 .
+wd:Q3196721 a ex:Athlete ; rdfs:label "Chancel Mbemba" ; ex:playsFor wd:Q270080 .
+wd:Q68607008 a ex:Athlete ; rdfs:label "Charles De Ketelaere" ; ex:playsFor wd:Q166776 .
+wd:Q24256738 a ex:Athlete ; rdfs:label "Charles Pickel" ; ex:playsFor wd:Q270080 .
 wd:Q113510254 a ex:Athlete ; rdfs:label "Chemsdine Talbi" ; ex:playsFor wd:Q207337 .
+wd:Q28811942 a ex:Athlete ; rdfs:label "Cherif Ndiaye" ; ex:playsFor wd:Q207441 .
 wd:Q69696822 a ex:Athlete ; rdfs:label "Cho Gue-sung" ; ex:playsFor wd:Q543842 .
 wd:Q98594864 a ex:Athlete ; rdfs:label "Chris Brady" ; ex:playsFor wd:Q164134 .
 wd:Q60839691 a ex:Athlete ; rdfs:label "Chris Richards" ; ex:playsFor wd:Q164134 .
@@ -251,34 +332,47 @@ wd:Q74548 a ex:Athlete ; rdfs:label "Chris Wood" ; ex:playsFor wd:Q175315 .
 wd:Q136038808 a ex:Athlete ; rdfs:label "Christ Inao Oulaï" ; ex:playsFor wd:Q175145 .
 wd:Q27306208 a ex:Athlete ; rdfs:label "Christian Fassnacht" ; ex:playsFor wd:Q165141 .
 wd:Q22279773 a ex:Athlete ; rdfs:label "Christian Pulisic" ; ex:playsFor wd:Q164134 .
+wd:Q117408985 a ex:Athlete ; rdfs:label "Christopher Bonsu Baah" ; ex:playsFor wd:Q172014 .
 wd:Q41791648 a ex:Athlete ; rdfs:label "Christopher Opéri" ; ex:playsFor wd:Q175145 .
 wd:Q18683792 a ex:Athlete ; rdfs:label "Ché Adams" ; ex:playsFor wd:Q34044 .
 wd:Q28801927 a ex:Athlete ; rdfs:label "Cody Gakpo" ; ex:playsFor wd:Q47050 .
 wd:Q51213832 a ex:Athlete ; rdfs:label "Connor Metcalfe" ; ex:playsFor wd:Q268208 .
 wd:Q177331 a ex:Athlete ; rdfs:label "Craig Gordon" ; ex:playsFor wd:Q34044 .
+wd:Q24688826 a ex:Athlete ; rdfs:label "Cristian Martínez" ; ex:playsFor wd:Q223748 .
 wd:Q19519224 a ex:Athlete ; rdfs:label "Cristian Roldan" ; ex:playsFor wd:Q164134 .
 wd:Q28058687 a ex:Athlete ; rdfs:label "Cristian Romero" ; ex:playsFor wd:Q79800 .
 wd:Q109924046 a ex:Athlete ; rdfs:label "Cristian Volpato" ; ex:playsFor wd:Q268208 .
+wd:Q11571 a ex:Athlete ; rdfs:label "Cristiano Ronaldo" ; ex:playsFor wd:Q267245 .
 wd:Q60664537 a ex:Athlete ; rdfs:label "Crysencio Summerville" ; ex:playsFor wd:Q47050 .
 wd:Q27037962 a ex:Athlete ; rdfs:label "Cucho Hernández" ; ex:playsFor wd:Q212564 .
 wd:Q16935084 a ex:Athlete ; rdfs:label "Cyle Larin" ; ex:playsFor wd:Q208635 .
+wd:Q932982 a ex:Athlete ; rdfs:label "Cédric Bakambu" ; ex:playsFor wd:Q270080 .
+wd:Q51331558 a ex:Athlete ; rdfs:label "César Blackman" ; ex:playsFor wd:Q223748 .
 wd:Q50820392 a ex:Athlete ; rdfs:label "César Huerta" ; ex:playsFor wd:Q164089 .
 wd:Q20816441 a ex:Athlete ; rdfs:label "César Montes" ; ex:playsFor wd:Q164089 .
+wd:Q114216100 a ex:Athlete ; rdfs:label "César Samudio" ; ex:playsFor wd:Q223748 .
+wd:Q100271502 a ex:Athlete ; rdfs:label "César Yanis" ; ex:playsFor wd:Q223748 .
 wd:Q20039495 a ex:Athlete ; rdfs:label "Daichi Kamada" ; ex:playsFor wd:Q170566 .
 wd:Q110943455 a ex:Athlete ; rdfs:label "Dailon Livramento" ; ex:playsFor wd:Q330039 .
 wd:Q27990906 a ex:Athlete ; rdfs:label "Daizen Maeda" ; ex:playsFor wd:Q170566 .
 wd:Q116223348 a ex:Athlete ; rdfs:label "Damián Bobadilla" ; ex:playsFor wd:Q172020 .
 wd:Q5213217 a ex:Athlete ; rdfs:label "Dan Burn" ; ex:playsFor wd:Q47762 .
 wd:Q61439485 a ex:Athlete ; rdfs:label "Dan Ndoye" ; ex:playsFor wd:Q165141 .
+wd:Q19560313 a ex:Athlete ; rdfs:label "Dani Olmo" ; ex:playsFor wd:Q42267 .
 wd:Q137779066 a ex:Athlete ; rdfs:label "Danial Eiri" ; ex:playsFor wd:Q184602 .
 wd:Q56703599 a ex:Athlete ; rdfs:label "Daniel Muñoz" ; ex:playsFor wd:Q212564 .
 wd:Q106967174 a ex:Athlete ; rdfs:label "Daniel Svensson" ; ex:playsFor wd:Q160826 .
 wd:Q437329 a ex:Athlete ; rdfs:label "Danilo" ; ex:playsFor wd:Q83459 .
+wd:Q113393306 a ex:Athlete ; rdfs:label "Danley Jean Jacques" ; ex:playsFor wd:Q236006 .
 wd:Q46372260 a ex:Athlete ; rdfs:label "Darwin Núñez" ; ex:playsFor wd:Q134916 .
+wd:Q65948590 a ex:Athlete ; rdfs:label "David Affengruber" ; ex:playsFor wd:Q163534 .
+wd:Q31981 a ex:Athlete ; rdfs:label "David Alaba" ; ex:playsFor wd:Q163534 .
 wd:Q96613620 a ex:Athlete ; rdfs:label "David Douděra" ; ex:playsFor wd:Q483868 .
 wd:Q96070453 a ex:Athlete ; rdfs:label "David Jurásek" ; ex:playsFor wd:Q483868 .
+wd:Q101095985 a ex:Athlete ; rdfs:label "David Møller Wolfe" ; ex:playsFor wd:Q184387 .
 wd:Q436987 a ex:Athlete ; rdfs:label "David Ospina" ; ex:playsFor wd:Q212564 .
 wd:Q28540571 a ex:Athlete ; rdfs:label "David Raum" ; ex:playsFor wd:Q43310 .
+wd:Q19665907 a ex:Athlete ; rdfs:label "David Raya" ; ex:playsFor wd:Q42267 .
 wd:Q84312754 a ex:Athlete ; rdfs:label "David Zima" ; ex:playsFor wd:Q483868 .
 wd:Q60583915 a ex:Athlete ; rdfs:label "Dayne St. Clair" ; ex:playsFor wd:Q208635 .
 wd:Q20723878 a ex:Athlete ; rdfs:label "Dayot Upamecano" ; ex:playsFor wd:Q47774 .
@@ -287,34 +381,58 @@ wd:Q30007142 a ex:Athlete ; rdfs:label "Declan Rice" ; ex:playsFor wd:Q47762 .
 wd:Q117835987 a ex:Athlete ; rdfs:label "Denil Castillo" ; ex:playsFor wd:Q987584 .
 wd:Q106061470 a ex:Athlete ; rdfs:label "Denis Višinský" ; ex:playsFor wd:Q483868 .
 wd:Q21066260 a ex:Athlete ; rdfs:label "Denis Zakaria" ; ex:playsFor wd:Q165141 .
+wd:Q123174990 a ex:Athlete ; rdfs:label "Deniz Gül" ; ex:playsFor wd:Q483856 .
 wd:Q55955918 a ex:Athlete ; rdfs:label "Deniz Undav" ; ex:playsFor wd:Q43310 .
 wd:Q56223703 a ex:Athlete ; rdfs:label "Dennis Eckert Ayensa" ; ex:playsFor wd:Q184602 .
+wd:Q27654739 a ex:Athlete ; rdfs:label "Dennis Hadžikadunić" ; ex:playsFor wd:Q181190 .
 wd:Q19882816 a ex:Athlete ; rdfs:label "Denzel Dumfries" ; ex:playsFor wd:Q47050 .
 wd:Q29901014 a ex:Athlete ; rdfs:label "Derek Cornelius" ; ex:playsFor wd:Q208635 .
 wd:Q39082970 a ex:Athlete ; rdfs:label "Deroy Duarte" ; ex:playsFor wd:Q330039 .
+wd:Q21005754 a ex:Athlete ; rdfs:label "Derrick Etienne Jr." ; ex:playsFor wd:Q236006 .
+wd:Q18046760 a ex:Athlete ; rdfs:label "Derrick Luckassen" ; ex:playsFor wd:Q172014 .
 wd:Q116215237 a ex:Athlete ; rdfs:label "Deveron Fonville" ; ex:playsFor wd:Q729640 .
 wd:Q115978703 a ex:Athlete ; rdfs:label "Diego Gómez" ; ex:playsFor wd:Q172020 .
+wd:Q110616805 a ex:Athlete ; rdfs:label "Diego Moreira" ; ex:playsFor wd:Q166776 .
 wd:Q18637312 a ex:Athlete ; rdfs:label "Diney" ; ex:playsFor wd:Q330039 .
+wd:Q26255578 a ex:Athlete ; rdfs:label "Diogo Costa" ; ex:playsFor wd:Q267245 .
+wd:Q26255506 a ex:Athlete ; rdfs:label "Diogo Dalot" ; ex:playsFor wd:Q267245 .
 wd:Q56222532 a ex:Athlete ; rdfs:label "Djed Spence" ; ex:playsFor wd:Q47762 .
 wd:Q27995699 a ex:Athlete ; rdfs:label "Djibril Sow" ; ex:playsFor wd:Q165141 .
+wd:Q21281344 a ex:Athlete ; rdfs:label "Dodi Lukebakio" ; ex:playsFor wd:Q166776 .
 wd:Q23007824 a ex:Athlete ; rdfs:label "Dominic Hyam" ; ex:playsFor wd:Q34044 .
+wd:Q51159914 a ex:Athlete ; rdfs:label "Dominik Kotarski" ; ex:playsFor wd:Q134479 .
+wd:Q18207229 a ex:Athlete ; rdfs:label "Dominik Livaković" ; ex:playsFor wd:Q134479 .
+wd:Q124392516 a ex:Athlete ; rdfs:label "Dominique Simon" ; ex:playsFor wd:Q236006 .
 wd:Q24084301 a ex:Athlete ; rdfs:label "Donyell Malen" ; ex:playsFor wd:Q47050 .
 wd:Q20306806 a ex:Athlete ; rdfs:label "Dostonbek Khamdamov" ; ex:playsFor wd:Q487321 .
 wd:Q10268484 a ex:Athlete ; rdfs:label "Douglas Santos" ; ex:playsFor wd:Q83459 .
+wd:Q16916422 a ex:Athlete ; rdfs:label "Duckens Nazon" ; ex:playsFor wd:Q236006 .
+wd:Q17612806 a ex:Athlete ; rdfs:label "Duje Ćaleta-Car" ; ex:playsFor wd:Q134479 .
+wd:Q21621771 a ex:Athlete ; rdfs:label "Duke Lacroix" ; ex:playsFor wd:Q236006 .
+wd:Q34360045 a ex:Athlete ; rdfs:label "Dylan Batubinsika" ; ex:playsFor wd:Q270080 .
 wd:Q26405549 a ex:Athlete ; rdfs:label "Dylan Bronn" ; ex:playsFor wd:Q27971 .
 wd:Q20737387 a ex:Athlete ; rdfs:label "Dávinson Sánchez" ; ex:playsFor wd:Q212564 .
 wd:Q19266811 a ex:Athlete ; rdfs:label "Déiver Machado" ; ex:playsFor wd:Q212564 .
 wd:Q112170256 a ex:Athlete ; rdfs:label "Désiré Doué" ; ex:playsFor wd:Q47774 .
+wd:Q27468610 a ex:Athlete ; rdfs:label "Dženis Burnić" ; ex:playsFor wd:Q181190 .
 wd:Q28445512 a ex:Athlete ; rdfs:label "Eberechi Eze" ; ex:playsFor wd:Q47762 .
-wd:Q17074511 a ex:Athlete ; rdfs:label "Ederson Santana de Moraes" ; ex:playsFor wd:Q83459 .
+wd:Q17074511 a ex:Athlete ; rdfs:label "Ederson" ; ex:playsFor wd:Q83459 .
+wd:Q117239349 a ex:Athlete ; rdfs:label "Edgardo Fariña" ; ex:playsFor wd:Q223748 .
+wd:Q153786 a ex:Athlete ; rdfs:label "Edin Džeko" ; ex:playsFor wd:Q181190 .
 wd:Q14592575 a ex:Athlete ; rdfs:label "Edison borj" ; ex:playsFor wd:Q172020 .
+wd:Q1957458 a ex:Athlete ; rdfs:label "Edmilson Junior" ; ex:playsFor wd:Q232731 .
+wd:Q46699047 a ex:Athlete ; rdfs:label "Edo Kayembe" ; ex:playsFor wd:Q270080 .
 wd:Q27859514 a ex:Athlete ; rdfs:label "Edson Álvarez" ; ex:playsFor wd:Q164089 .
+wd:Q62617279 a ex:Athlete ; rdfs:label "Egil Selvik" ; ex:playsFor wd:Q184387 .
 wd:Q2762113 a ex:Athlete ; rdfs:label "Ehsan Hajsafi" ; ex:playsFor wd:Q184602 .
+wd:Q123479947 a ex:Athlete ; rdfs:label "El Hadji Malick Diouf" ; ex:playsFor wd:Q207441 .
 wd:Q4702779 a ex:Athlete ; rdfs:label "El-Mahdy Soliman" ; ex:playsFor wd:Q28089 .
 wd:Q20641483 a ex:Athlete ; rdfs:label "Eldor Shomurodov" ; ex:playsFor wd:Q487321 .
+wd:Q22162731 a ex:Athlete ; rdfs:label "Elia Meschak" ; ex:playsFor wd:Q270080 .
 wd:Q64740426 a ex:Athlete ; rdfs:label "Elias Achouri" ; ex:playsFor wd:Q27971 .
 wd:Q115803591 a ex:Athlete ; rdfs:label "Elias Saad" ; ex:playsFor wd:Q27971 .
 wd:Q64031850 a ex:Athlete ; rdfs:label "Elijah Just" ; ex:playsFor wd:Q175315 .
+wd:Q55934972 a ex:Athlete ; rdfs:label "Elisha Owusu" ; ex:playsFor wd:Q172014 .
 wd:Q104762954 a ex:Athlete ; rdfs:label "Elliot Anderson" ; ex:playsFor wd:Q47762 .
 wd:Q117789805 a ex:Athlete ; rdfs:label "Elliot Stroud" ; ex:playsFor wd:Q160826 .
 wd:Q20641500 a ex:Athlete ; rdfs:label "Ellyes Skhiri" ; ex:playsFor wd:Q27971 .
@@ -329,32 +447,55 @@ wd:Q2843080 a ex:Athlete ; rdfs:label "Enner Valencia" ; ex:playsFor wd:Q987584 
 wd:Q96105248 a ex:Athlete ; rdfs:label "Enzo Fernández" ; ex:playsFor wd:Q79800 .
 wd:Q105896342 a ex:Athlete ; rdfs:label "Eom Ji-sung" ; ex:playsFor wd:Q543842 .
 wd:Q24052364 a ex:Athlete ; rdfs:label "Eray Cömert" ; ex:playsFor wd:Q165141 .
+wd:Q98262284 a ex:Athlete ; rdfs:label "Eren Elmalı" ; ex:playsFor wd:Q483856 .
+wd:Q3731469 a ex:Athlete ; rdfs:label "Eric Davis" ; ex:playsFor wd:Q223748 .
+wd:Q59938996 a ex:Athlete ; rdfs:label "Eric García" ; ex:playsFor wd:Q42267 .
 wd:Q18145133 a ex:Athlete ; rdfs:label "Eric Smith" ; ex:playsFor wd:Q160826 .
 wd:Q98593181 a ex:Athlete ; rdfs:label "Erik Lira" ; ex:playsFor wd:Q164089 .
+wd:Q28967995 a ex:Athlete ; rdfs:label "Erling Haaland" ; ex:playsFor wd:Q184387 .
+wd:Q47067481 a ex:Athlete ; rdfs:label "Ermedin Demirović" ; ex:playsFor wd:Q181190 .
+wd:Q123139564 a ex:Athlete ; rdfs:label "Ermin Mahmić" ; ex:playsFor wd:Q181190 .
+wd:Q111584129 a ex:Athlete ; rdfs:label "Ernest Nuamah" ; ex:playsFor wd:Q172014 .
+wd:Q108518721 a ex:Athlete ; rdfs:label "Esmir Bajraktarević" ; ex:playsFor wd:Q181190 .
 wd:Q28971436 a ex:Athlete ; rdfs:label "Evan Ndicka" ; ex:playsFor wd:Q175145 .
 wd:Q98593672 a ex:Athlete ; rdfs:label "Evann Guessand" ; ex:playsFor wd:Q175145 .
+wd:Q100984327 a ex:Athlete ; rdfs:label "Evidence Makgopa" ; ex:playsFor wd:Q170327 .
 wd:Q19345715 a ex:Athlete ; rdfs:label "Exequiel Palacios" ; ex:playsFor wd:Q79800 .
 wd:Q27063854 a ex:Athlete ; rdfs:label "Ezri Konsa" ; ex:playsFor wd:Q47762 .
 wd:Q101033685 a ex:Athlete ; rdfs:label "Fabian Rieder" ; ex:playsFor wd:Q165141 .
 wd:Q641425 a ex:Athlete ; rdfs:label "Fabinho" ; ex:playsFor wd:Q83459 .
 wd:Q16297591 a ex:Athlete ; rdfs:label "Fabián Balbuena" ; ex:playsFor wd:Q172020 .
+wd:Q18637930 a ex:Athlete ; rdfs:label "Fabián Ruiz" ; ex:playsFor wd:Q42267 .
 wd:Q28056787 a ex:Athlete ; rdfs:label "Facundo Medina" ; ex:playsFor wd:Q79800 .
 wd:Q72091732 a ex:Athlete ; rdfs:label "Facundo Pellistri" ; ex:playsFor wd:Q134916 .
+wd:Q16555086 a ex:Athlete ; rdfs:label "Fahad Talib" ; ex:playsFor wd:Q186243 .
 wd:Q18753041 a ex:Athlete ; rdfs:label "Farrukh Sayfiev" ; ex:playsFor wd:Q487321 .
 wd:Q113474248 a ex:Athlete ; rdfs:label "Farès Chaïbi" ; ex:playsFor wd:Q181903 .
 wd:Q124151324 a ex:Athlete ; rdfs:label "Farès Ghedjemis" ; ex:playsFor wd:Q181903 .
 wd:Q19509544 a ex:Athlete ; rdfs:label "Federico Valverde" ; ex:playsFor wd:Q134916 .
 wd:Q62594816 a ex:Athlete ; rdfs:label "Federico Viñas" ; ex:playsFor wd:Q134916 .
 wd:Q60889488 a ex:Athlete ; rdfs:label "Felix Nmecha" ; ex:playsFor wd:Q43310 .
+wd:Q26719541 a ex:Athlete ; rdfs:label "Ferdi Kadıoğlu" ; ex:playsFor wd:Q483856 .
 wd:Q203749 a ex:Athlete ; rdfs:label "Fernando Muslera" ; ex:playsFor wd:Q134916 .
+wd:Q44297797 a ex:Athlete ; rdfs:label "Ferran Torres" ; ex:playsFor wd:Q42267 .
+wd:Q20090660 a ex:Athlete ; rdfs:label "Fidel Escobar" ; ex:playsFor wd:Q223748 .
 wd:Q131863254 a ex:Athlete ; rdfs:label "Findlay Curtis" ; ex:playsFor wd:Q34044 .
 wd:Q109968695 a ex:Athlete ; rdfs:label "Finn Surman" ; ex:playsFor wd:Q175315 .
 wd:Q30082508 a ex:Athlete ; rdfs:label "Firas Al-Buraikan" ; ex:playsFor wd:Q189723 .
 wd:Q58815643 a ex:Athlete ; rdfs:label "Firas Chaouat" ; ex:playsFor wd:Q27971 .
+wd:Q117287348 a ex:Athlete ; rdfs:label "Fiston Mayele" ; ex:playsFor wd:Q270080 .
+wd:Q20752635 a ex:Athlete ; rdfs:label "Florian Grillitsch" ; ex:playsFor wd:Q163534 .
+wd:Q123335801 a ex:Athlete ; rdfs:label "Florian Wiegele" ; ex:playsFor wd:Q163534 .
 wd:Q94699949 a ex:Athlete ; rdfs:label "Florian Wirtz" ; ex:playsFor wd:Q43310 .
 wd:Q101035007 a ex:Athlete ; rdfs:label "Folarin Balogun" ; ex:playsFor wd:Q164134 .
 wd:Q29113776 a ex:Athlete ; rdfs:label "Francis de Vries" ; ex:playsFor wd:Q175315 .
+wd:Q99617367 a ex:Athlete ; rdfs:label "Francisco Conceição" ; ex:playsFor wd:Q267245 .
+wd:Q24084271 a ex:Athlete ; rdfs:label "Francisco Trincão" ; ex:playsFor wd:Q267245 .
 wd:Q18044401 a ex:Athlete ; rdfs:label "Franck Kessié" ; ex:playsFor wd:Q175145 .
+wd:Q12312192 a ex:Athlete ; rdfs:label "Frans Putros" ; ex:playsFor wd:Q186243 .
+wd:Q55820193 a ex:Athlete ; rdfs:label "Frantzdy Pierrot" ; ex:playsFor wd:Q236006 .
+wd:Q24007315 a ex:Athlete ; rdfs:label "Fredrik André Bjørkan" ; ex:playsFor wd:Q184387 .
+wd:Q20090180 a ex:Athlete ; rdfs:label "Fredrik Aursnes" ; ex:playsFor wd:Q184387 .
 wd:Q19898898 a ex:Athlete ; rdfs:label "Frenkie de Jong" ; ex:playsFor wd:Q47050 .
 wd:Q30916190 a ex:Athlete ; rdfs:label "Félix Torres" ; ex:playsFor wd:Q987584 .
 wd:Q29318963 a ex:Athlete ; rdfs:label "Gabriel Gudmundsson" ; ex:playsFor wd:Q160826 .
@@ -363,11 +504,14 @@ wd:Q61460651 a ex:Athlete ; rdfs:label "Gabriel Martinelli" ; ex:playsFor wd:Q83
 wd:Q4621784 a ex:Athlete ; rdfs:label "Garry Mendes Rodrigues" ; ex:playsFor wd:Q330039 .
 wd:Q18020415 a ex:Athlete ; rdfs:label "Gastón Olveira" ; ex:playsFor wd:Q172020 .
 wd:Q781683 a ex:Athlete ; rdfs:label "Gatito Fernández" ; ex:playsFor wd:Q172020 .
+wd:Q108111889 a ex:Athlete ; rdfs:label "Gavi" ; ex:playsFor wd:Q42267 .
+wd:Q299703 a ex:Athlete ; rdfs:label "Gaël Kakuta" ; ex:playsFor wd:Q270080 .
 wd:Q27914873 a ex:Athlete ; rdfs:label "George Hirst" ; ex:playsFor wd:Q34044 .
 wd:Q14517123 a ex:Athlete ; rdfs:label "Gervane Kastaneer" ; ex:playsFor wd:Q729640 .
 wd:Q5879014 a ex:Athlete ; rdfs:label "Gerónimo Rulli" ; ex:playsFor wd:Q79800 .
 wd:Q126436400 a ex:Athlete ; rdfs:label "Gessime Yassine" ; ex:playsFor wd:Q207337 .
 wd:Q29158696 a ex:Athlete ; rdfs:label "Ghislain Konan" ; ex:playsFor wd:Q175145 .
+wd:Q25939340 a ex:Athlete ; rdfs:label "Gideon Mensah" ; ex:playsFor wd:Q172014 .
 wd:Q129652337 a ex:Athlete ; rdfs:label "Gilberto Mora" ; ex:playsFor wd:Q164089 .
 wd:Q105939150 a ex:Athlete ; rdfs:label "Gilson Benchimol" ; ex:playsFor wd:Q330039 .
 wd:Q13578003 a ex:Athlete ; rdfs:label "Giorgian de Arrascaeta" ; ex:playsFor wd:Q134916 .
@@ -378,6 +522,9 @@ wd:Q60047739 a ex:Athlete ; rdfs:label "Godfried Roemeratoe" ; ex:playsFor wd:Q7
 wd:Q26255087 a ex:Athlete ; rdfs:label "Gonzalo Montiel" ; ex:playsFor wd:Q79800 .
 wd:Q60842120 a ex:Athlete ; rdfs:label "Gonzalo Plata" ; ex:playsFor wd:Q987584 .
 wd:Q87119732 a ex:Athlete ; rdfs:label "Gonzalo Valle" ; ex:playsFor wd:Q987584 .
+wd:Q16729477 a ex:Athlete ; rdfs:label "Gonçalo Guedes" ; ex:playsFor wd:Q267245 .
+wd:Q99955331 a ex:Athlete ; rdfs:label "Gonçalo Inácio" ; ex:playsFor wd:Q267245 .
+wd:Q60621615 a ex:Athlete ; rdfs:label "Gonçalo Ramos" ; ex:playsFor wd:Q267245 .
 wd:Q514427 a ex:Athlete ; rdfs:label "Granit Xhaka" ; ex:playsFor wd:Q165141 .
 wd:Q1362064 a ex:Athlete ; rdfs:label "Grant Hanley" ; ex:playsFor wd:Q34044 .
 wd:Q36184031 a ex:Athlete ; rdfs:label "Gregor Kobel" ; ex:playsFor wd:Q165141 .
@@ -392,44 +539,72 @@ wd:Q116447721 a ex:Athlete ; rdfs:label "Gustavo Puerta" ; ex:playsFor wd:Q21256
 wd:Q20888302 a ex:Athlete ; rdfs:label "Gustavo Velásquez" ; ex:playsFor wd:Q172020 .
 wd:Q26385193 a ex:Athlete ; rdfs:label "Guus Til" ; ex:playsFor wd:Q47050 .
 wd:Q116605365 a ex:Athlete ; rdfs:label "Guéla Doué" ; ex:playsFor wd:Q175145 .
+wd:Q66528692 a ex:Athlete ; rdfs:label "Gédéon Kalulu" ; ex:playsFor wd:Q270080 .
+wd:Q108924143 a ex:Athlete ; rdfs:label "Habib Diarra" ; ex:playsFor wd:Q207441 .
+wd:Q58303188 a ex:Athlete ; rdfs:label "Haissem Hassan" ; ex:playsFor wd:Q28089 .
 wd:Q19787021 a ex:Athlete ; rdfs:label "Haji Wright" ; ex:playsFor wd:Q164134 .
+wd:Q763465 a ex:Athlete ; rdfs:label "Hakan Çalhanoğlu" ; ex:playsFor wd:Q483856 .
 wd:Q35841433 a ex:Athlete ; rdfs:label "Hamdi Fathi" ; ex:playsFor wd:Q28089 .
-wd:Q134513932 a ex:Athlete ; rdfs:label "Hamza Abdelkarim" ; ex:playsFor wd:Q28089 .
+wd:Q134513932 a ex:Athlete ; rdfs:label "Hamza Abdelmoneem" ; ex:playsFor wd:Q28089 .
+wd:Q56011432 a ex:Athlete ; rdfs:label "Hannes Delcroix" ; ex:playsFor wd:Q236006 .
 wd:Q96755704 a ex:Athlete ; rdfs:label "Hannibal Mejbri" ; ex:playsFor wd:Q27971 .
+wd:Q2359678 a ex:Athlete ; rdfs:label "Hans Vanaken" ; ex:playsFor wd:Q166776 .
+wd:Q15257381 a ex:Athlete ; rdfs:label "Haris Tabaković" ; ex:playsFor wd:Q181190 .
 wd:Q969725 a ex:Athlete ; rdfs:label "Harry Kane" ; ex:playsFor wd:Q47762 .
 wd:Q24084205 a ex:Athlete ; rdfs:label "Harry Souttar" ; ex:playsFor wd:Q268208 .
+wd:Q5679556 a ex:Athlete ; rdfs:label "Hassan Al Haidos" ; ex:playsFor wd:Q232731 .
 wd:Q23712679 a ex:Athlete ; rdfs:label "Hassan Kadesh" ; ex:playsFor wd:Q189723 .
 wd:Q45108287 a ex:Athlete ; rdfs:label "Hassan Tombakti" ; ex:playsFor wd:Q189723 .
 wd:Q134699960 a ex:Athlete ; rdfs:label "Hazem Mastouri" ; ex:playsFor wd:Q27971 .
+wd:Q108990482 a ex:Athlete ; rdfs:label "Henrik Falchener" ; ex:playsFor wd:Q184387 .
 wd:Q106372516 a ex:Athlete ; rdfs:label "Herman Johansson" ; ex:playsFor wd:Q160826 .
 wd:Q5742434 a ex:Athlete ; rdfs:label "Hernán Galíndez" ; ex:playsFor wd:Q987584 .
 wd:Q59306433 a ex:Athlete ; rdfs:label "Hicham Boudaoui" ; ex:playsFor wd:Q181903 .
 wd:Q30933054 a ex:Athlete ; rdfs:label "Hiroki Itō" ; ex:playsFor wd:Q170566 .
 wd:Q56641379 a ex:Athlete ; rdfs:label "Hjalmar Ekdal" ; ex:playsFor wd:Q160826 .
+wd:Q64364375 a ex:Athlete ; rdfs:label "Homam Ahmed" ; ex:playsFor wd:Q232731 .
 wd:Q98937753 a ex:Athlete ; rdfs:label "Hossam Abdelmaguid" ; ex:playsFor wd:Q28089 .
 wd:Q5865783 a ex:Athlete ; rdfs:label "Hossein Hosseini" ; ex:playsFor wd:Q184602 .
 wd:Q27927442 a ex:Athlete ; rdfs:label "Houssem Aouar شيبان" ; ex:playsFor wd:Q181903 .
 wd:Q138757935 a ex:Athlete ; rdfs:label "Hugo Sochůrek" ; ex:playsFor wd:Q483868 .
 wd:Q130244944 a ex:Athlete ; rdfs:label "Husam Abu Dahab" ; ex:playsFor wd:Q275940 .
+wd:Q85767808 a ex:Athlete ; rdfs:label "Hussein Ali" ; ex:playsFor wd:Q186243 .
 wd:Q18551518 a ex:Athlete ; rdfs:label "Hwang Hee-chan" ; ex:playsFor wd:Q543842 .
 wd:Q19603924 a ex:Athlete ; rdfs:label "Hwang In-beom" ; ex:playsFor wd:Q543842 .
 wd:Q121907216 a ex:Athlete ; rdfs:label "Hélio Varela" ; ex:playsFor wd:Q330039 .
 wd:Q90916422 a ex:Athlete ; rdfs:label "Ibrahim Adel" ; ex:playsFor wd:Q28089 .
+wd:Q45936149 a ex:Athlete ; rdfs:label "Ibrahim Bayesh" ; ex:playsFor wd:Q186243 .
 wd:Q118118504 a ex:Athlete ; rdfs:label "Ibrahim Maza" ; ex:playsFor wd:Q181903 .
+wd:Q129088593 a ex:Athlete ; rdfs:label "Ibrahim Mbaye" ; ex:playsFor wd:Q207441 .
 wd:Q123203666 a ex:Athlete ; rdfs:label "Ibrahim Sabrah" ; ex:playsFor wd:Q275940 .
 wd:Q106173160 a ex:Athlete ; rdfs:label "Ibrahim Sadeh" ; ex:playsFor wd:Q275940 .
 wd:Q27832634 a ex:Athlete ; rdfs:label "Ibrahim Sangaré" ; ex:playsFor wd:Q175145 .
 wd:Q30301454 a ex:Athlete ; rdfs:label "Ibrahima Konaté" ; ex:playsFor wd:Q47774 .
+wd:Q46679 a ex:Athlete ; rdfs:label "Idrissa Gueye" ; ex:playsFor wd:Q207441 .
+wd:Q102399064 a ex:Athlete ; rdfs:label "Igor Matanović" ; ex:playsFor wd:Q134479 .
 wd:Q10549264 a ex:Athlete ; rdfs:label "Igor Sergeev" ; ex:playsFor wd:Q487321 .
 wd:Q83639138 a ex:Athlete ; rdfs:label "Igor Thiago" ; ex:playsFor wd:Q83459 .
 wd:Q16236181 a ex:Athlete ; rdfs:label "Ihsan Haddad" ; ex:playsFor wd:Q275940 .
+wd:Q105956269 a ex:Athlete ; rdfs:label "Iliman Ndiaye" ; ex:playsFor wd:Q207441 .
+wd:Q127514195 a ex:Athlete ; rdfs:label "Ime Okon" ; ex:playsFor wd:Q170327 .
+wd:Q100565190 a ex:Athlete ; rdfs:label "Iqraam Rayners" ; ex:playsFor wd:Q170327 .
 wd:Q105127935 a ex:Athlete ; rdfs:label "Isak Hien" ; ex:playsFor wd:Q160826 .
 wd:Q99096411 a ex:Athlete ; rdfs:label "Isidro Pitta" ; ex:playsFor wd:Q172020 .
+wd:Q18921648 a ex:Athlete ; rdfs:label "Ismael Díaz" ; ex:playsFor wd:Q223748 .
 wd:Q98784065 a ex:Athlete ; rdfs:label "Ismael Saibari" ; ex:playsFor wd:Q207337 .
+wd:Q74178822 a ex:Athlete ; rdfs:label "Ismail Jakobs" ; ex:playsFor wd:Q207441 .
 wd:Q107746612 a ex:Athlete ; rdfs:label "Ismaël Gharbi" ; ex:playsFor wd:Q27971 .
 wd:Q111009946 a ex:Athlete ; rdfs:label "Ismaël Koné" ; ex:playsFor wd:Q208635 .
+wd:Q26924482 a ex:Athlete ; rdfs:label "Ismaïla Sarr" ; ex:playsFor wd:Q207441 .
 wd:Q107739233 a ex:Athlete ; rdfs:label "Israel Reyes" ; ex:playsFor wd:Q164089 .
+wd:Q21621180 a ex:Athlete ; rdfs:label "Issa Diop" ; ex:playsFor wd:Q207337 .
+wd:Q137392794 a ex:Athlete ; rdfs:label "Issa Laye" ; ex:playsFor wd:Q232731 .
+wd:Q111536418 a ex:Athlete ; rdfs:label "Ivan Bašić" ; ex:playsFor wd:Q181190 .
+wd:Q161054 a ex:Athlete ; rdfs:label "Ivan Perišić" ; ex:playsFor wd:Q134479 .
 wd:Q16239819 a ex:Athlete ; rdfs:label "Ivan Toney" ; ex:playsFor wd:Q47762 .
+wd:Q19662444 a ex:Athlete ; rdfs:label "Ivan Šunjić" ; ex:playsFor wd:Q181190 .
+wd:Q84462730 a ex:Athlete ; rdfs:label "Ivor Pandur" ; ex:playsFor wd:Q134479 .
+wd:Q18608497 a ex:Athlete ; rdfs:label "Iñaki Williams" ; ex:playsFor wd:Q172014 .
 wd:Q20027858 a ex:Athlete ; rdfs:label "Jack Hendry" ; ex:playsFor wd:Q34044 .
 wd:Q10544594 a ex:Athlete ; rdfs:label "Jackson Irvine" ; ex:playsFor wd:Q268208 .
 wd:Q60842110 a ex:Athlete ; rdfs:label "Jackson Porozo" ; ex:playsFor wd:Q987584 .
@@ -437,6 +612,7 @@ wd:Q43303848 a ex:Athlete ; rdfs:label "Jacob Italiano" ; ex:playsFor wd:Q268208
 wd:Q64009768 a ex:Athlete ; rdfs:label "Jacob Shaffelburg" ; ex:playsFor wd:Q208635 .
 wd:Q95618487 a ex:Athlete ; rdfs:label "Jacob Widell Zetterström" ; ex:playsFor wd:Q160826 .
 wd:Q122055800 a ex:Athlete ; rdfs:label "Jakhongir Urozov" ; ex:playsFor wd:Q487321 .
+wd:Q10526042 a ex:Athlete ; rdfs:label "Jalal Hasan" ; ex:playsFor wd:Q186243 .
 wd:Q19831829 a ex:Athlete ; rdfs:label "Jaloliddin Masharipov" ; ex:playsFor wd:Q487321 .
 wd:Q96072055 a ex:Athlete ; rdfs:label "Jamal Musiala" ; ex:playsFor wd:Q43310 .
 wd:Q368441 a ex:Athlete ; rdfs:label "James Rodríguez" ; ex:playsFor wd:Q212564 .
@@ -451,14 +627,20 @@ wd:Q98561102 a ex:Athlete ; rdfs:label "Jaouen Hadjam" ; ex:playsFor wd:Q181903 
 wd:Q112813857 a ex:Athlete ; rdfs:label "Jarell Quansah" ; ex:playsFor wd:Q47762 .
 wd:Q6160707 a ex:Athlete ; rdfs:label "Jaroslav Zelený" ; ex:playsFor wd:Q483868 .
 wd:Q10556049 a ex:Athlete ; rdfs:label "Jason Geria" ; ex:playsFor wd:Q268208 .
+wd:Q80809664 a ex:Athlete ; rdfs:label "Jassem Gaber" ; ex:playsFor wd:Q232731 .
+wd:Q105520386 a ex:Athlete ; rdfs:label "Jayden Adams" ; ex:playsFor wd:Q170327 .
 wd:Q6171506 a ex:Athlete ; rdfs:label "Jean Seri" ; ex:playsFor wd:Q175145 .
+wd:Q26251605 a ex:Athlete ; rdfs:label "Jean-Kévin Duverne" ; ex:playsFor wd:Q236006 .
 wd:Q26964668 a ex:Athlete ; rdfs:label "Jean-Philippe Mateta" ; ex:playsFor wd:Q47774 .
+wd:Q26251607 a ex:Athlete ; rdfs:label "Jean-Ricner Bellegarde" ; ex:playsFor wd:Q236006 .
 wd:Q104780374 a ex:Athlete ; rdfs:label "Jearl Margaritha" ; ex:playsFor wd:Q729640 .
 wd:Q16300824 a ex:Athlete ; rdfs:label "Jefferson Lerma" ; ex:playsFor wd:Q212564 .
 wd:Q105658245 a ex:Athlete ; rdfs:label "Jehad Thakri" ; ex:playsFor wd:Q189723 .
 wd:Q98829565 a ex:Athlete ; rdfs:label "Jens Castrop" ; ex:playsFor wd:Q543842 .
+wd:Q24007299 a ex:Athlete ; rdfs:label "Jens Petter Hauge" ; ex:playsFor wd:Q184387 .
 wd:Q104531012 a ex:Athlete ; rdfs:label "Jeremy Antonisse" ; ex:playsFor wd:Q729640 .
 wd:Q121410218 a ex:Athlete ; rdfs:label "Jeremy Arévalo" ; ex:playsFor wd:Q987584 .
+wd:Q67905022 a ex:Athlete ; rdfs:label "Jerome Opoku" ; ex:playsFor wd:Q172014 .
 wd:Q16633144 a ex:Athlete ; rdfs:label "Jesper Karlström" ; ex:playsFor wd:Q160826 .
 wd:Q118287620 a ex:Athlete ; rdfs:label "Jesse Randall" ; ex:playsFor wd:Q175315 .
 wd:Q22092356 a ex:Athlete ; rdfs:label "Jesús Gallardo" ; ex:playsFor wd:Q164089 .
@@ -466,7 +648,10 @@ wd:Q65378670 a ex:Athlete ; rdfs:label "Jhon Arias" ; ex:playsFor wd:Q212564 .
 wd:Q209847 a ex:Athlete ; rdfs:label "Jhon Córdoba" ; ex:playsFor wd:Q212564 .
 wd:Q21573188 a ex:Athlete ; rdfs:label "Jhon Lucumí" ; ex:playsFor wd:Q212564 .
 wd:Q56512017 a ex:Athlete ; rdfs:label "Jindřich Staněk" ; ex:playsFor wd:Q483868 .
+wd:Q62006245 a ex:Athlete ; rdfs:label "Jiovany Ramos" ; ex:playsFor wd:Q223748 .
 wd:Q15622446 a ex:Athlete ; rdfs:label "Jo Hyeon-woo" ; ex:playsFor wd:Q543842 .
+wd:Q110258306 a ex:Athlete ; rdfs:label "Joan Garcia" ; ex:playsFor wd:Q42267 .
+wd:Q113510252 a ex:Athlete ; rdfs:label "Joaquin Seys" ; ex:playsFor wd:Q166776 .
 wd:Q35066458 a ex:Athlete ; rdfs:label "Joaquín Piquerez" ; ex:playsFor wd:Q134916 .
 wd:Q64433070 a ex:Athlete ; rdfs:label "Joe Bell" ; ex:playsFor wd:Q175315 .
 wd:Q54861644 a ex:Athlete ; rdfs:label "Joe Scally" ; ex:playsFor wd:Q164134 .
@@ -479,25 +664,44 @@ wd:Q10547335 a ex:Athlete ; rdfs:label "John McGinn" ; ex:playsFor wd:Q34044 .
 wd:Q3238952 a ex:Athlete ; rdfs:label "John Souttar" ; ex:playsFor wd:Q34044 .
 wd:Q2025900 a ex:Athlete ; rdfs:label "John Stones" ; ex:playsFor wd:Q47762 .
 wd:Q58215731 a ex:Athlete ; rdfs:label "John Yeboah" ; ex:playsFor wd:Q987584 .
+wd:Q2749342 a ex:Athlete ; rdfs:label "Johnny Placide" ; ex:playsFor wd:Q236006 .
+wd:Q124045019 a ex:Athlete ; rdfs:label "Jonas Adjetey" ; ex:playsFor wd:Q172014 .
 wd:Q56085180 a ex:Athlete ; rdfs:label "Jonathan David" ; ex:playsFor wd:Q208635 .
 wd:Q10554558 a ex:Athlete ; rdfs:label "Jonathan Osorio" ; ex:playsFor wd:Q208635 .
 wd:Q14640027 a ex:Athlete ; rdfs:label "Jonathan Tah" ; ex:playsFor wd:Q43310 .
+wd:Q367861 a ex:Athlete ; rdfs:label "Jordan Ayew" ; ex:playsFor wd:Q172014 .
 wd:Q109768459 a ex:Athlete ; rdfs:label "Jordan Bos" ; ex:playsFor wd:Q268208 .
 wd:Q273715 a ex:Athlete ; rdfs:label "Jordan Henderson" ; ex:playsFor wd:Q47762 .
 wd:Q13014035 a ex:Athlete ; rdfs:label "Jordan Pickford" ; ex:playsFor wd:Q47762 .
 wd:Q60842122 a ex:Athlete ; rdfs:label "Jordy Alcívar" ; ex:playsFor wd:Q987584 .
 wd:Q30346214 a ex:Athlete ; rdfs:label "Jordy Caicedo" ; ex:playsFor wd:Q987584 .
+wd:Q117818408 a ex:Athlete ; rdfs:label "Jorge Abdiel Gutiérrez" ; ex:playsFor wd:Q223748 .
 wd:Q19362872 a ex:Athlete ; rdfs:label "Jorge Carrascal" ; ex:playsFor wd:Q212564 .
 wd:Q24034870 a ex:Athlete ; rdfs:label "Jorge Sánchez Ramos" ; ex:playsFor wd:Q164089 .
+wd:Q16979997 a ex:Athlete ; rdfs:label "Joris Kayembe" ; ex:playsFor wd:Q270080 .
 wd:Q115059438 a ex:Athlete ; rdfs:label "Jorrel Hato" ; ex:playsFor wd:Q47050 .
+wd:Q107985032 a ex:Athlete ; rdfs:label "Joseph Anang" ; ex:playsFor wd:Q172014 .
 wd:Q2342765 a ex:Athlete ; rdfs:label "Joshua Brenet" ; ex:playsFor wd:Q729640 .
 wd:Q13865408 a ex:Athlete ; rdfs:label "Joshua Kimmich" ; ex:playsFor wd:Q43310 .
+wd:Q65950201 a ex:Athlete ; rdfs:label "Josip Stanišić" ; ex:playsFor wd:Q134479 .
+wd:Q98592909 a ex:Athlete ; rdfs:label "Josip Šutalo" ; ex:playsFor wd:Q134479 .
+wd:Q100792937 a ex:Athlete ; rdfs:label "Josué Casimir" ; ex:playsFor wd:Q236006 .
+wd:Q42926090 a ex:Athlete ; rdfs:label "Josué Duverger" ; ex:playsFor wd:Q236006 .
+wd:Q108543955 a ex:Athlete ; rdfs:label "José Córdoba" ; ex:playsFor wd:Q223748 .
+wd:Q48877857 a ex:Athlete ; rdfs:label "José Fajardo" ; ex:playsFor wd:Q223748 .
+wd:Q54512527 a ex:Athlete ; rdfs:label "José Luis Rodríguez" ; ex:playsFor wd:Q223748 .
 wd:Q104903216 a ex:Athlete ; rdfs:label "José Manuel López" ; ex:playsFor wd:Q79800 .
 wd:Q50105161 a ex:Athlete ; rdfs:label "José María Canale" ; ex:playsFor wd:Q172020 .
 wd:Q13634114 a ex:Athlete ; rdfs:label "José María Giménez" ; ex:playsFor wd:Q134916 .
 wd:Q120753803 a ex:Athlete ; rdfs:label "José Raul Rangel" ; ex:playsFor wd:Q164089 .
+wd:Q6294052 a ex:Athlete ; rdfs:label "José Sá" ; ex:playsFor wd:Q267245 .
 wd:Q26704562 a ex:Athlete ; rdfs:label "Jovane Cabral" ; ex:playsFor wd:Q330039 .
+wd:Q96182876 a ex:Athlete ; rdfs:label "Jovo Lukić" ; ex:playsFor wd:Q181190 .
+wd:Q6298063 a ex:Athlete ; rdfs:label "João Cancelo" ; ex:playsFor wd:Q267245 .
+wd:Q27049064 a ex:Athlete ; rdfs:label "João Félix" ; ex:playsFor wd:Q267245 .
+wd:Q113551733 a ex:Athlete ; rdfs:label "João Neves" ; ex:playsFor wd:Q267245 .
 wd:Q107334828 a ex:Athlete ; rdfs:label "João Paulo Fernandes" ; ex:playsFor wd:Q330039 .
+wd:Q73400656 a ex:Athlete ; rdfs:label "Joško Gvardiol" ; ex:playsFor wd:Q134479 .
 wd:Q2092409 a ex:Athlete ; rdfs:label "Juan Fernando Quintero" ; ex:playsFor wd:Q212564 .
 wd:Q101791178 a ex:Athlete ; rdfs:label "Juan José Cáceres" ; ex:playsFor wd:Q172020 .
 wd:Q60841788 a ex:Athlete ; rdfs:label "Juan Manuel Sanabria" ; ex:playsFor wd:Q134916 .
@@ -505,6 +709,7 @@ wd:Q5951550 a ex:Athlete ; rdfs:label "Juan Musso" ; ex:playsFor wd:Q79800 .
 wd:Q118593930 a ex:Athlete ; rdfs:label "Juan Portilla" ; ex:playsFor wd:Q212564 .
 wd:Q66241169 a ex:Athlete ; rdfs:label "Jude Bellingham" ; ex:playsFor wd:Q47762 .
 wd:Q47170176 a ex:Athlete ; rdfs:label "Jules Koundé" ; ex:playsFor wd:Q47774 .
+wd:Q28717698 a ex:Athlete ; rdfs:label "Julian Ryerson" ; ex:playsFor wd:Q184387 .
 wd:Q85872272 a ex:Athlete ; rdfs:label "Julio César Enciso" ; ex:playsFor wd:Q172020 .
 wd:Q59381180 a ex:Athlete ; rdfs:label "Julián Alvarez" ; ex:playsFor wd:Q79800 .
 wd:Q22082627 a ex:Athlete ; rdfs:label "Julián Quiñones" ; ex:playsFor wd:Q164089 .
@@ -514,28 +719,44 @@ wd:Q21913126 a ex:Athlete ; rdfs:label "Junya Itō" ; ex:playsFor wd:Q170566 .
 wd:Q32666318 a ex:Athlete ; rdfs:label "Juriën Gaari" ; ex:playsFor wd:Q729640 .
 wd:Q53952196 a ex:Athlete ; rdfs:label "Jurriën Timber" ; ex:playsFor wd:Q47050 .
 wd:Q26934107 a ex:Athlete ; rdfs:label "Justin Kluivert" ; ex:playsFor wd:Q47050 .
+wd:Q59209505 a ex:Athlete ; rdfs:label "Jérémy Doku" ; ex:playsFor wd:Q166776 .
+wd:Q28933132 a ex:Athlete ; rdfs:label "Jørgen Strand Larsen" ; ex:playsFor wd:Q184387 .
 wd:Q11091593 a ex:Athlete ; rdfs:label "Júnior Alonso" ; ex:playsFor wd:Q172020 .
 wd:Q1885 a ex:Athlete ; rdfs:label "Jürgen Locadia" ; ex:playsFor wd:Q729640 .
+wd:Q3191617 a ex:Athlete ; rdfs:label "Kaan Ayhan" ; ex:playsFor wd:Q483856 .
 wd:Q27310755 a ex:Athlete ; rdfs:label "Kai Havertz" ; ex:playsFor wd:Q43310 .
 wd:Q87400019 a ex:Athlete ; rdfs:label "Kai Trewin" ; ex:playsFor wd:Q268208 .
 wd:Q65029955 a ex:Athlete ; rdfs:label "Kaishu Sano" ; ex:playsFor wd:Q170566 .
+wd:Q3192187 a ex:Athlete ; rdfs:label "Kalidou Koulibaly" ; ex:playsFor wd:Q207441 .
+wd:Q86269576 a ex:Athlete ; rdfs:label "Kamaldeen Sulemana" ; ex:playsFor wd:Q172014 .
+wd:Q137441719 a ex:Athlete ; rdfs:label "Kamogelo Sebelebele" ; ex:playsFor wd:Q170327 .
+wd:Q3812986 a ex:Athlete ; rdfs:label "Karim Boudiaf" ; ex:playsFor wd:Q232731 .
 wd:Q18225149 a ex:Athlete ; rdfs:label "Karim Hafez" ; ex:playsFor wd:Q28089 .
+wd:Q136466749 a ex:Athlete ; rdfs:label "Keeto Thermoncy" ; ex:playsFor wd:Q236006 .
 wd:Q114736627 a ex:Athlete ; rdfs:label "Keisuke Goto" ; ex:playsFor wd:Q170566 .
 wd:Q30925365 a ex:Athlete ; rdfs:label "Keisuke Osako" ; ex:playsFor wd:Q170566 .
 wd:Q45819496 a ex:Athlete ; rdfs:label "Keito Nakamura" ; ex:playsFor wd:Q170566 .
 wd:Q107806484 a ex:Athlete ; rdfs:label "Kelvin Pires" ; ex:playsFor wd:Q330039 .
 wd:Q10544852 a ex:Athlete ; rdfs:label "Ken Sema" ; ex:playsFor wd:Q160826 .
+wd:Q113184832 a ex:Athlete ; rdfs:label "Kenan Yıldız" ; ex:playsFor wd:Q483856 .
 wd:Q116466426 a ex:Athlete ; rdfs:label "Kendry Páez" ; ex:playsFor wd:Q987584 .
 wd:Q19969384 a ex:Athlete ; rdfs:label "Kenji Gorré" ; ex:playsFor wd:Q729640 .
 wd:Q6391158 a ex:Athlete ; rdfs:label "Kenny McLean" ; ex:playsFor wd:Q34044 .
 wd:Q127388493 a ex:Athlete ; rdfs:label "Kento Shiogai" ; ex:playsFor wd:Q170566 .
+wd:Q97725322 a ex:Athlete ; rdfs:label "Kerem Aktürkoğlu" ; ex:playsFor wd:Q483856 .
+wd:Q130741313 a ex:Athlete ; rdfs:label "Kerim Alajbegović" ; ex:playsFor wd:Q181190 .
 wd:Q117289166 a ex:Athlete ; rdfs:label "Kevin Castaño" ; ex:playsFor wd:Q212564 .
+wd:Q28868192 a ex:Athlete ; rdfs:label "Kevin Danso" ; ex:playsFor wd:Q163534 .
+wd:Q357984 a ex:Athlete ; rdfs:label "Kevin De Bruyne" ; ex:playsFor wd:Q166776 .
 wd:Q46709013 a ex:Athlete ; rdfs:label "Kevin Felida" ; ex:playsFor wd:Q729640 .
 wd:Q108395046 a ex:Athlete ; rdfs:label "Kevin Pina" ; ex:playsFor wd:Q330039 .
 wd:Q115132592 a ex:Athlete ; rdfs:label "Kevin Rodríguez" ; ex:playsFor wd:Q987584 .
+wd:Q58339004 a ex:Athlete ; rdfs:label "Kevin Yakob" ; ex:playsFor wd:Q186243 .
 wd:Q64147458 a ex:Athlete ; rdfs:label "Khalid Al-Ghannam" ; ex:playsFor wd:Q189723 .
 wd:Q134711363 a ex:Athlete ; rdfs:label "Khalil Ayari" ; ex:playsFor wd:Q27971 .
 wd:Q64853255 a ex:Athlete ; rdfs:label "Khojiakbar Alijonov" ; ex:playsFor wd:Q487321 .
+wd:Q58810793 a ex:Athlete ; rdfs:label "Khuliso Mudau" ; ex:playsFor wd:Q170327 .
+wd:Q137299823 a ex:Athlete ; rdfs:label "Khulumani Ndamane" ; ex:playsFor wd:Q170327 .
 wd:Q19888012 a ex:Athlete ; rdfs:label "Kieran Tierney" ; ex:playsFor wd:Q34044 .
 wd:Q21916759 a ex:Athlete ; rdfs:label "Kim Jin-gyu" ; ex:playsFor wd:Q543842 .
 wd:Q28699707 a ex:Athlete ; rdfs:label "Kim Min-jae" ; ex:playsFor wd:Q543842 .
@@ -543,17 +764,30 @@ wd:Q31146726 a ex:Athlete ; rdfs:label "Kim Moon-hwan" ; ex:playsFor wd:Q543842 
 wd:Q6409355 a ex:Athlete ; rdfs:label "Kim Seung-gyu" ; ex:playsFor wd:Q543842 .
 wd:Q79904514 a ex:Athlete ; rdfs:label "Kim Tae-hyeon" ; ex:playsFor wd:Q543842 .
 wd:Q114703020 a ex:Athlete ; rdfs:label "Kobbie Mainoo" ; ex:playsFor wd:Q47762 .
+wd:Q117848823 a ex:Athlete ; rdfs:label "Kojo Oppong" ; ex:playsFor wd:Q172014 .
 wd:Q22127681 a ex:Athlete ; rdfs:label "Koki Ogawa" ; ex:playsFor wd:Q170566 .
+wd:Q108200391 a ex:Athlete ; rdfs:label "Koni De Winter" ; ex:playsFor wd:Q166776 .
+wd:Q18670270 a ex:Athlete ; rdfs:label "Konrad Laimer" ; ex:playsFor wd:Q163534 .
 wd:Q771396 a ex:Athlete ; rdfs:label "Kosta Barbarouses" ; ex:playsFor wd:Q175315 .
+wd:Q29168109 a ex:Athlete ; rdfs:label "Krepin Diatta" ; ex:playsFor wd:Q207441 .
+wd:Q61721648 a ex:Athlete ; rdfs:label "Kristian Thorstvedt" ; ex:playsFor wd:Q184387 .
+wd:Q27106995 a ex:Athlete ; rdfs:label "Kristijan Jakić" ; ex:playsFor wd:Q134479 .
+wd:Q18157457 a ex:Athlete ; rdfs:label "Kristoffer Ajer" ; ex:playsFor wd:Q184387 .
 wd:Q1398221 a ex:Athlete ; rdfs:label "Kristoffer Nordfeldt" ; ex:playsFor wd:Q160826 .
+wd:Q66370589 a ex:Athlete ; rdfs:label "Kwasi Sibo" ; ex:playsFor wd:Q172014 .
+wd:Q21621995 a ex:Athlete ; rdfs:label "Kylian Mbappé" ; ex:playsFor wd:Q47774 .
 wd:Q20038711 a ex:Athlete ; rdfs:label "Kō Itakura" ; ex:playsFor wd:Q170566 .
 wd:Q123571870 a ex:Athlete ; rdfs:label "Lachlan Bayliss" ; ex:playsFor wd:Q175315 .
 wd:Q27919903 a ex:Athlete ; rdfs:label "Ladislav Krejčí" ; ex:playsFor wd:Q483868 .
+wd:Q116896436 a ex:Athlete ; rdfs:label "Lamine Camara" ; ex:playsFor wd:Q207441 .
+wd:Q113704154 a ex:Athlete ; rdfs:label "Lamine Yamal" ; ex:playsFor wd:Q42267 .
 wd:Q20676495 a ex:Athlete ; rdfs:label "Laros Duarte" ; ex:playsFor wd:Q330039 .
 wd:Q21484126 a ex:Athlete ; rdfs:label "Lautaro Martínez" ; ex:playsFor wd:Q79800 .
+wd:Q21523253 a ex:Athlete ; rdfs:label "Lawrence Ati-Zigi" ; ex:playsFor wd:Q172014 .
 wd:Q18331623 a ex:Athlete ; rdfs:label "Lawrence Shankland" ; ex:playsFor wd:Q34044 .
 wd:Q249344 a ex:Athlete ; rdfs:label "Leandro Bacuna" ; ex:playsFor wd:Q729640 .
 wd:Q630170 a ex:Athlete ; rdfs:label "Leandro Paredes" ; ex:playsFor wd:Q79800 .
+wd:Q6509762 a ex:Athlete ; rdfs:label "Leandro Trossard" ; ex:playsFor wd:Q166776 .
 wd:Q62961021 a ex:Athlete ; rdfs:label "Lee Dong-gyeong" ; ex:playsFor wd:Q543842 .
 wd:Q106779330 a ex:Athlete ; rdfs:label "Lee Han-beom" ; ex:playsFor wd:Q543842 .
 wd:Q16234741 a ex:Athlete ; rdfs:label "Lee Jae-sung" ; ex:playsFor wd:Q543842 .
@@ -561,17 +795,22 @@ wd:Q16174734 a ex:Athlete ; rdfs:label "Lee Kang-in" ; ex:playsFor wd:Q543842 .
 wd:Q113013535 a ex:Athlete ; rdfs:label "Lee Ki-hyuk" ; ex:playsFor wd:Q543842 .
 wd:Q61100362 a ex:Athlete ; rdfs:label "Lee Tae-seok" ; ex:playsFor wd:Q543842 .
 wd:Q130776450 a ex:Athlete ; rdfs:label "Lennart Karl" ; ex:playsFor wd:Q43310 .
+wd:Q108000394 a ex:Athlete ; rdfs:label "Lenny Joseph" ; ex:playsFor wd:Q236006 .
+wd:Q30330390 a ex:Athlete ; rdfs:label "Leo Østigård" ; ex:playsFor wd:Q184387 .
 wd:Q520721 a ex:Athlete ; rdfs:label "Leon Goretzka" ; ex:playsFor wd:Q43310 .
 wd:Q50233588 a ex:Athlete ; rdfs:label "Leonardo Balerdi" ; ex:playsFor wd:Q79800 .
 wd:Q16499882 a ex:Athlete ; rdfs:label "Leroy Sané" ; ex:playsFor wd:Q43310 .
+wd:Q49004376 a ex:Athlete ; rdfs:label "Leverton Pierre" ; ex:playsFor wd:Q236006 .
 wd:Q47467341 a ex:Athlete ; rdfs:label "Lewis Ferguson" ; ex:playsFor wd:Q34044 .
 wd:Q27448075 a ex:Athlete ; rdfs:label "Liam Kelly" ; ex:playsFor wd:Q34044 .
 wd:Q50505969 a ex:Athlete ; rdfs:label "Liam Millar" ; ex:playsFor wd:Q208635 .
 wd:Q47544166 a ex:Athlete ; rdfs:label "Liberato Cacace" ; ex:playsFor wd:Q175315 .
 wd:Q615 a ex:Athlete ; rdfs:label "Lionel Messi" ; ex:playsFor wd:Q79800 .
+wd:Q86041826 a ex:Athlete ; rdfs:label "Lionel Mpasi" ; ex:playsFor wd:Q270080 .
 wd:Q30881092 a ex:Athlete ; rdfs:label "Lisandro Martínez" ; ex:playsFor wd:Q79800 .
 wd:Q108800542 a ex:Athlete ; rdfs:label "Livano Comenencia" ; ex:playsFor wd:Q729640 .
 wd:Q110184199 a ex:Athlete ; rdfs:label "Logan Costa" ; ex:playsFor wd:Q330039 .
+wd:Q72697581 a ex:Athlete ; rdfs:label "Louicius Don Deedson" ; ex:playsFor wd:Q236006 .
 wd:Q121829403 a ex:Athlete ; rdfs:label "Luc de Fougerolles" ; ex:playsFor wd:Q208635 .
 wd:Q122160785 a ex:Athlete ; rdfs:label "Luca Jaquez" ; ex:playsFor wd:Q165141 .
 wd:Q19952334 a ex:Athlete ; rdfs:label "Luca Zidane" ; ex:playsFor wd:Q181903 .
@@ -579,48 +818,79 @@ wd:Q115371638 a ex:Athlete ; rdfs:label "Lucas Bergvall" ; ex:playsFor wd:Q16082
 wd:Q72648 a ex:Athlete ; rdfs:label "Lucas Digne" ; ex:playsFor wd:Q47774 .
 wd:Q18924954 a ex:Athlete ; rdfs:label "Lucas Hernandez" ; ex:playsFor wd:Q47774 .
 wd:Q133105064 a ex:Athlete ; rdfs:label "Lucas Herrington" ; ex:playsFor wd:Q268208 .
+wd:Q602311 a ex:Athlete ; rdfs:label "Lucas Mendes" ; ex:playsFor wd:Q232731 .
 wd:Q30089624 a ex:Athlete ; rdfs:label "Lucas Paquetá" ; ex:playsFor wd:Q83459 .
 wd:Q22092264 a ex:Athlete ; rdfs:label "Luis Chávez" ; ex:playsFor wd:Q164089 .
 wd:Q28531111 a ex:Athlete ; rdfs:label "Luis Díaz" ; ex:playsFor wd:Q212564 .
+wd:Q2465298 a ex:Athlete ; rdfs:label "Luis Mejía" ; ex:playsFor wd:Q223748 .
 wd:Q56433831 a ex:Athlete ; rdfs:label "Luis Romo" ; ex:playsFor wd:Q164089 .
 wd:Q28736721 a ex:Athlete ; rdfs:label "Luis Suárez" ; ex:playsFor wd:Q212564 .
 wd:Q101764291 a ex:Athlete ; rdfs:label "Luiz Henrique" ; ex:playsFor wd:Q83459 .
+wd:Q483837 a ex:Athlete ; rdfs:label "Luka Modrić" ; ex:playsFor wd:Q134479 .
+wd:Q67999144 a ex:Athlete ; rdfs:label "Luka Sučić" ; ex:playsFor wd:Q134479 .
+wd:Q115162374 a ex:Athlete ; rdfs:label "Luka Vušković" ; ex:playsFor wd:Q134479 .
 wd:Q100271491 a ex:Athlete ; rdfs:label "Lukáš Horníček" ; ex:playsFor wd:Q483868 .
 wd:Q45288740 a ex:Athlete ; rdfs:label "Lukáš Provod" ; ex:playsFor wd:Q483868 .
 wd:Q97312966 a ex:Athlete ; rdfs:label "Lukáš Červ" ; ex:playsFor wd:Q483868 .
+wd:Q42725482 a ex:Athlete ; rdfs:label "Lyle Foster" ; ex:playsFor wd:Q170327 .
 wd:Q26405109 a ex:Athlete ; rdfs:label "Lyndon Dykes" ; ex:playsFor wd:Q34044 .
 wd:Q18199184 a ex:Athlete ; rdfs:label "Léo Pereira" ; ex:playsFor wd:Q83459 .
 wd:Q108910786 a ex:Athlete ; rdfs:label "Maghnes Akliouche" ; ex:playsFor wd:Q47774 .
 wd:Q18210581 a ex:Athlete ; rdfs:label "Mahdi Torabi" ; ex:playsFor wd:Q184602 .
 wd:Q21621941 a ex:Athlete ; rdfs:label "Mahmoud Al-Mardi" ; ex:playsFor wd:Q275940 .
 wd:Q117035133 a ex:Athlete ; rdfs:label "Mahmoud Saber" ; ex:playsFor wd:Q28089 .
+wd:Q61911369 a ex:Athlete ; rdfs:label "Mahmud Abunada" ; ex:playsFor wd:Q232731 .
 wd:Q87268125 a ex:Athlete ; rdfs:label "Malick Thiaw" ; ex:playsFor wd:Q43310 .
 wd:Q96391665 a ex:Athlete ; rdfs:label "Malik Tillman" ; ex:playsFor wd:Q164134 .
 wd:Q78752401 a ex:Athlete ; rdfs:label "Malo Gusto" ; ex:playsFor wd:Q47774 .
+wd:Q108187024 a ex:Athlete ; rdfs:label "Mamadou Sarr" ; ex:playsFor wd:Q207441 .
+wd:Q110111698 a ex:Athlete ; rdfs:label "Manaf Younis" ; ex:playsFor wd:Q186243 .
 wd:Q64029237 a ex:Athlete ; rdfs:label "Manu Koné" ; ex:playsFor wd:Q47774 .
 wd:Q19938984 a ex:Athlete ; rdfs:label "Manuel Akanji" ; ex:playsFor wd:Q165141 .
 wd:Q107365 a ex:Athlete ; rdfs:label "Manuel Neuer" ; ex:playsFor wd:Q43310 .
 wd:Q27960175 a ex:Athlete ; rdfs:label "Manuel Ugarte" ; ex:playsFor wd:Q134916 .
 wd:Q44737396 a ex:Athlete ; rdfs:label "Marc Guéhi" ; ex:playsFor wd:Q47762 .
+wd:Q22082505 a ex:Athlete ; rdfs:label "Marc Hagit Cucurella" ; ex:playsFor wd:Q42267 .
+wd:Q110220404 a ex:Athlete ; rdfs:label "Marc Pubill" ; ex:playsFor wd:Q42267 .
+wd:Q472300 a ex:Athlete ; rdfs:label "Marcel Sabitzer" ; ex:playsFor wd:Q163534 .
+wd:Q28692516 a ex:Athlete ; rdfs:label "Marco Friedl" ; ex:playsFor wd:Q163534 .
+wd:Q107641804 a ex:Athlete ; rdfs:label "Marco Pašalić" ; ex:playsFor wd:Q134479 .
+wd:Q21130285 a ex:Athlete ; rdfs:label "Marcos Llorente" ; ex:playsFor wd:Q42267 .
+wd:Q59268631 a ex:Athlete ; rdfs:label "Marcus Holmgren Pedersen" ; ex:playsFor wd:Q184387 .
 wd:Q22951255 a ex:Athlete ; rdfs:label "Marcus Rashford" ; ex:playsFor wd:Q47762 .
 wd:Q19903718 a ex:Athlete ; rdfs:label "Marcus Thuram" ; ex:playsFor wd:Q47774 .
+wd:Q29427316 a ex:Athlete ; rdfs:label "Marin Pongračić" ; ex:playsFor wd:Q134479 .
+wd:Q14625183 a ex:Athlete ; rdfs:label "Mario Pašalić" ; ex:playsFor wd:Q134479 .
 wd:Q5811691 a ex:Athlete ; rdfs:label "Mark Flekken" ; ex:playsFor wd:Q47050 .
 wd:Q27995843 a ex:Athlete ; rdfs:label "Mark McKenzie" ; ex:playsFor wd:Q164134 .
+wd:Q313575 a ex:Athlete ; rdfs:label "Marko Arnautović" ; ex:playsFor wd:Q163534 .
+wd:Q126373302 a ex:Athlete ; rdfs:label "Marko Farji" ; ex:playsFor wd:Q186243 .
 wd:Q102257634 a ex:Athlete ; rdfs:label "Marko Stamenic" ; ex:playsFor wd:Q175315 .
 wd:Q39230 a ex:Athlete ; rdfs:label "Marquinhos" ; ex:playsFor wd:Q83459 .
 wd:Q285684 a ex:Athlete ; rdfs:label "Marten de Roon" ; ex:playsFor wd:Q47050 .
+wd:Q107446975 a ex:Athlete ; rdfs:label "Martin Baturina" ; ex:playsFor wd:Q134479 .
+wd:Q42319683 a ex:Athlete ; rdfs:label "Martin Erlić" ; ex:playsFor wd:Q134479 .
+wd:Q107426681 a ex:Athlete ; rdfs:label "Martin Experiénce" ; ex:playsFor wd:Q236006 .
+wd:Q83795769 a ex:Athlete ; rdfs:label "Martin Zlomislić" ; ex:playsFor wd:Q181190 .
+wd:Q16902219 a ex:Athlete ; rdfs:label "Martin Ødegaard" ; ex:playsFor wd:Q184387 .
+wd:Q63384759 a ex:Athlete ; rdfs:label "Martín Zubimendi" ; ex:playsFor wd:Q42267 .
 wd:Q108698128 a ex:Athlete ; rdfs:label "Marvin Keller" ; ex:playsFor wd:Q165141 .
+wd:Q108606228 a ex:Athlete ; rdfs:label "Marvin Senaya" ; ex:playsFor wd:Q172014 .
 wd:Q116621640 a ex:Athlete ; rdfs:label "Marwan Attia" ; ex:playsFor wd:Q28089 .
 wd:Q124420330 a ex:Athlete ; rdfs:label "Mateo Chávez" ; ex:playsFor wd:Q164089 .
+wd:Q701297 a ex:Athlete ; rdfs:label "Mateo Kovačić" ; ex:playsFor wd:Q134479 .
 wd:Q35831063 a ex:Athlete ; rdfs:label "Matheus Cunha" ; ex:playsFor wd:Q83459 .
+wd:Q96211488 a ex:Athlete ; rdfs:label "Matheus Nunes" ; ex:playsFor wd:Q267245 .
 wd:Q176304 a ex:Athlete ; rdfs:label "Mathew Leckie" ; ex:playsFor wd:Q268208 .
 wd:Q1587689 a ex:Athlete ; rdfs:label "Mathew Ryan" ; ex:playsFor wd:Q268208 .
 wd:Q55760452 a ex:Athlete ; rdfs:label "Mathieu Choinière" ; ex:playsFor wd:Q208635 .
 wd:Q23679804 a ex:Athlete ; rdfs:label "Mathías Olivera" ; ex:playsFor wd:Q134916 .
+wd:Q117041294 a ex:Athlete ; rdfs:label "Matias Fernandez-Pardo" ; ex:playsFor wd:Q166776 .
 wd:Q58767078 a ex:Athlete ; rdfs:label "Mats Wieffer" ; ex:playsFor wd:Q47050 .
 wd:Q62036070 a ex:Athlete ; rdfs:label "Matt Freese" ; ex:playsFor wd:Q164134 .
 wd:Q24663885 a ex:Athlete ; rdfs:label "Matt Turner" ; ex:playsFor wd:Q164134 .
 wd:Q96091702 a ex:Athlete ; rdfs:label "Matthew Garbett" ; ex:playsFor wd:Q175315 .
+wd:Q113628776 a ex:Athlete ; rdfs:label "Matthieu Epolo" ; ex:playsFor wd:Q270080 .
 wd:Q23915221 a ex:Athlete ; rdfs:label "Mattias Svanberg" ; ex:playsFor wd:Q160826 .
 wd:Q106804819 a ex:Athlete ; rdfs:label "Matías Galarza" ; ex:playsFor wd:Q172020 .
 wd:Q28663925 a ex:Athlete ; rdfs:label "Matías Viña" ; ex:playsFor wd:Q134916 .
@@ -629,21 +899,34 @@ wd:Q65718498 a ex:Athlete ; rdfs:label "Maurício" ; ex:playsFor wd:Q172020 .
 wd:Q117309867 a ex:Athlete ; rdfs:label "Max Arfsten" ; ex:playsFor wd:Q164134 .
 wd:Q6794678 a ex:Athlete ; rdfs:label "Max Crocombe" ; ex:playsFor wd:Q175315 .
 wd:Q60286976 a ex:Athlete ; rdfs:label "Maxence Lacroix" ; ex:playsFor wd:Q47774 .
+wd:Q85928265 a ex:Athlete ; rdfs:label "Maxim De Cuyper" ; ex:playsFor wd:Q166776 .
 wd:Q19866530 a ex:Athlete ; rdfs:label "Maxime Crépeau" ; ex:playsFor wd:Q208635 .
 wd:Q80314837 a ex:Athlete ; rdfs:label "Maximilian Beier" ; ex:playsFor wd:Q43310 .
 wd:Q58011167 a ex:Athlete ; rdfs:label "Maximiliano Araújo" ; ex:playsFor wd:Q134916 .
+wd:Q133464757 a ex:Athlete ; rdfs:label "Mbekezeli Mbokazi" ; ex:playsFor wd:Q170327 .
 wd:Q30160479 a ex:Athlete ; rdfs:label "Mehdi Ghayedi" ; ex:playsFor wd:Q184602 .
 wd:Q17070837 a ex:Athlete ; rdfs:label "Mehdi Taremi" ; ex:playsFor wd:Q184602 .
 wd:Q105846503 a ex:Athlete ; rdfs:label "Melvin Mastil" ; ex:playsFor wd:Q181903 .
 wd:Q1894 a ex:Athlete ; rdfs:label "Memphis Depay" ; ex:playsFor wd:Q47050 .
+wd:Q100774865 a ex:Athlete ; rdfs:label "Merchas Doski" ; ex:playsFor wd:Q186243 .
+wd:Q29047921 a ex:Athlete ; rdfs:label "Merih Demiral" ; ex:playsFor wd:Q483856 .
+wd:Q1401328 a ex:Athlete ; rdfs:label "Mert Günok" ; ex:playsFor wd:Q483856 .
+wd:Q53394040 a ex:Athlete ; rdfs:label "Mert Müldür" ; ex:playsFor wd:Q483856 .
+wd:Q52771823 a ex:Athlete ; rdfs:label "Meshal Barsham" ; ex:playsFor wd:Q232731 .
+wd:Q27805413 a ex:Athlete ; rdfs:label "Michael Amir Murillo" ; ex:playsFor wd:Q223748 .
 wd:Q524730 a ex:Athlete ; rdfs:label "Michael Boxall" ; ex:playsFor wd:Q175315 .
+wd:Q699094 a ex:Athlete ; rdfs:label "Michael Gregoritsch" ; ex:playsFor wd:Q163534 .
 wd:Q62050484 a ex:Athlete ; rdfs:label "Michael Olise" ; ex:playsFor wd:Q47774 .
+wd:Q55813157 a ex:Athlete ; rdfs:label "Michael Svoboda" ; ex:playsFor wd:Q163534 .
 wd:Q54862548 a ex:Athlete ; rdfs:label "Michael Woud" ; ex:playsFor wd:Q175315 .
 wd:Q28801942 a ex:Athlete ; rdfs:label "Michal Sadílek" ; ex:playsFor wd:Q483868 .
 wd:Q27469951 a ex:Athlete ; rdfs:label "Michel Aebischer" ; ex:playsFor wd:Q165141 .
 wd:Q69812902 a ex:Athlete ; rdfs:label "Micky van de Ven" ; ex:playsFor wd:Q47050 .
 wd:Q16145667 a ex:Athlete ; rdfs:label "Miguel Almirón" ; ex:playsFor wd:Q172020 .
 wd:Q17274709 a ex:Athlete ; rdfs:label "Mike Maignan" ; ex:playsFor wd:Q47774 .
+wd:Q113515002 a ex:Athlete ; rdfs:label "Mike Penders" ; ex:playsFor wd:Q166776 .
+wd:Q17612631 a ex:Athlete ; rdfs:label "Mikel Merino" ; ex:playsFor wd:Q42267 .
+wd:Q21195147 a ex:Athlete ; rdfs:label "Mikel Oyarzabal" ; ex:playsFor wd:Q42267 .
 wd:Q17523896 a ex:Athlete ; rdfs:label "Milad Mohammadi" ; ex:playsFor wd:Q184602 .
 wd:Q30122953 a ex:Athlete ; rdfs:label "Miles Robinson" ; ex:playsFor wd:Q164134 .
 wd:Q14309492 a ex:Athlete ; rdfs:label "Miloš Degenek" ; ex:playsFor wd:Q268208 .
@@ -659,6 +942,7 @@ wd:Q17151209 a ex:Athlete ; rdfs:label "Mohamed El-Shenawy" ; ex:playsFor wd:Q28
 wd:Q18705249 a ex:Athlete ; rdfs:label "Mohamed Hany" ; ex:playsFor wd:Q28089 .
 wd:Q22278509 a ex:Athlete ; rdfs:label "Mohamed Kanno" ; ex:playsFor wd:Q189723 .
 wd:Q126365092 a ex:Athlete ; rdfs:label "Mohamed Koné" ; ex:playsFor wd:Q175145 .
+wd:Q137394484 a ex:Athlete ; rdfs:label "Mohamed Manai" ; ex:playsFor wd:Q232731 .
 wd:Q1354960 a ex:Athlete ; rdfs:label "Mohamed Salah" ; ex:playsFor wd:Q28089 .
 wd:Q84593316 a ex:Athlete ; rdfs:label "Mohamed Touré" ; ex:playsFor wd:Q268208 .
 wd:Q124247293 a ex:Athlete ; rdfs:label "Mohammad Abu Hashish" ; ex:playsFor wd:Q275940 .
@@ -669,6 +953,8 @@ wd:Q5938042 a ex:Athlete ; rdfs:label "Mohammad Hossein Kanaanizadegan" ; ex:pla
 wd:Q65515898 a ex:Athlete ; rdfs:label "Mohammad Mohebi" ; ex:playsFor wd:Q184602 .
 wd:Q136399691 a ex:Athlete ; rdfs:label "Mohammed Abu Al-Shamat" ; ex:playsFor wd:Q189723 .
 wd:Q22677970 a ex:Athlete ; rdfs:label "Mohammed Al-Owais" ; ex:playsFor wd:Q189723 .
+wd:Q18705783 a ex:Athlete ; rdfs:label "Mohammed Muntari" ; ex:playsFor wd:Q232731 .
+wd:Q45935415 a ex:Athlete ; rdfs:label "Mohanad Ali" ; ex:playsFor wd:Q186243 .
 wd:Q41023561 a ex:Athlete ; rdfs:label "Mohanad Lasheen" ; ex:playsFor wd:Q28089 .
 wd:Q124397380 a ex:Athlete ; rdfs:label "Mohannad Abu Taha" ; ex:playsFor wd:Q275940 .
 wd:Q87715532 a ex:Athlete ; rdfs:label "Moisés Caicedo" ; ex:playsFor wd:Q987584 .
@@ -677,15 +963,19 @@ wd:Q104488728 a ex:Athlete ; rdfs:label "Mojmír Chytil" ; ex:playsFor wd:Q48386
 wd:Q30118244 a ex:Athlete ; rdfs:label "Montassar Talbi" ; ex:playsFor wd:Q27971 .
 wd:Q61598452 a ex:Athlete ; rdfs:label "Morgan Rogers" ; ex:playsFor wd:Q47762 .
 wd:Q105082472 a ex:Athlete ; rdfs:label "Mortadha Ben Ouanes" ; ex:playsFor wd:Q27971 .
+wd:Q16852194 a ex:Athlete ; rdfs:label "Morten Thorsby" ; ex:playsFor wd:Q184387 .
+wd:Q17686992 a ex:Athlete ; rdfs:label "Mory Diaw" ; ex:playsFor wd:Q207441 .
 wd:Q110263543 a ex:Athlete ; rdfs:label "Mostafa Shobeir" ; ex:playsFor wd:Q28089 .
 wd:Q121537482 a ex:Athlete ; rdfs:label "Mostafa Ziko" ; ex:playsFor wd:Q28089 .
 wd:Q97698786 a ex:Athlete ; rdfs:label "Moteb Al-Harbi" ; ex:playsFor wd:Q189723 .
 wd:Q139815346 a ex:Athlete ; rdfs:label "Mouhib Chamakh" ; ex:playsFor wd:Q27971 .
+wd:Q18637804 a ex:Athlete ; rdfs:label "Moussa Niakhaté" ; ex:playsFor wd:Q207441 .
 wd:Q123436577 a ex:Athlete ; rdfs:label "Moutaz Neffati" ; ex:playsFor wd:Q27971 .
 wd:Q116146104 a ex:Athlete ; rdfs:label "Moïse Bombito" ; ex:playsFor wd:Q208635 .
 wd:Q18062338 a ex:Athlete ; rdfs:label "Munir Mohand Mohamedi" ; ex:playsFor wd:Q207337 .
 wd:Q27909473 a ex:Athlete ; rdfs:label "Musa Al-Taamari" ; ex:playsFor wd:Q275940 .
 wd:Q105834415 a ex:Athlete ; rdfs:label "Musab Al-Juwayr" ; ex:playsFor wd:Q189723 .
+wd:Q125735784 a ex:Athlete ; rdfs:label "Mustafa Saadoon" ; ex:playsFor wd:Q186243 .
 wd:Q55433904 a ex:Athlete ; rdfs:label "Márcio Rosa" ; ex:playsFor wd:Q330039 .
 wd:Q16665941 a ex:Athlete ; rdfs:label "N'Golo Kanté" ; ex:playsFor wd:Q47774 .
 wd:Q15410320 a ex:Athlete ; rdfs:label "Nabil Bentaleb" ; ex:playsFor wd:Q181903 .
@@ -695,8 +985,10 @@ wd:Q22082590 a ex:Athlete ; rdfs:label "Nahuel Molina" ; ex:playsFor wd:Q79800 .
 wd:Q64031855 a ex:Athlete ; rdfs:label "Nando Pijnaker" ; ex:playsFor wd:Q175315 .
 wd:Q47074246 a ex:Athlete ; rdfs:label "Nasser Al-Dawsari" ; ex:playsFor wd:Q189723 .
 wd:Q1755683 a ex:Athlete ; rdfs:label "Nathan Aké" ; ex:playsFor wd:Q47050 .
+wd:Q107094087 a ex:Athlete ; rdfs:label "Nathan Ngoy" ; ex:playsFor wd:Q166776 .
 wd:Q83264648 a ex:Athlete ; rdfs:label "Nathan Patterson" ; ex:playsFor wd:Q34044 .
 wd:Q116908746 a ex:Athlete ; rdfs:label "Nathan Saliba" ; ex:playsFor wd:Q208635 .
+wd:Q66363768 a ex:Athlete ; rdfs:label "Nathanaël Mbuku" ; ex:playsFor wd:Q270080 .
 wd:Q122351097 a ex:Athlete ; rdfs:label "Nathaniel Brown" ; ex:playsFor wd:Q43310 .
 wd:Q82251502 a ex:Athlete ; rdfs:label "Nawaf Al-Aqidi" ; ex:playsFor wd:Q189723 .
 wd:Q78459310 a ex:Athlete ; rdfs:label "Nawaf Boushal" ; ex:playsFor wd:Q189723 .
@@ -704,27 +996,42 @@ wd:Q28872567 a ex:Athlete ; rdfs:label "Nayef Aguerd" ; ex:playsFor wd:Q207337 .
 wd:Q107745867 a ex:Athlete ; rdfs:label "Neil El Aynaoui" ; ex:playsFor wd:Q207337 .
 wd:Q110486192 a ex:Athlete ; rdfs:label "Nestor Irankunda" ; ex:playsFor wd:Q268208 .
 wd:Q142794 a ex:Athlete ; rdfs:label "Neymar" ; ex:playsFor wd:Q83459 .
+wd:Q116151074 a ex:Athlete ; rdfs:label "Ngal'ayel Mukau" ; ex:playsFor wd:Q270080 .
 wd:Q84158344 a ex:Athlete ; rdfs:label "Nick Woltemade" ; ex:playsFor wd:Q43310 .
 wd:Q18637339 a ex:Athlete ; rdfs:label "Nico Elvedi" ; ex:playsFor wd:Q165141 .
 wd:Q118645253 a ex:Athlete ; rdfs:label "Nico O'Reilly" ; ex:playsFor wd:Q47762 .
 wd:Q111336539 a ex:Athlete ; rdfs:label "Nico Paz" ; ex:playsFor wd:Q79800 .
 wd:Q62015814 a ex:Athlete ; rdfs:label "Nico Schlotterbeck" ; ex:playsFor wd:Q43310 .
+wd:Q104414736 a ex:Athlete ; rdfs:label "Nico Williams" ; ex:playsFor wd:Q42267 .
+wd:Q100144350 a ex:Athlete ; rdfs:label "Nicolas Jackson" ; ex:playsFor wd:Q207441 .
 wd:Q20641306 a ex:Athlete ; rdfs:label "Nicolas Pépé" ; ex:playsFor wd:Q175145 .
+wd:Q48525779 a ex:Athlete ; rdfs:label "Nicolas Raskin" ; ex:playsFor wd:Q166776 .
+wd:Q64010197 a ex:Athlete ; rdfs:label "Nicolas Seiwald" ; ex:playsFor wd:Q163534 .
 wd:Q43381082 a ex:Athlete ; rdfs:label "Nicolás González" ; ex:playsFor wd:Q79800 .
 wd:Q182063 a ex:Athlete ; rdfs:label "Nicolás Otamendi" ; ex:playsFor wd:Q79800 .
 wd:Q3876530 a ex:Athlete ; rdfs:label "Nicolás Tagliafico" ; ex:playsFor wd:Q79800 .
 wd:Q20994037 a ex:Athlete ; rdfs:label "Nicolás de la Cruz" ; ex:playsFor wd:Q134916 .
+wd:Q131149776 a ex:Athlete ; rdfs:label "Nidal Čelik" ; ex:playsFor wd:Q181190 .
+wd:Q50623645 a ex:Athlete ; rdfs:label "Nihad Mujakić" ; ex:playsFor wd:Q181190 .
 wd:Q117830854 a ex:Athlete ; rdfs:label "Niko Sigur" ; ex:playsFor wd:Q208635 .
+wd:Q27957334 a ex:Athlete ; rdfs:label "Nikola Katić" ; ex:playsFor wd:Q181190 .
+wd:Q27914817 a ex:Athlete ; rdfs:label "Nikola Moro" ; ex:playsFor wd:Q134479 .
+wd:Q77243490 a ex:Athlete ; rdfs:label "Nikola Vasilj" ; ex:playsFor wd:Q181190 .
+wd:Q17501875 a ex:Athlete ; rdfs:label "Nikola Vlašić" ; ex:playsFor wd:Q134479 .
 wd:Q109301509 a ex:Athlete ; rdfs:label "Nilson Angulo" ; ex:playsFor wd:Q987584 .
 wd:Q106916460 a ex:Athlete ; rdfs:label "Nishan Velupillay" ; ex:playsFor wd:Q268208 .
 wd:Q124302622 a ex:Athlete ; rdfs:label "Nizar Al-Rashdan" ; ex:playsFor wd:Q275940 .
+wd:Q58580967 a ex:Athlete ; rdfs:label "Nkosinathi Sibisi" ; ex:playsFor wd:Q170327 .
 wd:Q29441778 a ex:Athlete ; rdfs:label "Noa Lang" ; ex:playsFor wd:Q47050 .
 wd:Q55286732 a ex:Athlete ; rdfs:label "Noah Okafor" ; ex:playsFor wd:Q165141 .
+wd:Q112112992 a ex:Athlete ; rdfs:label "Noah Sadiki" ; ex:playsFor wd:Q270080 .
 wd:Q66801705 a ex:Athlete ; rdfs:label "Noni Madueke" ; ex:playsFor wd:Q47762 .
 wd:Q106173174 a ex:Athlete ; rdfs:label "Noor Al-Rawabdeh" ; ex:playsFor wd:Q275940 .
 wd:Q33541239 a ex:Athlete ; rdfs:label "Nour Bani Attiah" ; ex:playsFor wd:Q275940 .
 wd:Q26266244 a ex:Athlete ; rdfs:label "Noussair Mazraoui" ; ex:playsFor wd:Q207337 .
+wd:Q96396963 a ex:Athlete ; rdfs:label "Nuno Mendes" ; ex:playsFor wd:Q267245 .
 wd:Q23007684 a ex:Athlete ; rdfs:label "Nuno da Costa" ; ex:playsFor wd:Q330039 .
+wd:Q16235823 a ex:Athlete ; rdfs:label "Nélson Semedo" ; ex:playsFor wd:Q267245 .
 wd:Q106778770 a ex:Athlete ; rdfs:label "Obed Vargas" ; ex:playsFor wd:Q164089 .
 wd:Q130508829 a ex:Athlete ; rdfs:label "Odeh Al-Fakhouri" ; ex:playsFor wd:Q275940 .
 wd:Q47501392 a ex:Athlete ; rdfs:label "Odiljon Hamrobekov" ; ex:playsFor wd:Q487321 .
@@ -732,36 +1039,63 @@ wd:Q64009388 a ex:Athlete ; rdfs:label "Odilon Kossounou" ; ex:playsFor wd:Q1751
 wd:Q63344470 a ex:Athlete ; rdfs:label "Oh Hyeon-gyu" ; ex:playsFor wd:Q543842 .
 wd:Q129116 a ex:Athlete ; rdfs:label "Oliver Baumann" ; ex:playsFor wd:Q43310 .
 wd:Q16911979 a ex:Athlete ; rdfs:label "Ollie Watkins" ; ex:playsFor wd:Q47762 .
+wd:Q122207713 a ex:Athlete ; rdfs:label "Olwethu Makhanya" ; ex:playsFor wd:Q170327 .
 wd:Q41800131 a ex:Athlete ; rdfs:label "Omar Alderete" ; ex:playsFor wd:Q172020 .
 wd:Q28065104 a ex:Athlete ; rdfs:label "Omar Marmoush" ; ex:playsFor wd:Q28089 .
 wd:Q96678415 a ex:Athlete ; rdfs:label "Omar Rekik" ; ex:playsFor wd:Q27971 .
 wd:Q18224489 a ex:Athlete ; rdfs:label "Orbelín Pineda" ; ex:playsFor wd:Q164089 .
+wd:Q56788302 a ex:Athlete ; rdfs:label "Orkun Kökçü" ; ex:playsFor wd:Q483856 .
 wd:Q60842077 a ex:Athlete ; rdfs:label "Orlando Gill" ; ex:playsFor wd:Q172020 .
+wd:Q48839143 a ex:Athlete ; rdfs:label "Orlando Mosquera" ; ex:playsFor wd:Q223748 .
+wd:Q110466658 a ex:Athlete ; rdfs:label "Oscar Bobb" ; ex:playsFor wd:Q184387 .
+wd:Q20656130 a ex:Athlete ; rdfs:label "Osman Hadžikić" ; ex:playsFor wd:Q181190 .
 wd:Q65030956 a ex:Athlete ; rdfs:label "Oston Urunov" ; ex:playsFor wd:Q487321 .
+wd:Q64167435 a ex:Athlete ; rdfs:label "Oswin Appollis" ; ex:playsFor wd:Q170327 .
 wd:Q26209536 a ex:Athlete ; rdfs:label "Otabek Shukurov" ; ex:playsFor wd:Q487321 .
 wd:Q110531201 a ex:Athlete ; rdfs:label "Oumar Diakité" ; ex:playsFor wd:Q175145 .
 wd:Q20851003 a ex:Athlete ; rdfs:label "Ousmane Dembélé" ; ex:playsFor wd:Q47774 .
 wd:Q116753805 a ex:Athlete ; rdfs:label "Ousmane Diomande" ; ex:playsFor wd:Q175145 .
 wd:Q84601192 a ex:Athlete ; rdfs:label "Oussama Benbot" ; ex:playsFor wd:Q181903 .
 wd:Q119079226 a ex:Athlete ; rdfs:label "Owen Goodman" ; ex:playsFor wd:Q208635 .
+wd:Q53280628 a ex:Athlete ; rdfs:label "Ozan Kabak" ; ex:playsFor wd:Q483856 .
+wd:Q109282705 a ex:Athlete ; rdfs:label "Oğuz Aydın" ; ex:playsFor wd:Q483856 .
 wd:Q12597820 a ex:Athlete ; rdfs:label "Paik Seung-ho" ; ex:playsFor wd:Q543842 .
+wd:Q45935395 a ex:Athlete ; rdfs:label "Pape Gueye" ; ex:playsFor wd:Q207441 .
+wd:Q104877690 a ex:Athlete ; rdfs:label "Pape Matar Sarr" ; ex:playsFor wd:Q207441 .
 wd:Q97577478 a ex:Athlete ; rdfs:label "Parfait Guiagon" ; ex:playsFor wd:Q175145 .
 wd:Q69696842 a ex:Athlete ; rdfs:label "Park Jin-seop" ; ex:playsFor wd:Q543842 .
 wd:Q509489 a ex:Athlete ; rdfs:label "Pascal Groß" ; ex:playsFor wd:Q43310 .
+wd:Q67089591 a ex:Athlete ; rdfs:label "Pathé Ciss" ; ex:playsFor wd:Q207441 .
 wd:Q126284601 a ex:Athlete ; rdfs:label "Patrick Beach" ; ex:playsFor wd:Q268208 .
+wd:Q18066870 a ex:Athlete ; rdfs:label "Patrick Berg" ; ex:playsFor wd:Q184387 .
+wd:Q24068400 a ex:Athlete ; rdfs:label "Patrick Pentz" ; ex:playsFor wd:Q163534 .
+wd:Q65948837 a ex:Athlete ; rdfs:label "Patrick Wimmer" ; ex:playsFor wd:Q163534 .
 wd:Q16910257 a ex:Athlete ; rdfs:label "Patrik Schick" ; ex:playsFor wd:Q483868 .
+wd:Q118473161 a ex:Athlete ; rdfs:label "Pau Cubarsí" ; ex:playsFor wd:Q42267 .
 wd:Q7151477 a ex:Athlete ; rdfs:label "Paul Izzo" ; ex:playsFor wd:Q268208 .
 wd:Q117000107 a ex:Athlete ; rdfs:label "Paul Okon-Engstler" ; ex:playsFor wd:Q268208 .
+wd:Q110463620 a ex:Athlete ; rdfs:label "Paul Wanner" ; ex:playsFor wd:Q163534 .
 wd:Q60791524 a ex:Athlete ; rdfs:label "Pavel Sulc" ; ex:playsFor wd:Q483868 .
 wd:Q43374160 a ex:Athlete ; rdfs:label "Payam Niazmand" ; ex:playsFor wd:Q184602 .
+wd:Q66606355 a ex:Athlete ; rdfs:label "Pedri" ; ex:playsFor wd:Q42267 .
+wd:Q7159779 a ex:Athlete ; rdfs:label "Pedro Miguel" ; ex:playsFor wd:Q232731 .
+wd:Q30036972 a ex:Athlete ; rdfs:label "Pedro Neto" ; ex:playsFor wd:Q267245 .
+wd:Q44080929 a ex:Athlete ; rdfs:label "Pedro Porro" ; ex:playsFor wd:Q42267 .
 wd:Q105920173 a ex:Athlete ; rdfs:label "Pedro Vite" ; ex:playsFor wd:Q987584 .
 wd:Q20994068 a ex:Athlete ; rdfs:label "Pervis Estupiñán" ; ex:playsFor wd:Q987584 .
+wd:Q84810924 a ex:Athlete ; rdfs:label "Petar Musa" ; ex:playsFor wd:Q134479 .
+wd:Q120907522 a ex:Athlete ; rdfs:label "Petar Sučić" ; ex:playsFor wd:Q134479 .
+wd:Q20078774 a ex:Athlete ; rdfs:label "Philipp Lienhart" ; ex:playsFor wd:Q163534 .
+wd:Q11634138 a ex:Athlete ; rdfs:label "Philipp Mwene" ; ex:playsFor wd:Q163534 .
 wd:Q101053044 a ex:Athlete ; rdfs:label "Piero Hincapié" ; ex:playsFor wd:Q987584 .
+wd:Q97356007 a ex:Athlete ; rdfs:label "Prince Kwabena Adu" ; ex:playsFor wd:Q172014 .
 wd:Q112988067 a ex:Athlete ; rdfs:label "Promise David" ; ex:playsFor wd:Q208635 .
 wd:Q53996595 a ex:Athlete ; rdfs:label "Quinten Timber" ; ex:playsFor wd:Q47050 .
 wd:Q139816192 a ex:Athlete ; rdfs:label "Raed Chikhaoui" ; ex:playsFor wd:Q27971 .
+wd:Q30055335 a ex:Athlete ; rdfs:label "Rafael Leão" ; ex:playsFor wd:Q267245 .
 wd:Q106030853 a ex:Athlete ; rdfs:label "Rafik Belghali" ; ex:playsFor wd:Q181903 .
 wd:Q15983763 a ex:Athlete ; rdfs:label "Raja'i Ayed" ; ex:playsFor wd:Q275940 .
+wd:Q7289588 a ex:Athlete ; rdfs:label "Ramin Rezaeian" ; ex:playsFor wd:Q184602 .
 wd:Q73149048 a ex:Athlete ; rdfs:label "Ramiz Zerrouki" ; ex:playsFor wd:Q181903 .
 wd:Q17484446 a ex:Athlete ; rdfs:label "Ramy Bensebaini" ; ex:playsFor wd:Q181903 .
 wd:Q501274 a ex:Athlete ; rdfs:label "Ramy Rabia" ; ex:playsFor wd:Q28089 .
@@ -773,9 +1107,14 @@ wd:Q50825738 a ex:Athlete ; rdfs:label "Rayan Aït-Nouri" ; ex:playsFor wd:Q1819
 wd:Q64736321 a ex:Athlete ; rdfs:label "Rayan Cherki" ; ex:playsFor wd:Q47774 .
 wd:Q134932034 a ex:Athlete ; rdfs:label "Rayan Elloumi" ; ex:playsFor wd:Q27971 .
 wd:Q1925465 a ex:Athlete ; rdfs:label "Raúl Jiménez" ; ex:playsFor wd:Q164089 .
+wd:Q18246217 a ex:Athlete ; rdfs:label "Rebin Sulaka" ; ex:playsFor wd:Q186243 .
 wd:Q120389429 a ex:Athlete ; rdfs:label "Redouane Halhal" ; ex:playsFor wd:Q207337 .
 wd:Q39076401 a ex:Athlete ; rdfs:label "Reece James" ; ex:playsFor wd:Q47762 .
+wd:Q119413564 a ex:Athlete ; rdfs:label "Relebohile Mofokeng" ; ex:playsFor wd:Q170327 .
 wd:Q16595441 a ex:Athlete ; rdfs:label "Remo Freuler" ; ex:playsFor wd:Q165141 .
+wd:Q116700351 a ex:Athlete ; rdfs:label "Renato Veiga" ; ex:playsFor wd:Q267245 .
+wd:Q28801770 a ex:Athlete ; rdfs:label "Ricardo Adé" ; ex:playsFor wd:Q236006 .
+wd:Q58796031 a ex:Athlete ; rdfs:label "Ricardo Goss" ; ex:playsFor wd:Q170327 .
 wd:Q62597239 a ex:Athlete ; rdfs:label "Ricardo Pepi" ; ex:playsFor wd:Q164134 .
 wd:Q666506 a ex:Athlete ; rdfs:label "Ricardo Rodriguez" ; ex:playsFor wd:Q165141 .
 wd:Q117322318 a ex:Athlete ; rdfs:label "Richard Ríos" ; ex:playsFor wd:Q212564 .
@@ -788,45 +1127,67 @@ wd:Q85797565 a ex:Athlete ; rdfs:label "Roberto Lopes" ; ex:playsFor wd:Q330039 
 wd:Q107647351 a ex:Athlete ; rdfs:label "Robin Hranáč" ; ex:playsFor wd:Q483868 .
 wd:Q124745247 a ex:Athlete ; rdfs:label "Robin Risser" ; ex:playsFor wd:Q47774 .
 wd:Q122789696 a ex:Athlete ; rdfs:label "Robin Roefs" ; ex:playsFor wd:Q47050 .
+wd:Q46312338 a ex:Athlete ; rdfs:label "Rocky Bushiri" ; ex:playsFor wd:Q270080 .
+wd:Q3939881 a ex:Athlete ; rdfs:label "Roderick Miller" ; ex:playsFor wd:Q223748 .
+wd:Q20994118 a ex:Athlete ; rdfs:label "Rodri" ; ex:playsFor wd:Q42267 .
 wd:Q2070073 a ex:Athlete ; rdfs:label "Rodrigo Aguirre" ; ex:playsFor wd:Q134916 .
 wd:Q18817134 a ex:Athlete ; rdfs:label "Rodrigo Bentancur" ; ex:playsFor wd:Q134916 .
 wd:Q6110670 a ex:Athlete ; rdfs:label "Rodrigo De Paul" ; ex:playsFor wd:Q79800 .
 wd:Q60842159 a ex:Athlete ; rdfs:label "Rodrigo Zalazar" ; ex:playsFor wd:Q134916 .
 wd:Q55363875 a ex:Athlete ; rdfs:label "Roger Ibañez" ; ex:playsFor wd:Q83459 .
+wd:Q30080273 a ex:Athlete ; rdfs:label "Romano Schmid" ; ex:playsFor wd:Q163534 .
+wd:Q313316 a ex:Athlete ; rdfs:label "Romelu Lukaku" ; ex:playsFor wd:Q166776 .
 wd:Q56332606 a ex:Athlete ; rdfs:label "Ronald Araújo" ; ex:playsFor wd:Q134916 .
+wd:Q7366080 a ex:Athlete ; rdfs:label "Ronwen Williams" ; ex:playsFor wd:Q170327 .
 wd:Q56787768 a ex:Athlete ; rdfs:label "Roshon van Eijma" ; ex:playsFor wd:Q729640 .
 wd:Q47126518 a ex:Athlete ; rdfs:label "Ross Stewart" ; ex:playsFor wd:Q34044 .
 wd:Q15981797 a ex:Athlete ; rdfs:label "Rouzbeh Cheshmi" ; ex:playsFor wd:Q184602 .
+wd:Q114355328 a ex:Athlete ; rdfs:label "Ruben Providence" ; ex:playsFor wd:Q236006 .
 wd:Q38053896 a ex:Athlete ; rdfs:label "Ruben Vargas" ; ex:playsFor wd:Q165141 .
+wd:Q16236537 a ex:Athlete ; rdfs:label "Rui Silva" ; ex:playsFor wd:Q267245 .
 wd:Q55138415 a ex:Athlete ; rdfs:label "Rustam Ashurmatov" ; ex:playsFor wd:Q487321 .
 wd:Q16236700 a ex:Athlete ; rdfs:label "Ryan Christie" ; ex:playsFor wd:Q34044 .
 wd:Q56257870 a ex:Athlete ; rdfs:label "Ryan Gravenberch" ; ex:playsFor wd:Q47050 .
 wd:Q1392925 a ex:Athlete ; rdfs:label "Ryan Mendes" ; ex:playsFor wd:Q330039 .
 wd:Q3943100 a ex:Athlete ; rdfs:label "Ryan Thomas" ; ex:playsFor wd:Q175315 .
+wd:Q21621168 a ex:Athlete ; rdfs:label "Rúben Dias" ; ex:playsFor wd:Q267245 .
+wd:Q17486599 a ex:Athlete ; rdfs:label "Rúben Neves" ; ex:playsFor wd:Q267245 .
 wd:Q139815184 a ex:Athlete ; rdfs:label "Sabri Ben Hessen" ; ex:playsFor wd:Q27971 .
+wd:Q209942 a ex:Athlete ; rdfs:label "Sadio Mané" ; ex:playsFor wd:Q207441 .
 wd:Q130210573 a ex:Athlete ; rdfs:label "Saed Al-Rosan" ; ex:playsFor wd:Q275940 .
 wd:Q7398276 a ex:Athlete ; rdfs:label "Saeid Ezzatollahi" ; ex:playsFor wd:Q184602 .
+wd:Q95680243 a ex:Athlete ; rdfs:label "Salah Zakaria" ; ex:playsFor wd:Q232731 .
 wd:Q7403894 a ex:Athlete ; rdfs:label "Saleh Al-Shehri" ; ex:playsFor wd:Q189723 .
 wd:Q70226579 a ex:Athlete ; rdfs:label "Saleh Hardani" ; ex:playsFor wd:Q184602 .
 wd:Q3945419 a ex:Athlete ; rdfs:label "Salem Al-Dawsari" ; ex:playsFor wd:Q189723 .
+wd:Q26965570 a ex:Athlete ; rdfs:label "Salih Özcan" ; ex:playsFor wd:Q483856 .
 wd:Q33124960 a ex:Athlete ; rdfs:label "Salim Obaid" ; ex:playsFor wd:Q275940 .
 wd:Q16632974 a ex:Athlete ; rdfs:label "Saman Ghoddos" ; ex:playsFor wd:Q184602 .
+wd:Q107284545 a ex:Athlete ; rdfs:label "Samed Baždar" ; ex:playsFor wd:Q181190 .
+wd:Q69512938 a ex:Athlete ; rdfs:label "Samet Akaydın" ; ex:playsFor wd:Q483856 .
 wd:Q104745615 a ex:Athlete ; rdfs:label "Samir Chergui" ; ex:playsFor wd:Q181903 .
 wd:Q135616172 a ex:Athlete ; rdfs:label "Samir El Mourabet" ; ex:playsFor wd:Q207337 .
+wd:Q37453754 a ex:Athlete ; rdfs:label "Samuel Moutoussamy" ; ex:playsFor wd:Q270080 .
+wd:Q133794425 a ex:Athlete ; rdfs:label "Samukele Kabini" ; ex:playsFor wd:Q170327 .
+wd:Q97441426 a ex:Athlete ; rdfs:label "Samú Costa" ; ex:playsFor wd:Q267245 .
+wd:Q20675980 a ex:Athlete ; rdfs:label "Sander Berge" ; ex:playsFor wd:Q184387 .
+wd:Q105754161 a ex:Athlete ; rdfs:label "Sander Tangvik" ; ex:playsFor wd:Q184387 .
 wd:Q2502118 a ex:Athlete ; rdfs:label "Santiago Arias" ; ex:playsFor wd:Q212564 .
 wd:Q25367692 a ex:Athlete ; rdfs:label "Santiago Bueno" ; ex:playsFor wd:Q134916 .
 wd:Q33296979 a ex:Athlete ; rdfs:label "Santiago Giménez" ; ex:playsFor wd:Q164089 .
 wd:Q27921765 a ex:Athlete ; rdfs:label "Santiago Mele" ; ex:playsFor wd:Q134916 .
 wd:Q28800473 a ex:Athlete ; rdfs:label "Sarpreet Singh" ; ex:playsFor wd:Q175315 .
 wd:Q60407856 a ex:Athlete ; rdfs:label "Saud Abdulhamid" ; ex:playsFor wd:Q189723 .
+wd:Q34058084 a ex:Athlete ; rdfs:label "Saša Kalajdžić" ; ex:playsFor wd:Q163534 .
 wd:Q24084667 a ex:Athlete ; rdfs:label "Scott McKenna" ; ex:playsFor wd:Q34044 .
 wd:Q29624459 a ex:Athlete ; rdfs:label "Scott McTominay" ; ex:playsFor wd:Q34044 .
+wd:Q127914 a ex:Athlete ; rdfs:label "Sead Kolašinac" ; ex:playsFor wd:Q181190 .
 wd:Q86301356 a ex:Athlete ; rdfs:label "Sebastian Berhalter" ; ex:playsFor wd:Q164134 .
 wd:Q96337717 a ex:Athlete ; rdfs:label "Sebastian Tounekti" ; ex:playsFor wd:Q27971 .
 wd:Q58011140 a ex:Athlete ; rdfs:label "Sebastián Cáceres" ; ex:playsFor wd:Q134916 .
 wd:Q18635274 a ex:Athlete ; rdfs:label "Seko Fofana" ; ex:playsFor wd:Q175145 .
+wd:Q98100512 a ex:Athlete ; rdfs:label "Senne Lammens" ; ex:playsFor wd:Q166776 .
 wd:Q97205258 a ex:Athlete ; rdfs:label "Seol Young-woo" ; ex:playsFor wd:Q543842 .
-wd:Q17086753 a ex:Athlete ; rdfs:label "Sergio Rochet" ; ex:playsFor wd:Q134916 .
 wd:Q57456989 a ex:Athlete ; rdfs:label "Sergiño Dest" ; ex:playsFor wd:Q164134 .
 wd:Q20641191 a ex:Athlete ; rdfs:label "Shahriar Moghanlou" ; ex:playsFor wd:Q184602 .
 wd:Q20972384 a ex:Athlete ; rdfs:label "Sherel Floranus" ; ex:playsFor wd:Q729640 .
@@ -838,39 +1199,66 @@ wd:Q17160970 a ex:Athlete ; rdfs:label "Shōgo Taniguchi" ; ex:playsFor wd:Q1705
 wd:Q124382289 a ex:Athlete ; rdfs:label "Sidny Lopes Cabral" ; ex:playsFor wd:Q330039 .
 wd:Q114386 a ex:Athlete ; rdfs:label "Silvan Widmer" ; ex:playsFor wd:Q165141 .
 wd:Q107742783 a ex:Athlete ; rdfs:label "Simon Adingra" ; ex:playsFor wd:Q175145 .
+wd:Q23887828 a ex:Athlete ; rdfs:label "Simon Banza" ; ex:playsFor wd:Q270080 .
+wd:Q58796434 a ex:Athlete ; rdfs:label "Sipho Chaine" ; ex:playsFor wd:Q170327 .
 wd:Q18428483 a ex:Athlete ; rdfs:label "Sofyan Amrabat" ; ex:playsFor wd:Q207337 .
 wd:Q439722 a ex:Athlete ; rdfs:label "Son Heung-min" ; ex:playsFor wd:Q543842 .
+wd:Q102330606 a ex:Athlete ; rdfs:label "Sondre Langås" ; ex:playsFor wd:Q184387 .
 wd:Q49562244 a ex:Athlete ; rdfs:label "Song Bum-keun" ; ex:playsFor wd:Q543842 .
 wd:Q64224437 a ex:Athlete ; rdfs:label "Sontje Hansen" ; ex:playsFor wd:Q729640 .
 wd:Q56247602 a ex:Athlete ; rdfs:label "Soufiane Rahimi" ; ex:playsFor wd:Q207337 .
+wd:Q104530871 a ex:Athlete ; rdfs:label "Sphephelo Sithole" ; ex:playsFor wd:Q170327 .
+wd:Q41447930 a ex:Athlete ; rdfs:label "Stefan Posch" ; ex:playsFor wd:Q163534 .
 wd:Q35009041 a ex:Athlete ; rdfs:label "Stephen Eustáquio" ; ex:playsFor wd:Q208635 .
+wd:Q85291597 a ex:Athlete ; rdfs:label "Steve Kapuadi" ; ex:playsFor wd:Q270080 .
 wd:Q14371131 a ex:Athlete ; rdfs:label "Steven Moreira" ; ex:playsFor wd:Q330039 .
+wd:Q56227031 a ex:Athlete ; rdfs:label "Stjepan Radeljić" ; ex:playsFor wd:Q181190 .
 wd:Q918049 a ex:Athlete ; rdfs:label "Stopira" ; ex:playsFor wd:Q330039 .
+wd:Q27671280 a ex:Athlete ; rdfs:label "Sultan Al-Brake" ; ex:playsFor wd:Q232731 .
 wd:Q22340706 a ex:Athlete ; rdfs:label "Sultan Mendash" ; ex:playsFor wd:Q189723 .
 wd:Q109906009 a ex:Athlete ; rdfs:label "Taha Ali" ; ex:playsFor wd:Q160826 .
 wd:Q24961840 a ex:Athlete ; rdfs:label "Tahith Chong" ; ex:playsFor wd:Q729640 .
+wd:Q126258395 a ex:Athlete ; rdfs:label "Tahsin Jamshid" ; ex:playsFor wd:Q232731 .
 wd:Q62016194 a ex:Athlete ; rdfs:label "Tajon Buchanan" ; ex:playsFor wd:Q208635 .
 wd:Q27067753 a ex:Athlete ; rdfs:label "Takefusa Kubo" ; ex:playsFor wd:Q170566 .
 wd:Q21286402 a ex:Athlete ; rdfs:label "Takehiro Tomiyasu" ; ex:playsFor wd:Q170566 .
 wd:Q113564288 a ex:Athlete ; rdfs:label "Tani Oluwaseyi" ; ex:playsFor wd:Q208635 .
 wd:Q139986016 a ex:Athlete ; rdfs:label "Tarek Alaa" ; ex:playsFor wd:Q28089 .
+wd:Q106620882 a ex:Athlete ; rdfs:label "Tarik Muharemović" ; ex:playsFor wd:Q181190 .
+wd:Q58790870 a ex:Athlete ; rdfs:label "Teboho Mokoena" ; ex:playsFor wd:Q170327 .
 wd:Q97580948 a ex:Athlete ; rdfs:label "Telmo Arcanjo" ; ex:playsFor wd:Q330039 .
 wd:Q104604531 a ex:Athlete ; rdfs:label "Tete Yengi" ; ex:playsFor wd:Q268208 .
 wd:Q39498277 a ex:Athlete ; rdfs:label "Teun Koopmeiners" ; ex:playsFor wd:Q47050 .
+wd:Q127324870 a ex:Athlete ; rdfs:label "Thabang Matuludi" ; ex:playsFor wd:Q170327 .
+wd:Q130261099 a ex:Athlete ; rdfs:label "Thalente Mbatha" ; ex:playsFor wd:Q170327 .
+wd:Q124173111 a ex:Athlete ; rdfs:label "Thapelo Maseko" ; ex:playsFor wd:Q170327 .
+wd:Q100711783 a ex:Athlete ; rdfs:label "Thelo Aasgaard" ; ex:playsFor wd:Q184387 .
+wd:Q7781199 a ex:Athlete ; rdfs:label "Themba Zwane" ; ex:playsFor wd:Q170327 .
+wd:Q14948183 a ex:Athlete ; rdfs:label "Theo Bongonda" ; ex:playsFor wd:Q270080 .
 wd:Q57293140 a ex:Athlete ; rdfs:label "Thiago Almada" ; ex:playsFor wd:Q79800 .
+wd:Q73360 a ex:Athlete ; rdfs:label "Thibaut Courtois" ; ex:playsFor wd:Q166776 .
+wd:Q2036160 a ex:Athlete ; rdfs:label "Thomas Meunier" ; ex:playsFor wd:Q166776 .
+wd:Q15963873 a ex:Athlete ; rdfs:label "Thomas Partey" ; ex:playsFor wd:Q172014 .
 wd:Q23703372 a ex:Athlete ; rdfs:label "Théo Hernandez" ; ex:playsFor wd:Q47774 .
 wd:Q39500352 a ex:Athlete ; rdfs:label "Tijjani Reijnders" ; ex:playsFor wd:Q47050 .
 wd:Q2642525 a ex:Athlete ; rdfs:label "Tim Payne" ; ex:playsFor wd:Q175315 .
 wd:Q716113 a ex:Athlete ; rdfs:label "Tim Ream" ; ex:playsFor wd:Q164134 .
+wd:Q18041089 a ex:Athlete ; rdfs:label "Timothy Castagne" ; ex:playsFor wd:Q166776 .
+wd:Q65680079 a ex:Athlete ; rdfs:label "Timothy Fayulu" ; ex:playsFor wd:Q270080 .
 wd:Q31871265 a ex:Athlete ; rdfs:label "Timothy Weah" ; ex:playsFor wd:Q164134 .
 wd:Q107930811 a ex:Athlete ; rdfs:label "Tino Livramento" ; ex:playsFor wd:Q47762 .
 wd:Q462503 a ex:Athlete ; rdfs:label "Tommy Smith" ; ex:playsFor wd:Q175315 .
 wd:Q105704210 a ex:Athlete ; rdfs:label "Tomoki Hayakawa" ; ex:playsFor wd:Q170566 .
+wd:Q99617294 a ex:Athlete ; rdfs:label "Tomás Araújo" ; ex:playsFor wd:Q267245 .
+wd:Q117842510 a ex:Athlete ; rdfs:label "Tomás Rodríguez" ; ex:playsFor wd:Q223748 .
 wd:Q17037384 a ex:Athlete ; rdfs:label "Tomáš Chorý" ; ex:playsFor wd:Q483868 .
 wd:Q13360752 a ex:Athlete ; rdfs:label "Tomáš Holeš" ; ex:playsFor wd:Q483868 .
 wd:Q20860081 a ex:Athlete ; rdfs:label "Tomáš Souček" ; ex:playsFor wd:Q483868 .
+wd:Q109587383 a ex:Athlete ; rdfs:label "Toni Fruk" ; ex:playsFor wd:Q134479 .
+wd:Q63968167 a ex:Athlete ; rdfs:label "Torbjørn Heggem" ; ex:playsFor wd:Q184387 .
 wd:Q95223261 a ex:Athlete ; rdfs:label "Trevor Doornbusch" ; ex:playsFor wd:Q729640 .
 wd:Q6734350 a ex:Athlete ; rdfs:label "Trézéguet" ; ex:playsFor wd:Q28089 .
+wd:Q125166783 a ex:Athlete ; rdfs:label "Tshepang Moremi" ; ex:playsFor wd:Q170327 .
 wd:Q56253139 a ex:Athlete ; rdfs:label "Tsuyoshi Watanabe" ; ex:playsFor wd:Q170566 .
 wd:Q19871581 a ex:Athlete ; rdfs:label "Tyler Adams" ; ex:playsFor wd:Q164134 .
 wd:Q121353909 a ex:Athlete ; rdfs:label "Tyler Bindon" ; ex:playsFor wd:Q175315 .
@@ -878,16 +1266,20 @@ wd:Q137384640 a ex:Athlete ; rdfs:label "Tyler Fletcher" ; ex:playsFor wd:Q34044
 wd:Q134657698 a ex:Athlete ; rdfs:label "Tyrese Noslin" ; ex:playsFor wd:Q729640 .
 wd:Q108858343 a ex:Athlete ; rdfs:label "Tyrick Bodak" ; ex:playsFor wd:Q729640 .
 wd:Q89047062 a ex:Athlete ; rdfs:label "Umar Eshmurodov" ; ex:playsFor wd:Q487321 .
+wd:Q23908113 a ex:Athlete ; rdfs:label "Unai Simón" ; ex:playsFor wd:Q42267 .
 wd:Q60298555 a ex:Athlete ; rdfs:label "Utkir Yusupov" ; ex:playsFor wd:Q487321 .
+wd:Q19610875 a ex:Athlete ; rdfs:label "Uğurcan Çakır" ; ex:playsFor wd:Q483856 .
 wd:Q107542811 a ex:Athlete ; rdfs:label "Valentín Barco" ; ex:playsFor wd:Q79800 .
 wd:Q4125587 a ex:Athlete ; rdfs:label "Victor Lindelöf" ; ex:playsFor wd:Q160826 .
 wd:Q47075606 a ex:Athlete ; rdfs:label "Viktor Gyökeres" ; ex:playsFor wd:Q160826 .
 wd:Q101249011 a ex:Athlete ; rdfs:label "Viktor Johansson" ; ex:playsFor wd:Q160826 .
 wd:Q28973866 a ex:Athlete ; rdfs:label "Vinícius Júnior" ; ex:playsFor wd:Q83459 .
 wd:Q133903 a ex:Athlete ; rdfs:label "Virgil van Dijk" ; ex:playsFor wd:Q47050 .
+wd:Q66818509 a ex:Athlete ; rdfs:label "Vitinha" ; ex:playsFor wd:Q267245 .
 wd:Q15113326 a ex:Athlete ; rdfs:label "Vladimír Coufal" ; ex:playsFor wd:Q483868 .
 wd:Q278239 a ex:Athlete ; rdfs:label "Vladimír Darida" ; ex:playsFor wd:Q483868 .
 wd:Q3018091 a ex:Athlete ; rdfs:label "Vozinha" ; ex:playsFor wd:Q330039 .
+wd:Q121422889 a ex:Athlete ; rdfs:label "Víctor Muñoz" ; ex:playsFor wd:Q42267 .
 wd:Q126369438 a ex:Athlete ; rdfs:label "Wagner Pina" ; ex:playsFor wd:Q330039 .
 wd:Q23559699 a ex:Athlete ; rdfs:label "Waldemar Anton" ; ex:playsFor wd:Q43310 .
 wd:Q111280241 a ex:Athlete ; rdfs:label "Warren Zaïre-Emery" ; ex:playsFor wd:Q47774 .
@@ -896,36 +1288,63 @@ wd:Q110882542 a ex:Athlete ; rdfs:label "Wesley França" ; ex:playsFor wd:Q83459
 wd:Q29998966 a ex:Athlete ; rdfs:label "Weston McKennie" ; ex:playsFor wd:Q164134 .
 wd:Q8040741 a ex:Athlete ; rdfs:label "Weverton" ; ex:playsFor wd:Q83459 .
 wd:Q78255759 a ex:Athlete ; rdfs:label "Wilfried Singo" ; ex:playsFor wd:Q175145 .
+wd:Q128210274 a ex:Athlete ; rdfs:label "Wilguens Paugain" ; ex:playsFor wd:Q236006 .
 wd:Q79880395 a ex:Athlete ; rdfs:label "Willer Ditta" ; ex:playsFor wd:Q212564 .
 wd:Q56868118 a ex:Athlete ; rdfs:label "William Saliba" ; ex:playsFor wd:Q47774 .
 wd:Q87767569 a ex:Athlete ; rdfs:label "Willian Pacho" ; ex:playsFor wd:Q987584 .
 wd:Q44821118 a ex:Athlete ; rdfs:label "Willy Semedo" ; ex:playsFor wd:Q330039 .
+wd:Q58484930 a ex:Athlete ; rdfs:label "Wilson Isidor" ; ex:playsFor wd:Q236006 .
+wd:Q139813358 a ex:Athlete ; rdfs:label "Woodensky Pierre" ; ex:playsFor wd:Q236006 .
 wd:Q2210473 a ex:Athlete ; rdfs:label "Wout Weghorst" ; ex:playsFor wd:Q47050 .
+wd:Q20190657 a ex:Athlete ; rdfs:label "Xaver Schlager" ; ex:playsFor wd:Q163534 .
 wd:Q109986890 a ex:Athlete ; rdfs:label "Yacine Titraoui" ; ex:playsFor wd:Q181903 .
 wd:Q105161343 a ex:Athlete ; rdfs:label "Yahia Fofana" ; ex:playsFor wd:Q175145 .
 wd:Q116235098 a ex:Athlete ; rdfs:label "Yaimar Medina" ; ex:playsFor wd:Q987584 .
-wd:Q133698867 a ex:Athlete ; rdfs:label "Yan Diomande" ; ex:playsFor wd:Q175145 .
+wd:Q133698867 a ex:Athlete ; rdfs:label "Yan D.Diomande" ; ex:playsFor wd:Q175145 .
 wd:Q59268317 a ex:Athlete ; rdfs:label "Yan Valery" ; ex:playsFor wd:Q27971 .
 wd:Q113127167 a ex:Athlete ; rdfs:label "Yang Hyun-jun" ; ex:playsFor wd:Q543842 .
 wd:Q130465245 a ex:Athlete ; rdfs:label "Yannick Semedo" ; ex:playsFor wd:Q330039 .
 wd:Q103979811 a ex:Athlete ; rdfs:label "Yasin Ayari" ; ex:playsFor wd:Q160826 .
 wd:Q17386078 a ex:Athlete ; rdfs:label "Yasser Ibrahim" ; ex:playsFor wd:Q28089 .
+wd:Q23772079 a ex:Athlete ; rdfs:label "Yassin Fortuné" ; ex:playsFor wd:Q236006 .
 wd:Q3571952 a ex:Athlete ; rdfs:label "Yassine Bounou" ; ex:playsFor wd:Q207337 .
 wd:Q47105682 a ex:Athlete ; rdfs:label "Yazan Abu Arab" ; ex:playsFor wd:Q275940 .
 wd:Q23772014 a ex:Athlete ; rdfs:label "Yazeed Abulaila" ; ex:playsFor wd:Q275940 .
+wd:Q64010489 a ex:Athlete ; rdfs:label "Yehvann Diouf" ; ex:playsFor wd:Q207441 .
 wd:Q16648816 a ex:Athlete ; rdfs:label "Yerry Mina" ; ex:playsFor wd:Q212564 .
+wd:Q28101965 a ex:Athlete ; rdfs:label "Yoane Wissa" ; ex:playsFor wd:Q270080 .
+wd:Q21072120 a ex:Athlete ; rdfs:label "Yoel Bárcenas" ; ex:playsFor wd:Q223748 .
+wd:Q14327453 a ex:Athlete ; rdfs:label "Youri Tielemans" ; ex:playsFor wd:Q166776 .
+wd:Q106372614 a ex:Athlete ; rdfs:label "Youssef Amyn" ; ex:playsFor wd:Q186243 .
 wd:Q110964329 a ex:Athlete ; rdfs:label "Youssef Belammari" ; ex:playsFor wd:Q207337 .
 wd:Q85884126 a ex:Athlete ; rdfs:label "Yuito Suzuki" ; ex:playsFor wd:Q170566 .
 wd:Q50073536 a ex:Athlete ; rdfs:label "Yukinari Sugawara" ; ex:playsFor wd:Q170566 .
+wd:Q56043430 a ex:Athlete ; rdfs:label "Yunus Akgün" ; ex:playsFor wd:Q483856 .
+wd:Q64211871 a ex:Athlete ; rdfs:label "Yusuf Abdurisag" ; ex:playsFor wd:Q232731 .
 wd:Q16236380 a ex:Athlete ; rdfs:label "Yvon Mvogo" ; ex:playsFor wd:Q165141 .
+wd:Q100735281 a ex:Athlete ; rdfs:label "Yéremy Pino" ; ex:playsFor wd:Q42267 .
 wd:Q281734 a ex:Athlete ; rdfs:label "Yūto Nagatomo" ; ex:playsFor wd:Q170566 .
+wd:Q138863253 a ex:Athlete ; rdfs:label "Zaid Ismail" ; ex:playsFor wd:Q186243 .
+wd:Q114355105 a ex:Athlete ; rdfs:label "Zaid Tahseen" ; ex:playsFor wd:Q186243 .
 wd:Q108156269 a ex:Athlete ; rdfs:label "Zakaria El Ouahdi" ; ex:playsFor wd:Q207337 .
 wd:Q106882153 a ex:Athlete ; rdfs:label "Zeki Amdouni" ; ex:playsFor wd:Q165141 .
+wd:Q50628268 a ex:Athlete ; rdfs:label "Zeki Çelik" ; ex:playsFor wd:Q483856 .
+wd:Q106686485 a ex:Athlete ; rdfs:label "Zeno Debast" ; ex:playsFor wd:Q166776 .
+wd:Q17086753 a ex:Athlete ; rdfs:label "Zergio Roquet" ; ex:playsFor wd:Q134916 .
+wd:Q107882685 a ex:Athlete ; rdfs:label "Zidane Iqbal" ; ex:playsFor wd:Q186243 .
 wd:Q100273072 a ex:Athlete ; rdfs:label "Zineddine Belaïd" ; ex:playsFor wd:Q181903 .
 wd:Q67498669 a ex:Athlete ; rdfs:label "Zion Suzuki" ; ex:playsFor wd:Q170566 .
 wd:Q98191389 a ex:Athlete ; rdfs:label "Ziyad Al-Johani" ; ex:playsFor wd:Q189723 .
 wd:Q17429290 a ex:Athlete ; rdfs:label "Zizo" ; ex:playsFor wd:Q28089 .
 wd:Q20645743 a ex:Athlete ; rdfs:label "putaso monterito" ; ex:playsFor wd:Q212564 .
+wd:Q97404267 a ex:Athlete ; rdfs:label "Álex Baena" ; ex:playsFor wd:Q42267 .
+wd:Q921324 a ex:Athlete ; rdfs:label "Álex Grimaldo" ; ex:playsFor wd:Q42267 .
 wd:Q98092491 a ex:Athlete ; rdfs:label "Álvaro Fidalgo" ; ex:playsFor wd:Q164089 .
+wd:Q19612578 a ex:Athlete ; rdfs:label "Çağlar Söyüncü" ; ex:playsFor wd:Q483856 .
+wd:Q27736107 a ex:Athlete ; rdfs:label "Édouard Mendy" ; ex:playsFor wd:Q207441 .
+wd:Q869214 a ex:Athlete ; rdfs:label "Ørjan Nyland" ; ex:playsFor wd:Q184387 .
+wd:Q17708749 a ex:Athlete ; rdfs:label "İrfan Kahveci" ; ex:playsFor wd:Q483856 .
+wd:Q97320541 a ex:Athlete ; rdfs:label "İsmail Yüksek" ; ex:playsFor wd:Q483856 .
 wd:Q114713721 a ex:Athlete ; rdfs:label "Štěpán Chaloupek" ; ex:playsFor wd:Q483868 .
+wd:Q108159340 a ex:Athlete ; rdfs:label "Αrda Güler" ; ex:playsFor wd:Q483856 .
 

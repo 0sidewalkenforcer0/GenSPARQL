@@ -54,11 +54,12 @@ public class OpenAIProvider implements LLMProvider {
 
     public OpenAIProvider(String apiKey, String baseUrl) {
         this.apiKey = apiKey;
-        this.baseUrl = baseUrl != null ? baseUrl : DEFAULT_BASE_URL;
+        this.baseUrl = normalizeBaseUrl(baseUrl != null ? baseUrl : DEFAULT_BASE_URL);
         // OPENAI_EMBEDDING_BASE_URL / OPENAI_EMBEDDING_API_KEY override the endpoint used for
         // embeddings; if unset, embeddings reuse the chat base URL and key.
         String embUrl = System.getenv("OPENAI_EMBEDDING_BASE_URL");
-        this.embeddingBaseUrl = (embUrl != null && !embUrl.isEmpty()) ? embUrl : this.baseUrl;
+        this.embeddingBaseUrl = (embUrl != null && !embUrl.isEmpty())
+                ? normalizeBaseUrl(embUrl) : this.baseUrl;
         String embKey = System.getenv("OPENAI_EMBEDDING_API_KEY");
         this.embeddingApiKey = (embKey != null && !embKey.isEmpty()) ? embKey : apiKey;
         this.objectMapper = new ObjectMapper();
@@ -129,7 +130,6 @@ public class OpenAIProvider implements LLMProvider {
         ));
         body.put("temperature", request.getTemperature());
         body.put("max_tokens", request.getMaxTokens());
-
         String json = objectMapper.writeValueAsString(body);
         LOG.debug("OpenAI request: {}", truncate(json, 200));
 
@@ -145,11 +145,12 @@ public class OpenAIProvider implements LLMProvider {
 
             if (!response.isSuccessful()) {
                 LOG.error("OpenAI API error: {} - {}", response.code(), responseBody);
-                throw new LLMException("OpenAI API error: " + response.code(),
+                throw new LLMException("OpenAI API error " + response.code() + ": "
+                                + apiErrorMessage(responseBody),
                         "openai", model, response.code());
             }
 
-            JsonNode root = objectMapper.readTree(responseBody);
+            JsonNode root = readJsonResponse(response, responseBody, model, "Chat Completions");
             JsonNode choices = root.path("choices");
             if (!choices.isArray() || choices.isEmpty()) {
                 // Error payloads and content-filter responses omit choices; guard against
@@ -185,6 +186,19 @@ public class OpenAIProvider implements LLMProvider {
                     .success(true)
                     .build();
         }
+    }
+
+    private String apiErrorMessage(String responseBody) {
+        try {
+            String message = objectMapper.readTree(responseBody)
+                    .path("error").path("message").asText("");
+            if (!message.isBlank()) return truncate(message, 600);
+        } catch (Exception ignored) {
+            // Fall back to the raw response below.
+        }
+        String raw = responseBody == null || responseBody.isBlank()
+                ? "No error details returned" : responseBody;
+        return truncate(raw, 600);
     }
 
     @Override
@@ -228,7 +242,7 @@ public class OpenAIProvider implements LLMProvider {
                         "openai", model, response.code());
             }
 
-            JsonNode root = objectMapper.readTree(responseBody);
+            JsonNode root = readJsonResponse(response, responseBody, model, "Embeddings");
             JsonNode dataArray = root.path("data");
 
             List<float[]> embeddings = new ArrayList<>();
@@ -248,6 +262,45 @@ public class OpenAIProvider implements LLMProvider {
     private static String truncate(String s, int maxLen) {
         if (s == null || s.length() <= maxLen) return s;
         return s.substring(0, maxLen) + "...";
+    }
+
+    /**
+     * Accept either an API root (for example {@code https://host/v1}) or a full
+     * OpenAI endpoint pasted from provider documentation. Requests append the
+     * appropriate endpoint themselves, so remove that suffix once here.
+     */
+    static String normalizeBaseUrl(String value) {
+        String normalized = Objects.requireNonNull(value, "baseUrl").trim();
+        normalized = normalized.replaceFirst("/+$", "");
+        normalized = normalized.replaceFirst("(?i)/(chat/completions|responses|embeddings)$", "");
+        HttpUrl parsed = HttpUrl.parse(normalized);
+        if (parsed == null || !("http".equals(parsed.scheme()) || "https".equals(parsed.scheme()))) {
+            throw new IllegalArgumentException("Invalid OpenAI-compatible base URL: " + value);
+        }
+        return normalized;
+    }
+
+    private JsonNode readJsonResponse(Response response, String body, String model, String apiName) {
+        String text = body == null ? "" : body.trim();
+        String contentType = response.header("Content-Type", "unknown");
+        if (!(text.startsWith("{") || text.startsWith("["))) {
+            String preview = truncate(text.replaceAll("\\s+", " "), 240);
+            throw new LLMException(apiName + " endpoint returned a non-JSON response"
+                            + " (HTTP " + response.code() + ", Content-Type: " + contentType + "). "
+                            + "Check the OpenAI-compatible base URL; it should normally end at /v1."
+                            + (preview.isBlank() ? "" : " Response begins: " + preview),
+                    "openai", model, response.code());
+        }
+        try {
+            JsonNode root = objectMapper.readTree(text);
+            if (root == null) throw new IOException("empty JSON document");
+            return root;
+        } catch (IOException e) {
+            throw new LLMException(apiName + " endpoint returned invalid JSON"
+                            + " (HTTP " + response.code() + ", Content-Type: " + contentType + "): "
+                            + e.getMessage(),
+                    "openai", model, response.code(), e);
+        }
     }
 
     @Override

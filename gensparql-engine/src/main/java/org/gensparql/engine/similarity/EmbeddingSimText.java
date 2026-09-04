@@ -2,6 +2,7 @@ package org.gensparql.engine.similarity;
 
 import org.gensparql.core.model.EmbedRequest;
 import org.gensparql.core.model.EmbedResponse;
+import org.gensparql.core.model.ModelSpec;
 import org.gensparql.core.similarity.JaccardSimText;
 import org.gensparql.core.similarity.SimText;
 import org.gensparql.llm.LLMProvider;
@@ -27,13 +28,21 @@ public class EmbeddingSimText implements SimText {
     private static final int MAX_CACHE_SIZE = 10000;
 
     private final SimText fallback;
+    private final LLMProvider provider;
+    private final ModelSpec embeddingModel;
 
     public EmbeddingSimText() {
-        this.fallback = new JaccardSimText();
+        this(new JaccardSimText(), null, null);
     }
 
     public EmbeddingSimText(SimText fallback) {
+        this(fallback, null, null);
+    }
+
+    public EmbeddingSimText(SimText fallback, LLMProvider provider, ModelSpec embeddingModel) {
         this.fallback = fallback != null ? fallback : new JaccardSimText();
+        this.provider = provider;
+        this.embeddingModel = embeddingModel;
     }
 
     @Override
@@ -105,27 +114,26 @@ public class EmbeddingSimText implements SimText {
      * Get embedding for text (with caching).
      */
     private float[] getEmbedding(String text) {
-        // Check cache first
-        float[] cached = embeddingCache.get(text);
-        if (cached != null) {
-            return cached;
-        }
-
         try {
-            LLMProvider provider = LLMProviderRegistry.getDefault();
-            if (provider == null || !provider.supportsEmbedding()) {
+            LLMProvider activeProvider = provider != null ? provider : LLMProviderRegistry.getDefault();
+            if (activeProvider == null || !activeProvider.supportsEmbedding()) {
                 return null;
             }
+            String cacheKey = cacheKey(text, activeProvider, embeddingModel);
+            float[] cached = embeddingCache.get(cacheKey);
+            if (cached != null) {
+                return cached;
+            }
 
-            EmbedRequest request = new EmbedRequest(text, null);
-            EmbedResponse response = provider.embedSync(request);
+            EmbedRequest request = new EmbedRequest(text, embeddingModel);
+            EmbedResponse response = activeProvider.embedSync(request);
 
             if (response.isSuccess()) {
                 float[] embedding = response.getFirstEmbedding();
 
                 // Cache if not too large
                 if (embedding != null && embeddingCache.size() < MAX_CACHE_SIZE) {
-                    embeddingCache.put(text, embedding);
+                    embeddingCache.put(cacheKey, embedding);
                 }
 
                 return embedding;
@@ -159,12 +167,34 @@ public class EmbeddingSimText implements SimText {
         if (provider == null || !provider.supportsEmbedding()) {
             return;
         }
+        warmUpWith(texts, provider, null);
+    }
+
+    /** Pre-compute embeddings with the provider configured for this query. */
+    public void warmUpConfigured(java.util.Collection<String> texts) {
+        LLMProvider activeProvider;
+        try {
+            activeProvider = provider != null ? provider : LLMProviderRegistry.getDefault();
+        } catch (Exception e) {
+            return;
+        }
+        warmUpWith(texts, activeProvider, embeddingModel);
+    }
+
+    private static void warmUpWith(java.util.Collection<String> texts,
+                                   LLMProvider provider,
+                                   ModelSpec embeddingModel) {
+        if (texts == null || texts.isEmpty() || provider == null || !provider.supportsEmbedding()) {
+            return;
+        }
 
         // Unique, non-empty, not-yet-cached texts (preserve encounter order).
         java.util.List<String> todo = new java.util.ArrayList<>();
         java.util.Set<String> seen = new java.util.HashSet<>();
         for (String t : texts) {
-            if (t == null || t.isEmpty() || embeddingCache.containsKey(t) || !seen.add(t)) {
+            if (t == null || t.isEmpty()
+                    || embeddingCache.containsKey(cacheKey(t, provider, embeddingModel))
+                    || !seen.add(t)) {
                 continue;
             }
             todo.add(t);
@@ -178,7 +208,7 @@ public class EmbeddingSimText implements SimText {
             java.util.List<String> chunk =
                     new java.util.ArrayList<>(todo.subList(i, Math.min(i + batch, todo.size())));
             try {
-                EmbedResponse resp = provider.embedSync(new EmbedRequest(chunk, null));
+                EmbedResponse resp = provider.embedSync(new EmbedRequest(chunk, embeddingModel));
                 if (resp == null || !resp.isSuccess()) {
                     continue;
                 }
@@ -186,7 +216,7 @@ public class EmbeddingSimText implements SimText {
                 for (int j = 0; j < chunk.size() && j < embs.size(); j++) {
                     float[] e = embs.get(j);
                     if (e != null && embeddingCache.size() < MAX_CACHE_SIZE) {
-                        embeddingCache.put(chunk.get(j), e);
+                        embeddingCache.put(cacheKey(chunk.get(j), provider, embeddingModel), e);
                     }
                 }
             } catch (Exception e) {
@@ -195,6 +225,12 @@ public class EmbeddingSimText implements SimText {
         }
         LOG.debug("warmUp: cached embeddings for up to {} new strings ({} total cached)",
                 todo.size(), embeddingCache.size());
+    }
+
+    private static String cacheKey(String text, LLMProvider provider, ModelSpec model) {
+        String providerName = provider == null ? "default" : provider.getName();
+        String modelName = model == null ? "default" : model.toString();
+        return providerName + '\u0001' + modelName + '\u0001' + text;
     }
 
     /**

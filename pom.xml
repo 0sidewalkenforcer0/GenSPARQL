@@ -18,6 +18,7 @@
         <module>gensparql-parser</module>
         <module>gensparql-engine</module>
         <module>gensparql-functions</module>
+        <module>gensparql-server</module>
         <module>gensparql-integration-tests</module>
         <module>gensparql-example</module>
     </modules>
@@ -72,6 +73,11 @@
             <dependency>
                 <groupId>org.gensparql</groupId>
                 <artifactId>gensparql-functions</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.gensparql</groupId>
+                <artifactId>gensparql-server</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

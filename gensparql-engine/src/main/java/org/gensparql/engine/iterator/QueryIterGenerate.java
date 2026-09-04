@@ -13,9 +13,11 @@ import org.apache.jena.sparql.engine.binding.BindingFactory;
 import org.apache.jena.sparql.engine.iterator.QueryIteratorBase;
 import org.apache.jena.sparql.serializer.SerializationContext;
 import org.gensparql.core.model.*;
+import org.gensparql.core.exception.LLMException;
 import org.gensparql.core.metrics.LLMCallMetrics;
 import org.gensparql.core.util.PromptTemplate;
 import org.gensparql.engine.GenSPARQLConfig;
+import org.gensparql.engine.boot.GenSPARQL;
 import org.gensparql.engine.candidate.CandidateExtractor;
 import org.gensparql.engine.grounding.EntityGrounder;
 import org.gensparql.engine.op.OpGenerate;
@@ -51,6 +53,8 @@ public class QueryIterGenerate extends QueryIteratorBase {
     private final OpGenerate opGen;
     private final ExecutionContext execCxt;
     private final LLMProvider provider;
+    private final ModelSpec modelSpec;
+    private final boolean failOnLlmError;
     private final PromptTemplate template;
 
     // Candidate extraction for constrained generation
@@ -107,8 +111,13 @@ public class QueryIterGenerate extends QueryIteratorBase {
         LOG.debug("[DEBUG] Output variables: " + opGen.getOutputVariables());
 
         // Get LLM provider
-        ModelSpec modelSpec = opGen.getModelSpec();
-        if (modelSpec != null) {
+        ModelSpec requestModel = execCxt.getContext().get(GenSPARQL.DEFAULT_MODEL);
+        this.modelSpec = requestModel != null ? requestModel : opGen.getModelSpec();
+        LLMProvider requestProvider = execCxt.getContext().get(GenSPARQL.LLM_PROVIDER);
+        this.failOnLlmError = execCxt.getContext().isTrue(GenSPARQL.FAIL_ON_LLM_ERROR);
+        if (requestProvider != null) {
+            this.provider = requestProvider;
+        } else if (modelSpec != null) {
             this.provider = LLMProviderRegistry.getFromSpec(modelSpec);
         } else {
             this.provider = LLMProviderRegistry.getDefault();
@@ -306,7 +315,7 @@ public class QueryIterGenerate extends QueryIteratorBase {
 
             GenerateRequest request = GenerateRequest.builder()
                     .prompt(batchedPrompt)
-                    .modelSpec(opGen.getModelSpec())
+                    .modelSpec(modelSpec)
                     .outputVariables(outputVarNames)
                     .build();
 
@@ -319,6 +328,9 @@ public class QueryIterGenerate extends QueryIteratorBase {
             if (!response.isSuccess()) {
                 LOG.warn("Batched generation failed, dropping {} binding(s): {}",
                         batchInputCount, response.getErrorMessage());
+                if (failOnLlmError) {
+                    throw new LLMException("LLM generation failed: " + response.getErrorMessage());
+                }
                 batchResults = Collections.emptyIterator();
                 return;
             }
@@ -357,6 +369,8 @@ public class QueryIterGenerate extends QueryIteratorBase {
 
         } catch (QueryCancelledException e) {
             throw e;   // a cancelled query must stop, not carry on producing no rows
+        } catch (LLMException e) {
+            throw e;
         } catch (Exception e) {
             LOG.warn("Could not read the batched response, dropping {} binding(s): {}",
                     batchInputCount, e.getMessage());
@@ -462,7 +476,7 @@ public class QueryIterGenerate extends QueryIteratorBase {
         try {
             GenerateRequest request = GenerateRequest.builder()
                     .prompt(finalPrompt)
-                    .modelSpec(opGen.getModelSpec())
+                    .modelSpec(modelSpec)
                     .outputVariables(outputVarNames)
                     .build();
 
@@ -475,12 +489,16 @@ public class QueryIterGenerate extends QueryIteratorBase {
 
             if (!response.isSuccess()) {
                 LOG.warn("LLM generation failed: {}", response.getErrorMessage());
+                if (failOnLlmError) {
+                    throw new LLMException("LLM generation failed: " + response.getErrorMessage());
+                }
                 return null;
             }
 
             if (response.hasBindings()) {
                 for (Map<String, String> outputBinding : response.getBindings()) {
-                    Map<String, String> validatedBinding = validateOutputBinding(outputBinding);
+                    Map<String, String> normalizedBinding = normalizeExplicitScalar(outputBinding);
+                    Map<String, String> validatedBinding = validateOutputBinding(normalizedBinding);
                     if (validatedBinding != null) {
                         outputMaps.add(validatedBinding);
                     } else {
@@ -498,11 +516,48 @@ public class QueryIterGenerate extends QueryIteratorBase {
             }
         } catch (QueryCancelledException e) {
             throw e;   // a cancelled query must stop, not carry on producing no rows
+        } catch (LLMException e) {
+            throw e;
         } catch (Exception e) {
             LOG.error("Error during LLM generation", e);
             return null;
         }
         return outputMaps;
+    }
+
+    /**
+     * Canonicalize a verbose single-value answer only when the query prompt explicitly lists
+     * the allowed labels (for example "Return exactly one value: A, B, or C"). This avoids
+     * guessing how arbitrary prose should be shortened while making classification output
+     * deterministic for a following exact SPARQL FILTER.
+     */
+    private Map<String, String> normalizeExplicitScalar(Map<String, String> binding) {
+        if (binding == null || opGen.getOutputVariables().size() != 1) return binding;
+        String var = opGen.getOutputVariables().get(0).getName();
+        String raw = binding.get(var);
+        if (raw == null || raw.isBlank()) return binding;
+
+        java.util.regex.Matcher list = java.util.regex.Pattern.compile(
+                "(?i)return\\s+(?:exactly\\s+)?(?:only\\s+)?one\\s+(?:value\\s*)?(?:of\\s*)?:\\s*([^\\n.]+)")
+                .matcher(opGen.getPromptTemplate());
+        if (!list.find()) return binding;
+
+        String fragment = list.group(1).replaceAll("(?i)\\s+or\\s+", ",").replace('|', ',');
+        List<String> matches = new ArrayList<>();
+        for (String item : fragment.split(",")) {
+            String candidate = item.trim().replaceAll("^[\\\"'`]+|[\\\"'`;:]+$", "").trim();
+            if (candidate.isEmpty()) continue;
+            java.util.regex.Pattern mention = java.util.regex.Pattern.compile(
+                    "(?i)(?<![\\p{L}\\p{N}])" + java.util.regex.Pattern.quote(candidate)
+                            + "(?![\\p{L}\\p{N}])");
+            if (mention.matcher(raw).find()) matches.add(candidate);
+        }
+        if (matches.size() != 1) return binding;
+
+        Map<String, String> normalized = new HashMap<>(binding);
+        normalized.put(var, matches.get(0));
+        LOG.debug("Normalized verbose scalar '{}' to explicit label '{}'", truncate(raw, 100), matches.get(0));
+        return normalized;
     }
 
     /**

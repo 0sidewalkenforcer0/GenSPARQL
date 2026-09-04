@@ -54,6 +54,8 @@ public class GenSPARQL {
             org.apache.jena.sparql.util.Symbol.create(NS + "defaultModel");
     public static final org.apache.jena.sparql.util.Symbol SIM_THRESHOLD =
             org.apache.jena.sparql.util.Symbol.create(NS + "simThreshold");
+    public static final org.apache.jena.sparql.util.Symbol FAIL_ON_LLM_ERROR =
+            org.apache.jena.sparql.util.Symbol.create(NS + "failOnLlmError");
 
     /**
      * Initialize GenSPARQL.
@@ -248,9 +250,14 @@ public class GenSPARQL {
      * @return a QueryExecution that uses GenSPARQL engine
      */
     public static QueryExecution createQueryExecution(Query query, Dataset dataset) {
+        return createQueryExecution(query, dataset, ARQ.getContext());
+    }
+
+    /** Create a GenSPARQL execution with an isolated, request-local context. */
+    public static QueryExecution createQueryExecution(Query query, Dataset dataset, Context context) {
         ensureInitialized();
         DatasetGraph dsg = dataset.asDatasetGraph();
-        Context ctx = ARQ.getContext().copy();
+        Context ctx = (context != null ? context : ARQ.getContext()).copy();
         Binding input = BindingFactory.root();
 
         // Check if query contains ElementGenerate

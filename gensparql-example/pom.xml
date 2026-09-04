@@ -56,6 +56,15 @@
             <artifactId>gson</artifactId>
             <version>2.10.1</version>
         </dependency>
+
+        <!-- Console diagnostics for command-line examples. Without a provider,
+             LLM response/parsing and SimJoin messages are silently discarded. -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.9</version>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
     <build>

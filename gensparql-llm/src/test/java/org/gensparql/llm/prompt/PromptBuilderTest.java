@@ -14,11 +14,13 @@ class PromptBuilderTest {
     // ========== buildStructuredPrompt Tests ==========
 
     @Test
-    void testBuildStructuredPrompt_SingleVariable_NoChange() {
+    void testBuildStructuredPrompt_SingleVariable_RequestsConciseJsonScalar() {
         String original = "Translate this to Japanese";
         String result = PromptBuilder.buildStructuredPrompt(original, List.of("translation"));
 
-        assertEquals(original, result);
+        assertTrue(result.startsWith(original));
+        assertTrue(result.contains("{\"translation\": \"value\"}"));
+        assertTrue(result.contains("not a sentence"));
     }
 
     @Test

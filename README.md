@@ -86,6 +86,37 @@ mvn -q compile
 
 ## Quick Verification
 
+### Start the Web UI and Fuseki backend
+
+The `gensparql-server` module embeds Fuseki, serves the UI in `docs/`, and exposes a
+GenSPARQL-aware API. Unlike Fuseki's standard query endpoint, the API parses queries with
+`GenSPARQLQueryFactory`, so it accepts the `GENOP` syntax.
+
+```bash
+./start-fuseki.sh              # port 8080
+# or: ./start-fuseki.sh 9090
+```
+
+Then open `http://localhost:8080/`. The standard Fuseki dataset is available at
+`/gensparql`, while the UI uses:
+
+```text
+GET  /api/gensparql/health
+POST /api/gensparql/datasets
+POST /api/gensparql/query
+```
+
+For a live OpenAI-compatible model, enter the API key, base URL, and model in the Live UI.
+These values are applied only to that query and are not persisted by the server. Environment
+configuration remains available for non-UI clients:
+
+```bash
+export OPENAI_API_KEY="sk-..."
+# Optional for vLLM/Ollama/another compatible server:
+export OPENAI_BASE_URL="http://localhost:8000/v1"
+./start-fuseki.sh
+```
+
 ### Run Unit Tests
 
 ```bash
