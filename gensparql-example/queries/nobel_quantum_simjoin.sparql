@@ -1,0 +1,31 @@
+# Semantic SimJoin over the Nobel Prize KG.
+#
+# The KG supplies the closed set of Physics laureates and award years. GENOP
+# independently supplies the open-world judgment "foundational contributions
+# to quantum mechanics". Because both branches bind ?laureate, GenSPARQL joins
+# generated names to KG labels using the 0.75 similarity threshold.
+
+PREFIX ex:   <http://example.org/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?laureate ?year
+WHERE {
+  {
+    ?person a ex:NobelLaureate ;
+            rdfs:label ?laureate ;
+            ex:wonNobelPrize ?award .
+
+    ?award ex:field <http://www.wikidata.org/entity/Q38104> ;
+           ex:winningYear ?year .
+  }
+
+  {
+    GENOP(
+      "Name one Nobel Prize in Physics laureate who made a foundational contribution to quantum mechanics. Return only the laureate's full name.",
+      (?laureate),
+      <model:openrouter:nvidia/nemotron-3-ultra-550b-a55b:free>,
+      0.75
+    )
+  }
+}
+ORDER BY ?year

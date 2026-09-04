@@ -306,7 +306,7 @@ public class QueryIterSimJoin extends QueryIteratorBase {
         collectLabels(rightBindings, labels);
         if (!labels.isEmpty()) {
             LOG.debug("SimJoin pre-warming {} embeddings (batched)", labels.size());
-            EmbeddingSimText.warmUp(labels);
+            ((EmbeddingSimText) st).warmUpConfigured(labels);
         }
     }
 

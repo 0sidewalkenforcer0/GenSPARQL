@@ -48,6 +48,9 @@ public class GenSPARQLExample {
             // Initialize GenSPARQL
             System.out.println("Initializing GenSPARQL...");
             GenSPARQL.init();
+            // A command-line run must surface provider/model/response errors instead of
+            // silently turning a failed GENOP batch into an empty result set.
+            org.apache.jena.query.ARQ.getContext().set(GenSPARQL.FAIL_ON_LLM_ERROR, true);
 
             // Load data
             System.out.println("Loading data from: " + dataFile);
@@ -117,7 +120,6 @@ public class GenSPARQLExample {
                 Gson gson = new Gson();
                 JsonObject obj = gson.fromJson(json, JsonObject.class);
                 JsonArray answers = obj.getAsJsonArray("answers");
-                
                 if (answers != null) {
                     for (int i = 0; i < answers.size(); i++) {
                         String answer = answers.get(i).getAsString();
