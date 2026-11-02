@@ -1,5 +1,7 @@
 package org.gensparql.llm.prompt;
 
+import org.gensparql.core.model.GenerateRequest;
+import org.gensparql.core.model.ModelSpec;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -14,13 +16,42 @@ class PromptBuilderTest {
     // ========== buildStructuredPrompt Tests ==========
 
     @Test
-    void testBuildStructuredPrompt_SingleVariable_RequestsConciseJsonScalar() {
-        String original = "Translate this to Japanese";
-        String result = PromptBuilder.buildStructuredPrompt(original, List.of("translation"));
+    void testBuildStructuredPrompt_SingleVariable_RequestsArrayOfConciseValues() {
+        String original = "List the official Nobel Prize fields.";
+        String result = PromptBuilder.buildStructuredPrompt(original, List.of("field"));
 
         assertTrue(result.startsWith(original));
-        assertTrue(result.contains("{\"translation\": \"value\"}"));
+        assertTrue(result.contains("JSON array of strings"));
+        assertTrue(result.contains("[\"value1\", \"value2\", ...]"),
+                "the format must allow several values, or a base-mode list collapses to one row");
         assertTrue(result.contains("not a sentence"));
+        assertFalse(result.contains("one valid JSON object"));
+    }
+
+    @Test
+    void testBuildStructuredPrompt_Request_TextFormatGetsFormatBlock() {
+        GenerateRequest request = GenerateRequest.builder()
+                .prompt("List the official Nobel Prize fields.")
+                .modelSpec(ModelSpec.fromURI("model:openai:test"))
+                .outputVariables(List.of("field"))
+                .build();
+
+        assertEquals(PromptBuilder.buildStructuredPrompt(request.getPrompt(), List.of("field")),
+                PromptBuilder.buildStructuredPrompt(request));
+    }
+
+    @Test
+    void testBuildStructuredPrompt_Request_JsonArrayFormatIsSentUnchanged() {
+        // The batched GENOP prompt states its own array-of-objects format.
+        String batched = "PROMPT 1:\nPosition of Messi?\n\nReturn a JSON array with exactly 1 objects.";
+        GenerateRequest request = GenerateRequest.builder()
+                .prompt(batched)
+                .modelSpec(ModelSpec.fromURI("model:openai:test"))
+                .outputVariables(List.of("pos"))
+                .outputFormat(GenerateRequest.OutputFormat.JSON_ARRAY)
+                .build();
+
+        assertEquals(batched, PromptBuilder.buildStructuredPrompt(request));
     }
 
     @Test

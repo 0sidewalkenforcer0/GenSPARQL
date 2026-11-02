@@ -115,11 +115,8 @@ public class OpenAIProvider implements LLMProvider {
         String model = request.getModelSpec() != null ?
                 request.getModelSpec().getModel() : DEFAULT_MODEL;
 
-        // Build enhanced prompt with format instructions for multi-variable outputs
-        String enhancedPrompt = PromptBuilder.buildStructuredPrompt(
-                request.getPrompt(),
-                request.getOutputVariables()
-        );
+        // Add the output format instructions, unless the prompt already carries its own
+        String enhancedPrompt = PromptBuilder.buildStructuredPrompt(request);
         LOG.debug("Enhanced prompt: {}", truncate(enhancedPrompt, 500));
 
         // Build request body

@@ -313,10 +313,13 @@ public class QueryIterGenerate extends QueryIteratorBase {
             String batchedPrompt = BatchedPromptBuilder.buildBatchedPrompt(
                 distinctPrompts, outputVarNames);
 
+            // The batched prompt states its own response format (an array of objects keyed
+            // by prompt_id); JSON_ARRAY tells the provider not to append another one.
             GenerateRequest request = GenerateRequest.builder()
                     .prompt(batchedPrompt)
                     .modelSpec(modelSpec)
                     .outputVariables(outputVarNames)
+                    .outputFormat(GenerateRequest.OutputFormat.JSON_ARRAY)
                     .build();
 
             long startTime = System.currentTimeMillis();

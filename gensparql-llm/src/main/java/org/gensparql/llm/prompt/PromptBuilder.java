@@ -1,12 +1,14 @@
 package org.gensparql.llm.prompt;
 
+import org.gensparql.core.model.GenerateRequest;
+
 import java.util.Collection;
 import java.util.List;
 
 /**
  * Utility class for building enhanced prompts for LLM requests.
  *
- * When multiple output variables are expected, this builder adds
+ * When output variables are expected, this builder adds
  * structured format instructions to guide the LLM to return JSON.
  *
  * Supports Constrained Generation by injecting candidate entity lists,
@@ -22,10 +24,30 @@ public class PromptBuilder {
     }
 
     /**
+     * Build the prompt a provider sends for a request.
+     *
+     * A request whose output format is {@link GenerateRequest.OutputFormat#JSON_ARRAY}
+     * already states the array it expects (the batched GENOP prompt does), so it is sent
+     * unchanged: a second format block would contradict the first. Every other request
+     * gets the format block of {@link #buildStructuredPrompt(String, List)}.
+     *
+     * @param request the generation request
+     * @return the prompt to send
+     */
+    public static String buildStructuredPrompt(GenerateRequest request) {
+        if (request.getOutputFormat() == GenerateRequest.OutputFormat.JSON_ARRAY) {
+            return request.getPrompt();
+        }
+        return buildStructuredPrompt(request.getPrompt(), request.getOutputVariables());
+    }
+
+    /**
      * Build a prompt with structured output format instructions.
      *
-     * For single variable outputs, returns the original prompt unchanged.
-     * For multiple variables, appends JSON format requirements.
+     * For a single output variable, asks for a JSON array of concise values, one per
+     * answer. A GENOP call may produce several values (a base-mode list such as "List the
+     * Nobel Prize fields" in particular), so the format must not cap the answer at one.
+     * For multiple variables, asks for a JSON array of objects with those fields.
      *
      * @param userPrompt the original user prompt
      * @param outputVars list of expected output variable names
@@ -43,8 +65,10 @@ public class PromptBuilder {
         if (outputVars.size() == 1) {
             String var = outputVars.get(0);
             return userPrompt + "\n\n[OUTPUT FORMAT REQUIREMENT]\n"
-                    + "Respond with ONLY one valid JSON object: {\"" + var + "\": \"value\"}.\n"
-                    + "The value must be only the requested concise scalar or category label, not a sentence.\n"
+                    + "Respond with ONLY a valid JSON array of strings holding the values of "
+                    + var + ", one string per answer: [\"value\"] for a single answer, "
+                    + "[\"value1\", \"value2\", ...] for several.\n"
+                    + "Each value must be only the requested concise scalar or category label, not a sentence.\n"
                     + "Do NOT include markdown, reasoning, or explanation.";
         }
 
