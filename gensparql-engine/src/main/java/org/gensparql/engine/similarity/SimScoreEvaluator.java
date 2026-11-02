@@ -1,5 +1,6 @@
 package org.gensparql.engine.similarity;
 
+import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.core.Var;
 import org.gensparql.core.model.TypedValue;
 import org.gensparql.core.similarity.CanonicalForm;
@@ -7,6 +8,8 @@ import org.gensparql.core.similarity.SimText;
 import org.gensparql.core.similarity.ThresholdRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.function.Function;
 
 /**
  * Evaluates SimScore between two typed values.
@@ -23,16 +26,50 @@ public class SimScoreEvaluator {
 
     private final SimText simText;
     private final ThresholdRegistry thresholdRegistry;
+    private final Function<Node, String> labels;
 
     /**
-     * Create a SimScoreEvaluator.
+     * Create a SimScoreEvaluator whose Canon(t) knows only the process-wide label table of
+     * {@link CanonicalForm}, falling back to the IRI local name.
      *
      * @param simText           text similarity strategy
      * @param thresholdRegistry registry for variable-specific thresholds
      */
     public SimScoreEvaluator(SimText simText, ThresholdRegistry thresholdRegistry) {
+        this(simText, thresholdRegistry, null);
+    }
+
+    /**
+     * Create a SimScoreEvaluator whose Canon(t) reads the label of an IRI from {@code labels}
+     * first, normally the graph the query runs over (see {@link GraphLabels}).
+     *
+     * @param simText           text similarity strategy
+     * @param thresholdRegistry registry for variable-specific thresholds
+     * @param labels            label of an IRI, or null if it has none; may itself be null
+     */
+    public SimScoreEvaluator(SimText simText, ThresholdRegistry thresholdRegistry,
+                             Function<Node, String> labels) {
         this.simText = simText;
         this.thresholdRegistry = thresholdRegistry;
+        this.labels = labels;
+    }
+
+    /**
+     * Canon(t): the label of an IRI if it has one, otherwise what {@link CanonicalForm#canon}
+     * gives (the process-wide label table, then the local name). Literals and blank nodes are
+     * unaffected.
+     *
+     * @param node the RDF node
+     * @return the string a generated value is compared with
+     */
+    public String canon(Node node) {
+        if (labels != null && node != null && node.isURI()) {
+            String label = labels.apply(node);
+            if (label != null && !label.isEmpty()) {
+                return label;
+            }
+        }
+        return CanonicalForm.canon(node);
     }
 
     /**
@@ -93,13 +130,13 @@ public class SimScoreEvaluator {
         String s1, s2;
         String type1, type2;
         if (tv1.isRdf()) {
-            s1 = CanonicalForm.canon(tv1.getNode());
+            s1 = canon(tv1.getNode());
             s2 = CanonicalForm.lex(tv2.getNode());
             type1 = "RDF(canon)";
             type2 = "GEN(lex)";
         } else {
             s1 = CanonicalForm.lex(tv1.getNode());
-            s2 = CanonicalForm.canon(tv2.getNode());
+            s2 = canon(tv2.getNode());
             type1 = "GEN(lex)";
             type2 = "RDF(canon)";
         }
@@ -139,11 +176,11 @@ public class SimScoreEvaluator {
         // Mixed - use Canon for RDF, Lex for GEN
         String s1, s2;
         if (tv1.isRdf()) {
-            s1 = CanonicalForm.canon(tv1.getNode());
+            s1 = canon(tv1.getNode());
             s2 = CanonicalForm.lex(tv2.getNode());
         } else {
             s1 = CanonicalForm.lex(tv1.getNode());
-            s2 = CanonicalForm.canon(tv2.getNode());
+            s2 = canon(tv2.getNode());
         }
 
         return simText.similarity(s1, s2);

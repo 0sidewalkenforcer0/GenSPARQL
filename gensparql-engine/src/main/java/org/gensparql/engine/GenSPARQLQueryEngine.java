@@ -20,6 +20,7 @@ import org.gensparql.engine.iterator.QueryIterSimJoin;
 import org.gensparql.engine.iterator.QueryIterSimScoreFilter;
 import org.gensparql.engine.op.OpGenerate;
 import org.gensparql.engine.similarity.EmbeddingSimText;
+import org.gensparql.engine.similarity.GraphLabels;
 import org.gensparql.engine.similarity.SimScoreEvaluator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -363,9 +364,7 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
             for (org.apache.jena.sparql.expr.Expr expr : opFilter.getExprs()) {
                 if (hasGenVars && isEqualityExpr(expr)) {
                     // Use SimScore-aware filter for equality expressions with GEN types
-                    SimText simText = getSimText(execCxt);
-                    ThresholdRegistry registry = getThresholdRegistry(execCxt);
-                    SimScoreEvaluator evaluator = new SimScoreEvaluator(simText, registry);
+                    SimScoreEvaluator evaluator = newSimScoreEvaluator(execCxt);
                     LOG.debug("Using SimScoreFilter for expr: {}", expr);
                     subIter = new QueryIterSimScoreFilter(subIter, expr, evaluator, sourceTypes, execCxt);
                 } else {
@@ -579,41 +578,26 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
      */
     private QueryIterator executeSimJoin(OpJoin opJoin, QueryIterator input, ExecutionContext execCxt) {
         LOG.debug("executeSimJoin: Executing similarity-based join");
-
-        // Get the initial binding from input (typically empty root binding)
-        Binding initialBinding = input.hasNext() ? input.next() : org.apache.jena.sparql.engine.binding.BindingFactory.empty();
-
-        // Execute left side (e.g., BGP) - these are RDF sourced
-        // All variables from left side default to RDF type
-        Map<Var, SourceType> leftTypes = new HashMap<>();
-        QueryIterator leftIter = executeOp(opJoin.getLeft(), QueryIterRoot.create(initialBinding, execCxt), execCxt);
-
-        // Execute right side (e.g., OpGenerate) independently with empty binding
-        // For base mode GENOP, it doesn't need input bindings
-        // Clear sourceTypes before executing right side to get fresh GEN types
-        sourceTypes.clear();
-        QueryIterator rightIter = executeOp(opJoin.getRight(),
-                QueryIterRoot.create(org.apache.jena.sparql.engine.binding.BindingFactory.empty(), execCxt), execCxt);
-
-        // rightTypes now contains GEN variables from OpGenerate execution
-        Map<Var, SourceType> rightTypes = new HashMap<>(sourceTypes);
-
-        LOG.debug("executeSimJoin: leftTypes={}, rightTypes={}", leftTypes, rightTypes);
-
-        // Create SimScore evaluator
-        SimText simText = getSimText(execCxt);
-        ThresholdRegistry registry = getThresholdRegistry(execCxt);
-        SimScoreEvaluator evaluator = new SimScoreEvaluator(simText, registry);
-
-        return new QueryIterSimJoin(leftIter, rightIter, evaluator, leftTypes, rightTypes, execCxt);
+        return executeSimJoinForSequence(opJoin.getLeft(), opJoin.getRight(), input, execCxt);
     }
 
     /**
-     * Execute a similarity-based join for OpSequence elements.
+     * Execute a similarity-based join of two Op elements.
      *
-     * Similar to executeSimJoin but takes two Op elements directly.
+     * <p>The join compares the values a GENOP generated with the KG values on the other side,
+     * so the side that generates must be known: its variables are typed GEN, the other side's
+     * RDF. The join is commutative, so the generating side is moved to the right whatever the
+     * order the algebra arrived in. That order is not the author's to control: a group such as
+     * {@code { ?team a ex:Team . GENOP("...", (?team), <model>, 0.85) }} has its KG pattern moved
+     * after the GENOP, because the pattern mentions the GENOP's output variable, and with the
+     * GENOP on the left its generated values were typed RDF and compared by exact equality.
      */
     private QueryIterator executeSimJoinForSequence(Op leftOp, Op rightOp, QueryIterator input, ExecutionContext execCxt) {
+        if (containsGenOp(leftOp) && !containsGenOp(rightOp)) {
+            Op generating = leftOp;
+            leftOp = rightOp;
+            rightOp = generating;
+        }
         LOG.debug("executeSimJoinForSequence: left={}, right={}",
                   leftOp.getClass().getSimpleName(), rightOp.getClass().getSimpleName());
 
@@ -637,12 +621,17 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
 
         LOG.debug("executeSimJoinForSequence: leftTypes={}, rightTypes={}", leftTypes, rightTypes);
 
-        // Create SimScore evaluator
-        SimText simText = getSimText(execCxt);
-        ThresholdRegistry registry = getThresholdRegistry(execCxt);
-        SimScoreEvaluator evaluator = new SimScoreEvaluator(simText, registry);
+        return new QueryIterSimJoin(leftIter, rightIter, newSimScoreEvaluator(execCxt),
+                leftTypes, rightTypes, execCxt);
+    }
 
-        return new QueryIterSimJoin(leftIter, rightIter, evaluator, leftTypes, rightTypes, execCxt);
+    /**
+     * A SimScore evaluator for this execution. Canon(t) of an IRI is its label in the graph
+     * the query runs over, so a generated name can match an entity whose IRI is opaque.
+     */
+    private SimScoreEvaluator newSimScoreEvaluator(ExecutionContext execCxt) {
+        return new SimScoreEvaluator(getSimText(execCxt), getThresholdRegistry(execCxt),
+                new GraphLabels(execCxt.getActiveGraph()));
     }
 
     /**

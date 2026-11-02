@@ -271,7 +271,7 @@ public class QueryIterSimJoin extends QueryIteratorBase {
         if (tv == null || tv.getNode() == null) {
             return null;
         }
-        return tv.isGen() ? CanonicalForm.lex(tv.getNode()) : CanonicalForm.canon(tv.getNode());
+        return tv.isGen() ? CanonicalForm.lex(tv.getNode()) : simScoreEvaluator.canon(tv.getNode());
     }
 
     /**
@@ -286,7 +286,7 @@ public class QueryIterSimJoin extends QueryIteratorBase {
             if (tv == null || tv.getNode() == null) {
                 return null;
             }
-            String s = tv.isGen() ? CanonicalForm.lex(tv.getNode()) : CanonicalForm.canon(tv.getNode());
+            String s = tv.isGen() ? CanonicalForm.lex(tv.getNode()) : simScoreEvaluator.canon(tv.getNode());
             sb.append(CanonicalForm.normalize(s)).append('\u0001');
         }
         return sb.toString();
@@ -317,7 +317,7 @@ public class QueryIterSimJoin extends QueryIteratorBase {
                 if (tv == null || tv.getNode() == null) {
                     continue;
                 }
-                String s = tv.isGen() ? CanonicalForm.lex(tv.getNode()) : CanonicalForm.canon(tv.getNode());
+                String s = tv.isGen() ? CanonicalForm.lex(tv.getNode()) : simScoreEvaluator.canon(tv.getNode());
                 if (s != null && !s.isEmpty()) {
                     out.add(s);
                 }
