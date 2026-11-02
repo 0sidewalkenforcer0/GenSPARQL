@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
  *
  * Example:
  * BIND(gen:tokenCost(?myPrompt) AS ?estimatedTokens)
- * FILTER(gen:tokenCost(?prompt) < 1000)
+ * {@code FILTER(gen:tokenCost(?prompt) < 1000)}
  */
 public class TokenCostFunction extends FunctionBase1 {
     private static final Logger LOG = LoggerFactory.getLogger(TokenCostFunction.class);

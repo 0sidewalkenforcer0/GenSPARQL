@@ -62,14 +62,37 @@ Download from [Adoptium](https://adoptium.net/temurin/releases/?version=17)
 
 ## Installation
 
-### Step 1: Clone the Repository
+### From Maven Central
+
+GenSPARQL releases from 0.1.0 on are published to Maven Central under the group `org.gensparql`. The aggregate dependency `gensparql-libs` brings the parser, the query engine, the LLM providers and the `gen:*` functions. As with Jena's `apache-jena-libs`, Maven declares it with `<type>pom</type>`:
+
+```xml
+<dependency>
+  <groupId>org.gensparql</groupId>
+  <artifactId>gensparql-libs</artifactId>
+  <version>0.1.0</version>
+  <type>pom</type>
+</dependency>
+```
+
+Gradle:
+
+```kotlin
+implementation("org.gensparql:gensparql-libs:0.1.0")
+```
+
+The modules can also be added one by one: `gensparql-core`, `gensparql-parser`, `gensparql-llm`, `gensparql-engine`, `gensparql-functions` and `gensparql-server` (the embedded Fuseki server behind the web workbench). GenSPARQL requires Java 17 or later. See [Programmatic Use](#programmatic-use-java-api) for a first query, and [RELEASING.md](RELEASING.md) for how releases are made.
+
+### From Source
+
+#### Step 1: Clone the Repository
 
 ```bash
 git clone https://github.com/0sidewalkenforcer0/GenSPARQL.git
 cd GenSPARQL
 ```
 
-### Step 2: Build
+#### Step 2: Build
 
 GenSPARQL is a multi-module Maven project on top of Apache Jena ARQ. Compiling also generates the SPARQL + `GENOP` parser from the JavaCC grammar.
 

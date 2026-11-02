@@ -13,7 +13,7 @@ import java.util.Objects;
  * - Model identifier (e.g., "gpt-4", "claude-3-opus")
  * - Model parameters (e.g., temperature, maxTokens)
  *
- * URI format: model:{provider}:{model}?param1=value1&param2=value2
+ * URI format: {@code model:{provider}:{model}?param1=value1&param2=value2}
  * Examples:
  * - model:openai:gpt-4
  * - model:anthropic:claude-3-opus?temperature=0.7
@@ -93,7 +93,7 @@ public class ModelSpec {
      * Format: model:{provider}:{model}[?params]
      * Examples:
      * - model:openai:gpt-4
-     * - model:anthropic:claude-3-opus?temperature=0.7&maxTokens=500
+     * - {@code model:anthropic:claude-3-opus?temperature=0.7&maxTokens=500}
      *
      * @param uri the model URI
      * @return parsed ModelSpec

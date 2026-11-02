@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.gensparql</groupId>
+        <artifactId>gensparql-parent</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>gensparql-libs</artifactId>
+    <packaging>pom</packaging>
+
+    <name>GenSPARQL Libraries</name>
+    <description>All GenSPARQL library modules as one dependency: the GENOP parser, the query engine, the LLM providers and the gen:* SPARQL functions. Declare it with type pom, as with apache-jena-libs.</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.gensparql</groupId>
+            <artifactId>gensparql-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gensparql</groupId>
+            <artifactId>gensparql-llm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gensparql</groupId>
+            <artifactId>gensparql-parser</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gensparql</groupId>
+            <artifactId>gensparql-engine</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gensparql</groupId>
+            <artifactId>gensparql-functions</artifactId>
+        </dependency>
+    </dependencies>
+</project>

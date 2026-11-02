@@ -29,8 +29,8 @@ import java.util.Set;
  * to support GENOP as a first-class construct in graph patterns.
  *
  * GENOP Syntax:
- *   GENOP("prompt", ?output, <model>)
- *   GENOP("prompt", (?var1, ?var2), <model>, threshold)
+ *   {@code GENOP("prompt", ?output, <model>)}
+ *   {@code GENOP("prompt", (?var1, ?var2), <model>, threshold)}
  *
  * GENOP appears in GraphPatternNotTriples alongside FILTER, BIND, OPTIONAL, etc.
  *
