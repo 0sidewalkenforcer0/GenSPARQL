@@ -16,10 +16,10 @@ On the cluster (from the repository root; the login node only submits jobs):
 
 ```
 sbatch eval/www27/build.sbatch
-sbatch --gpus=A40:1 --export=ALL,MODEL=Qwen/Qwen3-8B,SMOKE=1 eval/www27/job.sbatch   # a few calls
-sbatch --gpus=A40:2 --export=ALL,MODEL=Qwen/Qwen3-30B-A3B-Instruct-2507,TP=2 eval/www27/job.sbatch
-sbatch --gpus=A40:1 --export=ALL,MODEL=Qwen/Qwen3-8B eval/www27/job.sbatch
-sbatch --gpus=A40:1 --export=ALL,MODEL=mistralai/Mistral-7B-Instruct-v0.3 eval/www27/job.sbatch
+sbatch --gpus=A40:1 eval/www27/job.sbatch Qwen/Qwen3-8B 1 1   # a few calls
+sbatch --gpus=A40:2 eval/www27/job.sbatch Qwen/Qwen3-30B-A3B-Instruct-2507 2
+sbatch --gpus=A40:1 eval/www27/job.sbatch Qwen/Qwen3-8B
+sbatch --gpus=A40:1 eval/www27/job.sbatch mistralai/Mistral-7B-Instruct-v0.3
 python3 eval/www27/score.py eval/www27/results/Qwen_* eval/www27/results/mistralai_*
 ```
 

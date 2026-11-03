@@ -1,19 +1,20 @@
 #!/bin/bash
 # One model: start vLLM for the model and for the embedding model, start the GenSPARQL
-# HTTP service, and run run_eval.py against them. The GPUs are given on the command line:
-#   sbatch --gpus=A40:2 --export=ALL,MODEL=Qwen/Qwen3-30B-A3B-Instruct-2507,TP=2 eval/www27/job.sbatch
-#   sbatch --gpus=A40:1 --export=ALL,MODEL=Qwen/Qwen3-8B eval/www27/job.sbatch
-# SMOKE=1 runs a few calls per experiment only.
+# HTTP service, and run run_eval.py against them. Arguments: MODEL [TP [SMOKE]]; the GPUs
+# are given to sbatch (the cluster fails to set up jobs submitted with --export=ALL,...):
+#   sbatch --gpus=A40:2 eval/www27/job.sbatch Qwen/Qwen3-30B-A3B-Instruct-2507 2
+#   sbatch --gpus=A40:1 eval/www27/job.sbatch Qwen/Qwen3-8B
+# SMOKE=1 (third argument) runs a few calls per experiment only.
 #SBATCH --job-name=gs-eval
 #SBATCH --partition=slowlane
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=64G
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=48G
 #SBATCH --time=08:00:00
 #SBATCH --output=gs-eval-%j.out
 set -euo pipefail
-MODEL=${MODEL:?set MODEL}
-TP=${TP:-1}
-SMOKE=${SMOKE:-0}
+MODEL=${1:?usage: job.sbatch MODEL [TP [SMOKE]]}
+TP=${2:-1}
+SMOKE=${3:-0}
 REPO=${REPO:-$HOME/workspace/GenSPARQL-www27}
 EVAL=$REPO/eval/www27
 SUFFIX=""; [ "$SMOKE" = 1 ] && SUFFIX="-smoke"
