@@ -17,7 +17,7 @@
     "success" : true,
     "errorMessage" : null,
     "model" : "Qwen/Qwen3-30B-A3B-Instruct-2507",
-    "promptTokens" : 93,
+    "promptTokens" : 113,
     "completionTokens" : 26
   }
 }

@@ -12,10 +12,13 @@
      "x": "http://www.wikidata.org/entity/Q23556"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q16555"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q1489"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q159260"
+     "x": "http://www.wikidata.org/entity/Q1345"
     },
     {
      "x": "http://www.wikidata.org/entity/Q147402"
@@ -36,10 +39,13 @@
      "x": "http://www.wikidata.org/entity/Q23556"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q16555"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q1489"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q159260"
+     "x": "http://www.wikidata.org/entity/Q1345"
     },
     {
      "x": "http://www.wikidata.org/entity/Q147402"
@@ -60,10 +66,13 @@
      "x": "http://www.wikidata.org/entity/Q23556"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q16555"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q1489"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q159260"
+     "x": "http://www.wikidata.org/entity/Q1345"
     },
     {
      "x": "http://www.wikidata.org/entity/Q147402"
@@ -84,10 +93,13 @@
      "x": "http://www.wikidata.org/entity/Q23556"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q16555"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q1489"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q159260"
+     "x": "http://www.wikidata.org/entity/Q1345"
     },
     {
      "x": "http://www.wikidata.org/entity/Q147402"
@@ -108,10 +120,13 @@
      "x": "http://www.wikidata.org/entity/Q23556"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q16555"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q1489"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q159260"
+     "x": "http://www.wikidata.org/entity/Q1345"
     },
     {
      "x": "http://www.wikidata.org/entity/Q147402"
@@ -132,10 +147,13 @@
      "x": "http://www.wikidata.org/entity/Q23556"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q16555"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q1489"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q159260"
+     "x": "http://www.wikidata.org/entity/Q1345"
     },
     {
      "x": "http://www.wikidata.org/entity/Q147402"
@@ -156,10 +174,13 @@
      "x": "http://www.wikidata.org/entity/Q23556"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q16555"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q1489"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q159260"
+     "x": "http://www.wikidata.org/entity/Q1345"
     },
     {
      "x": "http://www.wikidata.org/entity/Q147402"
@@ -280,7 +301,7 @@
     }
    ],
    "calls": 1,
-   "seconds": 0.1,
+   "seconds": 0.0,
    "similarity": "embedding",
    "theta": 0.6
   },
@@ -345,6 +366,9 @@
      "x": "http://www.wikidata.org/entity/Q23556"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q16555"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q1489"
     },
     {
@@ -357,7 +381,7 @@
      "x": "http://www.wikidata.org/entity/Q159260"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q41819"
+     "x": "http://www.wikidata.org/entity/Q1345"
     },
     {
      "x": "http://www.wikidata.org/entity/Q147402"
@@ -381,10 +405,13 @@
      "x": "http://www.wikidata.org/entity/Q23556"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q16555"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q1489"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q159260"
+     "x": "http://www.wikidata.org/entity/Q1345"
     },
     {
      "x": "http://www.wikidata.org/entity/Q147402"
@@ -405,10 +432,13 @@
      "x": "http://www.wikidata.org/entity/Q23556"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q16555"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q1489"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q159260"
+     "x": "http://www.wikidata.org/entity/Q1345"
     },
     {
      "x": "http://www.wikidata.org/entity/Q147402"
@@ -429,10 +459,13 @@
      "x": "http://www.wikidata.org/entity/Q23556"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q16555"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q1489"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q159260"
+     "x": "http://www.wikidata.org/entity/Q1345"
     },
     {
      "x": "http://www.wikidata.org/entity/Q147402"
@@ -458,10 +491,25 @@
     "x": "Monterrey"
    },
    {
+    "x": "León"
+   },
+   {
+    "x": "San Juan del Rio"
+   },
+   {
+    "x": "Toluca"
+   },
+   {
+    "x": "Cancun"
+   },
+   {
+    "x": "Houston"
+   },
+   {
     "x": "Los Angeles"
    },
    {
-    "x": "San Francisco"
+    "x": "Philadelphia"
    },
    {
     "x": "Boston"
@@ -474,7 +522,7 @@
    }
   ],
   "calls": 1,
-  "seconds": 0.5
+  "seconds": 1.9
  },
  "generated_after": {
   "query": "SELECT ?x WHERE { GENOP(\"List the host cities of the 2026 FIFA World Cup.\", (?x), <model>) }",
@@ -489,10 +537,25 @@
     "x": "Monterrey"
    },
    {
+    "x": "León"
+   },
+   {
+    "x": "San Juan del Rio"
+   },
+   {
+    "x": "Toluca"
+   },
+   {
+    "x": "Cancun"
+   },
+   {
+    "x": "Houston"
+   },
+   {
     "x": "Los Angeles"
    },
    {
-    "x": "San Francisco"
+    "x": "Philadelphia"
    },
    {
     "x": "Boston"

@@ -1,61 +1,11 @@
 {
   "openai:Qwen/Qwen3-8B:458735d0fdd866f0447479f9cdeff5ce0254eabd4bbc937c84153394b19b4de1:0.00:1000:x" : {
-    "rawText" : "[\"Lionel Messi\", \"Julián Alvarez\", \"Lautaro Martínez\", \"Enzo Fernández\", \"Rodrigo De Paul\", \"Ángel Di María\", \"Nicolás Otamendi\", \"Matías Vecino\", \"Facundo Pellistri\", \"Gonzalo Montiel\", \"Nicolás Tagliafico\", \"Emiliano Martínez\", \"Jesús Ferreira\", \"Rodrigo Palacio\", \"Germán Pezzella\", \"Matías Mora\", \"Lautaro Acuña\", \"Gonzalo Bergessio\", \"Rodrigo Zaldivia\", \"Gonzalo Montes\", \"Matías Kranevitter\", \"Gonzalo Pineda\", \"Lucas Ocampos\", \"Gonzalo Higuaín\", \"Ángel Correa\", \"Rodrigo Palacio\", \"Gonzalo Montes\", \"Matías Kranevitter\", \"Gonzalo Pineda\", \"Lucas Ocampos\", \"Gonzalo Higuaín\", \"Ángel Correa\"]",
-    "bindings" : [ {
-      "x" : "Lionel Messi"
-    }, {
-      "x" : "Julián Alvarez"
-    }, {
-      "x" : "Lautaro Martínez"
-    }, {
-      "x" : "Enzo Fernández"
-    }, {
-      "x" : "Rodrigo De Paul"
-    }, {
-      "x" : "Ángel Di María"
-    }, {
-      "x" : "Nicolás Otamendi"
-    }, {
-      "x" : "Matías Vecino"
-    }, {
-      "x" : "Facundo Pellistri"
-    }, {
-      "x" : "Gonzalo Montiel"
-    }, {
-      "x" : "Nicolás Tagliafico"
-    }, {
-      "x" : "Emiliano Martínez"
-    }, {
-      "x" : "Jesús Ferreira"
-    }, {
-      "x" : "Rodrigo Palacio"
-    }, {
-      "x" : "Germán Pezzella"
-    }, {
-      "x" : "Matías Mora"
-    }, {
-      "x" : "Lautaro Acuña"
-    }, {
-      "x" : "Gonzalo Bergessio"
-    }, {
-      "x" : "Rodrigo Zaldivia"
-    }, {
-      "x" : "Gonzalo Montes"
-    }, {
-      "x" : "Matías Kranevitter"
-    }, {
-      "x" : "Gonzalo Pineda"
-    }, {
-      "x" : "Lucas Ocampos"
-    }, {
-      "x" : "Gonzalo Higuaín"
-    }, {
-      "x" : "Ángel Correa"
-    } ],
+    "rawText" : "[]",
+    "bindings" : [ ],
     "success" : true,
     "errorMessage" : null,
     "model" : "Qwen/Qwen3-8B",
-    "promptTokens" : 105,
-    "completionTokens" : 236
+    "promptTokens" : 125,
+    "completionTokens" : 2
   }
 }

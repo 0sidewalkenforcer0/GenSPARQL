@@ -1,6 +1,6 @@
 {
   "openai:Qwen/Qwen3-30B-A3B-Instruct-2507:90a2229a3cc369b869a3474f0f0640268476cc3eeb12906ba15d6ab70e155445:0.00:1000:x" : {
-    "rawText" : "[\n  \"Roger Penrose\",\n  \"Reinhard Genzel\",\n  \"Andrea Ghez\",\n  \"Giorgio Parisi\",\n  \"John F. Clauser\",\n  \"Alain Aspect\",\n  \"Anton Zeilinger\",\n  \"Pierre Agostini\",\n  \"Ferenc Krausz\",\n  \"Anne L'Huillier\",\n  \"Louis Néel\",\n  \"John B. Goodenough\",\n  \"M. Stanley Whittingham\",\n  \"Akira Yoshino\",\n  \"Michel Mayor\",\n  \"Didier Queloz\",\n  \"James Peebles\",\n  \"M. Rees\",\n  \"J. H. Taylor\",\n  \"R. A. Hulse\",\n  \"S. Chandrasekhar\",\n  \"R. Feynman\",\n  \"J. Schwinger\",\n  \"S. Tomonaga\",\n  \"R. P. Feynman\",\n  \"J. G. Taylor\",\n  \"R. A. Hulse\",\n  \"S. Chandrasekhar\",\n  \"R. Feynman\",\n  \"J. Schwinger\",\n  \"S. Tomonaga\",\n  \"R. P. Feynman\",\n  \"J. G. Taylor\",\n  \"R. A. Hulse\",\n  \"S. Chandrasekhar\",\n  \"R. Feynman\",\n  \"J. Schwinger\",\n  \"S. Tomonaga\",\n  \"R. P. Feynman\",\n  \"J. G. Taylor\",\n  \"R. A. Hulse\",\n  \"S. Chandrasekhar\",\n  \"R. Feynman\",\n  \"J. Schwinger\",\n  \"S. Tomonaga\",\n  \"R. P. Feynman\",\n  \"J. G. Taylor\",\n  \"R. A. Hulse\",\n  \"S. Chandrasekhar\",\n  \"R. Feynman\",\n  \"J. Schwinger\",\n  \"S. Tomonaga\",\n  \"R. P. Feynman\",\n  \"J. G. Taylor\",\n  \"R. A. Hulse\",\n  \"S. Chandrasekhar\",\n  \"R. Feynman\",\n  \"J. Schwinger\",\n  \"S. Tomonaga\",\n  \"R. P. Feynman\",\n  \"J. G. Taylor\",\n  \"R. A. Hulse\",\n  \"S. Chandrasekhar\",\n  \"R. Feynman\",\n  \"J. Schwinger\",\n  \"S. Tomonaga\",\n  \"R. P. Feynman\",\n  \"J. G. Taylor\",\n  \"R. A. Hulse\",\n  \"S. Chandrasekhar\",\n  \"R. Feynman\",\n  \"J. Schwinger\",\n  \"S. Tomonaga\",\n  \"R. P. Feynman\",\n  \"J. G. Taylor\",\n  \"R. A. Hulse\",\n  \"S. Chandrasekhar\",\n  \"R. Feynman\",\n  \"J. Schwinger\",\n  \"S. Tomonaga\",\n  \"R. P. Feynman\",\n  \"J. G. Taylor\",\n  \"R. A. Hulse\",\n  \"S. Chandrasekhar\",\n  \"R. Feynman\",\n  \"J. Schwinger\",\n  \"S. Tomonaga\",\n  \"R. P. Feynman\",\n  \"J. G. Taylor\",\n  \"R. A. Hulse\",\n  \"S. Chandrasekhar\",\n  \"R. Feynman\",\n  \"J. Schwinger\",\n  \"S. Tomonaga\",\n  \"R. P. Feynman\",\n  \"J. G. Taylor\",\n  \"R. A. Hulse\",\n  \"S. Chandrasekhar\",\n  \"R. Feynman\",\n  \"J. Schwinger\",\n  \"S. Tomonaga\",\n  \"R. P. Feynman\",\n  \"J. G. Taylor\",\n  \"R. A. Hulse\",\n  \"S. Chandrasekhar\",\n  \"R. Feynman\",\n  \"J. Schwinger\",\n  \"S. Tomonaga\",\n  \"R. P. Feynman\",\n  \"J. G. Taylor\",\n  \"R. A. Hulse\",\n  \"S. Chandrasekhar\",\n  \"R. Feynman\",\n  \"J. Schwinger\",\n  \"S. Tomonaga\",\n  \"R. P. Feynman\",\n  \"J. G. Taylor\",\n  \"R. A. Hulse\",\n  \"S. Chandrasekhar\",\n  \"R. Feynman\",\n  \"J",
+    "rawText" : "[\n  \"Roger Penrose\",\n  \"Reinhard Genzel\",\n  \"Andrea Ghez\",\n  \"Giorgio Parisi\",\n  \"John F. Clauser\",\n  \"Alain Aspect\",\n  \"Anton Zeilinger\",\n  \"Pierre Agostini\",\n  \"Ferenc Krausz\",\n  \"Anne L’Huillier\",\n  \"Louis Néel\",\n  \"Pierre-Gilles de Gennes\",\n  \"Jean-Pierre Sauvage\",\n  \"J. Fraser Stoddart\",\n  \"Ben Feringa\",\n  \"David J. Thouless\",\n  \"F. Duncan M. Haldane\",\n  \"J. Michael Kosterlitz\",\n  \"Arthur Ashkin\",\n  \"Gérard Mourou\",\n  \"Donna Strickland\",\n  \"Rainer Weiss\",\n  \"Barry Barish\",\n  \"Kip Thorne\",\n  \"James Peebles\",\n  \"Michel Mayor\",\n  \"Didier Queloz\",\n  \"Andrea Ghez\",\n  \"Reinhard Genzel\",\n  \"Roger Penrose\"\n]",
     "bindings" : [ {
       "x" : "Roger Penrose"
     }, {
@@ -20,44 +20,46 @@
     }, {
       "x" : "Ferenc Krausz"
     }, {
-      "x" : "Anne L'Huillier"
+      "x" : "Anne L’Huillier"
     }, {
       "x" : "Louis Néel"
     }, {
-      "x" : "John B. Goodenough"
+      "x" : "Pierre-Gilles de Gennes"
     }, {
-      "x" : "M. Stanley Whittingham"
+      "x" : "Jean-Pierre Sauvage"
     }, {
-      "x" : "Akira Yoshino"
+      "x" : "J. Fraser Stoddart"
+    }, {
+      "x" : "Ben Feringa"
+    }, {
+      "x" : "David J. Thouless"
+    }, {
+      "x" : "F. Duncan M. Haldane"
+    }, {
+      "x" : "J. Michael Kosterlitz"
+    }, {
+      "x" : "Arthur Ashkin"
+    }, {
+      "x" : "Gérard Mourou"
+    }, {
+      "x" : "Donna Strickland"
+    }, {
+      "x" : "Rainer Weiss"
+    }, {
+      "x" : "Barry Barish"
+    }, {
+      "x" : "Kip Thorne"
+    }, {
+      "x" : "James Peebles"
     }, {
       "x" : "Michel Mayor"
     }, {
       "x" : "Didier Queloz"
-    }, {
-      "x" : "James Peebles"
-    }, {
-      "x" : "M. Rees"
-    }, {
-      "x" : "J. H. Taylor"
-    }, {
-      "x" : "R. A. Hulse"
-    }, {
-      "x" : "S. Chandrasekhar"
-    }, {
-      "x" : "R. Feynman"
-    }, {
-      "x" : "J. Schwinger"
-    }, {
-      "x" : "S. Tomonaga"
-    }, {
-      "x" : "R. P. Feynman"
-    }, {
-      "x" : "J. G. Taylor"
     } ],
     "success" : true,
     "errorMessage" : null,
     "model" : "Qwen/Qwen3-30B-A3B-Instruct-2507",
-    "promptTokens" : 105,
-    "completionTokens" : 1000
+    "promptTokens" : 125,
+    "completionTokens" : 236
   }
 }

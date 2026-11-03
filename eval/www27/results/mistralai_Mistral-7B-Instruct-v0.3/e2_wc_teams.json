@@ -55,9 +55,6 @@
     },
     {
      "x": "http://www.wikidata.org/entity/Q184602"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q134916"
     }
    ],
    "calls": 1,
@@ -115,9 +112,6 @@
     },
     {
      "x": "http://www.wikidata.org/entity/Q268208"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q134916"
     }
    ],
    "calls": 1,
@@ -175,9 +169,6 @@
     },
     {
      "x": "http://www.wikidata.org/entity/Q268208"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q134916"
     }
    ],
    "calls": 1,
@@ -235,9 +226,6 @@
     },
     {
      "x": "http://www.wikidata.org/entity/Q268208"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q134916"
     }
    ],
    "calls": 1,
@@ -295,9 +283,6 @@
     },
     {
      "x": "http://www.wikidata.org/entity/Q268208"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q134916"
     }
    ],
    "calls": 1,
@@ -355,9 +340,6 @@
     },
     {
      "x": "http://www.wikidata.org/entity/Q268208"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q134916"
     }
    ],
    "calls": 1,
@@ -415,9 +397,6 @@
     },
     {
      "x": "http://www.wikidata.org/entity/Q268208"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q134916"
     }
    ],
    "calls": 1,
@@ -925,9 +904,6 @@
     },
     {
      "x": "http://www.wikidata.org/entity/Q268208"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q134916"
     }
    ],
    "calls": 1,
@@ -985,9 +961,6 @@
     },
     {
      "x": "http://www.wikidata.org/entity/Q268208"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q134916"
     }
    ],
    "calls": 1,
@@ -1045,9 +1018,6 @@
     },
     {
      "x": "http://www.wikidata.org/entity/Q268208"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q134916"
     }
    ],
    "calls": 1,
@@ -1105,9 +1075,6 @@
     },
     {
      "x": "http://www.wikidata.org/entity/Q268208"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q134916"
     }
    ],
    "calls": 1,
@@ -1191,13 +1158,10 @@
    },
    {
     "x": "United States"
-   },
-   {
-    "x": "Uruguay"
    }
   ],
   "calls": 1,
-  "seconds": 1.2
+  "seconds": 3.1
  },
  "generated_after": {
   "query": "SELECT ?x WHERE { GENOP(\"List the national teams that play at the 2026 FIFA World Cup.\", (?x), <model>) }",
@@ -1273,9 +1237,6 @@
    },
    {
     "x": "United States"
-   },
-   {
-    "x": "Uruguay"
    }
   ],
   "calls": 1,

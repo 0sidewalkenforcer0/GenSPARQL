@@ -1,35 +1,33 @@
 {
   "openai:Qwen/Qwen3-30B-A3B-Instruct-2507:5eab7a64031daa92caa0f9505f98ee92b828306d57de13625d8695d7ae2e5fd1:0.00:1000:x" : {
-    "rawText" : "[\"Toronto\", \"Mexico City\", \"Los Angeles\", \"Seattle\", \"San Francisco\", \"Atlanta\", \"Dallas\", \"Philadelphia\", \"Boston\", \"Washington, D.C.\", \"Miami\", \"Houston\"]",
+    "rawText" : "[\"Los Angeles\", \"New York/New Jersey\", \"Miami\", \"Dallas\", \"Seattle\", \"Atlanta\", \"Boston\", \"San Francisco\", \"Mexico City\", \"Guadalajara\", \"Monterrey\"]",
     "bindings" : [ {
-      "x" : "Toronto"
-    }, {
-      "x" : "Mexico City"
-    }, {
       "x" : "Los Angeles"
     }, {
-      "x" : "Seattle"
-    }, {
-      "x" : "San Francisco"
-    }, {
-      "x" : "Atlanta"
-    }, {
-      "x" : "Dallas"
-    }, {
-      "x" : "Philadelphia"
-    }, {
-      "x" : "Boston"
-    }, {
-      "x" : "Washington, D.C."
+      "x" : "New York/New Jersey"
     }, {
       "x" : "Miami"
     }, {
-      "x" : "Houston"
+      "x" : "Dallas"
+    }, {
+      "x" : "Seattle"
+    }, {
+      "x" : "Atlanta"
+    }, {
+      "x" : "Boston"
+    }, {
+      "x" : "San Francisco"
+    }, {
+      "x" : "Mexico City"
+    }, {
+      "x" : "Guadalajara"
+    }, {
+      "x" : "Monterrey"
     } ],
     "success" : true,
     "errorMessage" : null,
     "model" : "Qwen/Qwen3-30B-A3B-Instruct-2507",
-    "promptTokens" : 97,
-    "completionTokens" : 43
+    "promptTokens" : 117,
+    "completionTokens" : 45
   }
 }

@@ -3,7 +3,7 @@
  "rows": [
   {
    "name": "John Hopfield",
-   "c": "Neural Networks"
+   "c": "Nobel Prize in Physics was not awarded to John Hopfield"
   },
   {
    "name": "Pierre Agostini",
@@ -11,7 +11,7 @@
   },
   {
    "name": "Giorgio Parisi",
-   "c": "Theoretical Physics, Statistical Mechanics"
+   "c": "Theoretical Physics: Statistical Mechanics"
   },
   {
    "name": "Anton Zeilinger",
@@ -19,7 +19,7 @@
   },
   {
    "name": "John Clauser",
-   "c": "Quantum entanglement"
+   "c": "Quantum Entanglement Experiment"
   },
   {
    "name": "John M. Martinis",
@@ -27,7 +27,7 @@
   },
   {
    "name": "Michel Devoret",
-   "c": "Quantum Information Science"
+   "c": "Quantum Computing: Superconducting Quantum Bits"
   },
   {
    "name": "John Clarke",
@@ -43,7 +43,7 @@
   },
   {
    "name": "Reinhard Genzel",
-   "c": "Observation of a black hole's shadow"
+   "c": "Gravitational Waves from a Black Hole Merger"
   },
   {
    "name": "Ferenc Krausz",
@@ -51,11 +51,11 @@
   },
   {
    "name": "Syukuro Manabe",
-   "c": "Climate and Weather Research"
+   "c": "Climate and Atmospheric Science"
   },
   {
    "name": "Geoffrey Hinton",
-   "c": "Machine Learning, Neural Networks"
+   "c": "Not awarded in Physics"
   },
   {
    "name": "Roger Penrose",
@@ -63,7 +63,7 @@
   },
   {
    "name": "Anne L'Huillier",
-   "c": "Laser Spectroscopy"
+   "c": "Not awarded"
   },
   {
    "name": "Klaus Hasselmann",
@@ -71,7 +71,7 @@
   }
  ],
  "calls": 17,
- "seconds": 2.3,
+ "seconds": 6.8,
  "solutions_without_restriction": {
   "query": "SELECT (COUNT(*) AS ?n) WHERE { ?a ex:field wd:Q38104 ; ex:winningYear ?y ; ex:winner ?l . ?l rdfs:label ?name . }",
   "rows": [

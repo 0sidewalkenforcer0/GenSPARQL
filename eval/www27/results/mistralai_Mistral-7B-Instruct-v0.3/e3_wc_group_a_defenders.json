@@ -1,8 +1,16 @@
 {
- "query": "SELECT ?name ?pos WHERE { ?t ex:inGroup ?g . ?g rdfs:label \"Group A\" . ?p ex:playsFor ?t ; rdfs:label ?name . GENOP(\"On which position does the footballer {?name} primarily play? Answer with one of Goalkeeper, Defender, Midfielder or Forward. If you do not know this player, answer Unknown.\", (?pos), <model>) FILTER(?pos = \"Defender\") }",
+ "query": "SELECT ?name ?pos WHERE { ?t ex:inGroup ?g . ?g rdfs:label \"Group A\" . ?p ex:playsFor ?t ; rdfs:label ?name . GENOP(\"Which position does the footballer {?name} primarily play: goalkeeper, defender, midfielder or forward?\", (?pos), <model>) FILTER(LCASE(STR(?pos)) = \"defender\") }",
  "rows": [
   {
+   "name": "Sphephelo Sithole",
+   "pos": "Defender"
+  },
+  {
    "name": "Kamogelo Sebelebele",
+   "pos": "Defender"
+  },
+  {
+   "name": "Relebohile Mofokeng",
    "pos": "Defender"
   },
   {
@@ -10,7 +18,19 @@
    "pos": "Defender"
   },
   {
-   "name": "Iqraam Rayners",
+   "name": "Olwethu Makhanya",
+   "pos": "Defender"
+  },
+  {
+   "name": "Khuliso Mudau",
+   "pos": "Defender"
+  },
+  {
+   "name": "Teboho Mokoena",
+   "pos": "Defender"
+  },
+  {
+   "name": "Thabang Matuludi",
    "pos": "Defender"
   },
   {
@@ -22,23 +42,19 @@
    "pos": "Defender"
   },
   {
+   "name": "Tshepang Moremi",
+   "pos": "Defender"
+  },
+  {
+   "name": "Samukele Kabini",
+   "pos": "Defender"
+  },
+  {
    "name": "Nkosinathi Sibisi",
    "pos": "Defender"
   },
   {
-   "name": "Kim Jin-gyu",
-   "pos": "Defender"
-  },
-  {
-   "name": "Paik Seung-ho",
-   "pos": "Defender"
-  },
-  {
-   "name": "Cho Gue-sung",
-   "pos": "Defender"
-  },
-  {
-   "name": "Lee Han-beom",
+   "name": "Eom Ji-sung",
    "pos": "Defender"
   },
   {
@@ -54,11 +70,27 @@
    "pos": "Defender"
   },
   {
-   "name": "Gilberto Mora",
+   "name": "Roberto Alvarado",
+   "pos": "Defender"
+  },
+  {
+   "name": "César Huerta",
+   "pos": "Defender"
+  },
+  {
+   "name": "Armando González",
+   "pos": "Defender"
+  },
+  {
+   "name": "Julián Quiñones",
    "pos": "Defender"
   },
   {
    "name": "Santiago Giménez",
+   "pos": "Defender"
+  },
+  {
+   "name": "Jorge Sánchez Ramos",
    "pos": "Defender"
   },
   {
@@ -71,10 +103,6 @@
   },
   {
    "name": "Guillermo Martínez Ayala",
-   "pos": "Defender"
-  },
-  {
-   "name": "Jindřich Staněk",
    "pos": "Defender"
   },
   {
@@ -91,14 +119,10 @@
   },
   {
    "name": "Vladimír Coufal",
-   "pos": "Defender"
+   "pos": "defender"
   },
   {
    "name": "Alexandr Sojka",
-   "pos": "Defender"
-  },
-  {
-   "name": "Ladislav Krejčí",
    "pos": "Defender"
   },
   {
@@ -118,12 +142,20 @@
    "pos": "Defender"
   },
   {
-   "name": "Lukáš Červ",
+   "name": "Mojmír Chytil",
+   "pos": "Defender"
+  },
+  {
+   "name": "Michal Sadílek",
+   "pos": "Defender"
+  },
+  {
+   "name": "David Zima",
    "pos": "Defender"
   }
  ],
  "calls": 104,
- "seconds": 8.3,
+ "seconds": 23.5,
  "solutions_without_restriction": {
   "query": "SELECT (COUNT(*) AS ?n) WHERE { ?p ex:playsFor ?t ; rdfs:label ?name . }",
   "rows": [

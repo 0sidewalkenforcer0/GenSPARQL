@@ -1,65 +1,59 @@
 {
   "openai:mistralai/Mistral-7B-Instruct-v0.3:3435059233eac994c4232865a941331103a71910c1e3c194e16dd506a6e7d3b4:0.00:1000:x" : {
-    "rawText" : " [\"MetLife Stadium\", \"Soccer Stadium (New York/New Jersey)\", \"AT&T Stadium\", \"Cotton Bowl Stadium\", \"NRG Stadium\", \"Toyota Stadium\", \"Allegiant Stadium\", \"Las Vegas Stadium\", \"State Farm Stadium\", \"University of Phoenix Stadium\", \"SoFi Stadium\", \"Rose Bowl\", \"Los Angeles Memorial Coliseum\", \"Estadio Azteca\", \"Estadio Jalisco\", \"Estadio BBVA Bancomer\", \"Estadio Universitario\", \"Estadio Olimpico Universitario\", \"Estadio Tecnologico\", \"Estadio Akron\", \"Estadio BBVA\", \"Estadio Corona\", \"Estadio BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Stadium\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer",
+    "rawText" : " [\"MetLife Stadium\", \"AT&T Stadium\", \"Solider Field\", \"NRG Stadium\", \"Levi's Stadium\", \"State Farm Stadium\", \"Empower Field at Mile High\", \"Allegiant Stadium\", \"SoFi Stadium\", \"Lincoln Financial Field\", \"Ford Field\", \"Mercedes-Benz Stadium\", \"Bank of America Stadium\", \"Raymond James Stadium\", \"Gillette Stadium\", \"Lumen Field\", \"CenturyLink Field\", \"Oracle Park\", \"AT&T Park\", \"Glendale Stadium\", \"Las Vegas Stadium\", \"Pasadena Rose Bowl\", \"Santa Clara Stadium\", \"Inglewood Stadium\"]",
     "bindings" : [ {
       "x" : "MetLife Stadium"
     }, {
-      "x" : "Soccer Stadium (New York/New Jersey)"
-    }, {
       "x" : "AT&T Stadium"
     }, {
-      "x" : "Cotton Bowl Stadium"
+      "x" : "Solider Field"
     }, {
       "x" : "NRG Stadium"
     }, {
-      "x" : "Toyota Stadium"
-    }, {
-      "x" : "Allegiant Stadium"
-    }, {
-      "x" : "Las Vegas Stadium"
+      "x" : "Levi's Stadium"
     }, {
       "x" : "State Farm Stadium"
     }, {
-      "x" : "University of Phoenix Stadium"
+      "x" : "Empower Field at Mile High"
+    }, {
+      "x" : "Allegiant Stadium"
     }, {
       "x" : "SoFi Stadium"
     }, {
-      "x" : "Rose Bowl"
+      "x" : "Lincoln Financial Field"
     }, {
-      "x" : "Los Angeles Memorial Coliseum"
+      "x" : "Ford Field"
     }, {
-      "x" : "Estadio Azteca"
+      "x" : "Mercedes-Benz Stadium"
     }, {
-      "x" : "Estadio Jalisco"
+      "x" : "Bank of America Stadium"
     }, {
-      "x" : "Estadio BBVA Bancomer"
+      "x" : "Raymond James Stadium"
     }, {
-      "x" : "Estadio Universitario"
+      "x" : "Gillette Stadium"
     }, {
-      "x" : "Estadio Olimpico Universitario"
+      "x" : "Lumen Field"
     }, {
-      "x" : "Estadio Tecnologico"
+      "x" : "CenturyLink Field"
     }, {
-      "x" : "Estadio Akron"
+      "x" : "Oracle Park"
     }, {
-      "x" : "Estadio BBVA"
+      "x" : "AT&T Park"
     }, {
-      "x" : "Estadio Corona"
+      "x" : "Glendale Stadium"
     }, {
-      "x" : "Estadio BBVA Bancomer BBVA Bancomer"
+      "x" : "Las Vegas Stadium"
     }, {
-      "x" : "Estadio BBVA Bancomer BBVA Stadium"
+      "x" : "Pasadena Rose Bowl"
     }, {
-      "x" : "Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer"
+      "x" : "Santa Clara Stadium"
     }, {
-      "x" : "Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer"
-    }, {
-      "x" : "Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer"
+      "x" : "Inglewood Stadium"
     } ],
     "success" : true,
     "errorMessage" : null,
     "model" : "mistralai/Mistral-7B-Instruct-v0.3",
-    "promptTokens" : 109,
-    "completionTokens" : 1000
+    "promptTokens" : 130,
+    "completionTokens" : 147
   }
 }

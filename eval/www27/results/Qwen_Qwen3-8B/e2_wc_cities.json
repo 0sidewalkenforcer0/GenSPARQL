@@ -279,23 +279,32 @@
     "x": "Verona"
    },
    {
+    "x": "Padua"
+   },
+   {
+    "x": "Bari"
+   },
+   {
     "x": "Palermo"
    },
    {
     "x": "Catania"
    },
    {
+    "x": "Messina"
+   },
+   {
     "x": "Cagliari"
    },
    {
-    "x": "Bari"
+    "x": "Sassari"
    },
    {
-    "x": "Salerno"
+    "x": "Livorno"
    }
   ],
   "calls": 1,
-  "seconds": 2.3
+  "seconds": 3.2
  },
  "generated_after": {
   "query": "SELECT ?x WHERE { GENOP(\"List the host cities of the 2026 FIFA World Cup.\", (?x), <model>) }",
@@ -322,19 +331,28 @@
     "x": "Verona"
    },
    {
+    "x": "Padua"
+   },
+   {
+    "x": "Bari"
+   },
+   {
     "x": "Palermo"
    },
    {
     "x": "Catania"
    },
    {
+    "x": "Messina"
+   },
+   {
     "x": "Cagliari"
    },
    {
-    "x": "Bari"
+    "x": "Sassari"
    },
    {
-    "x": "Salerno"
+    "x": "Livorno"
    }
   ],
   "calls": 1,

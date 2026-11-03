@@ -1,22 +1,30 @@
 {
   "openai:mistralai/Mistral-7B-Instruct-v0.3:458735d0fdd866f0447479f9cdeff5ce0254eabd4bbc937c84153394b19b4de1:0.00:1000:x" : {
-    "rawText" : " [\"Emiliano Martinez\", \"Gonzalo Montiel\", \"Nicolas Otamendi\", \"Nicolas Tagliafico\", \"Marcos Acuna\", \"Renzo Saravia\", \"German Pezzella\", \"Nicolas Gonzalez\", \"Guido Rodriguez\", \"Exequiel Palacios\", \"Rodrigo De Paul\", \"Alexis Mac Allister\", \"Angel Di Maria\", \"Lionel Messi\", \"Julian Alvarez\", \"Lautaro Martinez\", \"Joel Ferreira\", \"Giovani Lo Celso\", \"Nicolas Dominguez\", \"Thiago Almada\", \"Papu Gomez\", \"Diego Schwartzman\", \"Emiliano Buendia\", \"Gonzalo Montiel\", \"Nicolas Otamendi\", \"Nicolas Tagliafico\", \"Marcos Acuna\", \"Renzo Saravia\", \"German Pezzella\", \"Nicolas Gonzalez\", \"Guido Rodriguez\", \"Exequiel Palacios\", \"Rodrigo De Paul\", \"Alexis Mac Allister\", \"Angel Di Maria\", \"Lionel Messi\", \"Julian Alvarez\", \"Lautaro Martinez\", \"Joel Ferreira\", \"Giovani Lo Celso\", \"Nicolas Dominguez\", \"Thiago Almada\", \"Papu Gomez\", \"Diego Schwartzman\"]",
+    "rawText" : " [\"Emiliano Martinez\", \"Geronimo Rulli\", \"Franco Armani\", \"Nahuel Guzman\", \"Nicolas Otamendi\", \"Germán Pezzella\", \"Nicolas Tagliafico\", \"Marcos Acuna\", \"Gonzalo Montiel\", \"Nicolas Gonzalez\", \"Renzo Saravia\", \"Leandro Paredes\", \"Guido Rodriguez\", \"Exequiel Palacios\", \"Rodrigo De Paul\", \"Alexis Mac Allister\", \"Angel Di Maria\", \"Lionel Messi\", \"Julian Alvarez\", \"Lautaro Martinez\", \"Joel Ferreira\", \"Giovani Lo Celso\", \"Nicolas Gonzalez\", \"Lucas Ocampos\", \"Dario Benedetto\", \"Joaquin Correa\", \"Lautaro Caceres\", \"Nicolas Ibanez\", \"Juan Foyth\", \"Nehuen Perez\", \"Nicolas Tagliafico\", \"Gonzalo Montiel\", \"Marcos Acuna\", \"Ramiro Funes Mori\", \"Juan Musso\", \"Agustin Marchesin\", \"Gonzalo Montiel\", \"Nicolas Otamendi\", \"Nicolas Tagliafico\", \"Marcos Acuna\", \"Renzo Saravia\", \"Leandro Paredes\", \"Guido Rodriguez\", \"Exequiel Palacios\", \"Rodrigo De Paul\", \"Alexis Mac Allister\", \"Angel Di Maria\", \"Lionel Messi\", \"Julian Alvarez\", \"Lautaro Martinez\", \"Joel Ferreira\", \"Giovani Lo Celso\", \"Nicolas Gonzalez\", \"Lucas Ocampos\", \"Dario Benedetto\", \"Joaquin Correa\", \"Lautaro Caceres\", \"Nicolas Ibanez\", \"Juan Foyth\", \"Nehuen Perez\"]",
     "bindings" : [ {
       "x" : "Emiliano Martinez"
     }, {
-      "x" : "Gonzalo Montiel"
+      "x" : "Geronimo Rulli"
+    }, {
+      "x" : "Franco Armani"
+    }, {
+      "x" : "Nahuel Guzman"
     }, {
       "x" : "Nicolas Otamendi"
+    }, {
+      "x" : "Germán Pezzella"
     }, {
       "x" : "Nicolas Tagliafico"
     }, {
       "x" : "Marcos Acuna"
     }, {
-      "x" : "Renzo Saravia"
-    }, {
-      "x" : "German Pezzella"
+      "x" : "Gonzalo Montiel"
     }, {
       "x" : "Nicolas Gonzalez"
+    }, {
+      "x" : "Renzo Saravia"
+    }, {
+      "x" : "Leandro Paredes"
     }, {
       "x" : "Guido Rodriguez"
     }, {
@@ -38,20 +46,30 @@
     }, {
       "x" : "Giovani Lo Celso"
     }, {
-      "x" : "Nicolas Dominguez"
+      "x" : "Lucas Ocampos"
     }, {
-      "x" : "Thiago Almada"
+      "x" : "Dario Benedetto"
     }, {
-      "x" : "Papu Gomez"
+      "x" : "Joaquin Correa"
     }, {
-      "x" : "Diego Schwartzman"
+      "x" : "Lautaro Caceres"
     }, {
-      "x" : "Emiliano Buendia"
+      "x" : "Nicolas Ibanez"
+    }, {
+      "x" : "Juan Foyth"
+    }, {
+      "x" : "Nehuen Perez"
+    }, {
+      "x" : "Ramiro Funes Mori"
+    }, {
+      "x" : "Juan Musso"
+    }, {
+      "x" : "Agustin Marchesin"
     } ],
     "success" : true,
     "errorMessage" : null,
     "model" : "mistralai/Mistral-7B-Instruct-v0.3",
-    "promptTokens" : 109,
-    "completionTokens" : 337
+    "promptTokens" : 130,
+    "completionTokens" : 453
   }
 }

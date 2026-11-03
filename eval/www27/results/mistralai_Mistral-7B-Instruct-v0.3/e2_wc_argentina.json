@@ -18,13 +18,16 @@
      "x": "http://www.wikidata.org/entity/Q6110670"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q630170"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q20743436"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q33297140"
+     "x": "http://www.wikidata.org/entity/Q5951550"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q57293140"
+     "x": "http://www.wikidata.org/entity/Q33297140"
     }
    ],
    "calls": 1,
@@ -48,13 +51,16 @@
      "x": "http://www.wikidata.org/entity/Q6110670"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q630170"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q20743436"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q33297140"
+     "x": "http://www.wikidata.org/entity/Q5951550"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q57293140"
+     "x": "http://www.wikidata.org/entity/Q33297140"
     }
    ],
    "calls": 1,
@@ -78,13 +84,16 @@
      "x": "http://www.wikidata.org/entity/Q6110670"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q630170"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q20743436"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q33297140"
+     "x": "http://www.wikidata.org/entity/Q5951550"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q57293140"
+     "x": "http://www.wikidata.org/entity/Q33297140"
     }
    ],
    "calls": 1,
@@ -108,13 +117,16 @@
      "x": "http://www.wikidata.org/entity/Q6110670"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q630170"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q20743436"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q33297140"
+     "x": "http://www.wikidata.org/entity/Q5951550"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q57293140"
+     "x": "http://www.wikidata.org/entity/Q33297140"
     }
    ],
    "calls": 1,
@@ -138,13 +150,16 @@
      "x": "http://www.wikidata.org/entity/Q6110670"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q630170"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q20743436"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q33297140"
+     "x": "http://www.wikidata.org/entity/Q5951550"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q57293140"
+     "x": "http://www.wikidata.org/entity/Q33297140"
     }
    ],
    "calls": 1,
@@ -168,13 +183,16 @@
      "x": "http://www.wikidata.org/entity/Q6110670"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q630170"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q20743436"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q33297140"
+     "x": "http://www.wikidata.org/entity/Q5951550"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q57293140"
+     "x": "http://www.wikidata.org/entity/Q33297140"
     }
    ],
    "calls": 1,
@@ -198,13 +216,16 @@
      "x": "http://www.wikidata.org/entity/Q6110670"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q630170"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q20743436"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q33297140"
+     "x": "http://www.wikidata.org/entity/Q5951550"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q57293140"
+     "x": "http://www.wikidata.org/entity/Q33297140"
     }
    ],
    "calls": 1,
@@ -318,6 +339,9 @@
      "x": "http://www.wikidata.org/entity/Q21484126"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q22082590"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q111672750"
     },
     {
@@ -349,6 +373,12 @@
     },
     {
      "x": "http://www.wikidata.org/entity/Q96105248"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q5951550"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q5879014"
     },
     {
      "x": "http://www.wikidata.org/entity/Q33297140"
@@ -384,6 +414,9 @@
      "x": "http://www.wikidata.org/entity/Q21484126"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q22082590"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q111672750"
     },
     {
@@ -405,16 +438,22 @@
      "x": "http://www.wikidata.org/entity/Q182063"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q630170"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q20743436"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q5951550"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q5879014"
     },
     {
      "x": "http://www.wikidata.org/entity/Q33297140"
     },
     {
      "x": "http://www.wikidata.org/entity/Q30881092"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q57293140"
     }
    ],
    "calls": 1,
@@ -438,6 +477,9 @@
      "x": "http://www.wikidata.org/entity/Q21484126"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q22082590"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q3275904"
     },
     {
@@ -456,13 +498,19 @@
      "x": "http://www.wikidata.org/entity/Q182063"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q630170"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q20743436"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q33297140"
+     "x": "http://www.wikidata.org/entity/Q5951550"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q57293140"
+     "x": "http://www.wikidata.org/entity/Q5879014"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q33297140"
     }
    ],
    "calls": 1,
@@ -504,13 +552,19 @@
      "x": "http://www.wikidata.org/entity/Q182063"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q630170"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q20743436"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q33297140"
+     "x": "http://www.wikidata.org/entity/Q5951550"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q57293140"
+     "x": "http://www.wikidata.org/entity/Q5879014"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q33297140"
     }
    ],
    "calls": 1,
@@ -552,13 +606,19 @@
      "x": "http://www.wikidata.org/entity/Q182063"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q630170"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q20743436"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q33297140"
+     "x": "http://www.wikidata.org/entity/Q5951550"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q57293140"
+     "x": "http://www.wikidata.org/entity/Q5879014"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q33297140"
     }
    ],
    "calls": 1,
@@ -582,13 +642,16 @@
      "x": "http://www.wikidata.org/entity/Q6110670"
     },
     {
+     "x": "http://www.wikidata.org/entity/Q630170"
+    },
+    {
      "x": "http://www.wikidata.org/entity/Q20743436"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q33297140"
+     "x": "http://www.wikidata.org/entity/Q5951550"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q57293140"
+     "x": "http://www.wikidata.org/entity/Q33297140"
     }
    ],
    "calls": 1,
@@ -605,10 +668,19 @@
     "x": "Emiliano Martinez"
    },
    {
-    "x": "Gonzalo Montiel"
+    "x": "Geronimo Rulli"
+   },
+   {
+    "x": "Franco Armani"
+   },
+   {
+    "x": "Nahuel Guzman"
    },
    {
     "x": "Nicolas Otamendi"
+   },
+   {
+    "x": "Germán Pezzella"
    },
    {
     "x": "Nicolas Tagliafico"
@@ -617,13 +689,16 @@
     "x": "Marcos Acuna"
    },
    {
-    "x": "Renzo Saravia"
-   },
-   {
-    "x": "German Pezzella"
+    "x": "Gonzalo Montiel"
    },
    {
     "x": "Nicolas Gonzalez"
+   },
+   {
+    "x": "Renzo Saravia"
+   },
+   {
+    "x": "Leandro Paredes"
    },
    {
     "x": "Guido Rodriguez"
@@ -656,23 +731,38 @@
     "x": "Giovani Lo Celso"
    },
    {
-    "x": "Nicolas Dominguez"
+    "x": "Lucas Ocampos"
    },
    {
-    "x": "Thiago Almada"
+    "x": "Dario Benedetto"
    },
    {
-    "x": "Papu Gomez"
+    "x": "Joaquin Correa"
    },
    {
-    "x": "Diego Schwartzman"
+    "x": "Lautaro Caceres"
    },
    {
-    "x": "Emiliano Buendia"
+    "x": "Nicolas Ibanez"
+   },
+   {
+    "x": "Juan Foyth"
+   },
+   {
+    "x": "Nehuen Perez"
+   },
+   {
+    "x": "Ramiro Funes Mori"
+   },
+   {
+    "x": "Juan Musso"
+   },
+   {
+    "x": "Agustin Marchesin"
    }
   ],
   "calls": 1,
-  "seconds": 3.5
+  "seconds": 13.4
  },
  "generated_after": {
   "query": "SELECT ?x WHERE { GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>) }",
@@ -681,10 +771,19 @@
     "x": "Emiliano Martinez"
    },
    {
-    "x": "Gonzalo Montiel"
+    "x": "Geronimo Rulli"
+   },
+   {
+    "x": "Franco Armani"
+   },
+   {
+    "x": "Nahuel Guzman"
    },
    {
     "x": "Nicolas Otamendi"
+   },
+   {
+    "x": "Germán Pezzella"
    },
    {
     "x": "Nicolas Tagliafico"
@@ -693,13 +792,16 @@
     "x": "Marcos Acuna"
    },
    {
-    "x": "Renzo Saravia"
-   },
-   {
-    "x": "German Pezzella"
+    "x": "Gonzalo Montiel"
    },
    {
     "x": "Nicolas Gonzalez"
+   },
+   {
+    "x": "Renzo Saravia"
+   },
+   {
+    "x": "Leandro Paredes"
    },
    {
     "x": "Guido Rodriguez"
@@ -732,19 +834,34 @@
     "x": "Giovani Lo Celso"
    },
    {
-    "x": "Nicolas Dominguez"
+    "x": "Lucas Ocampos"
    },
    {
-    "x": "Thiago Almada"
+    "x": "Dario Benedetto"
    },
    {
-    "x": "Papu Gomez"
+    "x": "Joaquin Correa"
    },
    {
-    "x": "Diego Schwartzman"
+    "x": "Lautaro Caceres"
    },
    {
-    "x": "Emiliano Buendia"
+    "x": "Nicolas Ibanez"
+   },
+   {
+    "x": "Juan Foyth"
+   },
+   {
+    "x": "Nehuen Perez"
+   },
+   {
+    "x": "Ramiro Funes Mori"
+   },
+   {
+    "x": "Juan Musso"
+   },
+   {
+    "x": "Agustin Marchesin"
    }
   ],
   "calls": 1,

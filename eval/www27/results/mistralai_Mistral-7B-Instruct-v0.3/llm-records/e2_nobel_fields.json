@@ -17,7 +17,7 @@
     "success" : true,
     "errorMessage" : null,
     "model" : "mistralai/Mistral-7B-Instruct-v0.3",
-    "promptTokens" : 102,
+    "promptTokens" : 123,
     "completionTokens" : 34
   }
 }

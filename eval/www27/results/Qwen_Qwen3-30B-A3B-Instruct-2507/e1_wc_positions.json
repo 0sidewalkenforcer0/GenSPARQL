@@ -1,5 +1,5 @@
 {
- "query": "SELECT ?p ?v WHERE { ?p a ex:Athlete ; rdfs:label ?name . GENOP(\"On which position does the footballer {?name} primarily play? Give one specific position, for example centre-back, winger, defensive midfielder or goalkeeper. If you do not know this player, answer Unknown.\", (?v), <model>) }",
+ "query": "SELECT ?p ?v WHERE { ?p a ex:Athlete ; rdfs:label ?name . GENOP(\"Which position does the footballer {?name} primarily play: goalkeeper, defender, midfielder or forward?\", (?v), <model>) }",
  "rows": [
   {
    "p": "http://www.wikidata.org/entity/Q59914031",
@@ -7,71 +7,71 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q124397380",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q26838705",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q126284601",
-   "v": "defensive midfielder"
+   "v": "goalkeeper"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18608497",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q98594864",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q3855340",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q130210573",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q48877857",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q2876432",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q65950201",
-   "v": "left-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q63384759",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18044401",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q50105161",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q66370589",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q16234825",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q60842106",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q3876530",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q15627817",
@@ -79,23 +79,23 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q119079226",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q24007335",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q28967995",
-   "v": "centre-forward"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19969384",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18551518",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q28736721",
@@ -107,67 +107,67 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q111604014",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q117289166",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q17501875",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q85767808",
-   "v": "defensive midfielder"
+   "v": "goalkeeper"
   },
   {
    "p": "http://www.wikidata.org/entity/Q7159779",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q100271491",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q104530871",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q95223261",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q60736591",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20027858",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q113704154",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19882816",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q84462730",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q64147458",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q109968695",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q31981",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q33129609",
@@ -175,63 +175,63 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q3431767",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q122152591",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q30346214",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q58323172",
-   "v": "central midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q142794",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q112112992",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q28531111",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q98887333",
-   "v": "midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q5026758",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q73400656",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q28717698",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q66801705",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q55813157",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q520721",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q117289729",
-   "v": "midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q55955918",
@@ -239,19 +239,19 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q2359678",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q53394040",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q1354960",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q108000394",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q215522",
@@ -259,7 +259,7 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q98100512",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q26385193",
@@ -267,23 +267,23 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q2025900",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q29427316",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q13634114",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q26251815",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q113952820",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q17151209",
@@ -295,15 +295,15 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q318069",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q36696865",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19266811",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q2843080",
@@ -311,19 +311,19 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q39230",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q46699047",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q21913126",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q107130635",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q15956282",
@@ -331,39 +331,39 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q49166190",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q16145667",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q524730",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q105846503",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q17429290",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q116605365",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q98816361",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q124382289",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20645743",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q28065104",
@@ -375,11 +375,11 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q61721648",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q117035133",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q62597239",
@@ -387,39 +387,39 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q96182876",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q105082472",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q72091732",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q117280421",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q124302622",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q114713518",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q107446975",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q113393306",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q969014",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q74548",
@@ -427,11 +427,11 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q45935395",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q17612806",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q114703020",
@@ -439,7 +439,7 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q20963029",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q615",
@@ -447,19 +447,19 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q101095985",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q136375048",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q56868118",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q114841915",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q6794678",
@@ -467,15 +467,15 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q21004804",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q99670930",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q60842122",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q111336539",
@@ -483,71 +483,71 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q107542811",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20038711",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q85928265",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q22127681",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q61460651",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q108858343",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q64433070",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q118645253",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q62617279",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19882804",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q26255087",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q80314837",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q135616172",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q16902219",
-   "v": "central midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q137441719",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q55363875",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q136466749",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q17074511",
@@ -555,11 +555,11 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q26266244",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q1957458",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q177331",
@@ -567,55 +567,55 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q551192",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q116223348",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q99617367",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q51213832",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q23772014",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q133505943",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q111479885",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q56222105",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q23887828",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q22278509",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q21484126",
-   "v": "centre-forward"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q50505969",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q13578003",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18207229",
@@ -623,11 +623,11 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q58339004",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q22082590",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19903718",
@@ -635,123 +635,123 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q56512017",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q29318963",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q46709013",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q106061470",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q3812986",
-   "v": "midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q28101965",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q7500146",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q47582288",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q98262284",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q121946144",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q6391158",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q4702779",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q65680079",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q123436577",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q313316",
-   "v": "striker"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q126373302",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q61100362",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q117842510",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q50073536",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27921765",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q130337999",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q72697581",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q131822292",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20723878",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q50820392",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q127914",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q58011140",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q30007142",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q105704210",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q86312",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q89047062",
@@ -759,19 +759,19 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q65718498",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q134932034",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q107985032",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q117239349",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19610875",
@@ -779,51 +779,51 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q21621180",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18921648",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q28973866",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q16648816",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27306208",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q117790110",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q76591341",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q64009768",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q124247293",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20090660",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27995699",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q117322318",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q28059260",
@@ -831,15 +831,15 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q116146104",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q23703372",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q918049",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q102257634",
@@ -847,19 +847,19 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q20737387",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q129088593",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q119413564",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q64224437",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q24663885",
@@ -867,23 +867,23 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q107746612",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q55138415",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q118118504",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q8338725",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q35066458",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q111280241",
@@ -891,15 +891,15 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q23559699",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q133903",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q109594121",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19280531",
@@ -907,11 +907,11 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q2036160",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q16499882",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q3571952",
@@ -919,19 +919,19 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q30080273",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q108543955",
-   "v": "left-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20740578",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q62006510",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q108187024",
@@ -939,47 +939,47 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q124283356",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q105939150",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q64364375",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q133464757",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q22340706",
-   "v": "winger"
+   "v": "goalkeeper"
   },
   {
    "p": "http://www.wikidata.org/entity/Q121829403",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q7781199",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q44737396",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q129652337",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19274473",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18225149",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q139815346",
@@ -987,51 +987,51 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q120753803",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q134699960",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q51670751",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27990922",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q110616805",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q57456997",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q26924482",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q63344470",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q80809664",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q54861644",
-   "v": "left-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q90307470",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18705783",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q86301356",
@@ -1039,35 +1039,35 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q27671280",
-   "v": "defensive midfielder"
+   "v": "goalkeeper"
   },
   {
    "p": "http://www.wikidata.org/entity/Q111805882",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q16911979",
-   "v": "striker"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q99955331",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q102426988",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q51159914",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q666506",
-   "v": "left-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q60677561",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q781683",
@@ -1075,7 +1075,7 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q59306433",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q502898",
@@ -1083,55 +1083,55 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q32666318",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q59209505",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q83795769",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q69696842",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q110111698",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q121907216",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q28800473",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q616664",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q273715",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q47074246",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q29158696",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q98593672",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q47170176",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q22951255",
@@ -1139,31 +1139,31 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q124051749",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q53996595",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q106907687",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q21195147",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q30118244",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q24073962",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q3196721",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q17708749",
@@ -1171,91 +1171,91 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q30301454",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q278239",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q123571870",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27037962",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19319791",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q105426667",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q104903216",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q50829202",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q4665805",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q24256738",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q21573188",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q111672750",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q122971833",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q7403894",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q60048828",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q28971436",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q41023561",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q21000530",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q116235098",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q118978780",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q116447721",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18924954",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q17070837",
@@ -1263,7 +1263,7 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q98536293",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q16236380",
@@ -1271,15 +1271,15 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q96070453",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q4830013",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q42319683",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q129116",
@@ -1287,115 +1287,115 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q58796031",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q30045780",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q56227031",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q113628776",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q99096411",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q3945419",
-   "v": "winger"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q64031850",
-   "v": "centre-back"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q18066870",
-   "v": "defensive midfielder"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q45108287",
-   "v": "defensive midfielder"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q85884126",
-   "v": "winger"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q21621771",
-   "v": "defensive midfielder"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q22096162",
-   "v": "winger"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q4979316",
-   "v": "central midfielder"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q107357509",
-   "v": "attacking midfielder"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q113510254",
    "v": "midfielder"
   },
   {
+   "p": "http://www.wikidata.org/entity/Q64031850",
+   "v": "defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18066870",
+   "v": "defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q45108287",
+   "v": "defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q85884126",
+   "v": "midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21621771",
+   "v": "defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q22096162",
+   "v": "defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q4979316",
+   "v": "midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107357509",
+   "v": "forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q113510254",
+   "v": "defender"
+  },
+  {
    "p": "http://www.wikidata.org/entity/Q4125587",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q110739094",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q5938042",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27920148",
-   "v": "central midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q98092491",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27468610",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18705249",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27514541",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q62594816",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q14948183",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q96396963",
-   "v": "left-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q108910786",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q47467341",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q96072055",
@@ -1407,7 +1407,7 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q18157457",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q26255578",
@@ -1415,179 +1415,179 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q16632974",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q21621168",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q97404267",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q124745247",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q24007299",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18128872",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q24052364",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q110184199",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q60407856",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q64010525",
-   "v": "left-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q51756997",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q47499719",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q60664537",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q22082627",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q123139564",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q17494543",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q641425",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q2465298",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q60828724",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q3943100",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q21916759",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q116054089",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q114355328",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q106173174",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q96613620",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q2342765",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q28692516",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q69523791",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q127271091",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q17386078",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q105956269",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q82251502",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q107334828",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q17523896",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q124392516",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q41187975",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q4621784",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q28933132",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q21621995",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q122207713",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q10554558",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20994118",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q209942",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q437329",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q107985608",
@@ -1595,55 +1595,55 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q104780374",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q112654639",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q68168547",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q6160707",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q16235823",
-   "v": "left-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q97580948",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q16174734",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q23540953",
-   "v": "left winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q81659662",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q105812639",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q22812486",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q65964628",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q58810793",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q357984",
@@ -1651,31 +1651,31 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q38693097",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q85797565",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q65378670",
-   "v": "winger"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q14625183",
    "v": "midfielder"
   },
   {
+   "p": "http://www.wikidata.org/entity/Q14625183",
+   "v": "defender"
+  },
+  {
    "p": "http://www.wikidata.org/entity/Q18046760",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20675980",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27106995",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q107882685",
@@ -1683,75 +1683,75 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q105520386",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q69512938",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19560313",
-   "v": "attacking midfielder"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q24068400",
-   "v": "defensive midfielder"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q85872272",
-   "v": "winger"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q131470768",
    "v": "midfielder"
   },
   {
+   "p": "http://www.wikidata.org/entity/Q24068400",
+   "v": "defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q85872272",
+   "v": "forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q131470768",
+   "v": "defender"
+  },
+  {
    "p": "http://www.wikidata.org/entity/Q58790870",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q16555086",
-   "v": "defensive midfielder"
+   "v": "goalkeeper"
   },
   {
    "p": "http://www.wikidata.org/entity/Q98561102",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q81878309",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q63700064",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q1755683",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q104762954",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q105896342",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q104604531",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q21621941",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q17486599",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q106804819",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q29998966",
@@ -1759,91 +1759,91 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q113390994",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q2070073",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q96755",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q30160479",
-   "v": "central midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q12597820",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q110463620",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q57017726",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q38764408",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q122160785",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q23007684",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q98937753",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q109906009",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19612578",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q123174990",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q124101458",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q56703599",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q98781677",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q106030853",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q130741313",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q30925365",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q15622446",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q43303848",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q3275904",
@@ -1851,119 +1851,119 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q30916190",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q22812479",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20994068",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q117835987",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q98784065",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q84601192",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q113564288",
-   "v": "forward"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q111584129",
-   "v": "winger"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q602311",
-   "v": "defensive midfielder"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q78255759",
-   "v": "right-back"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q114386",
-   "v": "defensive midfielder"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q130508829",
-   "v": "winger"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q13784739",
-   "v": "centre-forward"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q48839143",
-   "v": "defensive midfielder"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q114736627",
-   "v": "defensive midfielder"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q108156269",
-   "v": "winger"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q22965497",
-   "v": "winger"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q26405109",
-   "v": "striker"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q28868192",
-   "v": "centre-back"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q24007315",
    "v": "midfielder"
   },
   {
+   "p": "http://www.wikidata.org/entity/Q602311",
+   "v": "defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q78255759",
+   "v": "defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q114386",
+   "v": "defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q130508829",
+   "v": "defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q13784739",
+   "v": "forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q48839143",
+   "v": "defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q114736627",
+   "v": "defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q108156269",
+   "v": "defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q22965497",
+   "v": "midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q26405109",
+   "v": "forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28868192",
+   "v": "defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q24007315",
+   "v": "defender"
+  },
+  {
    "p": "http://www.wikidata.org/entity/Q106805131",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q3939881",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q21286402",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q969725",
-   "v": "striker"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q83264648",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q317389",
-   "v": "left-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q50623645",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q131863254",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18962",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q29109911",
@@ -1971,51 +1971,51 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q60298555",
-   "v": "midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q59938996",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q109986890",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q123281002",
-   "v": "attacking midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q65131685",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q29441778",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q109587383",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q130495887",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q2502118",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q26251605",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q66528692",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q117818408",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q203749",
@@ -2023,7 +2023,7 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q19938984",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q699094",
@@ -2031,43 +2031,43 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q16234741",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q6298063",
-   "v": "left-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q44297797",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q7289588",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q43374160",
-   "v": "defensive midfielder"
+   "v": "goalkeeper"
   },
   {
    "p": "http://www.wikidata.org/entity/Q78752401",
-   "v": "left-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q69696822",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27914817",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q84158344",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q127324870",
-   "v": "defensive midfielder"
+   "v": "goalkeeper"
   },
   {
    "p": "http://www.wikidata.org/entity/Q1587689",
@@ -2075,67 +2075,67 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q16297591",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q30055335",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q64211871",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q96337717",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q140008336",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q50825738",
-   "v": "left-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27909473",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q17612631",
-   "v": "central midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18753041",
-   "v": "midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q1362064",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q17350507",
-   "v": "midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q28801927",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q103979811",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q21072120",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q75019636",
-   "v": "attacking midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q2749342",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q436987",
@@ -2147,83 +2147,83 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q2947963",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q105920173",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q4724643",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q108159340",
-   "v": "attacking midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q113515002",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q17496350",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q153786",
-   "v": "centre-forward"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20641500",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q716113",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q133698867",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q124045019",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18020415",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q98592909",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q121353909",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q97356007",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q28058687",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q74178822",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q96391665",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q921324",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q64681287",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q16910257",
@@ -2231,19 +2231,19 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q45179405",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q281734",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q56085180",
-   "v": "striker"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q21066260",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q61439485",
@@ -2251,15 +2251,15 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q4406552",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q108698128",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q133105064",
-   "v": "defensive midfielder"
+   "v": "[]"
   },
   {
    "p": "http://www.wikidata.org/entity/Q100144350",
@@ -2267,7 +2267,7 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q66241169",
-   "v": "central midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q66606355",
@@ -2275,55 +2275,55 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q105127935",
-   "v": "central midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q23679804",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27990906",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q14327453",
-   "v": "central midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20190657",
-   "v": "central midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q50137347",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q139813358",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q100271502",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19519224",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q33131174",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q125735784",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q107745867",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q101791178",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q509489",
@@ -2331,39 +2331,39 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q16979997",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q115059438",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q97205258",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q124173111",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q108924143",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q135287344",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q116215237",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q55820193",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q106779330",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q62085431",
@@ -2375,51 +2375,51 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q27049064",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q85291597",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q126436400",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q119432409",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q59381180",
-   "v": "attacking midfielder"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q501274",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q136462891",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q10556049",
-   "v": "left-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18637312",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27469951",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q121068701",
-   "v": "central midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q100565190",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q10547335",
@@ -2431,15 +2431,15 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q28445512",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q17037384",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q28801770",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q60621615",
@@ -2447,115 +2447,115 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q64740426",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q64167435",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q56332606",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q52771823",
-   "v": "centre-back"
+   "v": "goalkeeper"
   },
   {
    "p": "http://www.wikidata.org/entity/Q58484930",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q28663925",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q112623666",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q68607008",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q78459310",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q13422031",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19345715",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18062338",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q1033783",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20630956",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18637804",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q5932872",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q60047739",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q13360752",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q56599873",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q120907522",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q59150057",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20888302",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q43381082",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q26973015",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q139986016",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q72603655",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27960175",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q15113326",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q869214",
@@ -2563,119 +2563,119 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q121422889",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q26934107",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q62016194",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q25175970",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q6409355",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q67999144",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q106372614",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q28811942",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q161054",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18331623",
-   "v": "centre-forward"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q64009388",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q21523253",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q25367692",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q127514195",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q16235461",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q101053044",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q368441",
-   "v": "attacking midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q87715532",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q111741178",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q15915040",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q126365092",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q10549264",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q10544594",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q58767078",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q136399691",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q14371131",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27805413",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q65195011",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q17686992",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27736107",
@@ -2683,59 +2683,59 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q61911369",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q116466426",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q109924046",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q65515898",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q16300824",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q97724521",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q41800131",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q64010197",
-   "v": "central midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q110531201",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q61598452",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q56641379",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q118473161",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q26707107",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q125166783",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q110813058",
@@ -2743,11 +2743,11 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q28529932",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q100792937",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q313575",
@@ -2755,19 +2755,19 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q96678415",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q35009041",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q28098786",
-   "v": "midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q124242129",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q101033685",
@@ -2775,27 +2775,27 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q6110670",
-   "v": "central midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q55760452",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20745286",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27914873",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q16528455",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q116896436",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q17086753",
@@ -2803,55 +2803,55 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q27585643",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q47501392",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q117848823",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q17484446",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q87268125",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q122055800",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q137779066",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q50628268",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q16239819",
-   "v": "striker"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q176304",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q83639138",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q107284545",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q35778151",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q85040729",
@@ -2859,63 +2859,63 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q121537482",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q65948837",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q124420330",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q23915221",
-   "v": "central midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q117304605",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27067753",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q107370468",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q23772079",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q29901014",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q29113776",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q106686485",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q100984327",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q107352615",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q41447930",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20860081",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20807705",
@@ -2923,47 +2923,47 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q22082505",
-   "v": "left-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q60842077",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27832634",
-   "v": "midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q15963873",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q131432595",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q65030956",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q97577478",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19898898",
-   "v": "central midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q105658245",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q16595441",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q124151324",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q15521306",
@@ -2971,43 +2971,43 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q24961840",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q100735281",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q108653548",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q126258395",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q5742434",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q108111889",
-   "v": "central midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q125376751",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q1894",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q26405966",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q110244202",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18224489",
@@ -3019,39 +3019,39 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q137733792",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q13444905",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q121028932",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q60842159",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q117830854",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q108518721",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q58215731",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q16916422",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q30082508",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19866530",
@@ -3059,15 +3059,15 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q59268317",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19362872",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q98829565",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19972593",
@@ -3075,43 +3075,43 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q62714742",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q115162374",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q5865783",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27957334",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q95618487",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q45936149",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q118593930",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q182063",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q23541080",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27064119",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q110644260",
@@ -3119,15 +3119,15 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q20851003",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q630170",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q10526042",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19952334",
@@ -3139,23 +3139,23 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q117287348",
-   "v": "central midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q90916422",
-   "v": "midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q100273072",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q47105682",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27919903",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q107365",
@@ -3163,131 +3163,131 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q39082970",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q139770039",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20743436",
-   "v": "central midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q64853255",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q83787036",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q64029237",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q96105248",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q56011432",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q29047921",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q113551733",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q69812902",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q11091593",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q66828825",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q116151074",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q28716544",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q123469788",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q107641804",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q116215934",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q111009946",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27310755",
-   "v": "attacking midfielder"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q105834415",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q60842110",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20972384",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q16298600",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q64031855",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q114713721",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q30308980",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q139815184",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q37453754",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q763465",
-   "v": "central midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q64736321",
-   "v": "attacking midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q98191389",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q8040741",
@@ -3299,63 +3299,63 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q60839691",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q95680243",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q117000107",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q12312192",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q113127167",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q22279773",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q29624459",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q2759958",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q115978703",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q138757935",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q55934972",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q110943455",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18246217",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q99617294",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q104531012",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20039495",
@@ -3363,63 +3363,63 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q18817134",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q16665941",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q62050484",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q100711783",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q110258306",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q5213217",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q108990482",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q2092409",
-   "v": "attacking midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q16236181",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q56253139",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q3191617",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q53280628",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q62445814",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q84593316",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q28861547",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q96211488",
@@ -3427,19 +3427,19 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q45819496",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q3192187",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q151838",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q15983763",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q11571",
@@ -3447,7 +3447,7 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q45935415",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q26964668",
@@ -3455,51 +3455,51 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q26704562",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q68676722",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q766988",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q23712679",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q117041294",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q42926090",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q22833412",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q21622757",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q64520753",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q26405549",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q101247266",
-   "v": "left-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q60286976",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q22677970",
@@ -3507,7 +3507,7 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q112654481",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q59782306",
@@ -3523,123 +3523,123 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q110964329",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q46951844",
-   "v": "defensive midfielder"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q14592575",
-   "v": "winger"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q114355105",
-   "v": "winger"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q106212969",
-   "v": "winger"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q462503",
-   "v": "centre-back"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q18199184",
-   "v": "defensive midfielder"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q109548002",
    "v": "midfielder"
   },
   {
+   "p": "http://www.wikidata.org/entity/Q14592575",
+   "v": "defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q114355105",
+   "v": "defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q106212969",
+   "v": "defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q462503",
+   "v": "defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18199184",
+   "v": "defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q109548002",
+   "v": "defender"
+  },
+  {
    "p": "http://www.wikidata.org/entity/Q65948595",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q249344",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q118287620",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q97698786",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18637930",
-   "v": "central midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q24084667",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q55286732",
-   "v": "centre-forward"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q117789805",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q49562244",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q107285723",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q94699949",
-   "v": "attacking midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q133794425",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q122351097",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q13546781",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q110160871",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q15410320",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q101764291",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q112813857",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q4695740",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q114216100",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q24034870",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q22092356",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q299703",
@@ -3655,23 +3655,23 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q62364798",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q701297",
-   "v": "central midfielder"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q16633144",
-   "v": "defensive midfielder"
-  },
-  {
-   "p": "http://www.wikidata.org/entity/Q118799181",
    "v": "midfielder"
   },
   {
+   "p": "http://www.wikidata.org/entity/Q16633144",
+   "v": "defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q118799181",
+   "v": "defender"
+  },
+  {
    "p": "http://www.wikidata.org/entity/Q86041826",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18683792",
@@ -3679,11 +3679,11 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q2642525",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q105955374",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q67498669",
@@ -3691,7 +3691,7 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q106778770",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q73360",
@@ -3699,23 +3699,23 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q66363768",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q140007173",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q101035007",
-   "v": "striker"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q7151477",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q64748312",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q21130285",
@@ -3723,11 +3723,11 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q27859514",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q47499724",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q17274709",
@@ -3739,47 +3739,47 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q56788302",
-   "v": "central midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q14309492",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18145133",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q29168109",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q21066439",
-   "v": "centre-forward"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q21281344",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q14640027",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q114825245",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q28540571",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q62015814",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q116700351",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q35831063",
@@ -3787,27 +3787,27 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q62006806",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q55433904",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q138863253",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q16729477",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q115371638",
-   "v": "central midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q28699707",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q23759917",
@@ -3815,27 +3815,27 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q107647351",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q932982",
-   "v": "striker"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q106916460",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q60791524",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q26965570",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q24084301",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q110466658",
@@ -3843,15 +3843,15 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q18428483",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q17160970",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q110486192",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q54862548",
@@ -3859,23 +3859,23 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q136038808",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q1885",
-   "v": "striker"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q23712857",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q87767569",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q14517123",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q5951550",
@@ -3883,11 +3883,11 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q125805788",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q110263543",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q46372260",
@@ -3895,19 +3895,19 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q15257381",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27654739",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q115803591",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q108109586",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q60889488",
@@ -3915,19 +3915,19 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q20090180",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q39498277",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q104488728",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q3731469",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q42725482",
@@ -3935,91 +3935,91 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q115194574",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18041089",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20752635",
-   "v": "central midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q6509762",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q58011167",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18635274",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q35841433",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q13865408",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q113510252",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20078774",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q108200391",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q59306386",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q39161128",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q111345092",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q22092264",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q6734350",
-   "v": "attacking midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q117309867",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20816441",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q3238952",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q70251271",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q110220404",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20676495",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q23908113",
@@ -4027,23 +4027,23 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q113474248",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q109768459",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q7398276",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q99328435",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27063854",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q4726869",
@@ -4051,7 +4051,7 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q107558242",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q5879014",
@@ -4067,91 +4067,91 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q135971385",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q45045358",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q101067809",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q87400019",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q113184832",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q771396",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q137299823",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q107094087",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q3018091",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q108606228",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q107426681",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q101064617",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q106967174",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q472300",
-   "v": "central midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q514427",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q52990659",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q105161343",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q139816192",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q209847",
-   "v": "striker"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q58580967",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q63968167",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q79904514",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q10544852",
@@ -4163,71 +4163,71 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q47126518",
-   "v": "centre-forward"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19871581",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q30122953",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q121410218",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q66818509",
-   "v": "central midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q136092007",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q120389429",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q65029955",
-   "v": "winger"
+   "v": "goalkeeper"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27995843",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q2762113",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q26255506",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q109282705",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q124350127",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q16239766",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q126369438",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q51331558",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q26209536",
-   "v": "midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19787021",
@@ -4235,55 +4235,55 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q20641306",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q123335801",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q28056787",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q47075606",
-   "v": "striker"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q39500352",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q30330390",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19603924",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q61990402",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q58796434",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q24084271",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q34360045",
-   "v": "left-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18637339",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19158746",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19665907",
@@ -4291,11 +4291,11 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q56433831",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q59268631",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q109301509",
@@ -4307,55 +4307,55 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q16633442",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q21005754",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q107739233",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q101249011",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q23007824",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q62006245",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q18670270",
-   "v": "central midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q137392794",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q130244944",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q118935199",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q104745615",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q67905022",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q106173160",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q21011188",
@@ -4363,43 +4363,43 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q27448075",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q97312966",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q59193510",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20994037",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q112988067",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q49167084",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q33124960",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q100774865",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q66735853",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q26485052",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q47067481",
@@ -4411,7 +4411,7 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q30881092",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19509544",
@@ -4419,31 +4419,31 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q1925465",
-   "v": "striker"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q115132592",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q107742783",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q56043430",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q108395046",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q6171506",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q65948590",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q6294052",
@@ -4451,23 +4451,23 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q57456989",
-   "v": "left-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q483837",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q28801942",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q113013535",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q56257870",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q30089624",
@@ -4475,7 +4475,7 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q18210581",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q27927442",
@@ -4483,63 +4483,63 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q31871265",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q104414736",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q24084205",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q105946025",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q62961021",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q44821118",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q120509822",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q124273321",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q106882153",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q97441426",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q44080929",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q106099213",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q137394484",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q48525779",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q23799433",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q5811691",
@@ -4547,35 +4547,35 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q115937989",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q57293140",
-   "v": "attacking midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q38053896",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q16852194",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q3643114",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q41791648",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q77243490",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q106372516",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20641483",
@@ -4583,83 +4583,83 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q111536418",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q58303188",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q98682558",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q128133456",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q64010489",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q1392925",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q24005986",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q127179158",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q134513932",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q130261099",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q26932598",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q112170256",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q112079646",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q84312754",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q128210274",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q25939340",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q15981797",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q134657698",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q60841788",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q106620882",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q439722",
@@ -4667,7 +4667,7 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q18011169",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q1401328",
@@ -4675,11 +4675,11 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q34058084",
-   "v": "centre-forward"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q5679556",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q60842120",
@@ -4687,19 +4687,19 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q26251607",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q16935084",
-   "v": "striker"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q116753805",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q102399064",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q104215027",
@@ -4707,35 +4707,35 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q42328360",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q10268484",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q33541239",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q97725322",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q30933054",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19888012",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q104877690",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q56222532",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q13014035",
@@ -4743,15 +4743,15 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q73149048",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q85410990",
-   "v": "winger"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q56223703",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q97320541",
@@ -4759,31 +4759,31 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q30036972",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q11634138",
-   "v": "midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q30050934",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q86269576",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q58815643",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q285684",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q137705019",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q80661874",
@@ -4791,7 +4791,7 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q117408985",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q116908746",
@@ -4799,43 +4799,43 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q127388493",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q54512527",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q79880395",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q134711363",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q22162731",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q56164119",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q116621640",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q123479947",
-   "v": "winger"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q99557093",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q107316383",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q96755704",
@@ -4843,7 +4843,7 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q102330606",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q2210473",
@@ -4851,31 +4851,31 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q56787768",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q67089591",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q99777968",
-   "v": "midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q46679",
-   "v": "defensive midfielder"
+   "v": "midfielder"
   },
   {
    "p": "http://www.wikidata.org/entity/Q105754161",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q61983513",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q104784108",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q1398221",
@@ -4883,23 +4883,23 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q123995807",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q60583915",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q19662444",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q137384640",
-   "v": "defensive midfielder"
+   "v": "goalkeeper"
   },
   {
    "p": "http://www.wikidata.org/entity/Q98593181",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q62629839",
@@ -4907,19 +4907,19 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q16010783",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q42948040",
-   "v": "striker"
+   "v": "forward"
   },
   {
    "p": "http://www.wikidata.org/entity/Q47544166",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q23413053",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q84810924",
@@ -4927,7 +4927,7 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q39076401",
-   "v": "right-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q367861",
@@ -4935,39 +4935,39 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q72648",
-   "v": "left-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q24688826",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q70226579",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q108800542",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q96654340",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q107806484",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q106939313",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q87119732",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q111020508",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20435178",
@@ -4975,26 +4975,26 @@
   },
   {
    "p": "http://www.wikidata.org/entity/Q27019988",
-   "v": "centre-back"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q45288740",
-   "v": "winger"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q20306806",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q31146726",
-   "v": "defensive midfielder"
+   "v": "defender"
   },
   {
    "p": "http://www.wikidata.org/entity/Q130465245",
-   "v": "winger"
+   "v": "defender"
   }
  ],
  "calls": 1248,
- "seconds": 90.3,
+ "seconds": 87.2,
  "model": "Qwen/Qwen3-30B-A3B-Instruct-2507"
 }

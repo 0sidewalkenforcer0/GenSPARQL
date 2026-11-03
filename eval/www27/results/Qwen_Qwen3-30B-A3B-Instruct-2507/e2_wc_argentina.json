@@ -60,9 +60,22 @@
   },
   {
    "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 0.5) }",
-   "rows": [],
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q615"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q111672750"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q20743436"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q33297140"
+    }
+   ],
    "calls": 1,
-   "seconds": 0.0,
+   "seconds": 0.1,
    "similarity": "embedding",
    "theta": 0.5
   },
@@ -118,13 +131,21 @@
  "llm_record": "e2_wc_argentina.json",
  "generated_before": {
   "query": "SELECT ?x WHERE { GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>) }",
-  "rows": [],
+  "rows": [
+   {
+    "x": "[]"
+   }
+  ],
   "calls": 1,
   "seconds": 0.1
  },
  "generated_after": {
   "query": "SELECT ?x WHERE { GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>) }",
-  "rows": [],
+  "rows": [
+   {
+    "x": "[]"
+   }
+  ],
   "calls": 1,
   "seconds": 0.0
  },

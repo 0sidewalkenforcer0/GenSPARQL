@@ -1,6 +1,6 @@
 {
   "openai:Qwen/Qwen3-8B:5eab7a64031daa92caa0f9505f98ee92b828306d57de13625d8695d7ae2e5fd1:0.00:1000:x" : {
-    "rawText" : "[\"Milan\", \"Rome\", \"Naples\", \"Turin\", \"Bologna\", \"Genoa\", \"Verona\", \"Palermo\", \"Catania\", \"Cagliari\", \"Genoa\", \"Bari\", \"Salerno\", \"Palermo\", \"Catania\", \"Cagliari\"]",
+    "rawText" : "[\"Milan\", \"Rome\", \"Naples\", \"Turin\", \"Bologna\", \"Genoa\", \"Verona\", \"Padua\", \"Bari\", \"Palermo\", \"Catania\", \"Messina\", \"Cagliari\", \"Sassari\", \"Livorno\", \"Genoa\", \"Bologna\", \"Verona\", \"Padua\", \"Bari\", \"Palermo\", \"Catania\", \"Messina\", \"Cagliari\", \"Sassari\", \"Livorno\"]",
     "bindings" : [ {
       "x" : "Milan"
     }, {
@@ -16,20 +16,26 @@
     }, {
       "x" : "Verona"
     }, {
+      "x" : "Padua"
+    }, {
+      "x" : "Bari"
+    }, {
       "x" : "Palermo"
     }, {
       "x" : "Catania"
     }, {
+      "x" : "Messina"
+    }, {
       "x" : "Cagliari"
     }, {
-      "x" : "Bari"
+      "x" : "Sassari"
     }, {
-      "x" : "Salerno"
+      "x" : "Livorno"
     } ],
     "success" : true,
     "errorMessage" : null,
     "model" : "Qwen/Qwen3-8B",
-    "promptTokens" : 101,
-    "completionTokens" : 68
+    "promptTokens" : 121,
+    "completionTokens" : 110
   }
 }

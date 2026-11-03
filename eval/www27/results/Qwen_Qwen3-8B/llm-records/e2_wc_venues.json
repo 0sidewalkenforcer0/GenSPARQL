@@ -1,37 +1,43 @@
 {
   "openai:Qwen/Qwen3-8B:3435059233eac994c4232865a941331103a71910c1e3c194e16dd506a6e7d3b4:0.00:1000:x" : {
-    "rawText" : "[\"Lambeau Field\", \"Soldier Field\", \"SoFi Stadium\", \"MetLife Stadium\", \"AT&T Stadium\", \"Raymond James Stadium\", \"Tottenham Hotspur Stadium\", \"Wembley Stadium\", \"Estadio Azteca\", \"Estadio Jalisco\", \"Estadio Akron\", \"Estadio Olímpico Universitario\", \"Estadio Azteca\", \"Estadio BBVA\", \"Estadio Akron\", \"Estadio Olímpico Universitario\", \"Estadio Azteca\", \"Estadio BBVA\", \"Estadio Akron\", \"Estadio Olímpico Universitario\"]",
+    "rawText" : "[\"Giants Stadium\", \"SoFi Stadium\", \"Rose Bowl\", \"Dignity Health Stadium\", \"Allegiant Stadium\", \"Tottenham Hotspur Stadium\", \"Wembley Stadium\", \"Old Trafford\", \"Stade de France\", \"Estadio Azteca\", \"Estadio Jalisco\", \"Estadio Monumental\", \"Estadio Azteca\", \"Estadio Olímpico Universitario\", \"Estadio BBVA\", \"Estadio Akron\", \"Estadio Azteca\", \"Estadio de Béisbol Monterrey\", \"Estadio Jalisco\", \"Estadio Azteca\"]",
     "bindings" : [ {
-      "x" : "Lambeau Field"
-    }, {
-      "x" : "Soldier Field"
+      "x" : "Giants Stadium"
     }, {
       "x" : "SoFi Stadium"
     }, {
-      "x" : "MetLife Stadium"
+      "x" : "Rose Bowl"
     }, {
-      "x" : "AT&T Stadium"
+      "x" : "Dignity Health Stadium"
     }, {
-      "x" : "Raymond James Stadium"
+      "x" : "Allegiant Stadium"
     }, {
       "x" : "Tottenham Hotspur Stadium"
     }, {
       "x" : "Wembley Stadium"
     }, {
+      "x" : "Old Trafford"
+    }, {
+      "x" : "Stade de France"
+    }, {
       "x" : "Estadio Azteca"
     }, {
       "x" : "Estadio Jalisco"
     }, {
-      "x" : "Estadio Akron"
+      "x" : "Estadio Monumental"
     }, {
       "x" : "Estadio Olímpico Universitario"
     }, {
       "x" : "Estadio BBVA"
+    }, {
+      "x" : "Estadio Akron"
+    }, {
+      "x" : "Estadio de Béisbol Monterrey"
     } ],
     "success" : true,
     "errorMessage" : null,
     "model" : "Qwen/Qwen3-8B",
-    "promptTokens" : 104,
-    "completionTokens" : 135
+    "promptTokens" : 124,
+    "completionTokens" : 130
   }
 }

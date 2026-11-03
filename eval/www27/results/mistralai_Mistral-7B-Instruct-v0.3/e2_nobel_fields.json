@@ -198,7 +198,7 @@
    }
   ],
   "calls": 1,
-  "seconds": 0.4
+  "seconds": 1.1
  },
  "generated_after": {
   "query": "SELECT ?x WHERE { GENOP(\"List the fields in which the Nobel Prize is awarded.\", (?x), <model>) }",

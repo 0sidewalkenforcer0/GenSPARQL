@@ -1,13 +1,11 @@
 {
   "openai:Qwen/Qwen3-30B-A3B-Instruct-2507:458735d0fdd866f0447479f9cdeff5ce0254eabd4bbc937c84153394b19b4de1:0.00:1000:x" : {
-    "rawText" : "[\"\"]",
-    "bindings" : [ {
-      "x" : ""
-    } ],
+    "rawText" : "[]",
+    "bindings" : [ ],
     "success" : true,
     "errorMessage" : null,
     "model" : "Qwen/Qwen3-30B-A3B-Instruct-2507",
-    "promptTokens" : 101,
-    "completionTokens" : 3
+    "promptTokens" : 121,
+    "completionTokens" : 2
   }
 }

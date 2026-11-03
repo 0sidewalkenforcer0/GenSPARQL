@@ -3,7 +3,7 @@
  "rows": [
   {
    "name": "John Hopfield",
-   "c": "Neural networks"
+   "c": "Development of the Hopfield network"
   },
   {
    "name": "Pierre Agostini",
@@ -11,27 +11,27 @@
   },
   {
    "name": "Giorgio Parisi",
-   "c": "Disorder and fluctuations in physical systems"
+   "c": "Discovered hidden patterns in complex systems"
   },
   {
    "name": "Anton Zeilinger",
-   "c": "Quantum entanglement experiments"
+   "c": "Quantum entanglement experiments with photons"
   },
   {
    "name": "John Clauser",
-   "c": "Violation of Bell's inequalities"
+   "c": "Experimental tests of Bell's inequalities"
   },
   {
    "name": "John M. Martinis",
-   "c": "Development of superconducting qubits for quantum computing"
+   "c": "[]"
   },
   {
    "name": "Michel Devoret",
-   "c": "Quantum measurement and quantum computing"
+   "c": "Quantum measurement and quantum control of superconducting qubits"
   },
   {
    "name": "John Clarke",
-   "c": "Discovery of the cosmic microwave background radiation"
+   "c": "[]"
   },
   {
    "name": "Alain Aspect",
@@ -39,7 +39,7 @@
   },
   {
    "name": "Andrea M. Ghez",
-   "c": "Discovery of a supermassive compact object at the center of our galaxy"
+   "c": "Discovery of a supermassive black hole at the center of our galaxy"
   },
   {
    "name": "Reinhard Genzel",
@@ -51,15 +51,15 @@
   },
   {
    "name": "Syukuro Manabe",
-   "c": "Climate modeling"
+   "c": "Climate modeling and physical understanding of Earth's climate"
   },
   {
    "name": "Geoffrey Hinton",
-   "c": "Artificial Neural Networks"
+   "c": "[]"
   },
   {
    "name": "Roger Penrose",
-   "c": "Penrose-Hawking singularity theorems"
+   "c": "Prediction of black hole formation"
   },
   {
    "name": "Anne L'Huillier",
@@ -67,11 +67,11 @@
   },
   {
    "name": "Klaus Hasselmann",
-   "c": "Climate modeling and attribution of climate change"
+   "c": "Development of climate models"
   }
  ],
  "calls": 17,
- "seconds": 1.8,
+ "seconds": 1.7,
  "solutions_without_restriction": {
   "query": "SELECT (COUNT(*) AS ?n) WHERE { ?a ex:field wd:Q38104 ; ex:winningYear ?y ; ex:winner ?l . ?l rdfs:label ?name . }",
   "rows": [

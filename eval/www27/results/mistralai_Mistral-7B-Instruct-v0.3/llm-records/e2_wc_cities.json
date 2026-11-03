@@ -1,6 +1,6 @@
 {
   "openai:mistralai/Mistral-7B-Instruct-v0.3:5eab7a64031daa92caa0f9505f98ee92b828306d57de13625d8695d7ae2e5fd1:0.00:1000:x" : {
-    "rawText" : " [\"Mexico City\", \"Guadalajara\", \"Monterrey\", \"Los Angeles\", \"San Francisco\", \"Boston\", \"New York/New Jersey\", \"Atlanta\"]",
+    "rawText" : " [\"Mexico City\", \"Guadalajara\", \"Monterrey\", \"León\", \"San Juan del Rio\", \"Toluca\", \"Cancun\", \"Houston\", \"Los Angeles\", \"Philadelphia\", \"Boston\", \"New York/New Jersey\", \"Atlanta\"]",
     "bindings" : [ {
       "x" : "Mexico City"
     }, {
@@ -8,9 +8,19 @@
     }, {
       "x" : "Monterrey"
     }, {
+      "x" : "León"
+    }, {
+      "x" : "San Juan del Rio"
+    }, {
+      "x" : "Toluca"
+    }, {
+      "x" : "Cancun"
+    }, {
+      "x" : "Houston"
+    }, {
       "x" : "Los Angeles"
     }, {
-      "x" : "San Francisco"
+      "x" : "Philadelphia"
     }, {
       "x" : "Boston"
     }, {
@@ -21,7 +31,7 @@
     "success" : true,
     "errorMessage" : null,
     "model" : "mistralai/Mistral-7B-Instruct-v0.3",
-    "promptTokens" : 105,
-    "completionTokens" : 43
+    "promptTokens" : 126,
+    "completionTokens" : 69
   }
 }

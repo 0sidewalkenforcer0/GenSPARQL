@@ -1,107 +1,11 @@
 {
   "openai:Qwen/Qwen3-30B-A3B-Instruct-2507:107ce2286547884bfb2a8d2f9d9f1a2a89a66b900a665adb750ddbedd9532c03:0.00:1000:x" : {
-    "rawText" : "[\"Argentina\", \"Australia\", \"Austria\", \"Belgium\", \"Brazil\", \"Cameroon\", \"Canada\", \"Croatia\", \"Czech Republic\", \"Denmark\", \"Ecuador\", \"England\", \"France\", \"Germany\", \"Ghana\", \"Greece\", \"Hungary\", \"India\", \"Iceland\", \"Iran\", \"Iraq\", \"Israel\", \"Italy\", \"Japan\", \"Korea Republic\", \"Korea DPR\", \"Mexico\", \"Netherlands\", \"New Zealand\", \"Nigeria\", \"Norway\", \"Poland\", \"Portugal\", \"Qatar\", \"Romania\", \"Russia\", \"Saudi Arabia\", \"Serbia\", \"South Africa\", \"Spain\", \"Sweden\", \"Switzerland\", \"Tunisia\", \"Turkey\", \"USA\", \"Uruguay\", \"Vietnam\", \"Wales\"]",
-    "bindings" : [ {
-      "x" : "Argentina"
-    }, {
-      "x" : "Australia"
-    }, {
-      "x" : "Austria"
-    }, {
-      "x" : "Belgium"
-    }, {
-      "x" : "Brazil"
-    }, {
-      "x" : "Cameroon"
-    }, {
-      "x" : "Canada"
-    }, {
-      "x" : "Croatia"
-    }, {
-      "x" : "Czech Republic"
-    }, {
-      "x" : "Denmark"
-    }, {
-      "x" : "Ecuador"
-    }, {
-      "x" : "England"
-    }, {
-      "x" : "France"
-    }, {
-      "x" : "Germany"
-    }, {
-      "x" : "Ghana"
-    }, {
-      "x" : "Greece"
-    }, {
-      "x" : "Hungary"
-    }, {
-      "x" : "India"
-    }, {
-      "x" : "Iceland"
-    }, {
-      "x" : "Iran"
-    }, {
-      "x" : "Iraq"
-    }, {
-      "x" : "Israel"
-    }, {
-      "x" : "Italy"
-    }, {
-      "x" : "Japan"
-    }, {
-      "x" : "Korea Republic"
-    }, {
-      "x" : "Korea DPR"
-    }, {
-      "x" : "Mexico"
-    }, {
-      "x" : "Netherlands"
-    }, {
-      "x" : "New Zealand"
-    }, {
-      "x" : "Nigeria"
-    }, {
-      "x" : "Norway"
-    }, {
-      "x" : "Poland"
-    }, {
-      "x" : "Portugal"
-    }, {
-      "x" : "Qatar"
-    }, {
-      "x" : "Romania"
-    }, {
-      "x" : "Russia"
-    }, {
-      "x" : "Saudi Arabia"
-    }, {
-      "x" : "Serbia"
-    }, {
-      "x" : "South Africa"
-    }, {
-      "x" : "Spain"
-    }, {
-      "x" : "Sweden"
-    }, {
-      "x" : "Switzerland"
-    }, {
-      "x" : "Tunisia"
-    }, {
-      "x" : "Turkey"
-    }, {
-      "x" : "USA"
-    }, {
-      "x" : "Uruguay"
-    }, {
-      "x" : "Vietnam"
-    }, {
-      "x" : "Wales"
-    } ],
+    "rawText" : "[]",
+    "bindings" : [ ],
     "success" : true,
     "errorMessage" : null,
     "model" : "Qwen/Qwen3-30B-A3B-Instruct-2507",
-    "promptTokens" : 99,
-    "completionTokens" : 179
+    "promptTokens" : 119,
+    "completionTokens" : 2
   }
 }

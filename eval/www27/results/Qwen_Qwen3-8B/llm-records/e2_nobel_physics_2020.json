@@ -19,7 +19,7 @@
     "success" : true,
     "errorMessage" : null,
     "model" : "Qwen/Qwen3-8B",
-    "promptTokens" : 109,
+    "promptTokens" : 129,
     "completionTokens" : 44
   }
 }

@@ -9,13 +9,10 @@
      "x": "http://www.wikidata.org/entity/Q320454"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q10862290"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q838284"
-    },
-    {
      "x": "http://www.wikidata.org/entity/Q666183"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q3058827"
     },
     {
      "x": "http://www.wikidata.org/entity/Q19520501"
@@ -31,12 +28,6 @@
    "rows": [
     {
      "x": "http://www.wikidata.org/entity/Q320454"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q10862290"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q838284"
     },
     {
      "x": "http://www.wikidata.org/entity/Q666183"
@@ -57,12 +48,6 @@
      "x": "http://www.wikidata.org/entity/Q320454"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q10862290"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q838284"
-    },
-    {
      "x": "http://www.wikidata.org/entity/Q666183"
     },
     {
@@ -79,12 +64,6 @@
    "rows": [
     {
      "x": "http://www.wikidata.org/entity/Q320454"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q10862290"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q838284"
     },
     {
      "x": "http://www.wikidata.org/entity/Q666183"
@@ -105,12 +84,6 @@
      "x": "http://www.wikidata.org/entity/Q320454"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q10862290"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q838284"
-    },
-    {
      "x": "http://www.wikidata.org/entity/Q666183"
     },
     {
@@ -129,12 +102,6 @@
      "x": "http://www.wikidata.org/entity/Q320454"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q10862290"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q838284"
-    },
-    {
      "x": "http://www.wikidata.org/entity/Q666183"
     },
     {
@@ -151,12 +118,6 @@
    "rows": [
     {
      "x": "http://www.wikidata.org/entity/Q320454"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q10862290"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q838284"
     },
     {
      "x": "http://www.wikidata.org/entity/Q666183"
@@ -297,15 +258,6 @@
      "x": "http://www.wikidata.org/entity/Q10862290"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q1052370"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q796351"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q612736"
-    },
-    {
      "x": "http://www.wikidata.org/entity/Q838284"
     },
     {
@@ -345,9 +297,6 @@
      "x": "http://www.wikidata.org/entity/Q10862290"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q838284"
-    },
-    {
      "x": "http://www.wikidata.org/entity/Q666183"
     },
     {
@@ -369,13 +318,10 @@
      "x": "http://www.wikidata.org/entity/Q320454"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q10862290"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q838284"
-    },
-    {
      "x": "http://www.wikidata.org/entity/Q666183"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q3058827"
     },
     {
      "x": "http://www.wikidata.org/entity/Q19520501"
@@ -393,13 +339,10 @@
      "x": "http://www.wikidata.org/entity/Q320454"
     },
     {
-     "x": "http://www.wikidata.org/entity/Q10862290"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q838284"
-    },
-    {
      "x": "http://www.wikidata.org/entity/Q666183"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q3058827"
     },
     {
      "x": "http://www.wikidata.org/entity/Q19520501"
@@ -415,12 +358,6 @@
    "rows": [
     {
      "x": "http://www.wikidata.org/entity/Q320454"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q10862290"
-    },
-    {
-     "x": "http://www.wikidata.org/entity/Q838284"
     },
     {
      "x": "http://www.wikidata.org/entity/Q666183"
@@ -440,22 +377,19 @@
   "query": "SELECT ?x WHERE { GENOP(\"List the stadiums where matches of the 2026 FIFA World Cup are played.\", (?x), <model>) }",
   "rows": [
    {
-    "x": "Lambeau Field"
-   },
-   {
-    "x": "Soldier Field"
+    "x": "Giants Stadium"
    },
    {
     "x": "SoFi Stadium"
    },
    {
-    "x": "MetLife Stadium"
+    "x": "Rose Bowl"
    },
    {
-    "x": "AT&T Stadium"
+    "x": "Dignity Health Stadium"
    },
    {
-    "x": "Raymond James Stadium"
+    "x": "Allegiant Stadium"
    },
    {
     "x": "Tottenham Hotspur Stadium"
@@ -464,44 +398,53 @@
     "x": "Wembley Stadium"
    },
    {
+    "x": "Old Trafford"
+   },
+   {
+    "x": "Stade de France"
+   },
+   {
     "x": "Estadio Azteca"
    },
    {
     "x": "Estadio Jalisco"
    },
    {
-    "x": "Estadio Akron"
+    "x": "Estadio Monumental"
    },
    {
     "x": "Estadio Olímpico Universitario"
    },
    {
     "x": "Estadio BBVA"
+   },
+   {
+    "x": "Estadio Akron"
+   },
+   {
+    "x": "Estadio de Béisbol Monterrey"
    }
   ],
   "calls": 1,
-  "seconds": 4.2
+  "seconds": 3.8
  },
  "generated_after": {
   "query": "SELECT ?x WHERE { GENOP(\"List the stadiums where matches of the 2026 FIFA World Cup are played.\", (?x), <model>) }",
   "rows": [
    {
-    "x": "Lambeau Field"
-   },
-   {
-    "x": "Soldier Field"
+    "x": "Giants Stadium"
    },
    {
     "x": "SoFi Stadium"
    },
    {
-    "x": "MetLife Stadium"
+    "x": "Rose Bowl"
    },
    {
-    "x": "AT&T Stadium"
+    "x": "Dignity Health Stadium"
    },
    {
-    "x": "Raymond James Stadium"
+    "x": "Allegiant Stadium"
    },
    {
     "x": "Tottenham Hotspur Stadium"
@@ -510,19 +453,31 @@
     "x": "Wembley Stadium"
    },
    {
+    "x": "Old Trafford"
+   },
+   {
+    "x": "Stade de France"
+   },
+   {
     "x": "Estadio Azteca"
    },
    {
     "x": "Estadio Jalisco"
    },
    {
-    "x": "Estadio Akron"
+    "x": "Estadio Monumental"
    },
    {
     "x": "Estadio Olímpico Universitario"
    },
    {
     "x": "Estadio BBVA"
+   },
+   {
+    "x": "Estadio Akron"
+   },
+   {
+    "x": "Estadio de Béisbol Monterrey"
    }
   ],
   "calls": 1,

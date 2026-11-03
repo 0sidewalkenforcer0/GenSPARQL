@@ -11,15 +11,15 @@
   },
   {
    "name": "Giorgio Parisi",
-   "c": "discovery of the interplay of disorder and fluctuations in classical systems"
+   "c": "discovery of the interplay of disorder and fluctuations in strongly correlated systems"
   },
   {
    "name": "Anton Zeilinger",
-   "c": "quantum information science"
+   "c": "quantum information processing"
   },
   {
    "name": "John Clauser",
-   "c": "Quantum nonlocality and Bell inequalities"
+   "c": "Quantum nonlocality and Bell inequality experiments"
   },
   {
    "name": "John M. Martinis",
@@ -27,15 +27,15 @@
   },
   {
    "name": "Michel Devoret",
-   "c": "Quantum electrodynamics and superconducting circuits"
+   "c": "[]"
   },
   {
    "name": "John Clarke",
-   "c": "Discovery of the neutron"
+   "c": "[]"
   },
   {
    "name": "Alain Aspect",
-   "c": "Experimental violation of Bell inequalities"
+   "c": "for his experiments with entangled photons, showing the violation of Bell inequalities"
   },
   {
    "name": "Andrea M. Ghez",
@@ -51,11 +51,11 @@
   },
   {
    "name": "Syukuro Manabe",
-   "c": "climate modeling and predictions"
+   "c": "climate modeling and prediction"
   },
   {
    "name": "Geoffrey Hinton",
-   "c": "Deep learning in artificial neural networks"
+   "c": "[]"
   },
   {
    "name": "Roger Penrose",
@@ -63,7 +63,7 @@
   },
   {
    "name": "Anne L'Huillier",
-   "c": "Development of methods for generating attosecond light pulses"
+   "c": "Development of a method for generating ultra-short optical pulses"
   },
   {
    "name": "Klaus Hasselmann",
@@ -71,7 +71,7 @@
   }
  ],
  "calls": 17,
- "seconds": 6.5,
+ "seconds": 5.6,
  "solutions_without_restriction": {
   "query": "SELECT (COUNT(*) AS ?n) WHERE { ?a ex:field wd:Q38104 ; ex:winningYear ?y ; ex:winner ?l . ?l rdfs:label ?name . }",
   "rows": [
