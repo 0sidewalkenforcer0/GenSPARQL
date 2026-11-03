@@ -2866,3 +2866,13 @@ button{cursor:pointer}
     white-space:normal;
   }
 }
+
+/* ?print: the graph panel as a figure of a two-column paper. The panel is about 500 px wide
+   and printed at about 241 pt, so text needs about 15 px to print at 7 pt or more. */
+html[data-print] .graph-controls,
+html[data-print] .graph-help{display:none!important}
+html[data-print] #kgGraph .outer-country{display:none!important}
+html[data-print] #kgGraph text{font-size:18px!important}
+html[data-print] .graph-stage{height:372px!important}
+html[data-print] .graph-status,
+html[data-print] .legend{font-size:15px!important}

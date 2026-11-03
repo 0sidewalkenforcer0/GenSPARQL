@@ -6,6 +6,8 @@
 
   window.GENSPARQL_PAGE_MODE = mode;
   document.documentElement.dataset.pageMode = mode;
+  // ?print lays the graph out for a figure: larger text, no controls (styles.css, app.js).
+  if (params.has("print")) document.documentElement.dataset.print = "";
 
   document.addEventListener("DOMContentLoaded", () => {
     const livePanel = document.getElementById("liveBox");

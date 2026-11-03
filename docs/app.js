@@ -24,8 +24,11 @@
   const similarityLabel = method => String(method || "").trim().toLowerCase() === "text"
     ? "similarity"
     : `${String(method || "").trim()} similarity`.trim();
-  const SIMILARITY_BOX_WIDTH=96;
-  const SIMILARITY_BOX_HEIGHT=27;
+  // ?print (page-mode.js) lays the graph out for a figure: a similarity box shows only its
+  // score and is smaller, and the fit leaves room for the larger labels of styles.css.
+  const PRINT_LAYOUT=document.documentElement.hasAttribute("data-print");
+  const SIMILARITY_BOX_WIDTH=PRINT_LAYOUT?54:96;
+  const SIMILARITY_BOX_HEIGHT=PRINT_LAYOUT?25:27;
   const SIMILARITY_BOX_GAP=5;
 
   function cloneGraph(graph){
@@ -2251,6 +2254,34 @@ ORDER BY ?year`
       &&a.bottom+SIMILARITY_BOX_GAP>b.top;
   }
 
+  // ?print: the two rings put the labels of a narrow figure on top of each other, so the
+  // generated names form a left column and their closest entities of the graph a right
+  // column, one row per name. The mapped names come first, then the names whose closest
+  // entity stays below θ, then the names that share no word with any label. A similarity
+  // box sits on the edge of its name, or right of the name when there is no edge.
+  function layoutGroundingColumns(candidates,targets,cx,cy){
+    const ROW=29,HALF=95;
+    const rank=c=>c.grounded?0:(c.bestId?1:2);
+    const rows=[...candidates].sort((a,b)=>rank(a)-rank(b)||String(a.label).localeCompare(String(b.label)));
+    const top=cy-(rows.length-1)*ROW/2;
+    const targetRow=new Map();
+    rows.forEach((c,i)=>{
+      const y=top+i*ROW;
+      c.x=cx-HALF;c.y=y;c.fx=c.x;c.fy=y;
+      c.labelSide="left";
+      if(c.bestId&&!targetRow.has(c.bestId))targetRow.set(c.bestId,y);
+    });
+    targets.forEach(t=>{
+      const y=targetRow.has(t.id)?targetRow.get(t.id):cy;
+      t.x=cx+HALF;t.y=y;t.fx=t.x;t.fy=y;
+    });
+    rows.forEach(c=>{
+      const boxCenter=c.bestId?cx:c.x+nodeRadius(c)+12+SIMILARITY_BOX_WIDTH/2;
+      c.similarityBoxX=boxCenter-SIMILARITY_BOX_WIDTH/2-c.x;
+      c.similarityBoxY=-SIMILARITY_BOX_HEIGHT/2;
+    });
+  }
+
   function layoutSimilarityBoxes(candidates,cx,cy){
     const placed=[];
     const tangentShifts=[0,34,-34,68,-68,102,-102,136,-136,170,-170];
@@ -2340,16 +2371,18 @@ ORDER BY ?year`
       .attr("rx",0)
       .attr("ry",0);
 
-    boxes.append("text")
-      .attr("x",SIMILARITY_BOX_WIDTH/2)
-      .attr("y",10)
-      .attr("text-anchor","middle")
-      .attr("class","similarity-box-title")
-      .text(d=>similarityLabel(d.similarityMethod));
+    if(!PRINT_LAYOUT){
+      boxes.append("text")
+        .attr("x",SIMILARITY_BOX_WIDTH/2)
+        .attr("y",10)
+        .attr("text-anchor","middle")
+        .attr("class","similarity-box-title")
+        .text(d=>similarityLabel(d.similarityMethod));
+    }
 
     boxes.append("text")
       .attr("x",SIMILARITY_BOX_WIDTH/2)
-      .attr("y",22)
+      .attr("y",PRINT_LAYOUT?18:22)
       .attr("text-anchor","middle")
       .attr("class","similarity-box-score")
       .text(d=>d.score.toFixed(2));
@@ -2595,7 +2628,8 @@ ORDER BY ?year`
 
     const w=$("graphStage").clientWidth;
     const h=$("graphStage").clientHeight;
-    const pad=42;
+    const pad=PRINT_LAYOUT?84:42;
+    const padY=PRINT_LAYOUT?18:pad;
     const left=d=>d.generatedCandidate&&Number.isFinite(d.similarityBoxX)
       ? Math.min(d.x,d.x+d.similarityBoxX)
       : d.x;
@@ -2611,8 +2645,8 @@ ORDER BY ?year`
 
     const minX=NativeGraph.min(nodes,left)-pad;
     const maxX=NativeGraph.max(nodes,right)+pad;
-    const minY=NativeGraph.min(nodes,top)-pad;
-    const maxY=NativeGraph.max(nodes,bottom)+pad;
+    const minY=NativeGraph.min(nodes,top)-padY;
+    const maxY=NativeGraph.max(nodes,bottom)+padY;
 
     const bw=Math.max(maxX-minX,160);
     const bh=Math.max(maxY-minY,160);
@@ -3011,6 +3045,8 @@ ORDER BY ?year`
     // Place similarity boxes after the radial node layout. A deterministic
     // collision pass offsets nearby boxes tangentially/radially as needed.
     layoutSimilarityBoxes(generatedNodes,cx,cy);
+
+    if(PRINT_LAYOUT)layoutGroundingColumns(generatedNodes,relevantCountries,cx,cy);
 
     // Remaining KG countries form a stable, unlinked halo beyond the original
     // result. The initial camera still fits only the original result nodes.
