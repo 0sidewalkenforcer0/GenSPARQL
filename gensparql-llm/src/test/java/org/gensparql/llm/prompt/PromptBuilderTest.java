@@ -25,6 +25,7 @@ class PromptBuilderTest {
         assertTrue(result.contains("[\"value1\", \"value2\", ...]"),
                 "the format must allow several values, or a base-mode list collapses to one row");
         assertTrue(result.contains("not a sentence"));
+        assertTrue(result.contains("respond with an empty array: []"), "the model may decline");
         assertFalse(result.contains("one valid JSON object"));
     }
 
@@ -88,6 +89,7 @@ class PromptBuilderTest {
         assertTrue(result.contains("scientist"));
         assertTrue(result.contains("award"));
         assertTrue(result.contains("Do NOT include any markdown formatting"));
+        assertTrue(result.contains("respond with an empty array: []"), "the model may decline");
     }
 
     @Test

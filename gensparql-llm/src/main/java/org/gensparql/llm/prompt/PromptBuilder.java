@@ -48,11 +48,17 @@ public class PromptBuilder {
      * answer. A GENOP call may produce several values (a base-mode list such as "List the
      * Nobel Prize fields" in particular), so the format must not cap the answer at one.
      * For multiple variables, asks for a JSON array of objects with those fields.
+     * Both formats tell the model to answer with an empty array when it has no answer: an
+     * empty array removes the solution from the answer of GENOP, so the model can decline
+     * instead of guessing.
      *
      * @param userPrompt the original user prompt
      * @param outputVars list of expected output variable names
      * @return enhanced prompt with format instructions if needed
      */
+    /** How a model declines: an empty array yields no solution (see buildStructuredPrompt). */
+    static final String NO_ANSWER = "If there is no answer or you do not know it, respond with an empty array: [].";
+
     public static String buildStructuredPrompt(String userPrompt, List<String> outputVars) {
         if (userPrompt == null) {
             return "";
@@ -68,6 +74,7 @@ public class PromptBuilder {
                     + "Respond with ONLY a valid JSON array of strings holding the values of "
                     + var + ", one string per answer: [\"value\"] for a single answer, "
                     + "[\"value1\", \"value2\", ...] for several.\n"
+                    + NO_ANSWER + "\n"
                     + "Each value must be only the requested concise scalar or category label, not a sentence.\n"
                     + "Do NOT include markdown, reasoning, or explanation.";
         }
@@ -109,6 +116,7 @@ public class PromptBuilder {
         }
 
         sb.append("}\n]\n\n");
+        sb.append(NO_ANSWER).append("\n");
         sb.append("Do NOT include any markdown formatting, code blocks, or explanations.\n");
         sb.append("Return ONLY the raw JSON array, nothing else.");
 
