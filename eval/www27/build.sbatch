@@ -15,5 +15,5 @@ export PATH=$JAVA_HOME/bin:$HOME/tools/apache-maven-3.9.11/bin:$PATH
 cd "$REPO"
 java -version 2>&1 | head -1
 mvn -q -B install -DskipTests
-mvn -q -B -pl gensparql-server dependency:build-classpath -Dmdep.outputFile=eval/www27/server.classpath
+mvn -q -B -pl gensparql-server dependency:build-classpath -Dmdep.outputFile="$REPO/eval/www27/server.classpath"
 echo "built $(git rev-parse --short HEAD)"
