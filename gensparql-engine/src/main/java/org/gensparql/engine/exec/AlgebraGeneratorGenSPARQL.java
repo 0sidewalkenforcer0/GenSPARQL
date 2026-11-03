@@ -122,6 +122,11 @@ public class AlgebraGeneratorGenSPARQL {
      * blocks, GENOP, FILTER); any OPTIONAL/UNION/MINUS/BIND/etc. leaves the order untouched.
      */
     private static List<Element> reorderGenopLast(List<Element> original) {
+        // Switched off (gensparql.planner.reorder=false), the query keeps the order in
+        // which it is written, and no filter moves before GENOP either.
+        if (!GenSPARQLConfig.isGenopReorderEnabled()) {
+            return original;
+        }
         // With cost-based planning on, leave the author's order alone. Moving GENOP to the end
         // here makes the surrounding patterns adjacent, and adjacent patterns get merged into a
         // single BGP downstream; once that happens the boundary between a selective pattern and

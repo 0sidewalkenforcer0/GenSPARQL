@@ -26,6 +26,11 @@ public class GenSPARQLConfig {
     // dependency legality (Prop 6); off by default to preserve baseline behavior.
     private static boolean costBasedPlanningEnabled = false;
 
+    // The planner moves GENOP after the patterns of its group that do not mention its
+    // output variables and runs the filters that those patterns bind before GENOP
+    // (AlgebraGeneratorGenSPARQL). Off, a query keeps the order in which it is written.
+    private static boolean genopReorderEnabled = true;
+
     // Timing configuration
     private static boolean timingEnabled = true;
     private static boolean verboseLogging = false;
@@ -175,6 +180,21 @@ public class GenSPARQLConfig {
      */
     public static void setCostBasedPlanningEnabled(boolean enabled) {
         costBasedPlanningEnabled = enabled;
+    }
+
+    /**
+     * Whether the planner moves GENOP after the patterns of its group that do not mention
+     * its output variables (see AlgebraGeneratorGenSPARQL). On by default.
+     */
+    public static boolean isGenopReorderEnabled() {
+        return genopReorderEnabled;
+    }
+
+    /**
+     * Enable or disable the placement of GENOP after the patterns of its group.
+     */
+    public static void setGenopReorderEnabled(boolean enabled) {
+        genopReorderEnabled = enabled;
     }
 
     /**
@@ -408,6 +428,11 @@ public class GenSPARQLConfig {
             costBasedPlanningEnabled = Boolean.parseBoolean(costPlanning);
         }
 
+        String reorder = System.getProperty("gensparql.planner.reorder");
+        if (reorder != null) {
+            genopReorderEnabled = Boolean.parseBoolean(reorder);
+        }
+
         // Timing
         String timingEn = System.getProperty("gensparql.timing.enabled");
         if (timingEn != null) {
@@ -483,6 +508,7 @@ public class GenSPARQLConfig {
         batchMaxTokens = 8000;
         batchDedupEnabled = false;
         costBasedPlanningEnabled = false;
+        genopReorderEnabled = true;
         timingEnabled = true;
         verboseLogging = false;
         constrainedGenerationEnabled = false;

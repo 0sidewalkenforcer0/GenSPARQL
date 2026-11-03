@@ -70,7 +70,12 @@ class GenOpCallCountTest {
 
     /** Runs the query and returns the number of rows; the counter receives the LLM requests. */
     private static int run(String where, AtomicLong counter) {
-        LLMProviderRegistry.setDefault(new MockLLMProvider().withDefaultResponse("Lionel Messi"));
+        return run(where, counter, "Lionel Messi");
+    }
+
+    /** Runs the query with a mock LLM that always answers {@code response}. */
+    private static int run(String where, AtomicLong counter, String response) {
+        LLMProviderRegistry.setDefault(new MockLLMProvider().withDefaultResponse(response));
         String query = PREFIXES + "SELECT * WHERE { " + where + " }";
         try (QueryExecution qe = QueryExecution.create()
                 .query(GenSPARQLQueryFactory.create(query))
@@ -150,6 +155,35 @@ class GenOpCallCountTest {
                 + "GENOP(\"List footballers who have won the World Cup.\", (?p), <model:mock:test>, 0.85)", calls);
         assertEquals(1, rows, "the generated name maps to wd:Q615");
         assertEquals(1, calls.get());
+    }
+
+    @Test
+    void withoutReorderingTheQueryKeepsItsOrder() {
+        GenSPARQLConfig.setGenopReorderEnabled(false);
+        AtomicLong calls = new AtomicLong();
+        int rows = run("?p a ex:Athlete ; rdfs:label ?n . GENOP(\"Position of {?n}?\", (?pos), <model:mock:test>) "
+                + "?p ex:playsFor ?t . ?t rdfs:label \"Argentina\"", calls);
+        assertEquals(2, rows);
+        assertEquals(3, calls.get(), "written before the restricting patterns, GENOP sees every player");
+    }
+
+    @Test
+    void withoutReorderingAFilterStaysAtTheEndOfTheGroup() {
+        GenSPARQLConfig.setGenopReorderEnabled(false);
+        AtomicLong calls = new AtomicLong();
+        int rows = run("?p ex:playsFor ?t ; rdfs:label ?n . ?t rdfs:label ?tn . FILTER(?tn = \"France\") "
+                + "GENOP(\"Position of {?n}?\", (?pos), <model:mock:test>)", calls);
+        assertEquals(1, rows);
+        assertEquals(3, calls.get(), "the filter runs after GENOP, as SPARQL evaluates a group");
+    }
+
+    @Test
+    void anEmptyArrayRemovesTheSolution() {
+        AtomicLong calls = new AtomicLong();
+        int rows = run("?p ex:playsFor ?t . ?t rdfs:label \"Argentina\" . ?p rdfs:label ?n . "
+                + "GENOP(\"Position of {?n}?\", (?pos), <model:mock:test>)", calls, "[]");
+        assertEquals(0, rows, "an empty array is no answer, not the value \"[]\"");
+        assertEquals(2, calls.get());
     }
 
     @Test

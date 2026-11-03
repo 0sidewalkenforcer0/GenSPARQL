@@ -1,0 +1,33 @@
+{
+ "_note": "LLM calls of the two composed queries of E3 with the planner on (default) and off (gensparql.planner.reorder=false), measured on 2026-11-03 through the HTTP service with eval/www27/stub_llm.py as the LLM (measure_calls.py). The answers of the stub do not change the number of calls.",
+ "graphs": {
+  "worldcup2026.ttl": "1,248 players, 104 in Group A",
+  "nobel-prize.ttl": "230 Physics awards, 17 from 2020 on"
+ },
+ "queries": {
+  "wc_group_a_defenders": {
+   "genop after the patterns for Group A": {
+    "calls_planner_on": 104,
+    "calls_planner_off": 104,
+    "query": "SELECT ?name ?pos WHERE { ?t ex:inGroup ?g . ?g rdfs:label \"Group A\" . ?p ex:playsFor ?t ; rdfs:label ?name . GENOP(\"Which position does the footballer {?name} primarily play: goalkeeper, defender, midfielder or forward?\", (?pos), <model>) FILTER(LCASE(STR(?pos)) = \"defender\") }"
+   },
+   "genop before the patterns for Group A": {
+    "calls_planner_on": 104,
+    "calls_planner_off": 1248,
+    "query": "SELECT ?name ?pos WHERE { ?p ex:playsFor ?t ; rdfs:label ?name . GENOP(\"Which position does the footballer {?name} primarily play: goalkeeper, defender, midfielder or forward?\", (?pos), <model>) ?t ex:inGroup ?g . ?g rdfs:label \"Group A\" . FILTER(LCASE(STR(?pos)) = \"defender\") }"
+   }
+  },
+  "nobel_physics_2020_contributions": {
+   "filter written before genop": {
+    "calls_planner_on": 17,
+    "calls_planner_off": 230,
+    "query": "SELECT ?name ?c WHERE { ?a ex:field wd:Q38104 ; ex:winningYear ?y ; ex:winner ?l . ?l rdfs:label ?name . FILTER(xsd:integer(STR(?y)) >= 2020) GENOP(\"For which contribution did {?name} receive the Nobel Prize in Physics? Answer with one short phrase.\", (?c), <model>) }"
+   },
+   "filter written after genop": {
+    "calls_planner_on": 17,
+    "calls_planner_off": 230,
+    "query": "SELECT ?name ?c WHERE { ?a ex:field wd:Q38104 ; ex:winningYear ?y ; ex:winner ?l . ?l rdfs:label ?name . GENOP(\"For which contribution did {?name} receive the Nobel Prize in Physics? Answer with one short phrase.\", (?c), <model>) FILTER(xsd:integer(STR(?y)) >= 2020) }"
+   }
+  }
+ }
+}
