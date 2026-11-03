@@ -29,8 +29,10 @@ export HF_HOME=$HOME/hf_cache HF_HUB_OFFLINE=1
 # does not need it, so vLLM samples with PyTorch.
 export PATH=$HOME/.conda/envs/vllm/bin:$PATH VLLM_USE_FLASHINFER_SAMPLER=0
 export JAVA_HOME=$HOME/tools/jdk-21.0.8+9
-BASE=$((20000 + SLURM_JOB_ID % 20000))
-LLM_PORT=$BASE; EMB_PORT=$((BASE + 1)); GS_PORT=$((BASE + 2))
+# Ports the system reports free: jobs with neighbouring IDs share nodes, so ports derived
+# from the job ID collided.
+free_port() { "$PY" -c 'import socket; s = socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()'; }
+LLM_PORT=$(free_port); EMB_PORT=$(free_port); GS_PORT=$(free_port)
 mkdir -p "$OUT/logs"
 echo "job $SLURM_JOB_ID on $(hostname): $MODEL, TP=$TP, GPUs ${CUDA_VISIBLE_DEVICES:-?}, commit $(git -C "$REPO" rev-parse --short HEAD)"
 
