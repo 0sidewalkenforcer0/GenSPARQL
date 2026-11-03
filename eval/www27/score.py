@@ -153,6 +153,9 @@ def main(dirs):
         f = os.path.join(d, "e1_wc_positions.json")
         if os.path.exists(f):
             s["e1_wc_positions"] = score_positions(load(f), pos_gold, players)
+        f = os.path.join(d, "e1_wc_positions_coarse.json")
+        if os.path.exists(f):
+            s["e1_wc_positions_coarse"] = score_positions(load(f), pos_gold, players)
         f = os.path.join(d, "e1_nobel_birth_years.json")
         if os.path.exists(f):
             s["e1_nobel_birth_years"] = score_years(load(f), year_gold, laureates)
