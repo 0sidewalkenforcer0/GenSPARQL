@@ -35,16 +35,13 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 """
 THRESHOLDS = [0.5, 0.6, 0.7, 0.8, 0.85, 0.9, 1.0]
 
-POSITION_PROMPT = ("On which position does the footballer {?name} primarily play? Give one specific "
-                   "position, for example centre-back, winger, defensive midfielder or goalkeeper. "
-                   "If you do not know this player, answer Unknown.")
-# The examples of POSITION_PROMPT pull guesses towards "defensive midfielder" (run 1: midfielder
-# answers were right for 44-49% of the players, the other buckets for 72-93%). The variant
-# e1c asks for the four buckets that the scoring uses.
-COARSE_PROMPT = ("Which position does the footballer {?name} primarily play: goalkeeper, defender, "
-                 "midfielder or forward? If you do not know this player, answer Unknown.")
-BIRTH_PROMPT = ("In which year was {?name}, a Nobel laureate, born? Answer with the year only. "
-                "If {?name} is an organization or you do not know the year, answer Unknown.")
+# The prompts ask for the four buckets that the scoring uses. Examples of fine positions
+# (centre-back, winger, defensive midfielder, goalkeeper; results of 2026-11-03, morning) pulled
+# guesses towards defensive midfielder. A model that does not know the answer returns an empty
+# array, as the output format of GENOP tells it, so the prompts do not ask for "Unknown".
+POSITION_PROMPT = ("Which position does the footballer {?name} primarily play: goalkeeper, defender, "
+                   "midfielder or forward?")
+BIRTH_PROMPT = "In which year was the Nobel laureate {?name} born? Answer with the year only."
 
 E1 = [
     ("wc_positions", "wc",
@@ -54,15 +51,9 @@ E1 = [
      "SELECT ?p ?v WHERE { ?p a ex:NobelLaureate ; rdfs:label ?name . "
      f'GENOP("{BIRTH_PROMPT}", (?v), <model>) }}'),
 ]
-E1C = [
-    ("wc_positions_coarse", "wc",
-     "SELECT ?p ?v WHERE { ?p a ex:Athlete ; rdfs:label ?name . "
-     f'GENOP("{COARSE_PROMPT}", (?v), <model>) }}'),
-]
 # Smoke runs restrict E1 to a few entities so that a test job makes a handful of calls.
 SMOKE_VALUES = {
     "wc_positions": "VALUES ?p { wd:Q615 wd:Q28058687 wd:Q21621995 wd:Q19952334 }",
-    "wc_positions_coarse": "VALUES ?p { wd:Q615 wd:Q28058687 wd:Q21621995 wd:Q19952334 }",
     "nobel_birth_years": "VALUES ?p { wd:Q937 wd:Q7186 wd:Q35802 }",
 }
 
@@ -86,9 +77,7 @@ E3 = [
     ("wc_group_a_defenders", "wc",
      'SELECT ?name ?pos WHERE { ?t ex:inGroup ?g . ?g rdfs:label "Group A" . '
      "?p ex:playsFor ?t ; rdfs:label ?name . "
-     'GENOP("On which position does the footballer {?name} primarily play? Answer with one of '
-     'Goalkeeper, Defender, Midfielder or Forward. If you do not know this player, answer Unknown.", '
-     '(?pos), <model>) FILTER(?pos = "Defender") }',
+     f'GENOP("{POSITION_PROMPT}", (?pos), <model>) FILTER(LCASE(STR(?pos)) = "defender") }}',
      # the solutions of the patterns without the restriction to Group A
      "SELECT (COUNT(*) AS ?n) WHERE { ?p ex:playsFor ?t ; rdfs:label ?name . }"),
     ("nobel_physics_2020_contributions", "nobel",
@@ -167,7 +156,7 @@ def main():
     ap.add_argument("--out", required=True)
     ap.add_argument("--smoke", action="store_true", help="a few calls per experiment only")
     ap.add_argument("--only", default="e1,e2,e3",
-                    help="comma-separated experiments to run (e1, e1c, e2, e3)")
+                    help="comma-separated experiments to run (e1, e2, e3)")
     args = ap.parse_args()
     os.makedirs(args.out, exist_ok=True)
 
@@ -185,7 +174,7 @@ def main():
         print(f"wrote {name}: {len(record.get('rows', record.get('runs', [])))} entries", file=sys.stderr)
 
     only = set(args.only.split(","))
-    for name, graph, text in (E1 if "e1" in only else []) + (E1C if "e1c" in only else []):
+    for name, graph, text in (E1 if "e1" in only else []):
         if args.smoke:
             text = text.replace("WHERE { ", "WHERE { " + SMOKE_VALUES[name] + " ", 1)
         save("e1_" + name, svc.query(graph, text))
