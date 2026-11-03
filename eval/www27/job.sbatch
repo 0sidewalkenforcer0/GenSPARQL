@@ -22,6 +22,10 @@ OUT=${OUT:-$EVAL/results/$(echo "$MODEL" | tr '/' '_')$SUFFIX}
 EMB=BAAI/bge-large-en-v1.5
 PY=$HOME/.conda/envs/vllm/bin/python
 export HF_HOME=$HOME/hf_cache HF_HUB_OFFLINE=1
+# The job calls the env's python without activating the env, so its tools (ninja) need PATH.
+# The FlashInfer sampler compiles kernels at start-up, which needs nvcc; greedy decoding
+# does not need it, so vLLM samples with PyTorch.
+export PATH=$HOME/.conda/envs/vllm/bin:$PATH VLLM_USE_FLASHINFER_SAMPLER=0
 export JAVA_HOME=$HOME/tools/jdk-21.0.8+9
 BASE=$((20000 + SLURM_JOB_ID % 20000))
 LLM_PORT=$BASE; EMB_PORT=$((BASE + 1)); GS_PORT=$((BASE + 2))
