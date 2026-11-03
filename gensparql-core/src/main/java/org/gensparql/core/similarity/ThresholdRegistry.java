@@ -17,7 +17,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ThresholdRegistry {
 
     private final Map<Var, Double> thresholds = new ConcurrentHashMap<>();
-    private volatile double defaultThreshold = 0.8;
+    // 0.85: in the WWW'27 evaluation (eval/www27), the lowest threshold at which the embedding
+    // similarity mapped no generated name to a wrong entity; the Jaccard similarity made no
+    // wrong match from 0.6 on.
+    private volatile double defaultThreshold = 0.85;
 
     /**
      * Set the threshold for a specific variable.

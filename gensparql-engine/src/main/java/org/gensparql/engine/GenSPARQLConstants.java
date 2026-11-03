@@ -43,9 +43,9 @@ public class GenSPARQLConstants {
     public static final Symbol DEFAULT_THRESHOLD = Symbol.create(NS + "defaultThreshold");
 
     /**
-     * Default threshold value (0.8).
+     * Default threshold value (0.85), the same as the default of {@code ThresholdRegistry}.
      */
-    public static final double DEFAULT_THRESHOLD_VALUE = 0.8;
+    public static final double DEFAULT_THRESHOLD_VALUE = 0.85;
 
     // Prevent instantiation
     private GenSPARQLConstants() {}
