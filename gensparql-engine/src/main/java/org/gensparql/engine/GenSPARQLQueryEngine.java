@@ -16,6 +16,7 @@ import org.gensparql.core.model.SourceType;
 import org.gensparql.core.similarity.JaccardSimText;
 import org.gensparql.core.similarity.SimText;
 import org.gensparql.core.similarity.ThresholdRegistry;
+import org.gensparql.engine.iterator.QueryIterGenOptional;
 import org.gensparql.engine.iterator.QueryIterSimJoin;
 import org.gensparql.engine.iterator.QueryIterSimScoreFilter;
 import org.gensparql.engine.op.OpGenerate;
@@ -442,6 +443,19 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
             QueryIterator subIter = executeOp(opOrder.getSubOp(), input, execCxt);
             return new org.apache.jena.sparql.engine.iterator.QueryIterSort(
                     subIter, opOrder.getConditions(), execCxt);
+        }
+
+        // OPTIONAL with a context-mode GENOP in its optional part. The prompt of the GENOP names
+        // variables of the required part, as in OPTIONAL { GENOP("... {?name} ...", ?info, m) }.
+        // ARQ evaluates the optional part against the root binding, so the GENOP saw its input
+        // unbound and every row lost the generated value. Evaluate the optional part once per
+        // solution of the required part instead, and keep a solution unchanged when the
+        // optional part yields nothing.
+        if (op instanceof OpLeftJoin && containsGenOpWithInputVars(((OpLeftJoin) op).getRight())) {
+            OpLeftJoin opLeftJoin = (OpLeftJoin) op;
+            QueryIterator required = executeOp(opLeftJoin.getLeft(), input, execCxt);
+            return new QueryIterGenOptional(required, opLeftJoin.getRight(), opLeftJoin.getExprs(),
+                    execCxt, (optional, in) -> executeOp(optional, in, execCxt));
         }
 
         // Fallback to standard QC execution for other ops (BGP, etc.)
