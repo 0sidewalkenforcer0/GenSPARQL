@@ -4,7 +4,8 @@
 # are given to sbatch (the cluster fails to set up jobs submitted with --export=ALL,...):
 #   sbatch --gpus=A40:2 eval/www27/job.sbatch Qwen/Qwen3-30B-A3B-Instruct-2507 2
 #   sbatch --gpus=A40:1 eval/www27/job.sbatch Qwen/Qwen3-8B
-# SMOKE=1 (third argument) runs a few calls per experiment only.
+# SMOKE=1 (third argument) runs a few calls per experiment only; a fourth argument such as
+# e2,e3 runs only those experiments, into a directory named after them.
 #SBATCH --job-name=gs-eval
 #SBATCH --partition=slowlane
 #SBATCH --cpus-per-task=4
@@ -15,9 +16,10 @@ set -euo pipefail
 MODEL=${1:?usage: job.sbatch MODEL [TP [SMOKE]]}
 TP=${2:-1}
 SMOKE=${3:-0}
+ONLY=${4:-e1,e2,e3}
 REPO=${REPO:-$HOME/workspace/GenSPARQL-www27}
 EVAL=$REPO/eval/www27
-SUFFIX=""; [ "$SMOKE" = 1 ] && SUFFIX="-smoke"
+SUFFIX=""; [ "$SMOKE" = 1 ] && SUFFIX="-smoke"; [ "$ONLY" != e1,e2,e3 ] && SUFFIX="$SUFFIX-${ONLY//,/-}"
 OUT=${OUT:-$EVAL/results/$(echo "$MODEL" | tr '/' '_')$SUFFIX}
 EMB=BAAI/bge-large-en-v1.5
 PY=$HOME/.conda/envs/vllm/bin/python
@@ -52,12 +54,14 @@ done
     --port "$EMB_PORT" --gpu-memory-utilization 0.08 --max-model-len 512 > "$OUT/logs/vllm-emb.log" 2>&1 &
 pids+=($!)
 "$JAVA_HOME/bin/java" -Xmx8g -cp "$REPO/gensparql-server/target/classes:$(cat "$EVAL/server.classpath")" \
-    -Dgensparql.ui.dir="$REPO/docs" org.gensparql.server.GenSPARQLFuseki "$GS_PORT" \
+    -Dgensparql.ui.dir="$REPO/docs" -Dgensparql.recordDir="$OUT/llm-records" \
+    org.gensparql.server.GenSPARQLFuseki "$GS_PORT" \
     > "$OUT/logs/gensparql.log" 2>&1 &
 pids+=($!)
 
 ARGS=(--gs "http://localhost:$GS_PORT" --llm-base "http://localhost:$LLM_PORT/v1" --model "$MODEL"
-      --emb-base "http://localhost:$EMB_PORT/v1" --emb-model "$EMB" --data "$REPO/docs" --out "$OUT")
+      --emb-base "http://localhost:$EMB_PORT/v1" --emb-model "$EMB" --data "$REPO/docs" --out "$OUT"
+      --only "$ONLY")
 [ "$SMOKE" = 1 ] && ARGS+=(--smoke)
 "$PY" -I "$EVAL/run_eval.py" "${ARGS[@]}"
 echo "finished $(date)"

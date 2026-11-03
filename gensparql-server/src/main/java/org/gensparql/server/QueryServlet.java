@@ -17,10 +17,12 @@ import org.gensparql.engine.similarity.EmbeddingSimText;
 import org.gensparql.core.similarity.JaccardSimText;
 import org.gensparql.llm.LLMProvider;
 import org.gensparql.llm.provider.OpenAIProvider;
+import org.gensparql.llm.record.RecordReplayLLMProvider;
 import org.gensparql.parser.GenSPARQLQueryFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicLong;
 
 final class QueryServlet extends JsonServlet {
@@ -75,6 +77,7 @@ final class QueryServlet extends JsonServlet {
                 if (baseUrl != null) baseUrl = baseUrl.replaceFirst("/+$", "");
                 if (apiKey != null || baseUrl != null || model != null) {
                     requestProvider = new OpenAIProvider(apiKey == null ? "" : apiKey, baseUrl);
+                    requestProvider = recording(llm, requestProvider);
                     context.set(GenSPARQL.LLM_PROVIDER, requestProvider);
                     if (model != null) {
                         context.set(GenSPARQL.DEFAULT_MODEL,
@@ -141,6 +144,28 @@ final class QueryServlet extends JsonServlet {
         } catch (Exception e) {
             if (!response.isCommitted()) error(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e);
         }
+    }
+
+    /**
+     * For evaluations only: on a service started with -Dgensparql.recordDir, a request that
+     * names a record (llm.record) stores the first answer to each prompt in that record, and
+     * a later request with the same prompt gets the stored answer. Runs that differ only in
+     * the threshold or the similarity thus see the same generated values.
+     */
+    private static LLMProvider recording(JsonNode llm, LLMProvider provider) {
+        String name = optionalText(llm, "record");
+        if (name == null) {
+            return provider;
+        }
+        String dir = System.getProperty("gensparql.recordDir");
+        if (dir == null) {
+            throw new IllegalArgumentException("llm.record needs a service started with -Dgensparql.recordDir");
+        }
+        if (!name.matches("[A-Za-z0-9_-]{1,100}")) {
+            throw new IllegalArgumentException("llm.record must consist of letters, digits, '_' and '-'");
+        }
+        return new RecordReplayLLMProvider(provider, RecordReplayLLMProvider.Mode.RECORD,
+                Path.of(dir, name + ".json"));
     }
 
     private static String requiredText(JsonNode body, String field) {

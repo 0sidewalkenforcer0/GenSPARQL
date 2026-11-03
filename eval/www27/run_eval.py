@@ -129,9 +129,10 @@ class Service:
                     "model": args.emb_model}
         self.ds = {}
 
-    def query(self, graph, text, similarity=None):
+    def query(self, graph, text, similarity=None, record=None):
+        llm = dict(self.llm, record=record) if record else self.llm
         body = {"datasetId": self.ds[graph], "query": PREFIXES + text, "includeTrace": True,
-                "llm": self.llm, "similarity": similarity or {"method": "jaccard"}}
+                "llm": llm, "similarity": similarity or {"method": "jaccard"}}
         t0 = time.time()
         try:
             r = http(self.gs + "/api/gensparql/query", json.dumps(body).encode(),
@@ -154,6 +155,7 @@ def main():
     ap.add_argument("--data", required=True, help="directory with worldcup2026.ttl and nobel-prize.ttl")
     ap.add_argument("--out", required=True)
     ap.add_argument("--smoke", action="store_true", help="a few calls per experiment only")
+    ap.add_argument("--only", default="e1,e2,e3", help="comma-separated experiments to run")
     args = ap.parse_args()
     os.makedirs(args.out, exist_ok=True)
 
@@ -170,25 +172,32 @@ def main():
             json.dump(record, f, indent=1, ensure_ascii=False)
         print(f"wrote {name}: {len(record.get('rows', record.get('runs', [])))} entries", file=sys.stderr)
 
-    for name, graph, text in E1:
+    only = set(args.only.split(","))
+    for name, graph, text in (E1 if "e1" in only else []):
         if args.smoke:
             text = text.replace("WHERE { ", "WHERE { " + SMOKE_VALUES[name] + " ", 1)
         save("e1_" + name, svc.query(graph, text))
 
-    for name, graph, prompt, pattern in (E2[:2] if args.smoke else E2):
+    # The first query of each E2 family records the LLM answer; the threshold runs replay it,
+    # so every run maps the same generated names (the service stores the answer under
+    # e2_<name> in its record directory).
+    for name, graph, prompt, pattern in ((E2[:2] if args.smoke else E2) if "e2" in only else []):
         genop = 'GENOP("{}", (?x), <model>{{}})'.format(prompt)
-        record = {"prompt": prompt, "pattern": pattern, "runs": []}
-        record["generated_before"] = svc.query(graph, "SELECT ?x WHERE { " + genop.format("") + " }")
+        rec = "e2_" + name
+        record = {"prompt": prompt, "pattern": pattern, "runs": [], "llm_record": rec + ".json"}
+        record["generated_before"] = svc.query(graph, "SELECT ?x WHERE { " + genop.format("") + " }",
+                                               record=rec)
         for sim_name, sim in [("jaccard", None), ("embedding", svc.emb)]:
             for theta in (THRESHOLDS[2:5] if args.smoke else THRESHOLDS):
                 q = "SELECT DISTINCT ?x WHERE { " + pattern + " " + genop.format(f", {theta}") + " }"
-                run = svc.query(graph, q, sim)
+                run = svc.query(graph, q, sim, record=rec)
                 run.update({"similarity": sim_name, "theta": theta})
                 record["runs"].append(run)
-        record["generated_after"] = svc.query(graph, "SELECT ?x WHERE { " + genop.format("") + " }")
+        record["generated_after"] = svc.query(graph, "SELECT ?x WHERE { " + genop.format("") + " }",
+                                              record=rec)
         save("e2_" + name, record)
 
-    for name, graph, text, without in (E3[:1] if args.smoke else E3):
+    for name, graph, text, without in ((E3[:1] if args.smoke else E3) if "e3" in only else []):
         record = svc.query(graph, text)
         record["solutions_without_restriction"] = svc.query(graph, without)
         save("e3_" + name, record)
