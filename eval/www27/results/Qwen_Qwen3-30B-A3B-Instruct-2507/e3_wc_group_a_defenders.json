@@ -1,0 +1,318 @@
+{
+ "query": "SELECT ?name ?pos WHERE { ?t ex:inGroup ?g . ?g rdfs:label \"Group A\" . ?p ex:playsFor ?t ; rdfs:label ?name . GENOP(\"On which position does the footballer {?name} primarily play? Answer with one of Goalkeeper, Defender, Midfielder or Forward. If you do not know this player, answer Unknown.\", (?pos), <model>) FILTER(?pos = \"Defender\") }",
+ "rows": [
+  {
+   "name": "Sphephelo Sithole",
+   "pos": "Defender"
+  },
+  {
+   "name": "Kamogelo Sebelebele",
+   "pos": "Defender"
+  },
+  {
+   "name": "Bradley Cross",
+   "pos": "Defender"
+  },
+  {
+   "name": "Relebohile Mofokeng",
+   "pos": "Defender"
+  },
+  {
+   "name": "Mbekezeli Mbokazi",
+   "pos": "Defender"
+  },
+  {
+   "name": "Themba Zwane",
+   "pos": "Defender"
+  },
+  {
+   "name": "Olwethu Makhanya",
+   "pos": "Defender"
+  },
+  {
+   "name": "Khuliso Mudau",
+   "pos": "Defender"
+  },
+  {
+   "name": "Jayden Adams",
+   "pos": "Defender"
+  },
+  {
+   "name": "Teboho Mokoena",
+   "pos": "Defender"
+  },
+  {
+   "name": "Thabang Matuludi",
+   "pos": "Defender"
+  },
+  {
+   "name": "Thapelo Maseko",
+   "pos": "Defender"
+  },
+  {
+   "name": "Iqraam Rayners",
+   "pos": "Defender"
+  },
+  {
+   "name": "Oswin Appollis",
+   "pos": "Defender"
+  },
+  {
+   "name": "Ime Okon",
+   "pos": "Defender"
+  },
+  {
+   "name": "Tshepang Moremi",
+   "pos": "Defender"
+  },
+  {
+   "name": "Samukele Kabini",
+   "pos": "Defender"
+  },
+  {
+   "name": "Khulumani Ndamane",
+   "pos": "Defender"
+  },
+  {
+   "name": "Nkosinathi Sibisi",
+   "pos": "Defender"
+  },
+  {
+   "name": "Sipho Chaine",
+   "pos": "Defender"
+  },
+  {
+   "name": "Thalente Mbatha",
+   "pos": "Defender"
+  },
+  {
+   "name": "Lee Tae-seok",
+   "pos": "Defender"
+  },
+  {
+   "name": "Park Jin-seop",
+   "pos": "Defender"
+  },
+  {
+   "name": "Bae Jun-ho",
+   "pos": "Defender"
+  },
+  {
+   "name": "Kim Jin-gyu",
+   "pos": "Defender"
+  },
+  {
+   "name": "Paik Seung-ho",
+   "pos": "Defender"
+  },
+  {
+   "name": "Jo Hyeon-woo",
+   "pos": "Defender"
+  },
+  {
+   "name": "Seol Young-woo",
+   "pos": "Defender"
+  },
+  {
+   "name": "Lee Han-beom",
+   "pos": "Defender"
+  },
+  {
+   "name": "Cho Wi-je",
+   "pos": "Defender"
+  },
+  {
+   "name": "Kim Seung-gyu",
+   "pos": "Defender"
+  },
+  {
+   "name": "Jens Castrop",
+   "pos": "Defender"
+  },
+  {
+   "name": "Song Bum-keun",
+   "pos": "Defender"
+  },
+  {
+   "name": "Kim Min-jae",
+   "pos": "Defender"
+  },
+  {
+   "name": "Kim Tae-hyeon",
+   "pos": "Defender"
+  },
+  {
+   "name": "Hwang In-beom",
+   "pos": "Defender"
+  },
+  {
+   "name": "Lee Ki-hyuk",
+   "pos": "Defender"
+  },
+  {
+   "name": "Lee Dong-gyeong",
+   "pos": "Defender"
+  },
+  {
+   "name": "Kim Moon-hwan",
+   "pos": "Defender"
+  },
+  {
+   "name": "Roberto Alvarado",
+   "pos": "Defender"
+  },
+  {
+   "name": "César Huerta",
+   "pos": "Defender"
+  },
+  {
+   "name": "Armando González",
+   "pos": "Defender"
+  },
+  {
+   "name": "Gilberto Mora",
+   "pos": "Defender"
+  },
+  {
+   "name": "José Raul Rangel",
+   "pos": "Defender"
+  },
+  {
+   "name": "Álvaro Fidalgo",
+   "pos": "Defender"
+  },
+  {
+   "name": "Carlos Acevedo",
+   "pos": "Defender"
+  },
+  {
+   "name": "Mateo Chávez",
+   "pos": "Defender"
+  },
+  {
+   "name": "Jorge Sánchez Ramos",
+   "pos": "Defender"
+  },
+  {
+   "name": "Edson Álvarez",
+   "pos": "Defender"
+  },
+  {
+   "name": "Johan Vázquez",
+   "pos": "Defender"
+  },
+  {
+   "name": "César Montes",
+   "pos": "Defender"
+  },
+  {
+   "name": "Guillermo Martínez Ayala",
+   "pos": "Defender"
+  },
+  {
+   "name": "Luis Romo",
+   "pos": "Defender"
+  },
+  {
+   "name": "Israel Reyes",
+   "pos": "Defender"
+  },
+  {
+   "name": "Erik Lira",
+   "pos": "Defender"
+  },
+  {
+   "name": "Lukáš Horníček",
+   "pos": "Defender"
+  },
+  {
+   "name": "Jindřich Staněk",
+   "pos": "Defender"
+  },
+  {
+   "name": "Denis Višinský",
+   "pos": "Defender"
+  },
+  {
+   "name": "Vladimír Darida",
+   "pos": "Defender"
+  },
+  {
+   "name": "David Douděra",
+   "pos": "Defender"
+  },
+  {
+   "name": "Jaroslav Zelený",
+   "pos": "Defender"
+  },
+  {
+   "name": "Tomáš Chorý",
+   "pos": "Defender"
+  },
+  {
+   "name": "Tomáš Holeš",
+   "pos": "Defender"
+  },
+  {
+   "name": "Vladimír Coufal",
+   "pos": "Defender"
+  },
+  {
+   "name": "Tomáš Souček",
+   "pos": "Defender"
+  },
+  {
+   "name": "Alexandr Sojka",
+   "pos": "Defender"
+  },
+  {
+   "name": "Ladislav Krejčí",
+   "pos": "Defender"
+  },
+  {
+   "name": "Štěpán Chaloupek",
+   "pos": "Defender"
+  },
+  {
+   "name": "Hugo Sochůrek",
+   "pos": "Defender"
+  },
+  {
+   "name": "Pavel Sulc",
+   "pos": "Defender"
+  },
+  {
+   "name": "Mojmír Chytil",
+   "pos": "Defender"
+  },
+  {
+   "name": "Jan Kuchta",
+   "pos": "Defender"
+  },
+  {
+   "name": "Lukáš Červ",
+   "pos": "Defender"
+  },
+  {
+   "name": "David Zima",
+   "pos": "Defender"
+  },
+  {
+   "name": "Lukáš Provod",
+   "pos": "Defender"
+  }
+ ],
+ "calls": 104,
+ "seconds": 7.3,
+ "solutions_without_restriction": {
+  "query": "SELECT (COUNT(*) AS ?n) WHERE { ?p ex:playsFor ?t ; rdfs:label ?name . }",
+  "rows": [
+   {
+    "n": "1248"
+   }
+  ],
+  "calls": 0,
+  "seconds": 0.0
+ },
+ "model": "Qwen/Qwen3-30B-A3B-Instruct-2507"
+}

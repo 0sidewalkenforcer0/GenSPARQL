@@ -1,0 +1,86 @@
+{
+ "query": "SELECT ?name ?c WHERE { ?a ex:field wd:Q38104 ; ex:winningYear ?y ; ex:winner ?l . ?l rdfs:label ?name . FILTER(xsd:integer(STR(?y)) >= 2020) GENOP(\"For which contribution did {?name} receive the Nobel Prize in Physics? Answer with one short phrase.\", (?c), <model>) }",
+ "rows": [
+  {
+   "name": "John Hopfield",
+   "c": "Hopfield network"
+  },
+  {
+   "name": "Pierre Agostini",
+   "c": "Development of a method for generating attosecond pulses"
+  },
+  {
+   "name": "Giorgio Parisi",
+   "c": "discovery of the interplay of disorder and fluctuations in classical systems"
+  },
+  {
+   "name": "Anton Zeilinger",
+   "c": "quantum information science"
+  },
+  {
+   "name": "John Clauser",
+   "c": "Quantum nonlocality and Bell inequalities"
+  },
+  {
+   "name": "John M. Martinis",
+   "c": "Quantum entanglement and quantum computing"
+  },
+  {
+   "name": "Michel Devoret",
+   "c": "Quantum electrodynamics and superconducting circuits"
+  },
+  {
+   "name": "John Clarke",
+   "c": "Discovery of the neutron"
+  },
+  {
+   "name": "Alain Aspect",
+   "c": "Experimental violation of Bell inequalities"
+  },
+  {
+   "name": "Andrea M. Ghez",
+   "c": "Discovery of a supermassive compact object at the center of our galaxy"
+  },
+  {
+   "name": "Reinhard Genzel",
+   "c": "Discovery of a supermassive compact object at the center of our galaxy"
+  },
+  {
+   "name": "Ferenc Krausz",
+   "c": "Ultrafast laser physics"
+  },
+  {
+   "name": "Syukuro Manabe",
+   "c": "climate modeling and predictions"
+  },
+  {
+   "name": "Geoffrey Hinton",
+   "c": "Deep learning in artificial neural networks"
+  },
+  {
+   "name": "Roger Penrose",
+   "c": "black hole thermodynamics"
+  },
+  {
+   "name": "Anne L'Huillier",
+   "c": "Development of methods for generating attosecond light pulses"
+  },
+  {
+   "name": "Klaus Hasselmann",
+   "c": "climate modeling and detection of man-made climate change"
+  }
+ ],
+ "calls": 17,
+ "seconds": 6.5,
+ "solutions_without_restriction": {
+  "query": "SELECT (COUNT(*) AS ?n) WHERE { ?a ex:field wd:Q38104 ; ex:winningYear ?y ; ex:winner ?l . ?l rdfs:label ?name . }",
+  "rows": [
+   {
+    "n": "230"
+   }
+  ],
+  "calls": 0,
+  "seconds": 0.0
+ },
+ "model": "Qwen/Qwen3-8B"
+}

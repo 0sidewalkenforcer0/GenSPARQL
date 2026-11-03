@@ -1,0 +1,23 @@
+{
+  "openai:Qwen/Qwen3-30B-A3B-Instruct-2507:06751e88bf0b9d30d402e848a316f49e7c0b2bc4803040a7fe17bd03e21ddf4b:0.00:1000:x" : {
+    "rawText" : "[\"Physics\", \"Chemistry\", \"Physiology or Medicine\", \"Literature\", \"Peace\", \"Economic Sciences\"]",
+    "bindings" : [ {
+      "x" : "Physics"
+    }, {
+      "x" : "Chemistry"
+    }, {
+      "x" : "Physiology or Medicine"
+    }, {
+      "x" : "Literature"
+    }, {
+      "x" : "Peace"
+    }, {
+      "x" : "Economic Sciences"
+    } ],
+    "success" : true,
+    "errorMessage" : null,
+    "model" : "Qwen/Qwen3-30B-A3B-Instruct-2507",
+    "promptTokens" : 93,
+    "completionTokens" : 26
+  }
+}

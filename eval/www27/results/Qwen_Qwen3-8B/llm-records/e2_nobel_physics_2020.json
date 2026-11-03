@@ -1,0 +1,25 @@
+{
+  "openai:Qwen/Qwen3-8B:90a2229a3cc369b869a3474f0f0640268476cc3eeb12906ba15d6ab70e155445:0.00:1000:x" : {
+    "rawText" : "[\"Roger Penrose\", \"Reinhard Genzel\", \"Andrea Ghez\", \"Syukuro Manabe\", \"Klaus Hasselmann\", \"George Smoot\", \"John Mather\"]",
+    "bindings" : [ {
+      "x" : "Roger Penrose"
+    }, {
+      "x" : "Reinhard Genzel"
+    }, {
+      "x" : "Andrea Ghez"
+    }, {
+      "x" : "Syukuro Manabe"
+    }, {
+      "x" : "Klaus Hasselmann"
+    }, {
+      "x" : "George Smoot"
+    }, {
+      "x" : "John Mather"
+    } ],
+    "success" : true,
+    "errorMessage" : null,
+    "model" : "Qwen/Qwen3-8B",
+    "promptTokens" : 109,
+    "completionTokens" : 44
+  }
+}

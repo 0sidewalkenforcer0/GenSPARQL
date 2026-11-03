@@ -1,0 +1,39 @@
+{
+ "_note": "Generated names that denote an entity of the query's target set although none of the entity's English names in Wikidata equals them (manual check, 2026-11-03). A null value marks a name that was checked and denotes no entity of the target set.",
+ "nobel_fields": {
+  "Physics": "Q38104",
+  "Chemistry": "Q44585",
+  "Physiology or Medicine": "Q80061",
+  "Medicine": "Q80061",
+  "Medicine or Physiology": "Q80061",
+  "Literature": "Q37922",
+  "Peace": "Q35637",
+  "Economic Sciences": "Q47170",
+  "Economics": "Q47170"
+ },
+ "nobel_physics_2020": {
+  "James Peebles": "Q728331",
+  "J. H. Taylor": "Q192685",
+  "R. A. Hulse": "Q156286",
+  "S. Chandrasekhar": "Q148109",
+  "R. Feynman": "Q39246",
+  "R. P. Feynman": "Q39246",
+  "J. Schwinger": "Q186465",
+  "S. Tomonaga": "Q184563",
+  "George Smoot": "Q179572",
+  "John Mather": "Q104651",
+  "M. Rees": null,
+  "J. G. Taylor": null
+ },
+ "wc_venues": {
+  "CenturyLink Field": "Q612736",
+  "Estadio BBVA": "Q3058827",
+  "Estadio Jalisco": null
+ },
+ "wc_cities": {
+  "Los Angeles": null,
+  "Dallas": null,
+  "Monterrey": null,
+  "New York/New Jersey": null
+ }
+}

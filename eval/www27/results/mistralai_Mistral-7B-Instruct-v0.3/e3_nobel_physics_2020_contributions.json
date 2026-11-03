@@ -1,0 +1,86 @@
+{
+ "query": "SELECT ?name ?c WHERE { ?a ex:field wd:Q38104 ; ex:winningYear ?y ; ex:winner ?l . ?l rdfs:label ?name . FILTER(xsd:integer(STR(?y)) >= 2020) GENOP(\"For which contribution did {?name} receive the Nobel Prize in Physics? Answer with one short phrase.\", (?c), <model>) }",
+ "rows": [
+  {
+   "name": "John Hopfield",
+   "c": "Neural Networks"
+  },
+  {
+   "name": "Pierre Agostini",
+   "c": "Laser Frequency Stabilization"
+  },
+  {
+   "name": "Giorgio Parisi",
+   "c": "Theoretical Physics, Statistical Mechanics"
+  },
+  {
+   "name": "Anton Zeilinger",
+   "c": "Quantum Information Science"
+  },
+  {
+   "name": "John Clauser",
+   "c": "Quantum entanglement"
+  },
+  {
+   "name": "John M. Martinis",
+   "c": "Quantum Computing"
+  },
+  {
+   "name": "Michel Devoret",
+   "c": "Quantum Information Science"
+  },
+  {
+   "name": "John Clarke",
+   "c": "Laser Stabilization of Optical Resonators"
+  },
+  {
+   "name": "Alain Aspect",
+   "c": "Experiment showing violation of Bell inequalities"
+  },
+  {
+   "name": "Andrea M. Ghez",
+   "c": "Discovery of a supermassive compact object at the center of our galaxy"
+  },
+  {
+   "name": "Reinhard Genzel",
+   "c": "Observation of a black hole's shadow"
+  },
+  {
+   "name": "Ferenc Krausz",
+   "c": "Laser Spectroscopy"
+  },
+  {
+   "name": "Syukuro Manabe",
+   "c": "Climate and Weather Research"
+  },
+  {
+   "name": "Geoffrey Hinton",
+   "c": "Machine Learning, Neural Networks"
+  },
+  {
+   "name": "Roger Penrose",
+   "c": "Theory of Black Holes"
+  },
+  {
+   "name": "Anne L'Huillier",
+   "c": "Laser Spectroscopy"
+  },
+  {
+   "name": "Klaus Hasselmann",
+   "c": "Climate Science, Pioneering work in Earth system science, including the quantification of variability and predictability of the climate system"
+  }
+ ],
+ "calls": 17,
+ "seconds": 2.3,
+ "solutions_without_restriction": {
+  "query": "SELECT (COUNT(*) AS ?n) WHERE { ?a ex:field wd:Q38104 ; ex:winningYear ?y ; ex:winner ?l . ?l rdfs:label ?name . }",
+  "rows": [
+   {
+    "n": "230"
+   }
+  ],
+  "calls": 0,
+  "seconds": 0.0
+ },
+ "model": "mistralai/Mistral-7B-Instruct-v0.3"
+}

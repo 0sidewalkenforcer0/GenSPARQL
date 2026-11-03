@@ -1,0 +1,694 @@
+{
+ "prompt": "List the stadiums where matches of the 2026 FIFA World Cup are played.",
+ "pattern": "?x a ex:Venue .",
+ "runs": [
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Venue . GENOP(\"List the stadiums where matches of the 2026 FIFA World Cup are played.\", (?x), <model>, 0.5) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q373355"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7007552"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q10862290"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1052370"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q612736"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q838284"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q864339"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19520501"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7419343"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.5
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Venue . GENOP(\"List the stadiums where matches of the 2026 FIFA World Cup are played.\", (?x), <model>, 0.6) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q373355"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7007552"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q10862290"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1052370"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q612736"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q838284"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q864339"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19520501"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7419343"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.6
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Venue . GENOP(\"List the stadiums where matches of the 2026 FIFA World Cup are played.\", (?x), <model>, 0.7) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q373355"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7007552"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q10862290"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1052370"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q612736"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q838284"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q864339"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19520501"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7419343"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.7
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Venue . GENOP(\"List the stadiums where matches of the 2026 FIFA World Cup are played.\", (?x), <model>, 0.8) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q373355"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7007552"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q10862290"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1052370"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q612736"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q838284"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q864339"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19520501"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7419343"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.8
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Venue . GENOP(\"List the stadiums where matches of the 2026 FIFA World Cup are played.\", (?x), <model>, 0.85) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q373355"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7007552"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q10862290"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1052370"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q612736"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q838284"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q864339"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19520501"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7419343"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.85
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Venue . GENOP(\"List the stadiums where matches of the 2026 FIFA World Cup are played.\", (?x), <model>, 0.9) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q373355"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7007552"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q10862290"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1052370"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q612736"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q838284"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q864339"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19520501"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7419343"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.9
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Venue . GENOP(\"List the stadiums where matches of the 2026 FIFA World Cup are played.\", (?x), <model>, 1.0) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q373355"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7007552"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q10862290"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1052370"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q612736"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q838284"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q864339"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19520501"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7419343"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 1.0
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Venue . GENOP(\"List the stadiums where matches of the 2026 FIFA World Cup are played.\", (?x), <model>, 0.5) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q373355"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7007552"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q320454"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q10862290"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1052370"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q796351"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q612227"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q612736"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q838284"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q666183"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q544553"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q3058827"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q864339"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19520501"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1058864"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7419343"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.1,
+   "similarity": "embedding",
+   "theta": 0.5
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Venue . GENOP(\"List the stadiums where matches of the 2026 FIFA World Cup are played.\", (?x), <model>, 0.6) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q373355"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7007552"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q320454"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q10862290"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1052370"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q796351"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q612736"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q838284"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q666183"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q544553"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q3058827"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q864339"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19520501"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1058864"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7419343"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.6
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Venue . GENOP(\"List the stadiums where matches of the 2026 FIFA World Cup are played.\", (?x), <model>, 0.7) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q373355"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7007552"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q320454"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q10862290"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1052370"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q796351"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q612736"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q838284"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q544553"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q3058827"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q864339"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19520501"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1058864"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7419343"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.7
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Venue . GENOP(\"List the stadiums where matches of the 2026 FIFA World Cup are played.\", (?x), <model>, 0.8) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q373355"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7007552"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q10862290"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1052370"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q612736"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q838284"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q864339"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19520501"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7419343"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.8
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Venue . GENOP(\"List the stadiums where matches of the 2026 FIFA World Cup are played.\", (?x), <model>, 0.85) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q373355"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7007552"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q10862290"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1052370"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q612736"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q838284"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q864339"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19520501"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7419343"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.85
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Venue . GENOP(\"List the stadiums where matches of the 2026 FIFA World Cup are played.\", (?x), <model>, 0.9) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q373355"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7007552"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q10862290"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1052370"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q612736"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q838284"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q864339"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19520501"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7419343"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.9
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Venue . GENOP(\"List the stadiums where matches of the 2026 FIFA World Cup are played.\", (?x), <model>, 1.0) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q373355"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7007552"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q10862290"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1052370"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q612736"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q838284"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q864339"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19520501"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7419343"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 1.0
+  }
+ ],
+ "llm_record": "e2_wc_venues.json",
+ "generated_before": {
+  "query": "SELECT ?x WHERE { GENOP(\"List the stadiums where matches of the 2026 FIFA World Cup are played.\", (?x), <model>) }",
+  "rows": [
+   {
+    "x": "MetLife Stadium"
+   },
+   {
+    "x": "Rose Bowl"
+   },
+   {
+    "x": "AT&T Stadium"
+   },
+   {
+    "x": "Soldier Field"
+   },
+   {
+    "x": "Lincoln Financial Field"
+   },
+   {
+    "x": "Mercedes-Benz Stadium"
+   },
+   {
+    "x": "Levi's Stadium"
+   },
+   {
+    "x": "Gillette Stadium"
+   },
+   {
+    "x": "Hard Rock Stadium"
+   },
+   {
+    "x": "CenturyLink Field"
+   },
+   {
+    "x": "Bank of America Stadium"
+   },
+   {
+    "x": "State Farm Stadium"
+   },
+   {
+    "x": "Nissan Stadium"
+   },
+   {
+    "x": "Raymond James Stadium"
+   },
+   {
+    "x": "Fenway Park"
+   },
+   {
+    "x": "SoFi Stadium"
+   },
+   {
+    "x": "Camping World Stadium"
+   },
+   {
+    "x": "Lumen Field"
+   },
+   {
+    "x": "Wembley Stadium"
+   }
+  ],
+  "calls": 1,
+  "seconds": 0.8
+ },
+ "generated_after": {
+  "query": "SELECT ?x WHERE { GENOP(\"List the stadiums where matches of the 2026 FIFA World Cup are played.\", (?x), <model>) }",
+  "rows": [
+   {
+    "x": "MetLife Stadium"
+   },
+   {
+    "x": "Rose Bowl"
+   },
+   {
+    "x": "AT&T Stadium"
+   },
+   {
+    "x": "Soldier Field"
+   },
+   {
+    "x": "Lincoln Financial Field"
+   },
+   {
+    "x": "Mercedes-Benz Stadium"
+   },
+   {
+    "x": "Levi's Stadium"
+   },
+   {
+    "x": "Gillette Stadium"
+   },
+   {
+    "x": "Hard Rock Stadium"
+   },
+   {
+    "x": "CenturyLink Field"
+   },
+   {
+    "x": "Bank of America Stadium"
+   },
+   {
+    "x": "State Farm Stadium"
+   },
+   {
+    "x": "Nissan Stadium"
+   },
+   {
+    "x": "Raymond James Stadium"
+   },
+   {
+    "x": "Fenway Park"
+   },
+   {
+    "x": "SoFi Stadium"
+   },
+   {
+    "x": "Camping World Stadium"
+   },
+   {
+    "x": "Lumen Field"
+   },
+   {
+    "x": "Wembley Stadium"
+   }
+  ],
+  "calls": 1,
+  "seconds": 0.0
+ },
+ "model": "Qwen/Qwen3-30B-A3B-Instruct-2507"
+}

@@ -1,0 +1,23 @@
+{
+  "openai:Qwen/Qwen3-8B:06751e88bf0b9d30d402e848a316f49e7c0b2bc4803040a7fe17bd03e21ddf4b:0.00:1000:x" : {
+    "rawText" : "[\"Physics\", \"Chemistry\", \"Medicine\", \"Literature\", \"Peace\", \"Economics\"]",
+    "bindings" : [ {
+      "x" : "Physics"
+    }, {
+      "x" : "Chemistry"
+    }, {
+      "x" : "Medicine"
+    }, {
+      "x" : "Literature"
+    }, {
+      "x" : "Peace"
+    }, {
+      "x" : "Economics"
+    } ],
+    "success" : true,
+    "errorMessage" : null,
+    "model" : "Qwen/Qwen3-8B",
+    "promptTokens" : 97,
+    "completionTokens" : 23
+  }
+}

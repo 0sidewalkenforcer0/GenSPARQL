@@ -1,0 +1,65 @@
+{
+  "openai:mistralai/Mistral-7B-Instruct-v0.3:3435059233eac994c4232865a941331103a71910c1e3c194e16dd506a6e7d3b4:0.00:1000:x" : {
+    "rawText" : " [\"MetLife Stadium\", \"Soccer Stadium (New York/New Jersey)\", \"AT&T Stadium\", \"Cotton Bowl Stadium\", \"NRG Stadium\", \"Toyota Stadium\", \"Allegiant Stadium\", \"Las Vegas Stadium\", \"State Farm Stadium\", \"University of Phoenix Stadium\", \"SoFi Stadium\", \"Rose Bowl\", \"Los Angeles Memorial Coliseum\", \"Estadio Azteca\", \"Estadio Jalisco\", \"Estadio BBVA Bancomer\", \"Estadio Universitario\", \"Estadio Olimpico Universitario\", \"Estadio Tecnologico\", \"Estadio Akron\", \"Estadio BBVA\", \"Estadio Corona\", \"Estadio BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Stadium\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer\", \"Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer",
+    "bindings" : [ {
+      "x" : "MetLife Stadium"
+    }, {
+      "x" : "Soccer Stadium (New York/New Jersey)"
+    }, {
+      "x" : "AT&T Stadium"
+    }, {
+      "x" : "Cotton Bowl Stadium"
+    }, {
+      "x" : "NRG Stadium"
+    }, {
+      "x" : "Toyota Stadium"
+    }, {
+      "x" : "Allegiant Stadium"
+    }, {
+      "x" : "Las Vegas Stadium"
+    }, {
+      "x" : "State Farm Stadium"
+    }, {
+      "x" : "University of Phoenix Stadium"
+    }, {
+      "x" : "SoFi Stadium"
+    }, {
+      "x" : "Rose Bowl"
+    }, {
+      "x" : "Los Angeles Memorial Coliseum"
+    }, {
+      "x" : "Estadio Azteca"
+    }, {
+      "x" : "Estadio Jalisco"
+    }, {
+      "x" : "Estadio BBVA Bancomer"
+    }, {
+      "x" : "Estadio Universitario"
+    }, {
+      "x" : "Estadio Olimpico Universitario"
+    }, {
+      "x" : "Estadio Tecnologico"
+    }, {
+      "x" : "Estadio Akron"
+    }, {
+      "x" : "Estadio BBVA"
+    }, {
+      "x" : "Estadio Corona"
+    }, {
+      "x" : "Estadio BBVA Bancomer BBVA Bancomer"
+    }, {
+      "x" : "Estadio BBVA Bancomer BBVA Stadium"
+    }, {
+      "x" : "Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer"
+    }, {
+      "x" : "Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer"
+    }, {
+      "x" : "Estadio BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer BBVA Bancomer"
+    } ],
+    "success" : true,
+    "errorMessage" : null,
+    "model" : "mistralai/Mistral-7B-Instruct-v0.3",
+    "promptTokens" : 109,
+    "completionTokens" : 1000
+  }
+}

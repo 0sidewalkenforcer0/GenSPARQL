@@ -1,0 +1,37 @@
+{
+  "openai:Qwen/Qwen3-8B:3435059233eac994c4232865a941331103a71910c1e3c194e16dd506a6e7d3b4:0.00:1000:x" : {
+    "rawText" : "[\"Lambeau Field\", \"Soldier Field\", \"SoFi Stadium\", \"MetLife Stadium\", \"AT&T Stadium\", \"Raymond James Stadium\", \"Tottenham Hotspur Stadium\", \"Wembley Stadium\", \"Estadio Azteca\", \"Estadio Jalisco\", \"Estadio Akron\", \"Estadio Olímpico Universitario\", \"Estadio Azteca\", \"Estadio BBVA\", \"Estadio Akron\", \"Estadio Olímpico Universitario\", \"Estadio Azteca\", \"Estadio BBVA\", \"Estadio Akron\", \"Estadio Olímpico Universitario\"]",
+    "bindings" : [ {
+      "x" : "Lambeau Field"
+    }, {
+      "x" : "Soldier Field"
+    }, {
+      "x" : "SoFi Stadium"
+    }, {
+      "x" : "MetLife Stadium"
+    }, {
+      "x" : "AT&T Stadium"
+    }, {
+      "x" : "Raymond James Stadium"
+    }, {
+      "x" : "Tottenham Hotspur Stadium"
+    }, {
+      "x" : "Wembley Stadium"
+    }, {
+      "x" : "Estadio Azteca"
+    }, {
+      "x" : "Estadio Jalisco"
+    }, {
+      "x" : "Estadio Akron"
+    }, {
+      "x" : "Estadio Olímpico Universitario"
+    }, {
+      "x" : "Estadio BBVA"
+    } ],
+    "success" : true,
+    "errorMessage" : null,
+    "model" : "Qwen/Qwen3-8B",
+    "promptTokens" : 104,
+    "completionTokens" : 135
+  }
+}

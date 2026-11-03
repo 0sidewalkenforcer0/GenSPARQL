@@ -1,0 +1,49 @@
+{
+  "openai:Qwen/Qwen3-30B-A3B-Instruct-2507:3435059233eac994c4232865a941331103a71910c1e3c194e16dd506a6e7d3b4:0.00:1000:x" : {
+    "rawText" : "[\"MetLife Stadium\", \"Rose Bowl\", \"AT&T Stadium\", \"Soldier Field\", \"Lincoln Financial Field\", \"Mercedes-Benz Stadium\", \"Levi's Stadium\", \"Gillette Stadium\", \"Hard Rock Stadium\", \"CenturyLink Field\", \"Bank of America Stadium\", \"State Farm Stadium\", \"Nissan Stadium\", \"Raymond James Stadium\", \"Fenway Park\", \"SoFi Stadium\", \"Camping World Stadium\", \"Lumen Field\", \"Nissan Stadium\", \"Wembley Stadium\"]",
+    "bindings" : [ {
+      "x" : "MetLife Stadium"
+    }, {
+      "x" : "Rose Bowl"
+    }, {
+      "x" : "AT&T Stadium"
+    }, {
+      "x" : "Soldier Field"
+    }, {
+      "x" : "Lincoln Financial Field"
+    }, {
+      "x" : "Mercedes-Benz Stadium"
+    }, {
+      "x" : "Levi's Stadium"
+    }, {
+      "x" : "Gillette Stadium"
+    }, {
+      "x" : "Hard Rock Stadium"
+    }, {
+      "x" : "CenturyLink Field"
+    }, {
+      "x" : "Bank of America Stadium"
+    }, {
+      "x" : "State Farm Stadium"
+    }, {
+      "x" : "Nissan Stadium"
+    }, {
+      "x" : "Raymond James Stadium"
+    }, {
+      "x" : "Fenway Park"
+    }, {
+      "x" : "SoFi Stadium"
+    }, {
+      "x" : "Camping World Stadium"
+    }, {
+      "x" : "Lumen Field"
+    }, {
+      "x" : "Wembley Stadium"
+    } ],
+    "success" : true,
+    "errorMessage" : null,
+    "model" : "Qwen/Qwen3-30B-A3B-Instruct-2507",
+    "promptTokens" : 100,
+    "completionTokens" : 108
+  }
+}

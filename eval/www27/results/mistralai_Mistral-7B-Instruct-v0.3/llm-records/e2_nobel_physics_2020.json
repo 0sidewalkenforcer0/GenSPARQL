@@ -1,0 +1,23 @@
+{
+  "openai:mistralai/Mistral-7B-Instruct-v0.3:90a2229a3cc369b869a3474f0f0640268476cc3eeb12906ba15d6ab70e155445:0.00:1000:x" : {
+    "rawText" : " [\"Roger Penrose, Reinhard Genzel, Andrea Ghez (2020)\",\n\"Syukuro Manabe, Klaus Hasselmann, Giorgio Parisi (2021)\",\n\"Alain Aspect, John Clauser, Anton Zeilinger (2022)\",\n\"David Gross, Frank Wilczek, Ann Nelson (2023)\",\n\"James Peebles, Simon White, Abraham Loeb (2024)\",\n\"Alain Aspect, John F. Clauser, Anton Zeilinger (2025)\"]",
+    "bindings" : [ {
+      "x" : "Roger Penrose, Reinhard Genzel, Andrea Ghez (2020)"
+    }, {
+      "x" : "Syukuro Manabe, Klaus Hasselmann, Giorgio Parisi (2021)"
+    }, {
+      "x" : "Alain Aspect, John Clauser, Anton Zeilinger (2022)"
+    }, {
+      "x" : "David Gross, Frank Wilczek, Ann Nelson (2023)"
+    }, {
+      "x" : "James Peebles, Simon White, Abraham Loeb (2024)"
+    }, {
+      "x" : "Alain Aspect, John F. Clauser, Anton Zeilinger (2025)"
+    } ],
+    "success" : true,
+    "errorMessage" : null,
+    "model" : "mistralai/Mistral-7B-Instruct-v0.3",
+    "promptTokens" : 116,
+    "completionTokens" : 134
+  }
+}

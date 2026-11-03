@@ -1,0 +1,1285 @@
+{
+ "prompt": "List the national teams that play at the 2026 FIFA World Cup.",
+ "pattern": "?x a ex:Team .",
+ "runs": [
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Team . GENOP(\"List the national teams that play at the 2026 FIFA World Cup.\", (?x), <model>, 0.5) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q160826"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q208635"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q165141"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q170566"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47050"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q164089"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q232731"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47762"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q267245"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q42267"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q79800"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q83459"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q175315"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q43310"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47774"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q268208"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q184602"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q134916"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.5
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Team . GENOP(\"List the national teams that play at the 2026 FIFA World Cup.\", (?x), <model>, 0.6) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q160826"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q208635"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q165141"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q170566"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47050"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q164089"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q232731"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47762"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q267245"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q42267"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q79800"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q83459"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q175315"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q43310"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47774"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q268208"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q134916"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.6
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Team . GENOP(\"List the national teams that play at the 2026 FIFA World Cup.\", (?x), <model>, 0.7) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q160826"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q208635"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q165141"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q170566"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47050"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q164089"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q232731"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47762"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q267245"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q42267"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q79800"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q83459"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q175315"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q43310"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47774"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q268208"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q134916"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.7
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Team . GENOP(\"List the national teams that play at the 2026 FIFA World Cup.\", (?x), <model>, 0.8) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q160826"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q208635"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q165141"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q170566"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47050"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q164089"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q232731"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47762"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q267245"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q42267"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q79800"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q83459"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q175315"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q43310"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47774"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q268208"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q134916"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.8
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Team . GENOP(\"List the national teams that play at the 2026 FIFA World Cup.\", (?x), <model>, 0.85) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q160826"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q208635"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q165141"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q170566"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47050"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q164089"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q232731"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47762"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q267245"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q42267"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q79800"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q83459"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q175315"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q43310"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47774"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q268208"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q134916"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.85
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Team . GENOP(\"List the national teams that play at the 2026 FIFA World Cup.\", (?x), <model>, 0.9) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q160826"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q208635"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q165141"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q170566"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47050"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q164089"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q232731"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47762"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q267245"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q42267"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q79800"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q83459"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q175315"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q43310"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47774"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q268208"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q134916"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.9
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Team . GENOP(\"List the national teams that play at the 2026 FIFA World Cup.\", (?x), <model>, 1.0) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q160826"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q208635"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q165141"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q170566"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47050"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q164089"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q232731"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47762"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q267245"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q42267"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q79800"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q83459"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q175315"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q43310"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47774"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q268208"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q134916"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 1.0
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Team . GENOP(\"List the national teams that play at the 2026 FIFA World Cup.\", (?x), <model>, 0.5) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q160826"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q170327"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q34044"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q208635"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q164134"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q165141"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q170566"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q212564"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q236006"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47050"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q543842"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q164089"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q487321"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q232731"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q172020"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q729640"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q987584"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47762"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q207441"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q134479"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q267245"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q184387"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q330039"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q42267"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q483868"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q172014"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q79800"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q83459"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q181190"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q166776"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q163534"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q28089"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q223748"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q175145"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q186243"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q175315"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q43310"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q189723"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q275940"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q483856"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q207337"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q270080"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47774"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q181903"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q27971"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q268208"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q184602"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q134916"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.3,
+   "similarity": "embedding",
+   "theta": 0.5
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Team . GENOP(\"List the national teams that play at the 2026 FIFA World Cup.\", (?x), <model>, 0.6) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q160826"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q170327"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q34044"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q208635"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q164134"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q165141"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q170566"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q212564"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q236006"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47050"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q543842"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q164089"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q487321"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q232731"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q172020"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q729640"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q987584"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47762"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q207441"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q134479"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q267245"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q184387"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q330039"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q42267"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q483868"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q172014"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q79800"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q83459"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q181190"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q166776"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q163534"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q28089"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q223748"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q175145"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q186243"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q175315"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q43310"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q189723"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q275940"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q483856"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q207337"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q270080"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47774"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q181903"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q27971"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q268208"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q184602"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q134916"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.6
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Team . GENOP(\"List the national teams that play at the 2026 FIFA World Cup.\", (?x), <model>, 0.7) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q160826"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q170327"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q34044"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q208635"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q164134"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q165141"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q170566"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q212564"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q236006"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47050"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q543842"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q164089"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q232731"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q172020"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q729640"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q987584"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47762"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q134479"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q267245"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q184387"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q330039"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q42267"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q172014"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q79800"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q83459"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q181190"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q166776"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q163534"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q28089"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q223748"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q175145"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q186243"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q175315"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q43310"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q189723"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q275940"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q207337"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47774"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q181903"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q27971"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q268208"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q184602"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q134916"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.7
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Team . GENOP(\"List the national teams that play at the 2026 FIFA World Cup.\", (?x), <model>, 0.8) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q160826"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q208635"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q164134"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q165141"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q170566"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47050"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q164089"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q232731"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47762"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q267245"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q184387"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q42267"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q79800"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q83459"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q175315"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q43310"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47774"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q268208"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q134916"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.8
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Team . GENOP(\"List the national teams that play at the 2026 FIFA World Cup.\", (?x), <model>, 0.85) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q160826"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q208635"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q165141"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q170566"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47050"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q164089"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q232731"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47762"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q267245"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q42267"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q79800"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q83459"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q175315"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q43310"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47774"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q268208"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q134916"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.85
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Team . GENOP(\"List the national teams that play at the 2026 FIFA World Cup.\", (?x), <model>, 0.9) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q160826"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q208635"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q165141"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q170566"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47050"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q164089"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q232731"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47762"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q267245"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q42267"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q79800"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q83459"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q175315"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q43310"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47774"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q268208"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q134916"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.9
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:Team . GENOP(\"List the national teams that play at the 2026 FIFA World Cup.\", (?x), <model>, 1.0) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q160826"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q208635"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q165141"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q170566"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47050"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q164089"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q232731"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47762"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q267245"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q42267"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q79800"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q83459"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q175315"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q43310"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47774"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q268208"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q134916"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 1.0
+  }
+ ],
+ "llm_record": "e2_wc_teams.json",
+ "generated_before": {
+  "query": "SELECT ?x WHERE { GENOP(\"List the national teams that play at the 2026 FIFA World Cup.\", (?x), <model>) }",
+  "rows": [
+   {
+    "x": "Argentina"
+   },
+   {
+    "x": "Australia"
+   },
+   {
+    "x": "Brazil"
+   },
+   {
+    "x": "Canada"
+   },
+   {
+    "x": "Denmark"
+   },
+   {
+    "x": "England"
+   },
+   {
+    "x": "France"
+   },
+   {
+    "x": "Germany"
+   },
+   {
+    "x": "India"
+   },
+   {
+    "x": "Iran"
+   },
+   {
+    "x": "Italy"
+   },
+   {
+    "x": "Japan"
+   },
+   {
+    "x": "Mexico"
+   },
+   {
+    "x": "Netherlands"
+   },
+   {
+    "x": "New Zealand"
+   },
+   {
+    "x": "Peru"
+   },
+   {
+    "x": "Portugal"
+   },
+   {
+    "x": "Qatar"
+   },
+   {
+    "x": "Republic of Ireland"
+   },
+   {
+    "x": "South Korea"
+   },
+   {
+    "x": "Spain"
+   },
+   {
+    "x": "Sweden"
+   },
+   {
+    "x": "Switzerland"
+   },
+   {
+    "x": "United States"
+   },
+   {
+    "x": "Uruguay"
+   }
+  ],
+  "calls": 1,
+  "seconds": 1.2
+ },
+ "generated_after": {
+  "query": "SELECT ?x WHERE { GENOP(\"List the national teams that play at the 2026 FIFA World Cup.\", (?x), <model>) }",
+  "rows": [
+   {
+    "x": "Argentina"
+   },
+   {
+    "x": "Australia"
+   },
+   {
+    "x": "Brazil"
+   },
+   {
+    "x": "Canada"
+   },
+   {
+    "x": "Denmark"
+   },
+   {
+    "x": "England"
+   },
+   {
+    "x": "France"
+   },
+   {
+    "x": "Germany"
+   },
+   {
+    "x": "India"
+   },
+   {
+    "x": "Iran"
+   },
+   {
+    "x": "Italy"
+   },
+   {
+    "x": "Japan"
+   },
+   {
+    "x": "Mexico"
+   },
+   {
+    "x": "Netherlands"
+   },
+   {
+    "x": "New Zealand"
+   },
+   {
+    "x": "Peru"
+   },
+   {
+    "x": "Portugal"
+   },
+   {
+    "x": "Qatar"
+   },
+   {
+    "x": "Republic of Ireland"
+   },
+   {
+    "x": "South Korea"
+   },
+   {
+    "x": "Spain"
+   },
+   {
+    "x": "Sweden"
+   },
+   {
+    "x": "Switzerland"
+   },
+   {
+    "x": "United States"
+   },
+   {
+    "x": "Uruguay"
+   }
+  ],
+  "calls": 1,
+  "seconds": 0.0
+ },
+ "model": "mistralai/Mistral-7B-Instruct-v0.3"
+}

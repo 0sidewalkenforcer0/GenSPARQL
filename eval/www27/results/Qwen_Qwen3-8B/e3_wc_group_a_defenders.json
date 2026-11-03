@@ -1,0 +1,42 @@
+{
+ "query": "SELECT ?name ?pos WHERE { ?t ex:inGroup ?g . ?g rdfs:label \"Group A\" . ?p ex:playsFor ?t ; rdfs:label ?name . GENOP(\"On which position does the footballer {?name} primarily play? Answer with one of Goalkeeper, Defender, Midfielder or Forward. If you do not know this player, answer Unknown.\", (?pos), <model>) FILTER(?pos = \"Defender\") }",
+ "rows": [
+  {
+   "name": "Kim Min-jae",
+   "pos": "Defender"
+  },
+  {
+   "name": "Orbelín Pineda",
+   "pos": "Defender"
+  },
+  {
+   "name": "Edson Álvarez",
+   "pos": "Defender"
+  },
+  {
+   "name": "David Jurásek",
+   "pos": "Defender"
+  },
+  {
+   "name": "Vladimír Coufal",
+   "pos": "Defender"
+  },
+  {
+   "name": "Tomáš Souček",
+   "pos": "Defender"
+  }
+ ],
+ "calls": 104,
+ "seconds": 18.4,
+ "solutions_without_restriction": {
+  "query": "SELECT (COUNT(*) AS ?n) WHERE { ?p ex:playsFor ?t ; rdfs:label ?name . }",
+  "rows": [
+   {
+    "n": "1248"
+   }
+  ],
+  "calls": 0,
+  "seconds": 0.0
+ },
+ "model": "Qwen/Qwen3-8B"
+}

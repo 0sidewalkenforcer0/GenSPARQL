@@ -114,15 +114,18 @@ def e2_names(name, e2gold):
     return target
 
 
-def score_e2(rec, name, e2gold):
+def score_e2(rec, name, e2gold, manual):
     names = e2_names(name, e2gold)
+    checked = manual.get(name, {})
     generated = [r.get("x", "") for r in rec["generated_before"].get("rows", [])]
     after = [r.get("x", "") for r in rec["generated_after"].get("rows", [])]
     denoted, unmatched = set(), []
     for g in dict.fromkeys(generated):
         hits = {q for q, ns in names.items() if norm(g) in ns}
+        if not hits and checked.get(g):
+            hits = {checked[g]}
         denoted |= hits
-        if not hits:
+        if not hits and g not in checked:
             unmatched.append(g)
     runs = []
     for run in rec["runs"]:
@@ -134,8 +137,12 @@ def score_e2(rec, name, e2gold):
                      "recall": round(len(good) / len(denoted), 3) if denoted else None,
                      "wrong": sorted(mapped - denoted), "calls": run.get("calls"),
                      "error": run.get("error")})
-    return {"generated": len(set(generated)), "denote_graph_entities": len(denoted),
-            "names_without_entity": len(unmatched), "unmatched_names": unmatched,
+    names_in_target = sum(1 for g in dict.fromkeys(generated)
+                          if any(norm(g) in ns for ns in names.values()) or checked.get(g))
+    return {"generated": len(set(generated)), "names_denoting_target": names_in_target,
+            "denote_graph_entities": len(denoted),
+            "names_without_entity": len(set(generated)) - names_in_target,
+            "unchecked_names": unmatched,
             "same_list_after": sorted(map(norm, generated)) == sorted(map(norm, after)),
             "runs": runs}
 
@@ -144,6 +151,7 @@ def main(dirs):
     pos_gold = load(os.path.join(GOLD, "wc_positions.json"))
     year_gold = {q: set(v) for q, v in load(os.path.join(GOLD, "nobel_birth_years.json")).items()}
     e2gold = load(os.path.join(GOLD, "e2_entities.json"))
+    manual = load(os.path.join(GOLD, "e2_manual.json"))
     players = sorted(kg_labels("worldcup2026.ttl", "Athlete"))
     laureates = sorted(kg_labels("nobel-prize.ttl", "NobelLaureate"))
     summary = {}
@@ -162,7 +170,7 @@ def main(dirs):
         for name in e2gold:
             f = os.path.join(d, f"e2_{name}.json")
             if os.path.exists(f):
-                s["e2_" + name] = score_e2(load(f), name, e2gold)
+                s["e2_" + name] = score_e2(load(f), name, e2gold, manual)
         for f in sorted(os.listdir(d)):
             if f.startswith("e3_"):
                 r = load(os.path.join(d, f))

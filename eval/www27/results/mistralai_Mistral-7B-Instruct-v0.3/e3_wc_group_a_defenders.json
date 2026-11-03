@@ -1,0 +1,138 @@
+{
+ "query": "SELECT ?name ?pos WHERE { ?t ex:inGroup ?g . ?g rdfs:label \"Group A\" . ?p ex:playsFor ?t ; rdfs:label ?name . GENOP(\"On which position does the footballer {?name} primarily play? Answer with one of Goalkeeper, Defender, Midfielder or Forward. If you do not know this player, answer Unknown.\", (?pos), <model>) FILTER(?pos = \"Defender\") }",
+ "rows": [
+  {
+   "name": "Kamogelo Sebelebele",
+   "pos": "Defender"
+  },
+  {
+   "name": "Mbekezeli Mbokazi",
+   "pos": "Defender"
+  },
+  {
+   "name": "Iqraam Rayners",
+   "pos": "Defender"
+  },
+  {
+   "name": "Oswin Appollis",
+   "pos": "Defender"
+  },
+  {
+   "name": "Ime Okon",
+   "pos": "Defender"
+  },
+  {
+   "name": "Nkosinathi Sibisi",
+   "pos": "Defender"
+  },
+  {
+   "name": "Kim Jin-gyu",
+   "pos": "Defender"
+  },
+  {
+   "name": "Paik Seung-ho",
+   "pos": "Defender"
+  },
+  {
+   "name": "Cho Gue-sung",
+   "pos": "Defender"
+  },
+  {
+   "name": "Lee Han-beom",
+   "pos": "Defender"
+  },
+  {
+   "name": "Cho Wi-je",
+   "pos": "Defender"
+  },
+  {
+   "name": "Song Bum-keun",
+   "pos": "Defender"
+  },
+  {
+   "name": "Kim Min-jae",
+   "pos": "Defender"
+  },
+  {
+   "name": "Gilberto Mora",
+   "pos": "Defender"
+  },
+  {
+   "name": "Santiago Giménez",
+   "pos": "Defender"
+  },
+  {
+   "name": "Edson Álvarez",
+   "pos": "Defender"
+  },
+  {
+   "name": "César Montes",
+   "pos": "Defender"
+  },
+  {
+   "name": "Guillermo Martínez Ayala",
+   "pos": "Defender"
+  },
+  {
+   "name": "Jindřich Staněk",
+   "pos": "Defender"
+  },
+  {
+   "name": "David Jurásek",
+   "pos": "Defender"
+  },
+  {
+   "name": "David Douděra",
+   "pos": "Defender"
+  },
+  {
+   "name": "Jaroslav Zelený",
+   "pos": "Defender"
+  },
+  {
+   "name": "Vladimír Coufal",
+   "pos": "Defender"
+  },
+  {
+   "name": "Alexandr Sojka",
+   "pos": "Defender"
+  },
+  {
+   "name": "Ladislav Krejčí",
+   "pos": "Defender"
+  },
+  {
+   "name": "Štěpán Chaloupek",
+   "pos": "Defender"
+  },
+  {
+   "name": "Hugo Sochůrek",
+   "pos": "Defender"
+  },
+  {
+   "name": "Robin Hranáč",
+   "pos": "Defender"
+  },
+  {
+   "name": "Pavel Sulc",
+   "pos": "Defender"
+  },
+  {
+   "name": "Lukáš Červ",
+   "pos": "Defender"
+  }
+ ],
+ "calls": 104,
+ "seconds": 8.3,
+ "solutions_without_restriction": {
+  "query": "SELECT (COUNT(*) AS ?n) WHERE { ?p ex:playsFor ?t ; rdfs:label ?name . }",
+  "rows": [
+   {
+    "n": "1248"
+   }
+  ],
+  "calls": 0,
+  "seconds": 0.0
+ },
+ "model": "mistralai/Mistral-7B-Instruct-v0.3"
+}

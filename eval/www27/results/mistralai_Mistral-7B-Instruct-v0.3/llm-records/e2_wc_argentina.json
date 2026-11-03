@@ -1,0 +1,57 @@
+{
+  "openai:mistralai/Mistral-7B-Instruct-v0.3:458735d0fdd866f0447479f9cdeff5ce0254eabd4bbc937c84153394b19b4de1:0.00:1000:x" : {
+    "rawText" : " [\"Emiliano Martinez\", \"Gonzalo Montiel\", \"Nicolas Otamendi\", \"Nicolas Tagliafico\", \"Marcos Acuna\", \"Renzo Saravia\", \"German Pezzella\", \"Nicolas Gonzalez\", \"Guido Rodriguez\", \"Exequiel Palacios\", \"Rodrigo De Paul\", \"Alexis Mac Allister\", \"Angel Di Maria\", \"Lionel Messi\", \"Julian Alvarez\", \"Lautaro Martinez\", \"Joel Ferreira\", \"Giovani Lo Celso\", \"Nicolas Dominguez\", \"Thiago Almada\", \"Papu Gomez\", \"Diego Schwartzman\", \"Emiliano Buendia\", \"Gonzalo Montiel\", \"Nicolas Otamendi\", \"Nicolas Tagliafico\", \"Marcos Acuna\", \"Renzo Saravia\", \"German Pezzella\", \"Nicolas Gonzalez\", \"Guido Rodriguez\", \"Exequiel Palacios\", \"Rodrigo De Paul\", \"Alexis Mac Allister\", \"Angel Di Maria\", \"Lionel Messi\", \"Julian Alvarez\", \"Lautaro Martinez\", \"Joel Ferreira\", \"Giovani Lo Celso\", \"Nicolas Dominguez\", \"Thiago Almada\", \"Papu Gomez\", \"Diego Schwartzman\"]",
+    "bindings" : [ {
+      "x" : "Emiliano Martinez"
+    }, {
+      "x" : "Gonzalo Montiel"
+    }, {
+      "x" : "Nicolas Otamendi"
+    }, {
+      "x" : "Nicolas Tagliafico"
+    }, {
+      "x" : "Marcos Acuna"
+    }, {
+      "x" : "Renzo Saravia"
+    }, {
+      "x" : "German Pezzella"
+    }, {
+      "x" : "Nicolas Gonzalez"
+    }, {
+      "x" : "Guido Rodriguez"
+    }, {
+      "x" : "Exequiel Palacios"
+    }, {
+      "x" : "Rodrigo De Paul"
+    }, {
+      "x" : "Alexis Mac Allister"
+    }, {
+      "x" : "Angel Di Maria"
+    }, {
+      "x" : "Lionel Messi"
+    }, {
+      "x" : "Julian Alvarez"
+    }, {
+      "x" : "Lautaro Martinez"
+    }, {
+      "x" : "Joel Ferreira"
+    }, {
+      "x" : "Giovani Lo Celso"
+    }, {
+      "x" : "Nicolas Dominguez"
+    }, {
+      "x" : "Thiago Almada"
+    }, {
+      "x" : "Papu Gomez"
+    }, {
+      "x" : "Diego Schwartzman"
+    }, {
+      "x" : "Emiliano Buendia"
+    } ],
+    "success" : true,
+    "errorMessage" : null,
+    "model" : "mistralai/Mistral-7B-Instruct-v0.3",
+    "promptTokens" : 109,
+    "completionTokens" : 337
+  }
+}

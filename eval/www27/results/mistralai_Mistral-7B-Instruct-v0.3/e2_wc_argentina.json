@@ -1,0 +1,754 @@
+{
+ "prompt": "List the players in the squad of Argentina at the 2026 FIFA World Cup.",
+ "pattern": "?x ex:playsFor wd:Q79800 .",
+ "runs": [
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 0.5) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q615"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q26255087"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19345715"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q6110670"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q20743436"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q33297140"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q57293140"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.5
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 0.6) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q615"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q26255087"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19345715"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q6110670"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q20743436"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q33297140"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q57293140"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.6
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 0.7) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q615"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q26255087"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19345715"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q6110670"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q20743436"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q33297140"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q57293140"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.7
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 0.8) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q615"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q26255087"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19345715"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q6110670"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q20743436"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q33297140"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q57293140"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.8
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 0.85) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q615"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q26255087"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19345715"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q6110670"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q20743436"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q33297140"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q57293140"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.85
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 0.9) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q615"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q26255087"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19345715"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q6110670"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q20743436"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q33297140"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q57293140"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.9
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 1.0) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q615"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q26255087"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19345715"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q6110670"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q20743436"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q33297140"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q57293140"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 1.0
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 0.5) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q3876530"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q615"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q111336539"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q107542811"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q26255087"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q21484126"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q22082590"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q104903216"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q111672750"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q3275904"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q28058687"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q59381180"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19345715"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q43381082"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q6110670"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q182063"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q630170"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q20743436"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q96105248"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q5951550"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q5879014"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q33297140"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q28056787"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q30881092"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q57293140"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q23413053"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.1,
+   "similarity": "embedding",
+   "theta": 0.5
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 0.6) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q3876530"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q615"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q111336539"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q26255087"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q21484126"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q111672750"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q3275904"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q28058687"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q59381180"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19345715"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q43381082"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q6110670"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q182063"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q630170"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q20743436"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q96105248"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q33297140"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q30881092"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q57293140"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q23413053"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.6
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 0.7) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q3876530"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q615"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q26255087"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q21484126"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q111672750"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q3275904"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q59381180"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19345715"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q43381082"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q6110670"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q182063"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q20743436"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q33297140"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q30881092"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q57293140"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.7
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 0.8) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q3876530"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q615"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q26255087"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q21484126"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q3275904"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q59381180"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19345715"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q43381082"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q6110670"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q182063"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q20743436"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q33297140"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q57293140"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.8
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 0.85) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q3876530"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q615"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q26255087"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q21484126"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q3275904"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q59381180"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19345715"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q43381082"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q6110670"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q182063"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q20743436"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q33297140"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q57293140"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.85
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 0.9) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q3876530"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q615"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q26255087"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q21484126"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q3275904"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q59381180"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19345715"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q43381082"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q6110670"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q182063"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q20743436"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q33297140"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q57293140"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.9
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 1.0) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q615"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q26255087"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q19345715"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q6110670"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q20743436"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q33297140"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q57293140"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 1.0
+  }
+ ],
+ "llm_record": "e2_wc_argentina.json",
+ "generated_before": {
+  "query": "SELECT ?x WHERE { GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>) }",
+  "rows": [
+   {
+    "x": "Emiliano Martinez"
+   },
+   {
+    "x": "Gonzalo Montiel"
+   },
+   {
+    "x": "Nicolas Otamendi"
+   },
+   {
+    "x": "Nicolas Tagliafico"
+   },
+   {
+    "x": "Marcos Acuna"
+   },
+   {
+    "x": "Renzo Saravia"
+   },
+   {
+    "x": "German Pezzella"
+   },
+   {
+    "x": "Nicolas Gonzalez"
+   },
+   {
+    "x": "Guido Rodriguez"
+   },
+   {
+    "x": "Exequiel Palacios"
+   },
+   {
+    "x": "Rodrigo De Paul"
+   },
+   {
+    "x": "Alexis Mac Allister"
+   },
+   {
+    "x": "Angel Di Maria"
+   },
+   {
+    "x": "Lionel Messi"
+   },
+   {
+    "x": "Julian Alvarez"
+   },
+   {
+    "x": "Lautaro Martinez"
+   },
+   {
+    "x": "Joel Ferreira"
+   },
+   {
+    "x": "Giovani Lo Celso"
+   },
+   {
+    "x": "Nicolas Dominguez"
+   },
+   {
+    "x": "Thiago Almada"
+   },
+   {
+    "x": "Papu Gomez"
+   },
+   {
+    "x": "Diego Schwartzman"
+   },
+   {
+    "x": "Emiliano Buendia"
+   }
+  ],
+  "calls": 1,
+  "seconds": 3.5
+ },
+ "generated_after": {
+  "query": "SELECT ?x WHERE { GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>) }",
+  "rows": [
+   {
+    "x": "Emiliano Martinez"
+   },
+   {
+    "x": "Gonzalo Montiel"
+   },
+   {
+    "x": "Nicolas Otamendi"
+   },
+   {
+    "x": "Nicolas Tagliafico"
+   },
+   {
+    "x": "Marcos Acuna"
+   },
+   {
+    "x": "Renzo Saravia"
+   },
+   {
+    "x": "German Pezzella"
+   },
+   {
+    "x": "Nicolas Gonzalez"
+   },
+   {
+    "x": "Guido Rodriguez"
+   },
+   {
+    "x": "Exequiel Palacios"
+   },
+   {
+    "x": "Rodrigo De Paul"
+   },
+   {
+    "x": "Alexis Mac Allister"
+   },
+   {
+    "x": "Angel Di Maria"
+   },
+   {
+    "x": "Lionel Messi"
+   },
+   {
+    "x": "Julian Alvarez"
+   },
+   {
+    "x": "Lautaro Martinez"
+   },
+   {
+    "x": "Joel Ferreira"
+   },
+   {
+    "x": "Giovani Lo Celso"
+   },
+   {
+    "x": "Nicolas Dominguez"
+   },
+   {
+    "x": "Thiago Almada"
+   },
+   {
+    "x": "Papu Gomez"
+   },
+   {
+    "x": "Diego Schwartzman"
+   },
+   {
+    "x": "Emiliano Buendia"
+   }
+  ],
+  "calls": 1,
+  "seconds": 0.0
+ },
+ "model": "mistralai/Mistral-7B-Instruct-v0.3"
+}

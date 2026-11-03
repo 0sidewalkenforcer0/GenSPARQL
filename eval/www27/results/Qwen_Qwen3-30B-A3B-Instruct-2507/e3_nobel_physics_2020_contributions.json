@@ -1,0 +1,86 @@
+{
+ "query": "SELECT ?name ?c WHERE { ?a ex:field wd:Q38104 ; ex:winningYear ?y ; ex:winner ?l . ?l rdfs:label ?name . FILTER(xsd:integer(STR(?y)) >= 2020) GENOP(\"For which contribution did {?name} receive the Nobel Prize in Physics? Answer with one short phrase.\", (?c), <model>) }",
+ "rows": [
+  {
+   "name": "John Hopfield",
+   "c": "Neural networks"
+  },
+  {
+   "name": "Pierre Agostini",
+   "c": "Attosecond physics"
+  },
+  {
+   "name": "Giorgio Parisi",
+   "c": "Disorder and fluctuations in physical systems"
+  },
+  {
+   "name": "Anton Zeilinger",
+   "c": "Quantum entanglement experiments"
+  },
+  {
+   "name": "John Clauser",
+   "c": "Violation of Bell's inequalities"
+  },
+  {
+   "name": "John M. Martinis",
+   "c": "Development of superconducting qubits for quantum computing"
+  },
+  {
+   "name": "Michel Devoret",
+   "c": "Quantum measurement and quantum computing"
+  },
+  {
+   "name": "John Clarke",
+   "c": "Discovery of the cosmic microwave background radiation"
+  },
+  {
+   "name": "Alain Aspect",
+   "c": "Experimental verification of quantum entanglement"
+  },
+  {
+   "name": "Andrea M. Ghez",
+   "c": "Discovery of a supermassive compact object at the center of our galaxy"
+  },
+  {
+   "name": "Reinhard Genzel",
+   "c": "Observations of the supermassive black hole at the center of our galaxy"
+  },
+  {
+   "name": "Ferenc Krausz",
+   "c": "Attosecond physics"
+  },
+  {
+   "name": "Syukuro Manabe",
+   "c": "Climate modeling"
+  },
+  {
+   "name": "Geoffrey Hinton",
+   "c": "Artificial Neural Networks"
+  },
+  {
+   "name": "Roger Penrose",
+   "c": "Penrose-Hawking singularity theorems"
+  },
+  {
+   "name": "Anne L'Huillier",
+   "c": "Attosecond physics"
+  },
+  {
+   "name": "Klaus Hasselmann",
+   "c": "Climate modeling and attribution of climate change"
+  }
+ ],
+ "calls": 17,
+ "seconds": 1.8,
+ "solutions_without_restriction": {
+  "query": "SELECT (COUNT(*) AS ?n) WHERE { ?a ex:field wd:Q38104 ; ex:winningYear ?y ; ex:winner ?l . ?l rdfs:label ?name . }",
+  "rows": [
+   {
+    "n": "230"
+   }
+  ],
+  "calls": 0,
+  "seconds": 0.0
+ },
+ "model": "Qwen/Qwen3-30B-A3B-Instruct-2507"
+}

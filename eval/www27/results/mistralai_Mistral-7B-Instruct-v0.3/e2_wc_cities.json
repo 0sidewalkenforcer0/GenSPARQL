@@ -1,0 +1,511 @@
+{
+ "prompt": "List the host cities of the 2026 FIFA World Cup.",
+ "pattern": "?x a ex:City .",
+ "runs": [
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:City . GENOP(\"List the host cities of the 2026 FIFA World Cup.\", (?x), <model>, 0.5) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q830669"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q23556"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1489"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q159260"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q147402"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.5
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:City . GENOP(\"List the host cities of the 2026 FIFA World Cup.\", (?x), <model>, 0.6) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q830669"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q23556"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1489"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q159260"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q147402"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.6
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:City . GENOP(\"List the host cities of the 2026 FIFA World Cup.\", (?x), <model>, 0.7) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q830669"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q23556"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1489"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q159260"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q147402"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.7
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:City . GENOP(\"List the host cities of the 2026 FIFA World Cup.\", (?x), <model>, 0.8) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q830669"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q23556"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1489"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q159260"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q147402"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.8
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:City . GENOP(\"List the host cities of the 2026 FIFA World Cup.\", (?x), <model>, 0.85) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q830669"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q23556"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1489"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q159260"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q147402"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.85
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:City . GENOP(\"List the host cities of the 2026 FIFA World Cup.\", (?x), <model>, 0.9) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q830669"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q23556"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1489"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q159260"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q147402"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.9
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:City . GENOP(\"List the host cities of the 2026 FIFA World Cup.\", (?x), <model>, 1.0) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q830669"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q23556"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1489"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q159260"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q147402"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 1.0
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:City . GENOP(\"List the host cities of the 2026 FIFA World Cup.\", (?x), <model>, 0.5) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q830669"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q23556"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q16555"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1489"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q621549"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q24639"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q17943"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q721455"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q5083"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q746830"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q159260"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q41819"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1345"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q147402"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q938835"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q172"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.1,
+   "similarity": "embedding",
+   "theta": 0.5
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:City . GENOP(\"List the host cities of the 2026 FIFA World Cup.\", (?x), <model>, 0.6) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q830669"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q23556"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q16555"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1489"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q621549"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q24639"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q17943"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q721455"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q5083"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q746830"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q159260"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q41819"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1345"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q147402"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q938835"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q172"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.1,
+   "similarity": "embedding",
+   "theta": 0.6
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:City . GENOP(\"List the host cities of the 2026 FIFA World Cup.\", (?x), <model>, 0.7) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q830669"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q23556"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q16555"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1489"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q621549"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q24639"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q17943"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q721455"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q5083"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q159260"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q41819"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1345"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q147402"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q172"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.7
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:City . GENOP(\"List the host cities of the 2026 FIFA World Cup.\", (?x), <model>, 0.8) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q830669"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q23556"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1489"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q24639"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q5083"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q159260"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q41819"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q147402"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q172"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.8
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:City . GENOP(\"List the host cities of the 2026 FIFA World Cup.\", (?x), <model>, 0.85) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q830669"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q23556"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1489"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q159260"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q147402"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.85
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:City . GENOP(\"List the host cities of the 2026 FIFA World Cup.\", (?x), <model>, 0.9) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q830669"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q23556"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1489"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q159260"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q147402"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.9
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:City . GENOP(\"List the host cities of the 2026 FIFA World Cup.\", (?x), <model>, 1.0) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q830669"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q23556"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1489"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q159260"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q147402"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 1.0
+  }
+ ],
+ "llm_record": "e2_wc_cities.json",
+ "generated_before": {
+  "query": "SELECT ?x WHERE { GENOP(\"List the host cities of the 2026 FIFA World Cup.\", (?x), <model>) }",
+  "rows": [
+   {
+    "x": "Mexico City"
+   },
+   {
+    "x": "Guadalajara"
+   },
+   {
+    "x": "Monterrey"
+   },
+   {
+    "x": "Los Angeles"
+   },
+   {
+    "x": "San Francisco"
+   },
+   {
+    "x": "Boston"
+   },
+   {
+    "x": "New York/New Jersey"
+   },
+   {
+    "x": "Atlanta"
+   }
+  ],
+  "calls": 1,
+  "seconds": 0.5
+ },
+ "generated_after": {
+  "query": "SELECT ?x WHERE { GENOP(\"List the host cities of the 2026 FIFA World Cup.\", (?x), <model>) }",
+  "rows": [
+   {
+    "x": "Mexico City"
+   },
+   {
+    "x": "Guadalajara"
+   },
+   {
+    "x": "Monterrey"
+   },
+   {
+    "x": "Los Angeles"
+   },
+   {
+    "x": "San Francisco"
+   },
+   {
+    "x": "Boston"
+   },
+   {
+    "x": "New York/New Jersey"
+   },
+   {
+    "x": "Atlanta"
+   }
+  ],
+  "calls": 1,
+  "seconds": 0.0
+ },
+ "model": "mistralai/Mistral-7B-Instruct-v0.3"
+}

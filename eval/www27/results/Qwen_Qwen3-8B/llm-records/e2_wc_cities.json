@@ -1,0 +1,35 @@
+{
+  "openai:Qwen/Qwen3-8B:5eab7a64031daa92caa0f9505f98ee92b828306d57de13625d8695d7ae2e5fd1:0.00:1000:x" : {
+    "rawText" : "[\"Milan\", \"Rome\", \"Naples\", \"Turin\", \"Bologna\", \"Genoa\", \"Verona\", \"Palermo\", \"Catania\", \"Cagliari\", \"Genoa\", \"Bari\", \"Salerno\", \"Palermo\", \"Catania\", \"Cagliari\"]",
+    "bindings" : [ {
+      "x" : "Milan"
+    }, {
+      "x" : "Rome"
+    }, {
+      "x" : "Naples"
+    }, {
+      "x" : "Turin"
+    }, {
+      "x" : "Bologna"
+    }, {
+      "x" : "Genoa"
+    }, {
+      "x" : "Verona"
+    }, {
+      "x" : "Palermo"
+    }, {
+      "x" : "Catania"
+    }, {
+      "x" : "Cagliari"
+    }, {
+      "x" : "Bari"
+    }, {
+      "x" : "Salerno"
+    } ],
+    "success" : true,
+    "errorMessage" : null,
+    "model" : "Qwen/Qwen3-8B",
+    "promptTokens" : 101,
+    "completionTokens" : 68
+  }
+}

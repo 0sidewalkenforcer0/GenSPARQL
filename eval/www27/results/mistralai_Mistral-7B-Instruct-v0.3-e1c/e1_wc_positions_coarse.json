@@ -1,0 +1,5280 @@
+{
+ "query": "SELECT ?p ?v WHERE { ?p a ex:Athlete ; rdfs:label ?name . GENOP(\"Which position does the footballer {?name} primarily play: goalkeeper, defender, midfielder or forward? If you do not know this player, answer Unknown.\", (?v), <model>) }",
+ "rows": [
+  {
+   "p": "http://www.wikidata.org/entity/Q59914031",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q124397380",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q26838705",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q126284601",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18608497",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q98594864",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q3855340",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q130210573",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q48877857",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q2876432",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q65950201",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q63384759",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18044401",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q50105161",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q66370589",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q66370589",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q66370589",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16234825",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q60842106",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q3876530",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q15627817",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q119079226",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q24007335",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28967995",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19969384",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18551518",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28736721",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18719485",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q111604014",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q117289166",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q17501875",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q85767808",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q7159779",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q100271491",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q104530871",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q95223261",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q60736591",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20027858",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q113704154",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19882816",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q84462730",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q64147458",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q109968695",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q31981",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q33129609",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q3431767",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q122152591",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q30346214",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q58323172",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q142794",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q112112992",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28531111",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q98887333",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q5026758",
+   "v": "goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q73400656",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28717698",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q66801705",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q66801705",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q55813157",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q520721",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q117289729",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q55955918",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q2359678",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q53394040",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q1354960",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q108000394",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q215522",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q98100512",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q26385193",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q2025900",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q29427316",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q13634114",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q26251815",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q113952820",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q17151209",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q97608024",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q318069",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q36696865",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19266811",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q2843080",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q39230",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q46699047",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21913126",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107130635",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107130635",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q15956282",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q49166190",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16145667",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q524730",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q105846503",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q17429290",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q116605365",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q98816361",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q124382289",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20645743",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28065104",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q36184031",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q61721648",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q117035133",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q62597239",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q96182876",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q105082472",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q72091732",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q117280421",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q124302622",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q114713518",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107446975",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q113393306",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q969014",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q74548",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q45935395",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q17612806",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q114703020",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20963029",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q615",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q101095985",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q136375048",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q56868118",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q114841915",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q6794678",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21004804",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21004804",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21004804",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q99670930",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q60842122",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q111336539",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107542811",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20038711",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q85928265",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q22127681",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q61460651",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q108858343",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q64433070",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q118645253",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q62617279",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19882804",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q26255087",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q80314837",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q135616172",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16902219",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q137441719",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q55363875",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q136466749",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q17074511",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q26266244",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q1957458",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q177331",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q551192",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q116223348",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q99617367",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q51213832",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q23772014",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q133505943",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q111479885",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q56222105",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q23887828",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q22278509",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21484126",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q50505969",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q13578003",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18207229",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q58339004",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q22082590",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19903718",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q56512017",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q29318963",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q46709013",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q106061470",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q3812986",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28101965",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q7500146",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q47582288",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q98262284",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q121946144",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q6391158",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q4702779",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q65680079",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q123436577",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q313316",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q126373302",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q61100362",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q117842510",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q50073536",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27921765",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q130337999",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q72697581",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q131822292",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20723878",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q50820392",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q127914",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q58011140",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q30007142",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q105704210",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q86312",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q89047062",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q65718498",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q134932034",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107985032",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q117239349",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19610875",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21621180",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18921648",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28973866",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16648816",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27306208",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q117790110",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q76591341",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q64009768",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q124247293",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20090660",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27995699",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q117322318",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28059260",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q116146104",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q116146104",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q116146104",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q23703372",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q918049",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q102257634",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20737387",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q129088593",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q119413564",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q64224437",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q24663885",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107746612",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q55138415",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q118118504",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q8338725",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q35066458",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q111280241",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q23559699",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q133903",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q109594121",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19280531",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q2036160",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16499882",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q3571952",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q30080273",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q108543955",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20740578",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q62006510",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q108187024",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q124283356",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q124283356",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q124283356",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q105939150",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q64364375",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q133464757",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q22340706",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q121829403",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q7781199",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q44737396",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q129652337",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19274473",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18225149",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q139815346",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q120753803",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q134699960",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q51670751",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27990922",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q110616805",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q57456997",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q26924482",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q63344470",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q80809664",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q80809664",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q80809664",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q80809664",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q80809664",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q54861644",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q90307470",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18705783",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q86301356",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27671280",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q111805882",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16911979",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q99955331",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q102426988",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q51159914",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q666506",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q60677561",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q781683",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q59306433",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q502898",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q32666318",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q59209505",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q83795769",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q69696842",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q110111698",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q121907216",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28800473",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q616664",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q273715",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q47074246",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q29158696",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q98593672",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q47170176",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q22951255",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q124051749",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q53996595",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q106907687",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21195147",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q30118244",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q24073962",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q3196721",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q17708749",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q30301454",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q278239",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q123571870",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27037962",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19319791",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q105426667",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q104903216",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q50829202",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q4665805",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q24256738",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21573188",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q111672750",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q122971833",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q7403894",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q60048828",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28971436",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q41023561",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21000530",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q116235098",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q118978780",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q116447721",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18924954",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q17070837",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q98536293",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16236380",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q96070453",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q4830013",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q4830013",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q42319683",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q129116",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q58796031",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q30045780",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q56227031",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q113628776",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q99096411",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q3945419",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q64031850",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18066870",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q45108287",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q45108287",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q45108287",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q85884126",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21621771",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q22096162",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q4979316",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107357509",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q113510254",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q4125587",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q110739094",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q5938042",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27920148",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q98092491",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27468610",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18705249",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27514541",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q62594816",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q14948183",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q96396963",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q108910786",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q47467341",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q96072055",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q106915801",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18157457",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q26255578",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16632974",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21621168",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q97404267",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q124745247",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q24007299",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18128872",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q24052364",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q110184199",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q60407856",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q64010525",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q51756997",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q51756997",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q51756997",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q51756997",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q51756997",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q47499719",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q60664537",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q22082627",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q123139564",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q17494543",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q641425",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q2465298",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q60828724",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q3943100",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21916759",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q116054089",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q114355328",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q106173174",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q96613620",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q2342765",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28692516",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q69523791",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q127271091",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q17386078",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q105956269",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q82251502",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107334828",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q17523896",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q124392516",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q41187975",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q4621784",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28933132",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21621995",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q122207713",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q10554558",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20994118",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q209942",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q437329",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107985608",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q104780374",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q112654639",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q68168547",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q6160707",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16235823",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q97580948",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16174734",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q23540953",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q81659662",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q105812639",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q22812486",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q65964628",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q58810793",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q357984",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q38693097",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q85797565",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q65378670",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q14625183",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18046760",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20675980",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27106995",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107882685",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q105520386",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q69512938",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19560313",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q24068400",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q85872272",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q131470768",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q58790870",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16555086",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q98561102",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q81878309",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q63700064",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q1755683",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q104762954",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q105896342",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q104604531",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21621941",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q17486599",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q106804819",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q29998966",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q113390994",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q2070073",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q96755",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q30160479",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q12597820",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q110463620",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q57017726",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q38764408",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q122160785",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q23007684",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q98937753",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q109906009",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q109906009",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q109906009",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q109906009",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q109906009",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19612578",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q123174990",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q124101458",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q56703599",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q98781677",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q106030853",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q130741313",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q30925365",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q15622446",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q43303848",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q3275904",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q30916190",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q22812479",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20994068",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q117835987",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q98784065",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q84601192",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q113564288",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q111584129",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q602311",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q78255759",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q114386",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q130508829",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q13784739",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q48839143",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q114736627",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q108156269",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q22965497",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q26405109",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28868192",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q24007315",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q106805131",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q3939881",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21286402",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q969725",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q83264648",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q317389",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q50623645",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q131863254",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q131863254",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18962",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q29109911",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q60298555",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q59938996",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q109986890",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q123281002",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q65131685",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q29441778",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q109587383",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q130495887",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q130495887",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q130495887",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q2502118",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q26251605",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q66528692",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q117818408",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q203749",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19938984",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q699094",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16234741",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q6298063",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q44297797",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q44297797",
+   "v": "Winger"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q7289588",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q43374160",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q43374160",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q43374160",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q78752401",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q69696822",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27914817",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q84158344",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q127324870",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q1587689",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16297591",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q30055335",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q64211871",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q96337717",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q140008336",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q50825738",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27909473",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q17612631",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18753041",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q1362064",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q17350507",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28801927",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q103979811",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21072120",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q75019636",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q2749342",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q436987",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q26719541",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q2947963",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q105920173",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q4724643",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q108159340",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q113515002",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q17496350",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q153786",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20641500",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q716113",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q133698867",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q124045019",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18020415",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q98592909",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q121353909",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q97356007",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28058687",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q74178822",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q96391665",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q921324",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q64681287",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16910257",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q45179405",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q281734",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q56085180",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21066260",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q61439485",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q4406552",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q108698128",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q133105064",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q100144350",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q66241169",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q66606355",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q105127935",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q23679804",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27990906",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q14327453",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20190657",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q50137347",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q139813358",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q100271502",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19519224",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q33131174",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q125735784",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107745867",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q101791178",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q509489",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16979997",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q115059438",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q97205258",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q124173111",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q108924143",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q135287344",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q116215237",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q55820193",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q55820193",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q55820193",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q55820193",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q106779330",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q62085431",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q17505049",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27049064",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27049064",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q85291597",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q126436400",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q126436400",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q119432409",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q59381180",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q501274",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q136462891",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q10556049",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18637312",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27469951",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q121068701",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q100565190",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q10547335",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q33296979",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28445512",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q17037384",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28801770",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q60621615",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q64740426",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q64167435",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q56332606",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q52771823",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q58484930",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28663925",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q112623666",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q68607008",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q78459310",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q13422031",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19345715",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18062338",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q1033783",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20630956",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18637804",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q5932872",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q5932872",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q5932872",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q60047739",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q13360752",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q56599873",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q120907522",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q59150057",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20888302",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q43381082",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q26973015",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q139986016",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q72603655",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27960175",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q15113326",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q869214",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q121422889",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q26934107",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q62016194",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q25175970",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q6409355",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q67999144",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q106372614",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28811942",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q161054",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18331623",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q64009388",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21523253",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q25367692",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q127514195",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16235461",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q101053044",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q368441",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q87715532",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q111741178",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q111741178",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q15915040",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q126365092",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q10549264",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q10544594",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q58767078",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q136399691",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q14371131",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27805413",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q65195011",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q17686992",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27736107",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q61911369",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q116466426",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q109924046",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q65515898",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16300824",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q97724521",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q41800131",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q64010197",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q110531201",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q61598452",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q56641379",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q118473161",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q26707107",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q125166783",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q110813058",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28529932",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q100792937",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q313575",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q96678415",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q35009041",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28098786",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q124242129",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q101033685",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q6110670",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q55760452",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20745286",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27914873",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16528455",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q116896436",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q17086753",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27585643",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q47501392",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q117848823",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q17484446",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q87268125",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q122055800",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q137779066",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q50628268",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16239819",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q176304",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q83639138",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107284545",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q35778151",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q85040729",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q121537482",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q65948837",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q124420330",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q23915221",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q117304605",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27067753",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107370468",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q23772079",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q29901014",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q29113776",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q106686485",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q100984327",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107352615",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q41447930",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20860081",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20807705",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q22082505",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q60842077",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27832634",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q15963873",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q131432595",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q65030956",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q65030956",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q65030956",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q97577478",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19898898",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q105658245",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16595441",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q124151324",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q15521306",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q24961840",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q100735281",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q108653548",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q126258395",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q5742434",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q108111889",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q125376751",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q1894",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q26405966",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q110244202",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18224489",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q122789696",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q137733792",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q13444905",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q121028932",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q60842159",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q117830854",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q108518721",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q58215731",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16916422",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q30082508",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19866530",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q59268317",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19362872",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q98829565",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19972593",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q62714742",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q115162374",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q5865783",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27957334",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q95618487",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q45936149",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q118593930",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q182063",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q23541080",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27064119",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q110644260",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20851003",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q630170",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q10526042",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19952334",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q7366080",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q117287348",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q90916422",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q100273072",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q47105682",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27919903",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107365",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q39082970",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q139770039",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20743436",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q64853255",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q83787036",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q64029237",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q96105248",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q56011432",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q29047921",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q113551733",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q69812902",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q11091593",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q66828825",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q116151074",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28716544",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q123469788",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107641804",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q116215934",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q111009946",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27310755",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q105834415",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q60842110",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20972384",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16298600",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q64031855",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q114713721",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q30308980",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q139815184",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q37453754",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q763465",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q64736321",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q98191389",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q8040741",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q57415806",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q60839691",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q95680243",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q117000107",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q12312192",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q113127167",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q113127167",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q113127167",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q22279773",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q29624459",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q2759958",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q115978703",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q138757935",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q55934972",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q110943455",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18246217",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q99617294",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q104531012",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20039495",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18817134",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16665941",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q62050484",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q100711783",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q110258306",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q5213217",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q108990482",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q2092409",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16236181",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q56253139",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q3191617",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q53280628",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q62445814",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q84593316",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28861547",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28861547",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q96211488",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q45819496",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q3192187",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q151838",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q15983763",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q11571",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q45935415",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q45935415",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q26964668",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q26704562",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q68676722",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q766988",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q23712679",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q117041294",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q42926090",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q22833412",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21622757",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q64520753",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q26405549",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q101247266",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q60286976",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q22677970",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q112654481",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q59782306",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18237361",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q62036070",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q110964329",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q46951844",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q14592575",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q114355105",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q106212969",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q462503",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18199184",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q109548002",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q65948595",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q249344",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q118287620",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q97698786",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q97698786",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q97698786",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18637930",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q24084667",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q55286732",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q55286732",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q117789805",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q49562244",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107285723",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107285723",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107285723",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q94699949",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q133794425",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q122351097",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q13546781",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q110160871",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q15410320",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q101764291",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q112813857",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q4695740",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q114216100",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q24034870",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q22092356",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q299703",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q56247602",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q10856523",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q62364798",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q62364798",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q62364798",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q701297",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16633144",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q118799181",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q86041826",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18683792",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q2642525",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q105955374",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q67498669",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q106778770",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q73360",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q66363768",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q140007173",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q101035007",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q7151477",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q64748312",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21130285",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27859514",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q47499724",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q17274709",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q862963",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q56788302",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q14309492",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18145133",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18145133",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q29168109",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21066439",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21281344",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q14640027",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q114825245",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28540571",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q62015814",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q116700351",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q35831063",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q62006806",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q55433904",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q138863253",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16729477",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q115371638",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28699707",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q23759917",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107647351",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q932982",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q106916460",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q60791524",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q26965570",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q24084301",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q110466658",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18428483",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q17160970",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q110486192",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q110486192",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q110486192",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q54862548",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q136038808",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q1885",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q23712857",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q87767569",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q14517123",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q5951550",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q125805788",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q110263543",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q46372260",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q15257381",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27654739",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q115803591",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q108109586",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q60889488",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20090180",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q39498277",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q104488728",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q3731469",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q42725482",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q115194574",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18041089",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20752635",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q6509762",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q58011167",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18635274",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q35841433",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q13865408",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q113510252",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20078774",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q108200391",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q59306386",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q39161128",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q111345092",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q22092264",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q6734350",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q117309867",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20816441",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q3238952",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q70251271",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q110220404",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20676495",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q23908113",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q113474248",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q109768459",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q7398276",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q99328435",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27063854",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q4726869",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107558242",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q5879014",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q33297140",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20641191",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q135971385",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q45045358",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q101067809",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q87400019",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q113184832",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q771396",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q137299823",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107094087",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107094087",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107094087",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q3018091",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q108606228",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107426681",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q101064617",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q106967174",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q472300",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q514427",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q52990659",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q105161343",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q139816192",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q209847",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q58580967",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q63968167",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q79904514",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q10544852",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16236700",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q47126518",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19871581",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q30122953",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q121410218",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q66818509",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q136092007",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q136092007",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q136092007",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q120389429",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q65029955",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27995843",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q2762113",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q26255506",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q109282705",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q124350127",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16239766",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q126369438",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q51331558",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q26209536",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19787021",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20641306",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q123335801",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28056787",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q47075606",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q39500352",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q30330390",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19603924",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q61990402",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q58796434",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q24084271",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q34360045",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18637339",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19158746",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19665907",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q56433831",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q59268631",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q109301509",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16236537",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16633442",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21005754",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107739233",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q101249011",
+   "v": "goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q23007824",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q62006245",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18670270",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q137392794",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q130244944",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q118935199",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q104745615",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q67905022",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q106173160",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21011188",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27448075",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q97312966",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q59193510",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20994037",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q112988067",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q49167084",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q33124960",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q100774865",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q66735853",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q26485052",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q47067481",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q21590318",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q30881092",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19509544",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q1925465",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q115132592",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107742783",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q56043430",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q108395046",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q6171506",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q65948590",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q6294052",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q57456989",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q483837",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q28801942",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q113013535",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q56257870",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q30089624",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18210581",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27927442",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q31871265",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q104414736",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q24084205",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q105946025",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q62961021",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q44821118",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q120509822",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q124273321",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q106882153",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q97441426",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q44080929",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q106099213",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q137394484",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q48525779",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q23799433",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q5811691",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q115937989",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q57293140",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q38053896",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16852194",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q3643114",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q41791648",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q77243490",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q106372516",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20641483",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q111536418",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q58303188",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q98682558",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q128133456",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q64010489",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q1392925",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q24005986",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q127179158",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q134513932",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q130261099",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q26932598",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q112170256",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q112079646",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q84312754",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q128210274",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q25939340",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q15981797",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q134657698",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q60841788",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q60841788",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q60841788",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q60841788",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q60841788",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q106620882",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q439722",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18011169",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q18011169",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q1401328",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q34058084",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q5679556",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q60842120",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q26251607",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16935084",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q116753805",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q102399064",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q104215027",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q42328360",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q10268484",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q33541239",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q97725322",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q30933054",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19888012",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q104877690",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q56222532",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q13014035",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q73149048",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q85410990",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q56223703",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q97320541",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q30036972",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q11634138",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q30050934",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q86269576",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q58815643",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q285684",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q137705019",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q80661874",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q117408985",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q116908746",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q127388493",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q54512527",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q79880395",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q134711363",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q22162731",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q56164119",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q116621640",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q123479947",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q99557093",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107316383",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q96755704",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q102330606",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q2210473",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q56787768",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q67089591",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q99777968",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q99777968",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q99777968",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q46679",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q105754161",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q61983513",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q104784108",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q1398221",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q123995807",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q60583915",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q19662444",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q137384640",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q98593181",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q62629839",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q16010783",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q42948040",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q47544166",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q23413053",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q84810924",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q39076401",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q367861",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q72648",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q24688826",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q70226579",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q108800542",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q96654340",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q96654340",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q96654340",
+   "v": "Forward"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q96654340",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q96654340",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q107806484",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q106939313",
+   "v": "Unknown"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q87119732",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q111020508",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20435178",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q27019988",
+   "v": "Defender"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q45288740",
+   "v": "Midfielder"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q20306806",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q31146726",
+   "v": "Goalkeeper"
+  },
+  {
+   "p": "http://www.wikidata.org/entity/Q130465245",
+   "v": "Defender"
+  }
+ ],
+ "calls": 1248,
+ "seconds": 102.6,
+ "model": "mistralai/Mistral-7B-Instruct-v0.3"
+}

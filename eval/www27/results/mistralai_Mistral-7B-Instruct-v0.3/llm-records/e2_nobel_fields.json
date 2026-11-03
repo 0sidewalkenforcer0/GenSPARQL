@@ -1,0 +1,23 @@
+{
+  "openai:mistralai/Mistral-7B-Instruct-v0.3:06751e88bf0b9d30d402e848a316f49e7c0b2bc4803040a7fe17bd03e21ddf4b:0.00:1000:x" : {
+    "rawText" : " [\"Physics\", \"Chemistry\", \"Medicine or Physiology\", \"Literature\", \"Peace\", \"Economic Sciences\"]",
+    "bindings" : [ {
+      "x" : "Physics"
+    }, {
+      "x" : "Chemistry"
+    }, {
+      "x" : "Medicine or Physiology"
+    }, {
+      "x" : "Literature"
+    }, {
+      "x" : "Peace"
+    }, {
+      "x" : "Economic Sciences"
+    } ],
+    "success" : true,
+    "errorMessage" : null,
+    "model" : "mistralai/Mistral-7B-Instruct-v0.3",
+    "promptTokens" : 102,
+    "completionTokens" : 34
+  }
+}
