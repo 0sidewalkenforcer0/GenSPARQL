@@ -54,12 +54,7 @@ public class JsonResponseParser implements ResponseParser {
             // row containing the literal text "[]".
             if (json.isArray()) {
                 LOG.debug("Parsing JSON array with {} elements", json.size());
-                for (JsonNode item : json) {
-                    Map<String, String> binding = parseJsonObject(item, outputVars);
-                    if (!binding.isEmpty()) {
-                        bindings.add(binding);
-                    }
-                }
+                bindings = arrayBindings(json, outputVars);
                 LOG.info("Parsed {} bindings from JSON array ({} elements)", bindings.size(), json.size());
                 return bindings;
             } else if (json.isObject()) {
@@ -78,11 +73,93 @@ public class JsonResponseParser implements ResponseParser {
             LOG.warn("Failed to parse JSON: {}", e.getMessage());
         }
 
+        // A model that repeats itself until the token limit leaves an array without its
+        // closing bracket. Its complete elements are still answers.
+        String closed = closeTruncatedArray(content);
+        if (closed != null) {
+            try {
+                JsonNode json = objectMapper.readTree(closed);
+                if (json.isArray()) {
+                    bindings = arrayBindings(json, outputVars);
+                    LOG.warn("Recovered {} bindings from a JSON array cut off after {} elements",
+                            bindings.size(), json.size());
+                    return bindings;
+                }
+            } catch (Exception e) {
+                LOG.debug("Could not parse the closed array: {}", e.getMessage());
+            }
+        }
+
         // Fallback: use raw text for first variable (only reached when the content was
         // not a valid JSON array/object).
         LOG.debug("Falling back to raw text for first variable");
         bindings.add(Map.of(outputVars.get(0), content.trim()));
         return bindings;
+    }
+
+    /**
+     * The bindings of a JSON array, each distinct binding once: the answer of GENOP is a set
+     * of tuples, so a value that the model repeats yields one solution.
+     */
+    private List<Map<String, String>> arrayBindings(JsonNode json, List<String> outputVars) {
+        Set<Map<String, String>> distinct = new LinkedHashSet<>();
+        for (JsonNode item : json) {
+            Map<String, String> binding = parseJsonObject(item, outputVars);
+            if (!binding.isEmpty()) {
+                distinct.add(binding);
+            }
+        }
+        return new ArrayList<>(distinct);
+    }
+
+    /**
+     * The first JSON array of the text, closed after its last complete element, when the
+     * text ends before the array does; null when the text has no such array.
+     */
+    static String closeTruncatedArray(String text) {
+        if (text == null) {
+            return null;
+        }
+        int start = text.indexOf('[');
+        if (start < 0) {
+            return null;
+        }
+        int depth = 0;
+        int lastEnd = -1;
+        boolean inString = false;
+        boolean escaped = false;
+        for (int i = start; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if (inString) {
+                if (escaped) {
+                    escaped = false;
+                } else if (c == '\\') {
+                    escaped = true;
+                } else if (c == '"') {
+                    inString = false;
+                    if (depth == 1) {
+                        lastEnd = i + 1;
+                    }
+                }
+                continue;
+            }
+            if (c == '"') {
+                inString = true;
+            } else if (c == '[' || c == '{') {
+                depth++;
+            } else if (c == ']' || c == '}') {
+                depth--;
+                if (depth == 0) {
+                    return null;
+                }
+                if (depth == 1) {
+                    lastEnd = i + 1;
+                }
+            } else if (c == ',' && depth == 1) {
+                lastEnd = Math.max(lastEnd, i);
+            }
+        }
+        return lastEnd > start ? text.substring(start, lastEnd) + "]" : null;
     }
 
     @Override

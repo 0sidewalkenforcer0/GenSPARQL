@@ -220,6 +220,44 @@ class JsonResponseParserTest {
         assertEquals(content, bindings.get(0).get("var1"));
     }
 
+    @Test
+    void testParseTruncatedArray_KeepsTheCompleteElements() {
+        String content = "[\"Brazil\", \"Argentina\", \"France\", \"Bra";
+
+        List<Map<String, String>> bindings = parser.parse(content, List.of("team"));
+
+        assertEquals(List.of(Map.of("team", "Brazil"), Map.of("team", "Argentina"),
+                Map.of("team", "France")), bindings);
+    }
+
+    @Test
+    void testParseTruncatedArrayOfObjects_KeepsTheCompleteObjects() {
+        String content = "```json\n[{\"name\": \"Messi\", \"pos\": \"Forward\"}, "
+                + "{\"name\": \"Romero\", \"pos\": \"Def";
+
+        List<Map<String, String>> bindings = parser.parse(content, List.of("name", "pos"));
+
+        assertEquals(List.of(Map.of("name", "Messi", "pos", "Forward")), bindings);
+    }
+
+    @Test
+    void testParseArrayWithRepeatedValues_YieldsEachValueOnce() {
+        String content = "[\"Kenya\", \"Zambia\", \"Kenya\", \"Zambia\", \"Uganda\"]";
+
+        List<Map<String, String>> bindings = parser.parse(content, List.of("team"));
+
+        assertEquals(List.of(Map.of("team", "Kenya"), Map.of("team", "Zambia"),
+                Map.of("team", "Uganda")), bindings);
+    }
+
+    @Test
+    void testCloseTruncatedArray_LeavesCompleteArraysAlone() {
+        assertNull(JsonResponseParser.closeTruncatedArray("[\"a\", \"b\"]"));
+        assertNull(JsonResponseParser.closeTruncatedArray("no array here"));
+        assertEquals("[\"a\", \"b, c\"]",
+                JsonResponseParser.closeTruncatedArray("[\"a\", \"b, c\", \"d"));
+    }
+
     // ========== canParse Tests ==========
 
     @Test
