@@ -23,12 +23,21 @@
   "George Smoot": "Q179572",
   "John Mather": "Q104651",
   "M. Rees": null,
-  "J. G. Taylor": null
+  "J. G. Taylor": null,
+  "J. Fraser Stoddart": "Q376243",
+  "F. Duncan M. Haldane": "Q1002250",
+  "Barry Barish": "Q15900993",
+  "Kip Thorne": "Q323320",
+  "Jennifer Ruth Doudna": "Q56068"
  },
  "wc_venues": {
   "CenturyLink Field": "Q612736",
   "Estadio BBVA": "Q3058827",
-  "Estadio Jalisco": null
+  "Estadio Jalisco": null,
+  "Giants Stadium": null,
+  "Bankers Life Field": null,
+  "Dignity Health Stadium": null,
+  "Solider Field": null
  },
  "wc_cities": {
   "Los Angeles": null,

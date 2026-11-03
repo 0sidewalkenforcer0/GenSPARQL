@@ -117,8 +117,11 @@ def e2_names(name, e2gold):
 def score_e2(rec, name, e2gold, manual):
     names = e2_names(name, e2gold)
     checked = manual.get(name, {})
-    generated = [r.get("x", "") for r in rec["generated_before"].get("rows", [])]
-    after = [r.get("x", "") for r in rec["generated_after"].get("rows", [])]
+    # an empty value or "[]" is a declined answer (the parser drops it since e9314cb)
+    generated = [r.get("x", "") for r in rec["generated_before"].get("rows", [])
+                 if r.get("x", "").strip() not in ("", "[]")]
+    after = [r.get("x", "") for r in rec["generated_after"].get("rows", [])
+             if r.get("x", "").strip() not in ("", "[]")]
     denoted, unmatched = set(), []
     for g in dict.fromkeys(generated):
         hits = {q for q, ns in names.items() if norm(g) in ns}
