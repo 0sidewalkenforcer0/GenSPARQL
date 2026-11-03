@@ -105,11 +105,25 @@ public class JsonResponseParser implements ResponseParser {
         Set<Map<String, String>> distinct = new LinkedHashSet<>();
         for (JsonNode item : json) {
             Map<String, String> binding = parseJsonObject(item, outputVars);
-            if (!binding.isEmpty()) {
+            if (!binding.isEmpty() && !declines(binding)) {
                 distinct.add(binding);
             }
         }
         return new ArrayList<>(distinct);
+    }
+
+    /**
+     * A binding whose values are all empty or "[]" carries no answer: models asked to decline
+     * with an empty array often answer [""] or ["[]"] instead.
+     */
+    private static boolean declines(Map<String, String> binding) {
+        for (String value : binding.values()) {
+            String v = value == null ? "" : value.trim();
+            if (!v.isEmpty() && !v.equals("[]")) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

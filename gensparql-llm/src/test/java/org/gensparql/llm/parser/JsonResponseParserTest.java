@@ -251,6 +251,13 @@ class JsonResponseParserTest {
     }
 
     @Test
+    void testParseDeclineWrittenAsAValue_YieldsZeroBindings() {
+        assertTrue(parser.parse("[\"[]\"]", List.of("pos")).isEmpty());
+        assertTrue(parser.parse("[\"\"]", List.of("pos")).isEmpty());
+        assertEquals(List.of(Map.of("pos", "Defender")), parser.parse("[\"\", \"Defender\"]", List.of("pos")));
+    }
+
+    @Test
     void testCloseTruncatedArray_LeavesCompleteArraysAlone() {
         assertNull(JsonResponseParser.closeTruncatedArray("[\"a\", \"b\"]"));
         assertNull(JsonResponseParser.closeTruncatedArray("no array here"));
