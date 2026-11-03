@@ -34,6 +34,9 @@ export JAVA_HOME=$HOME/tools/jdk-21.0.8+9
 free_port() { "$PY" -c 'import socket; s = socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()'; }
 LLM_PORT=$(free_port); EMB_PORT=$(free_port); GS_PORT=$(free_port)
 mkdir -p "$OUT/logs"
+# A record that exists is loaded and replayed, so an E2 run starts from no records: answers
+# recorded by an earlier run would otherwise stand in for the LLM.
+case ",$ONLY," in *,e2,*) rm -rf "$OUT/llm-records";; esac
 echo "job $SLURM_JOB_ID on $(hostname): $MODEL, TP=$TP, GPUs ${CUDA_VISIBLE_DEVICES:-?}, commit $(git -C "$REPO" rev-parse --short HEAD)"
 
 pids=()

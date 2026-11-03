@@ -24,3 +24,5 @@ python3 eval/www27/score.py eval/www27/results/Qwen_* eval/www27/results/mistral
 ```
 
 All models run at temperature 0 (the default of GENOP). Qwen3-8B runs with thinking turned off.
+
+E2 records the first LLM answer of each list query in `results/<model>/llm-records/` and replays it for the threshold runs. `job.sbatch` deletes these records before an E2 run, because a record that exists is loaded and replayed.
