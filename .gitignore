@@ -43,3 +43,8 @@ gensparql-benchmark/GENSPARQL_Data/NELL995+H/
 # vLLM server logs from deploy/*.slurm
 vllm_llm_*.out
 vllm_emb_*.out
+
+# WWW'27 evaluation: generated classpath and the logs of the cluster jobs
+eval/www27/server.classpath
+eval/www27/results/*/logs/
+eval/www27/gs-*.out

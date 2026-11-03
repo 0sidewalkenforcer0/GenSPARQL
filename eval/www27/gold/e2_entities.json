@@ -1,0 +1,1478 @@
+{
+ "nobel_fields": {
+  "Q35637": {
+   "label": "Nobel Peace Prize",
+   "names": [
+    "Nobel Peace Prize",
+    "Nobel Prize for Peace",
+    "Nobel Prize in Peace",
+    "Noble Peace Prize"
+   ]
+  },
+  "Q37922": {
+   "label": "Nobel Prize in Literature",
+   "names": [
+    "Nobel Literature Prize",
+    "Nobel Prize in Literature"
+   ]
+  },
+  "Q38104": {
+   "label": "Nobel Prize in Physics",
+   "names": [
+    "Nobel Prize in Physics",
+    "Physics Nobel Prize"
+   ]
+  },
+  "Q44585": {
+   "label": "Nobel Prize in Chemistry",
+   "names": [
+    "Nobel Prize in Chemistry",
+    "Nobelpriset i kemi",
+    "chemistry Nobel Prizes"
+   ]
+  },
+  "Q47170": {
+   "label": "Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel",
+   "names": [
+    "Nobel Memorial Prize in Economic Sciences",
+    "Nobel Prize in Economics",
+    "Prize in Economic Sciences in Memory of Alfred Nobel",
+    "Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel"
+   ]
+  },
+  "Q80061": {
+   "label": "Nobel Prize in Physiology or Medicine",
+   "names": [
+    "Nobel Prize in Medicine",
+    "Nobel Prize in Physiology or Medicine"
+   ]
+  }
+ },
+ "nobel_physics_2020": {
+  "Q109370": {
+   "label": "Klaus Hasselmann",
+   "names": [
+    "Klaus Hasselmann"
+   ]
+  },
+  "Q1235614": {
+   "label": "Giorgio Parisi",
+   "names": [
+    "G Parisi",
+    "G. Parisi",
+    "Giorgio Parisi",
+    "Parisi",
+    "Parisi G",
+    "Parisi G."
+   ]
+  },
+  "Q1365270": {
+   "label": "John Clauser",
+   "names": [
+    "John Clauser",
+    "John F. Clauser",
+    "John Francis Clauser"
+   ]
+  },
+  "Q193803": {
+   "label": "Roger Penrose",
+   "names": [
+    "R. Penrose",
+    "Roger Penrose",
+    "Sir Roger Penrose"
+   ]
+  },
+  "Q26703310": {
+   "label": "Michel Devoret",
+   "names": [
+    "Michel Devoret"
+   ]
+  },
+  "Q28976188": {
+   "label": "John M. Martinis",
+   "names": [
+    "John M. Martinis"
+   ]
+  },
+  "Q364997": {
+   "label": "Alain Aspect",
+   "names": [
+    "Alain Aspect"
+   ]
+  },
+  "Q3675789": {
+   "label": "Syukuro Manabe",
+   "names": [
+    "Shukuro Manabe",
+    "Shukurō Manabe",
+    "Syukuro Manabe"
+   ]
+  },
+  "Q391237": {
+   "label": "John Hopfield",
+   "names": [
+    "Hopfield",
+    "John Hopfield",
+    "John J. Hopfield",
+    "John Joseph Hopfield"
+   ]
+  },
+  "Q493956": {
+   "label": "Andrea M. Ghez",
+   "names": [
+    "Andrea Ghez",
+    "Andrea M Ghez",
+    "Andrea M. Ghez"
+   ]
+  },
+  "Q555849": {
+   "label": "John Clarke",
+   "names": [
+    "John Clarke"
+   ]
+  },
+  "Q565544": {
+   "label": "Anne L'Huillier",
+   "names": [
+    "A L'Huillier",
+    "A. L'Huillier",
+    "Anne L'Huillier",
+    "Anne L’Huillier Wahlström",
+    "L'Huillier",
+    "L'Huillier A",
+    "L'Huillier A."
+   ]
+  },
+  "Q57020342": {
+   "label": "Pierre Agostini",
+   "names": [
+    "P. Agostini",
+    "Pierre A. Agostini",
+    "Pierre Agostini"
+   ]
+  },
+  "Q65807": {
+   "label": "Reinhard Genzel",
+   "names": [
+    "Genzel",
+    "Genzel R",
+    "Genzel R.",
+    "R Genzel",
+    "R. Genzel",
+    "Reinhard Genzel"
+   ]
+  },
+  "Q78610": {
+   "label": "Anton Zeilinger",
+   "names": [
+    "A Zeilinger",
+    "A. Zeilinger",
+    "Anton Zeilinger",
+    "Zeilinger",
+    "Zeilinger A",
+    "Zeilinger A."
+   ]
+  },
+  "Q86970": {
+   "label": "Ferenc Krausz",
+   "names": [
+    "Ferenc Krausz"
+   ]
+  },
+  "Q92894": {
+   "label": "Geoffrey Hinton",
+   "names": [
+    "G. E. Hinton",
+    "Geoff Hinton",
+    "Geoffrey Hinton"
+   ]
+  }
+ },
+ "wc_argentina": {
+  "Q104903216": {
+   "label": "José Manuel López",
+   "names": [
+    "Flaco",
+    "Flaco López",
+    "José Manuel Alberto López",
+    "José Manuel López"
+   ]
+  },
+  "Q107542811": {
+   "label": "Valentín Barco",
+   "names": [
+    "Colo Barco",
+    "Valentin Barco",
+    "Valentín Barco"
+   ]
+  },
+  "Q111336539": {
+   "label": "Nico Paz",
+   "names": [
+    "Nico Paz",
+    "Nicolás Paz Martínez"
+   ]
+  },
+  "Q111672750": {
+   "label": "Giuliano Simeone",
+   "names": [
+    "Giuliano Simeone"
+   ]
+  },
+  "Q182063": {
+   "label": "Nicolás Otamendi",
+   "names": [
+    "Nicolás Hernán Gonzalo Otamendi",
+    "Nicolás Otamendi"
+   ]
+  },
+  "Q19345715": {
+   "label": "Exequiel Palacios",
+   "names": [
+    "Exequiel Alejandro Palacios",
+    "Exequiel Palacios"
+   ]
+  },
+  "Q20743436": {
+   "label": "Giovani Lo Celso",
+   "names": [
+    "Giovani Lo Celso"
+   ]
+  },
+  "Q21484126": {
+   "label": "Lautaro Martínez",
+   "names": [
+    "Lautaro Javier Martinez",
+    "Lautaro Javier Martínez",
+    "Lautaro Martinez",
+    "Lautaro Martínez"
+   ]
+  },
+  "Q22082590": {
+   "label": "Nahuel Molina",
+   "names": [
+    "Nahuel Molina",
+    "Nahuel Molina Lucero"
+   ]
+  },
+  "Q23413053": {
+   "label": "Marcos Senesi",
+   "names": [
+    "Marcos Nicolas Senesi Baron",
+    "Marcos Senesi"
+   ]
+  },
+  "Q26255087": {
+   "label": "Gonzalo Montiel",
+   "names": [
+    "Gonzalo Ariel Montiel",
+    "Gonzalo Montiel"
+   ]
+  },
+  "Q28056787": {
+   "label": "Facundo Medina",
+   "names": [
+    "Facundo Axel Medina",
+    "Facundo Medina"
+   ]
+  },
+  "Q28058687": {
+   "label": "Cristian Romero",
+   "names": [
+    "Cristian Gabriel Romero",
+    "Cristian Romero",
+    "Cuti Romero"
+   ]
+  },
+  "Q30881092": {
+   "label": "Lisandro Martínez",
+   "names": [
+    "Lisandro Martínez"
+   ]
+  },
+  "Q3275904": {
+   "label": "Emiliano Martínez",
+   "names": [
+    "Damian Emiliano Martinez",
+    "Damián Emiliano Martínez",
+    "Dibu",
+    "Emi Martinez",
+    "Emi Martínez",
+    "Emiliano Martinez",
+    "Emiliano Martínez"
+   ]
+  },
+  "Q33297140": {
+   "label": "Alexis Mac Allister",
+   "names": [
+    "Alexis Mac Allister"
+   ]
+  },
+  "Q3876530": {
+   "label": "Nicolás Tagliafico",
+   "names": [
+    "Nicolás Tagliafico"
+   ]
+  },
+  "Q43381082": {
+   "label": "Nicolás González",
+   "names": [
+    "El Chori",
+    "Nico",
+    "Nico Gonzalez",
+    "Nico González",
+    "Nicolas Gozalez",
+    "Nicolas Ivan Gonzalez",
+    "Nicolás González",
+    "Nicolás Iván González"
+   ]
+  },
+  "Q57293140": {
+   "label": "Thiago Almada",
+   "names": [
+    "Thiago Almada",
+    "Thiago Ezequiel Almada"
+   ]
+  },
+  "Q5879014": {
+   "label": "Gerónimo Rulli",
+   "names": [
+    "Geronimo Rulli",
+    "Gerónimo Rulli"
+   ]
+  },
+  "Q59381180": {
+   "label": "Julián Alvarez",
+   "names": [
+    "Julian Alvarez",
+    "Julián Alvarez",
+    "Julián Álvarez"
+   ]
+  },
+  "Q5951550": {
+   "label": "Juan Musso",
+   "names": [
+    "Juan Agustin Musso",
+    "Juan Agustín Musso",
+    "Juan Musso"
+   ]
+  },
+  "Q6110670": {
+   "label": "Rodrigo De Paul",
+   "names": [
+    "Rodrigo De Paul",
+    "Rodrigo Javier De Paul"
+   ]
+  },
+  "Q615": {
+   "label": "Lionel Messi",
+   "names": [
+    "Lionel Messi"
+   ]
+  },
+  "Q630170": {
+   "label": "Leandro Paredes",
+   "names": [
+    "Leandro Paredes"
+   ]
+  },
+  "Q96105248": {
+   "label": "Enzo Fernández",
+   "names": [
+    "Enzo Fernandez",
+    "Enzo Fernández",
+    "Enzo Jeremias Fernandez",
+    "Enzo Jeremías Fernández"
+   ]
+  }
+ },
+ "wc_cities": {
+  "Q1345": {
+   "label": "Philadelphia",
+   "names": [
+    "City of Brotherly Love",
+    "City of Philadelphia",
+    "Cradle of Liberty",
+    "Philadelphia",
+    "Philadelphia, PA",
+    "Philadelphia, Pa"
+   ]
+  },
+  "Q147402": {
+   "label": "Guadalajara",
+   "names": [
+    "Guadalajara",
+    "Zapopan"
+   ]
+  },
+  "Q1489": {
+   "label": "Mexico City",
+   "names": [
+    "City of Mexico",
+    "Mexico",
+    "Mexico City",
+    "Mexico City, Mexico",
+    "Mexico D.F."
+   ]
+  },
+  "Q159260": {
+   "label": "San Francisco",
+   "names": [
+    "San Francisco",
+    "Santa Clara",
+    "Santa Clara, CA",
+    "Santa Clara, California"
+   ]
+  },
+  "Q16555": {
+   "label": "Houston",
+   "names": [
+    "City of Houston",
+    "H-Town",
+    "Houston",
+    "Houston TX",
+    "Houston, TX",
+    "Petro metro",
+    "Space City",
+    "USHOU"
+   ]
+  },
+  "Q172": {
+   "label": "Toronto",
+   "names": [
+    "City of Toronto",
+    "Hogtown",
+    "T-O",
+    "The 416",
+    "The Six",
+    "Toronto",
+    "Toronto, Canada",
+    "Toronto, ON",
+    "Toronto, Ontario"
+   ]
+  },
+  "Q17943": {
+   "label": "Arlington",
+   "names": [
+    "Arlington",
+    "Arlington, TX",
+    "Arlington, Texas"
+   ]
+  },
+  "Q23556": {
+   "label": "Atlanta",
+   "names": [
+    "Atlanta",
+    "Atlanta, GA",
+    "Hotlanta",
+    "Marthasville",
+    "Marthasville, Georgia",
+    "Terminus",
+    "The A",
+    "The ATL",
+    "The Big Peach"
+   ]
+  },
+  "Q24639": {
+   "label": "Vancouver",
+   "names": [
+    "City of Vancouver",
+    "Vancouver",
+    "Vancouver, BC",
+    "Vancouver, British Columbia"
+   ]
+  },
+  "Q41819": {
+   "label": "Kansas City",
+   "names": [
+    "K.C.",
+    "KC",
+    "KCMO",
+    "Kansas City",
+    "Kansas City, MO",
+    "Kansas City, Missouri"
+   ]
+  },
+  "Q5083": {
+   "label": "Seattle",
+   "names": [
+    "Duwamps",
+    "Emerald City",
+    "New York Alki",
+    "Seattle",
+    "Seattle, WA",
+    "Seattle, Washington"
+   ]
+  },
+  "Q621549": {
+   "label": "Inglewood",
+   "names": [
+    "Inglewood",
+    "Inglewood, CA",
+    "Inglewood, California"
+   ]
+  },
+  "Q721455": {
+   "label": "Miami",
+   "names": [
+    "Miami",
+    "Miami Gardens",
+    "Miami Gardens, FL",
+    "Miami Gardens, Florida",
+    "Miami Gardens, Miami-Dade County, Florida"
+   ]
+  },
+  "Q746830": {
+   "label": "East Rutherford",
+   "names": [
+    "Boiling Spring",
+    "Boiling Spring Township",
+    "Borough of East Rutherford",
+    "E. Rutherford",
+    "E. Rutherford, New Jersey",
+    "East Rutherford",
+    "East Rutherford, NJ",
+    "East Rutherford, New Jersey"
+   ]
+  },
+  "Q830669": {
+   "label": "Boston",
+   "names": [
+    "Boston",
+    "Foxboro",
+    "Foxboro, MA",
+    "Foxboro, Massachusetts",
+    "Foxborough",
+    "Foxborough, MA",
+    "Foxborough, Massachusetts"
+   ]
+  },
+  "Q938835": {
+   "label": "Guadalupe",
+   "names": [
+    "Guadalupe"
+   ]
+  }
+ },
+ "wc_teams": {
+  "Q134479": {
+   "label": "Croatia",
+   "names": [
+    "Blazers",
+    "CRO",
+    "Checkered Ones",
+    "Croatia",
+    "Croatia men's national association football team",
+    "Croatia men's national football team",
+    "Croatia national association football team",
+    "Croatia national football team",
+    "HR",
+    "HRV",
+    "RH",
+    "Republic of Croatia"
+   ]
+  },
+  "Q134916": {
+   "label": "Uruguay",
+   "names": [
+    "Eastern Republic of Uruguay",
+    "La Celeste",
+    "Oriental Republic of Uruguay",
+    "URU",
+    "Uruguay",
+    "Uruguay men's national football team",
+    "Uruguay national football team",
+    "uy"
+   ]
+  },
+  "Q160826": {
+   "label": "Sweden",
+   "names": [
+    "Kingdom of Sweden",
+    "Sweden",
+    "Sweden men's national association football team",
+    "Sweden men's national football team",
+    "Sweden national association football team",
+    "Sweden national football team",
+    "Swedish Kingdom",
+    "se"
+   ]
+  },
+  "Q163534": {
+   "label": "Austria",
+   "names": [
+    "Austria",
+    "Austria men's national football team",
+    "Austria national association football team",
+    "Austria national football team",
+    "Austria national soccer team",
+    "Austrian national football team",
+    "Austrian national soccer team",
+    "Republic of Austria"
+   ]
+  },
+  "Q164089": {
+   "label": "Mexico",
+   "names": [
+    "El Tri",
+    "MXN",
+    "Mexican Republic",
+    "Mexican United States",
+    "Mexico",
+    "Mexico men's national football team",
+    "Mexico national football team",
+    "US of M",
+    "United Mexican States",
+    "United States of Mexico",
+    "mx"
+   ]
+  },
+  "Q164134": {
+   "label": "USA",
+   "names": [
+    "'Murica",
+    "Merica",
+    "Murica",
+    "U. S.",
+    "U. S. A.",
+    "U.S. of America",
+    "US men's national soccer team",
+    "US national soccer team",
+    "US of A",
+    "US of America",
+    "USA",
+    "USA men's national soccer team",
+    "USA men's soccer team",
+    "USA national soccer team",
+    "USA national team",
+    "USMNT",
+    "United States",
+    "United States men's national association football team",
+    "United States men's national soccer team",
+    "United States national association football team",
+    "United States national football team",
+    "United States national soccer team",
+    "United States national team",
+    "United States of America",
+    "the States",
+    "the U.S.",
+    "the U.S. of A",
+    "the U.S. of America",
+    "the U.S.A.",
+    "the US",
+    "the US of A",
+    "the US of America",
+    "the USA",
+    "the United States",
+    "the United States of America"
+   ]
+  },
+  "Q165141": {
+   "label": "Switzerland",
+   "names": [
+    "Confoederatio Helvetica",
+    "Swiss",
+    "Swiss Confederation",
+    "Swiss men's national association football team",
+    "Swiss men's national football team",
+    "Swiss national association football team",
+    "Swiss national football team",
+    "Switzerland",
+    "Switzerland men's national association football team",
+    "Switzerland men's national football team",
+    "Switzerland national association football team"
+   ]
+  },
+  "Q166776": {
+   "label": "Belgium",
+   "names": [
+    "Belgian Red Devils",
+    "Belgium",
+    "Belgium men's national football team",
+    "Belgium national football team",
+    "Kingdom of Belgium",
+    "Red Devils"
+   ]
+  },
+  "Q170327": {
+   "label": "South Africa",
+   "names": [
+    "Bafana Bafana",
+    "R.S.A.",
+    "RSA",
+    "Republic of South Africa",
+    "SA",
+    "South Africa",
+    "South Africa men's national association football team",
+    "South Africa men's national football team",
+    "South Africa men's national soccer team",
+    "South Africa national association football team",
+    "South Africa national football team",
+    "South Africa national soccer team",
+    "zaf"
+   ]
+  },
+  "Q170566": {
+   "label": "Japan",
+   "names": [
+    "Iapan",
+    "Iapon",
+    "Japan",
+    "Japan men's national football team",
+    "Japan national football team",
+    "Japan's national football team",
+    "Japanese national football team",
+    "Land of Rising Sun",
+    "Land of the Rising Sun",
+    "Nihon-koku",
+    "Nippon-koku",
+    "Samurai Blue",
+    "State of Japan",
+    "national football team of Japan"
+   ]
+  },
+  "Q172014": {
+   "label": "Ghana",
+   "names": [
+    "Black Stars",
+    "Ghana",
+    "Ghana men's national football team",
+    "Ghana national football team"
+   ]
+  },
+  "Q172020": {
+   "label": "Paraguay",
+   "names": [
+    "Heart of South America",
+    "Paraguay",
+    "Paraguay men's national football team",
+    "Paraguay national football team",
+    "Republic of Paraguay"
+   ]
+  },
+  "Q175145": {
+   "label": "Côte d'Ivoire",
+   "names": [
+    "Cote Ivoire",
+    "Cote d'Ivoire",
+    "Cote d'lvoire",
+    "Cote-d'Ivoire",
+    "Côte d'Ivoire",
+    "Côte-d'Ivoire",
+    "Ivory Coast",
+    "Ivory Coast men's national football team",
+    "Ivory Coast national football team",
+    "Republic of Cote d'Ivoire",
+    "Republic of Côte d'Ivoire",
+    "Republic of Ivory Coast",
+    "Republic of the Ivory Coast",
+    "The Ivory Coast",
+    "ci"
+   ]
+  },
+  "Q175315": {
+   "label": "New Zealand",
+   "names": [
+    "All Whites",
+    "Aotearoa New Zealand",
+    "Dominion of New Zealand",
+    "New Zealand",
+    "New Zealand men's national football team",
+    "New Zealand national football team",
+    "nz"
+   ]
+  },
+  "Q181190": {
+   "label": "Bosnia and Herzegovina",
+   "names": [
+    "B&H",
+    "Bosnia & Herzegovina",
+    "Bosnia and Hercegovina",
+    "Bosnia and Herzegovina",
+    "Bosnia and Herzegovina men's national football team",
+    "Bosnia and Herzegovina national football team",
+    "Bosnia and Herzegovina national soccer team",
+    "Bosnia-Herzegovina",
+    "ba"
+   ]
+  },
+  "Q181903": {
+   "label": "Algeria",
+   "names": [
+    "Algeria",
+    "Algeria NT",
+    "Algeria football team",
+    "Algeria men's national football team",
+    "Algeria national football team",
+    "Algeria national soccer team",
+    "Algeria national team",
+    "Algeria soccer team",
+    "Algerian NT",
+    "Algerian football team",
+    "Algerian national football team",
+    "Algerian national soccer team",
+    "Algerian national team",
+    "Algerian soccer team",
+    "Djazaïr",
+    "Dzayer",
+    "National football team of Algeria",
+    "National soccer team of Algeria",
+    "National team of Algeria",
+    "People's Democratic Republic of Algeria"
+   ]
+  },
+  "Q184387": {
+   "label": "Norway",
+   "names": [
+    "Kingdom of Norway",
+    "Norway",
+    "Norway men's national association football team",
+    "Norway men's national football team",
+    "Norway national association football team",
+    "Norway national football team",
+    "Norway national soccer team",
+    "Team Norway"
+   ]
+  },
+  "Q184602": {
+   "label": "IR Iran",
+   "names": [
+    "IR Iran",
+    "IRI",
+    "Iran",
+    "Iran FC",
+    "Iran men's national football team",
+    "Iran national football team",
+    "Iran national team",
+    "Islamic Rep. Iran",
+    "Islamic Republic of Iran",
+    "ir",
+    "iran national association football team"
+   ]
+  },
+  "Q186243": {
+   "label": "Iraq",
+   "names": [
+    "Iraq",
+    "Iraq men's national football team",
+    "Iraq national football team",
+    "Republic of Iraq",
+    "iq"
+   ]
+  },
+  "Q189723": {
+   "label": "Saudi Arabia",
+   "names": [
+    "Kingdom of Saudi Arabia",
+    "Saudi",
+    "Saudi Arabia",
+    "Saudi Arabia men's national football team",
+    "Saudi Arabia national football team",
+    "Saudi Arabia national soccer team",
+    "Saudi Arabia national team",
+    "Saudi national football team",
+    "Saudi national soccer team",
+    "Saudi national team"
+   ]
+  },
+  "Q207337": {
+   "label": "Morocco",
+   "names": [
+    "Kingdom of Morocco",
+    "Lions of the Atlas",
+    "Lmaġrib",
+    "Maroc",
+    "Marocco",
+    "Morocco",
+    "Morocco men's national football team",
+    "Morocco men's national soccer team",
+    "Morocco national football team",
+    "Morocco national soccer team",
+    "Morocco national team",
+    "al-Maġrib"
+   ]
+  },
+  "Q207441": {
+   "label": "Senegal",
+   "names": [
+    "Republic of Senegal",
+    "Senegal",
+    "Senegal men's national association football team",
+    "Senegal national association football team",
+    "Senegal national football team",
+    "Senegal national soccer team"
+   ]
+  },
+  "Q208635": {
+   "label": "Canada",
+   "names": [
+    "CA",
+    "CAN",
+    "Canada",
+    "Canada men's national football team",
+    "Canada men's national soccer team",
+    "Canada national association football team",
+    "Canada national football team",
+    "Canada national soccer team",
+    "Canadian men's national soccer team",
+    "Canadian national soccer team"
+   ]
+  },
+  "Q212564": {
+   "label": "Colombia",
+   "names": [
+    "Colombia",
+    "Colombia men's national football team",
+    "Colombia national football team",
+    "Colombiá",
+    "Republic of Colombia",
+    "The Republic of Colombia"
+   ]
+  },
+  "Q223748": {
+   "label": "Panama",
+   "names": [
+    "Panama",
+    "Panama men's national football team",
+    "Panama national football team",
+    "Panama national soccer team",
+    "Panama national team",
+    "Republic of Panama",
+    "pa"
+   ]
+  },
+  "Q232731": {
+   "label": "Qatar",
+   "names": [
+    "Qatar",
+    "Qatar men's national football team",
+    "Qatar national football team",
+    "State of Qatar",
+    "qa",
+    "qat"
+   ]
+  },
+  "Q236006": {
+   "label": "Haiti",
+   "names": [
+    "Ayiti",
+    "Grenadiers",
+    "HAI",
+    "Haiti",
+    "Haiti men's national football team",
+    "Haiti national football team",
+    "Haitian Republic",
+    "Hayti",
+    "Republic of Haiti",
+    "ht"
+   ]
+  },
+  "Q267245": {
+   "label": "Portugal",
+   "names": [
+    "POR",
+    "Portugal",
+    "Portugal men's national association football team",
+    "Portugal men's national football team",
+    "Portugal national association football team",
+    "Portuguese Republic"
+   ]
+  },
+  "Q268208": {
+   "label": "Australia",
+   "names": [
+    "'Straya",
+    "Aussieland",
+    "Australia",
+    "Australia men's national football team",
+    "Australia men's national soccer team",
+    "Australia national football team",
+    "Australia national soccer team",
+    "Commonwealth of Australia",
+    "Down Under",
+    "New Holland",
+    "New Hollandia",
+    "Nova Hollandia",
+    "Oz",
+    "Socceroos",
+    "Stralia",
+    "Straya",
+    "Stria",
+    "The Commonwealth of Australia"
+   ]
+  },
+  "Q270080": {
+   "label": "Congo DR",
+   "names": [
+    "COD",
+    "Congo (Kinshasa)",
+    "Congo DR",
+    "Congo DR national football team",
+    "Congo DR national soccer team",
+    "D.R.C.",
+    "DR Congo",
+    "DR Congo men's national football team",
+    "DR Congo national football team",
+    "DR Congo national soccer team",
+    "DRC",
+    "Dem. Rep. Congo",
+    "Dem. Republic of Congo",
+    "Dem. Republic of the Congo",
+    "Democratic Republic of Congo",
+    "Democratic Republic of the Congo",
+    "Democratic Republic of the Congo national football team",
+    "Democratic Republic of the Congo national soccer team",
+    "Zaire",
+    "cd"
+   ]
+  },
+  "Q275940": {
+   "label": "Jordan",
+   "names": [
+    "Giordania",
+    "HKJ",
+    "Hashemite Kingdom of Jordan",
+    "ISO 3166-1:JO",
+    "Jordan",
+    "Jordan men's national football team",
+    "Jordan national football team",
+    "Kingdom of Jordan",
+    "State of Jordan",
+    "Yarden"
+   ]
+  },
+  "Q27971": {
+   "label": "Tunisia",
+   "names": [
+    "Eagles of Carthage",
+    "Republic of Tunisia",
+    "Tunisia",
+    "Tunisia men's national association football team",
+    "Tunisia men's national football team",
+    "Tunisia national association football team",
+    "Tunisia national football team",
+    "Tunisian Republic",
+    "tn"
+   ]
+  },
+  "Q28089": {
+   "label": "Egypt",
+   "names": [
+    "Arab Rep. Egypt",
+    "Arab Republic of Egypt",
+    "Egypt",
+    "Egypt men's national football team",
+    "Egypt national football team",
+    "Egypt national soccer team",
+    "Egypt national team",
+    "Misr",
+    "Rep. Egypt",
+    "Republic of Egypt",
+    "The Pharaohs"
+   ]
+  },
+  "Q330039": {
+   "label": "Cabo Verde",
+   "names": [
+    "Cabo Verde",
+    "Cape Verde",
+    "Cape Verde Islands",
+    "Cape Verde men's national football team",
+    "Cape Verde national football team",
+    "Cape Verde national soccer team",
+    "Cape Verdean national football team",
+    "Cape Verdean national soccer team",
+    "Republic of Cabo Verde",
+    "Republic of Cape Verde",
+    "Tubarões Azuis"
+   ]
+  },
+  "Q34044": {
+   "label": "Scotland",
+   "names": [
+    "Alba",
+    "Caledonia",
+    "G B",
+    "Great Britain",
+    "Great Britain and Northern Ireland",
+    "Scot",
+    "Scotland",
+    "Scotland men's national football team",
+    "Scotland national football team",
+    "Scotland national soccer team",
+    "Scotland national team",
+    "Scotland, United Kingdom",
+    "Scottish National Football Team",
+    "U K",
+    "United Kingdom",
+    "United Kingdom of Great Britain and Northern Ireland",
+    "the UK",
+    "the United Kingdom",
+    "the United Kingdom of Great Britain and Northern Ireland"
+   ]
+  },
+  "Q42267": {
+   "label": "Spain",
+   "names": [
+    "Kingdom of Spain",
+    "La Furia",
+    "La Furia Española",
+    "La Furia Roja",
+    "La Roja",
+    "Spain",
+    "Spain futbol team",
+    "Spain men's national association football team",
+    "Spain men's national football team",
+    "Spain national football team",
+    "Spanish national association football team",
+    "Spanish national team",
+    "The Fury",
+    "The Red Fury",
+    "The Red One",
+    "The Spanish Fury"
+   ]
+  },
+  "Q43310": {
+   "label": "Germany",
+   "names": [
+    "BRD",
+    "DE",
+    "DEU",
+    "Die Deutsche Fußball-Nationalmannschaft Der Männer",
+    "Die Fußball-Nationalmannschaft",
+    "FRG",
+    "Federal Republic of Germany",
+    "German National Football Team",
+    "Germany",
+    "Germany men's national association football team",
+    "Germany men's national football team",
+    "Germany national association football team",
+    "Germany national football team",
+    "West Germany national football team"
+   ]
+  },
+  "Q47050": {
+   "label": "Netherlands",
+   "names": [
+    "Holland",
+    "NL",
+    "NLD",
+    "Nederland",
+    "Nederlanden",
+    "Nederlands voetbalelftal",
+    "Netherlands",
+    "Netherlands national association football team",
+    "Netherlands national football team",
+    "Oranje",
+    "de Nederlanden",
+    "the Netherlands"
+   ]
+  },
+  "Q47762": {
+   "label": "England",
+   "names": [
+    "England",
+    "England men's national association football team",
+    "England men's national football team",
+    "England national association football team",
+    "England national football team",
+    "England national soccer team",
+    "England, UK",
+    "England, United Kingdom",
+    "G B",
+    "Great Britain",
+    "Great Britain and Northern Ireland",
+    "Three Lions",
+    "U K",
+    "United Kingdom",
+    "United Kingdom of Great Britain and Northern Ireland",
+    "the UK",
+    "the United Kingdom",
+    "the United Kingdom of Great Britain and Northern Ireland"
+   ]
+  },
+  "Q47774": {
+   "label": "France",
+   "names": [
+    "France",
+    "France men's national association football team",
+    "France men's national football team",
+    "France national association football team",
+    "France national football team",
+    "France national soccer team",
+    "French Republic",
+    "Les Bleus"
+   ]
+  },
+  "Q483856": {
+   "label": "Türkiye",
+   "names": [
+    "Republic of Turkey",
+    "Republic of Türkiye",
+    "Turkey",
+    "Turkey men's national association football team",
+    "Turkey men's national football team",
+    "Turkey national association football team",
+    "Turkey national soccer team",
+    "Turkish men's national association football team",
+    "Turkish national association football team",
+    "Turkish national football team",
+    "Turkish national soccer team",
+    "Türkiye",
+    "Türkiye men's national association football team",
+    "Türkiye men's national football team",
+    "Türkiye national association football team",
+    "Türkiye national football team",
+    "Türkiye national soccer team"
+   ]
+  },
+  "Q483868": {
+   "label": "Czechia",
+   "names": [
+    "Czech Republic",
+    "Czech Republic national football team",
+    "Czech national football team",
+    "Czechia",
+    "Czechia N.T.",
+    "Czechia NT",
+    "Czechia men's national football team",
+    "Czechia national football team",
+    "Czechia national team",
+    "National team of Czechia",
+    "the Czech Republic"
+   ]
+  },
+  "Q487321": {
+   "label": "Uzbekistan",
+   "names": [
+    "Republic of Uzbekistan",
+    "Uzbekistan",
+    "Uzbekistan men's national football team",
+    "Uzbekistan national football team"
+   ]
+  },
+  "Q543842": {
+   "label": "Korea Republic",
+   "names": [
+    "Choson",
+    "Daehan Minguk",
+    "Daehanminguk",
+    "Hanguk",
+    "Korea (South)",
+    "Korea Republic",
+    "Korea Republic national football team",
+    "Korea national football team",
+    "Korea national soccer team",
+    "Korea national team",
+    "Rep. Korea",
+    "Republic of Korea",
+    "S. Korea",
+    "Silla",
+    "South Korea",
+    "South Korea men's national football team",
+    "South Korea national football team",
+    "South Korea national soccer team",
+    "South Korea national team",
+    "South Korean national football team"
+   ]
+  },
+  "Q729640": {
+   "label": "Curaçao",
+   "names": [
+    "Country of Curaçao",
+    "Curacao national association football team",
+    "Curacao national football team",
+    "Curacau",
+    "Curazao",
+    "Curaçao",
+    "Curaçao men's national association football team",
+    "Curaçao men's national football team",
+    "Curaçao national association football team",
+    "Curaçao national football team",
+    "Curaçoa",
+    "Curaςao",
+    "Curocao",
+    "ISO 3166-1:CW",
+    "Island Territory of Curaçao"
+   ]
+  },
+  "Q79800": {
+   "label": "Argentina",
+   "names": [
+    "Argentina",
+    "Argentina men's national association football team",
+    "Argentina men's national football team",
+    "Argentina men's national soccer team",
+    "Argentina national association football team",
+    "Argentina national football team",
+    "Argentina national soccer team",
+    "Argentine Republic",
+    "Republic of Argentina",
+    "Republica Argentina"
+   ]
+  },
+  "Q83459": {
+   "label": "Brazil",
+   "names": [
+    "Brazil",
+    "Brazil men's national football team",
+    "Brazil national football team",
+    "Federative Republic of Brazil"
+   ]
+  },
+  "Q987584": {
+   "label": "Ecuador",
+   "names": [
+    "Ecuador",
+    "Ecuador men's national football team",
+    "Ecuador national football team",
+    "Ecuador national soccer team",
+    "Ecuadorian national football team",
+    "Ecuadorian national soccer team",
+    "Republic of Ecuador",
+    "Republic of Equator",
+    "Republic of the Equator",
+    "The Ecuadorian State"
+   ]
+  }
+ },
+ "wc_venues": {
+  "Q1052370": {
+   "label": "Lincoln Financial Field",
+   "names": [
+    "Lincoln Financial Field",
+    "The Linc"
+   ]
+  },
+  "Q1058864": {
+   "label": "NRG Stadium",
+   "names": [
+    "Estadio NGR",
+    "NRG Stadium",
+    "Reliant Stadium"
+   ]
+  },
+  "Q10862290": {
+   "label": "MetLife Stadium",
+   "names": [
+    "MetLife Stadium",
+    "New York Giants Stadium",
+    "New York Jets Stadium",
+    "New York New Jersey Stadium",
+    "New York/New Jersey Stadium"
+   ]
+  },
+  "Q19520501": {
+   "label": "SoFi Stadium",
+   "names": [
+    "2028 Stadium",
+    "City of Champions Stadium",
+    "LA Olympic Stadium",
+    "LA Stadium",
+    "LA Stadium at Hollywood Park",
+    "Los Angeles Stadium",
+    "SoFi Stadium"
+   ]
+  },
+  "Q3058827": {
+   "label": "Estadio Monterrey",
+   "names": [
+    "\"The Steel Giant el coloso deW la pastora\"",
+    "Estadio BBVA Bancomer",
+    "Estadio Monterrey",
+    "Estadio de Futbol Monterrey",
+    "Estadio de Fútbol Monterrey",
+    "Leonel Gonzales Stadium",
+    "Monterrey Football Stadium"
+   ]
+  },
+  "Q320454": {
+   "label": "Estadio Azteca",
+   "names": [
+    "Coloso de Santa Úrsula",
+    "El Coloso de Santa Úrsula",
+    "Estadio Azteca"
+   ]
+  },
+  "Q373355": {
+   "label": "Gillette Stadium",
+   "names": [
+    "Boston Stadium",
+    "Gillette Stadium"
+   ]
+  },
+  "Q544553": {
+   "label": "Arrowhead Stadium",
+   "names": [
+    "Arrowhead Stadium",
+    "GEHA Field at Arrowhead Stadium",
+    "Kansas City Stadium"
+   ]
+  },
+  "Q612227": {
+   "label": "BC Place",
+   "names": [
+    "BC Place"
+   ]
+  },
+  "Q612736": {
+   "label": "Lumen Field",
+   "names": [
+    "Lumen Field",
+    "The Hawk"
+   ]
+  },
+  "Q666183": {
+   "label": "Estadio Akron",
+   "names": [
+    "Chivas Stadium",
+    "Estadio Akron",
+    "Estadio Chiva",
+    "Estadio Chivas",
+    "Estadio Omnilife",
+    "Omnilife Stadium"
+   ]
+  },
+  "Q7007552": {
+   "label": "Mercedes-Benz Stadium",
+   "names": [
+    "Mercedes-Benz Stadium",
+    "New Atlanta Stadium",
+    "New Falcons Stadium"
+   ]
+  },
+  "Q7419343": {
+   "label": "Levi's Stadium",
+   "names": [
+    "49ers Stadium",
+    "Levi's Stadium",
+    "Levis Stadium",
+    "San Francisco 49ers Stadium",
+    "San Francisco Bay Area Stadium",
+    "Santa Clara Stadium"
+   ]
+  },
+  "Q796351": {
+   "label": "BMO Field",
+   "names": [
+    "BMO Field",
+    "Toronto Stadium"
+   ]
+  },
+  "Q838284": {
+   "label": "AT&T Stadium",
+   "names": [
+    "AT&T Stadium",
+    "Cowboys Stadium",
+    "Dallas Stadium",
+    "Jerry World"
+   ]
+  },
+  "Q864339": {
+   "label": "Hard Rock Stadium",
+   "names": [
+    "Hard Rock Stadium"
+   ]
+  }
+ }
+}
