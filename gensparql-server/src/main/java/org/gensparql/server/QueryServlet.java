@@ -1,6 +1,7 @@
 package org.gensparql.server;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.jena.query.Dataset;
@@ -20,6 +21,7 @@ import org.gensparql.parser.GenSPARQLQueryFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicLong;
 
 final class QueryServlet extends JsonServlet {
     private final DatasetRegistry registry;
@@ -53,6 +55,11 @@ final class QueryServlet extends JsonServlet {
             // Interactive API clients need the real provider error, not a misleading
             // successful response containing zero rows.
             context.set(GenSPARQL.FAIL_ON_LLM_ERROR, true);
+            // The workbench shows how many LLM requests a query sent, so count them for this
+            // execution and report the count in the trace that the client asks for.
+            AtomicLong llmCalls = new AtomicLong();
+            context.set(GenSPARQL.LLM_CALL_COUNTER, llmCalls);
+            boolean includeTrace = body.path("includeTrace").asBoolean(false);
             JsonNode llm = body.path("llm");
             if (llm.isObject()) {
                 String apiKey = optionalText(llm, "apiKey");
@@ -118,11 +125,17 @@ final class QueryServlet extends JsonServlet {
                 if (requestProvider != null) requestProvider.close();
                 if (embeddingProvider != null) embeddingProvider.close();
             }
+            byte[] payload = resultBuffer.toByteArray();
+            if (includeTrace) {
+                ObjectNode result = (ObjectNode) JSON.readTree(payload);
+                result.putObject("trace").put("genopCalls", llmCalls.get());
+                payload = JSON.writeValueAsBytes(result);
+            }
             response.setStatus(HttpServletResponse.SC_OK);
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/sparql-results+json");
-            response.setContentLength(resultBuffer.size());
-            resultBuffer.writeTo(response.getOutputStream());
+            response.setContentLength(payload.length);
+            response.getOutputStream().write(payload);
         } catch (IllegalArgumentException e) {
             if (!response.isCommitted()) error(response, HttpServletResponse.SC_BAD_REQUEST, e);
         } catch (Exception e) {

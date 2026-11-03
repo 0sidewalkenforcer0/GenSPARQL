@@ -56,6 +56,14 @@ public class GenSPARQL {
             org.apache.jena.sparql.util.Symbol.create(NS + "simThreshold");
     public static final org.apache.jena.sparql.util.Symbol FAIL_ON_LLM_ERROR =
             org.apache.jena.sparql.util.Symbol.create(NS + "failOnLlmError");
+    /**
+     * An {@link java.util.concurrent.atomic.AtomicLong} that a caller puts into the context of
+     * a query execution to learn how many LLM requests GENOP sends for that query. Every
+     * request counts once: a batch of prompts is one request, and a prompt answered from the
+     * cache or by deduplication is none.
+     */
+    public static final org.apache.jena.sparql.util.Symbol LLM_CALL_COUNTER =
+            org.apache.jena.sparql.util.Symbol.create(NS + "llmCallCounter");
 
     /**
      * Initialize GenSPARQL.

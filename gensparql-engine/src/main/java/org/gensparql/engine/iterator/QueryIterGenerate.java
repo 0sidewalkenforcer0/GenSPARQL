@@ -33,6 +33,7 @@ import java.util.*;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Query iterator for OpGenerate execution.
@@ -99,6 +100,9 @@ public class QueryIterGenerate extends QueryIteratorBase {
     private volatile boolean cancelled = false;
     private volatile CompletableFuture<GenerateResponse> inFlight = null;
 
+    // Counts the requests of this query for the caller, if the caller asked for a count.
+    private final AtomicLong llmCallCounter;
+
     public QueryIterGenerate(QueryIterator input, OpGenerate opGen, ExecutionContext execCxt) {
         this.input = input;
         this.opGen = opGen;
@@ -115,6 +119,8 @@ public class QueryIterGenerate extends QueryIteratorBase {
         this.modelSpec = requestModel != null ? requestModel : opGen.getModelSpec();
         LLMProvider requestProvider = execCxt.getContext().get(GenSPARQL.LLM_PROVIDER);
         this.failOnLlmError = execCxt.getContext().isTrue(GenSPARQL.FAIL_ON_LLM_ERROR);
+        Object counter = execCxt.getContext().get(GenSPARQL.LLM_CALL_COUNTER);
+        this.llmCallCounter = counter instanceof AtomicLong ? (AtomicLong) counter : null;
         if (requestProvider != null) {
             this.provider = requestProvider;
         } else if (modelSpec != null) {
@@ -714,6 +720,9 @@ public class QueryIterGenerate extends QueryIteratorBase {
     private GenerateResponse callProvider(GenerateRequest request) {
         if (cancelled) {
             throw new QueryCancelledException();
+        }
+        if (llmCallCounter != null) {
+            llmCallCounter.incrementAndGet();
         }
         CompletableFuture<GenerateResponse> pending = provider.generate(request);
         inFlight = pending;
