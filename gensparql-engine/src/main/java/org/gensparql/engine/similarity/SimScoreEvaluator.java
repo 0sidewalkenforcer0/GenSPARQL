@@ -9,6 +9,7 @@ import org.gensparql.core.similarity.ThresholdRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -73,6 +74,29 @@ public class SimScoreEvaluator {
     }
 
     /**
+     * Every string a generated value is compared with for this node: all labels of an IRI
+     * that has labels in the graph, otherwise the one string of {@link #canon}.
+     */
+    public List<String> canonAll(Node node) {
+        if (labels instanceof GraphLabels && node != null && node.isURI()) {
+            List<String> all = ((GraphLabels) labels).all(node);
+            if (!all.isEmpty()) {
+                return all;
+            }
+        }
+        return List.of(canon(node));
+    }
+
+    /** The highest similarity between a generated value and the strings of an RDF node. */
+    private double bestSimilarity(Node rdfNode, String generated) {
+        double best = 0.0;
+        for (String s : canonAll(rdfNode)) {
+            best = Math.max(best, simText.similarity(s, generated));
+        }
+        return best;
+    }
+
+    /**
      * Evaluate SimScore for a variable.
      *
      * @param tv1 first typed value (t, τ)
@@ -126,25 +150,13 @@ public class SimScoreEvaluator {
             return pass;
         }
 
-        // Case 3: Mixed types - use Canon for RDF, Lex for GEN
-        String s1, s2;
-        String type1, type2;
-        if (tv1.isRdf()) {
-            s1 = canon(tv1.getNode());
-            s2 = CanonicalForm.lex(tv2.getNode());
-            type1 = "RDF(canon)";
-            type2 = "GEN(lex)";
-        } else {
-            s1 = CanonicalForm.lex(tv1.getNode());
-            s2 = canon(tv2.getNode());
-            type1 = "GEN(lex)";
-            type2 = "RDF(canon)";
-        }
-
-        double similarity = simText.similarity(s1, s2);
+        // Case 3: Mixed types - the generated value against every label of the RDF node
+        Node rdfNode = tv1.isRdf() ? tv1.getNode() : tv2.getNode();
+        String generated = CanonicalForm.lex(tv1.isRdf() ? tv2.getNode() : tv1.getNode());
+        double similarity = bestSimilarity(rdfNode, generated);
         boolean pass = similarity >= threshold;
-        LOG.debug("SimScore var=?{} | {}×{} | v1=\"{}\" vs v2=\"{}\" | sim={} threshold={} -> {}",
-            var.getName(), type1, type2, s1, s2, String.format("%.4f", similarity), threshold, pass ? "PASS" : "FAIL");
+        LOG.debug("SimScore var=?{} | RDF×GEN | labels={} vs gen=\"{}\" | sim={} threshold={} -> {}",
+            var.getName(), canonAll(rdfNode), generated, String.format("%.4f", similarity), threshold, pass ? "PASS" : "FAIL");
         return pass;
     }
 
@@ -173,17 +185,10 @@ public class SimScoreEvaluator {
             return simText.similarity(lex1, lex2);
         }
 
-        // Mixed - use Canon for RDF, Lex for GEN
-        String s1, s2;
-        if (tv1.isRdf()) {
-            s1 = canon(tv1.getNode());
-            s2 = CanonicalForm.lex(tv2.getNode());
-        } else {
-            s1 = CanonicalForm.lex(tv1.getNode());
-            s2 = canon(tv2.getNode());
-        }
-
-        return simText.similarity(s1, s2);
+        // Mixed - the generated value against every label of the RDF node
+        Node rdfNode = tv1.isRdf() ? tv1.getNode() : tv2.getNode();
+        String generated = CanonicalForm.lex(tv1.isRdf() ? tv2.getNode() : tv1.getNode());
+        return bestSimilarity(rdfNode, generated);
     }
 
     /**

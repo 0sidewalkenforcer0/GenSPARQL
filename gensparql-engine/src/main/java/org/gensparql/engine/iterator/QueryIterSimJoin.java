@@ -193,12 +193,13 @@ public class QueryIterSimJoin extends QueryIteratorBase {
             return;
         }
         for (TypedBinding tb : rightBindings) {
-            String key = keyOf(tb);
-            rightKeys.add(key);
-            if (key != null) {
-                rightIndex.computeIfAbsent(key, k -> new ArrayList<>()).add(tb);
-            } else {
+            List<String> keys = keysOf(tb);
+            rightKeys.add(keys.isEmpty() ? null : keys.get(0));
+            if (keys.isEmpty()) {
                 hasUnindexedRights = true;
+            }
+            for (String key : keys) {
+                rightIndex.computeIfAbsent(key, k -> new ArrayList<>()).add(tb);
             }
         }
     }
@@ -215,12 +216,19 @@ public class QueryIterSimJoin extends QueryIteratorBase {
         if (candidateIndex == null) {
             return rightBindings;
         }
-        String leftText = simTextForm(left, prunedVar);
-        if (leftText == null) {
+        List<String> leftTexts = simTextForms(left, prunedVar);
+        if (leftTexts.isEmpty()) {
             return rightBindings; // null compares against null; the index cannot say
         }
-        List<TypedBinding> candidates =
-                new ArrayList<>(candidateIndex.candidates(leftText, prunedThreshold));
+        List<TypedBinding> candidates = new ArrayList<>();
+        Set<TypedBinding> seen = Collections.newSetFromMap(new IdentityHashMap<>());
+        for (String leftText : leftTexts) {
+            for (TypedBinding right : candidateIndex.candidates(leftText, prunedThreshold)) {
+                if (seen.add(right)) {
+                    candidates.add(right);
+                }
+            }
+        }
         candidates.addAll(unboundOnPrunedVar);
         return candidates;
     }
@@ -247,10 +255,11 @@ public class QueryIterSimJoin extends QueryIteratorBase {
 
         JaccardIndex<TypedBinding> index = new JaccardIndex<>();
         for (TypedBinding right : rightBindings) {
-            String text = simTextForm(right, var);
-            if (text == null) {
+            List<String> texts = simTextForms(right, var);
+            if (texts.isEmpty()) {
                 unboundOnPrunedVar.add(right);
-            } else {
+            }
+            for (String text : texts) {
                 index.add(text, right);
             }
         }
@@ -275,21 +284,40 @@ public class QueryIterSimJoin extends QueryIteratorBase {
     }
 
     /**
-     * Normalized join key for a binding, or {@code null} if any join variable is
-     * unbound/null (such bindings cannot be indexed and are handled by scanning).
-     * Uses the same lexical/canonical forms the {@link SimScoreEvaluator} compares.
+     * Every string the evaluator may compare for this binding and variable: the lexical form
+     * of a generated value, every label of an entity of the graph. Empty if unbound.
      */
-    private String keyOf(TypedBinding tb) {
-        StringBuilder sb = new StringBuilder();
-        for (Var v : joinVars) {
-            TypedValue tv = tb.getTypedValue(v);
-            if (tv == null || tv.getNode() == null) {
-                return null;
-            }
-            String s = tv.isGen() ? CanonicalForm.lex(tv.getNode()) : simScoreEvaluator.canon(tv.getNode());
-            sb.append(CanonicalForm.normalize(s)).append('\u0001');
+    private List<String> simTextForms(TypedBinding tb, Var var) {
+        TypedValue tv = tb.getTypedValue(var);
+        if (tv == null || tv.getNode() == null) {
+            return List.of();
         }
-        return sb.toString();
+        return tv.isGen() ? List.of(CanonicalForm.lex(tv.getNode())) : simScoreEvaluator.canonAll(tv.getNode());
+    }
+
+    /**
+     * Every normalized join key of a binding, one per combination of the texts of its join
+     * variables, or empty if a join variable is unbound/null (such bindings cannot be indexed
+     * and are handled by scanning). Uses the same lexical/canonical forms the
+     * {@link SimScoreEvaluator} compares.
+     */
+    private List<String> keysOf(TypedBinding tb) {
+        List<String> keys = new ArrayList<>();
+        keys.add("");
+        for (Var v : joinVars) {
+            List<String> forms = simTextForms(tb, v);
+            if (forms.isEmpty()) {
+                return List.of();
+            }
+            List<String> next = new ArrayList<>();
+            for (String prefix : keys) {
+                for (String s : forms) {
+                    next.add(prefix + CanonicalForm.normalize(s) + '\u0001');
+                }
+            }
+            keys = next;
+        }
+        return keys;
     }
 
     /** Batch-embed all join-variable labels up front when a fuzzy scan will run. */
@@ -313,13 +341,10 @@ public class QueryIterSimJoin extends QueryIteratorBase {
     private void collectLabels(List<TypedBinding> bindings, Set<String> out) {
         for (TypedBinding tb : bindings) {
             for (Var v : joinVars) {
-                TypedValue tv = tb.getTypedValue(v);
-                if (tv == null || tv.getNode() == null) {
-                    continue;
-                }
-                String s = tv.isGen() ? CanonicalForm.lex(tv.getNode()) : simScoreEvaluator.canon(tv.getNode());
-                if (s != null && !s.isEmpty()) {
-                    out.add(s);
+                for (String s : simTextForms(tb, v)) {
+                    if (s != null && !s.isEmpty()) {
+                        out.add(s);
+                    }
                 }
             }
         }
@@ -361,32 +386,35 @@ public class QueryIterSimJoin extends QueryIteratorBase {
             return rightBindings;
         }
 
-        String leftKey = keyOf(left);
+        List<String> leftKeys = keysOf(left);
         List<TypedBinding> compatible = new ArrayList<>();
+        Set<TypedBinding> seen = Collections.newSetFromMap(new IdentityHashMap<>());
 
-        // Phase 1 -- exact match via the pre-built index (no similarity/embeddings).
-        if (leftKey != null) {
+        // Phase 1 -- exact match via the pre-built index (no similarity/embeddings). An
+        // entity with several labels has one key per label, so a right binding can sit in
+        // several buckets; it is added once.
+        for (String leftKey : leftKeys) {
             List<TypedBinding> exact = rightIndex.get(leftKey);
             if (exact != null) {
                 for (TypedBinding right : exact) {
-                    if (areCompatible(left, right)) {
+                    if (seen.add(right) && areCompatible(left, right)) {
                         compatible.add(right);
                     }
                 }
             }
         }
 
-        // Phase 2 -- approximate scan (skip the exact bucket already handled).
+        // Phase 2 -- approximate scan (skip the exact buckets already handled).
         if (approximate) {
             for (TypedBinding right : approximateCandidates(left)) {
-                if (leftKey != null && leftKey.equals(keyOf(right))) {
+                if (!leftKeys.isEmpty() && !Collections.disjoint(leftKeys, keysOf(right))) {
                     continue; // already handled exactly in phase 1
                 }
-                if (areCompatible(left, right)) {
+                if (seen.add(right) && areCompatible(left, right)) {
                     compatible.add(right);
                 }
             }
-        } else if (leftKey == null) {
+        } else if (leftKeys.isEmpty()) {
             // Exact-only mode but the left key is unbound: scan to honour the
             // null==null compatibility semantics of SimScore.
             for (TypedBinding right : rightBindings) {

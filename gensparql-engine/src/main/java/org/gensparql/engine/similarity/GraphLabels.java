@@ -6,6 +6,7 @@ import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.util.iterator.ExtendedIterator;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +22,10 @@ import java.util.function.Function;
  * such as the Wikidata {@code wd:Q79800}, cannot be matched at all without this.
  *
  * <p>The label properties are tried in order: {@code rdfs:label}, {@code skos:prefLabel},
- * {@code schema:name} and {@code foaf:name}. Among several labels of one property, a label
- * without a language tag is preferred, then an English one, then the smallest by lexical
- * form, so that the choice does not depend on the order in which the graph stores triples.
+ * {@code schema:name} and {@code foaf:name}. A node with several labels of that property
+ * keeps all of them, the preferred one first: a label without a language tag, then an
+ * English one, then the smallest by lexical form, so that the order does not depend on the
+ * order in which the graph stores triples.
  * Lookups are cached for the lifetime of the instance, which is one query execution.
  */
 public final class GraphLabels implements Function<Node, String> {
@@ -36,48 +38,66 @@ public final class GraphLabels implements Function<Node, String> {
             NodeFactory.createURI("http://xmlns.com/foaf/0.1/name"));
 
     private final Graph graph;
-    private final Map<Node, String> cache = new HashMap<>();
+    private final Map<Node, List<String>> cache = new HashMap<>();
 
     public GraphLabels(Graph graph) {
         this.graph = graph;
     }
 
     /**
-     * The label of the node, or {@code null} if the node is not an IRI or has no label.
+     * The preferred label of the node, or {@code null} if the node is not an IRI or has no
+     * label.
      */
     @Override
     public String apply(Node node) {
-        if (graph == null || node == null || !node.isURI()) {
-            return null;
-        }
-        if (cache.containsKey(node)) {
-            return cache.get(node);
-        }
-        String label = lookup(node);
-        cache.put(node, label);
-        return label;
+        List<String> labels = all(node);
+        return labels.isEmpty() ? null : labels.get(0);
     }
 
-    private String lookup(Node node) {
+    /**
+     * Every label of the node: the values of the first label property that the node has in
+     * the graph, the preferred one first. Empty if the node is not an IRI or has no label.
+     * A generated name matches the node if it matches one of these labels.
+     */
+    public List<String> all(Node node) {
+        if (graph == null || node == null || !node.isURI()) {
+            return List.of();
+        }
+        List<String> labels = cache.get(node);
+        if (labels == null) {
+            labels = lookup(node);
+            cache.put(node, labels);
+        }
+        return labels;
+    }
+
+    private List<String> lookup(Node node) {
         for (Node property : LABEL_PROPERTIES) {
-            Node best = null;
+            List<Node> found = new ArrayList<>();
             ExtendedIterator<Triple> it = graph.find(node, property, Node.ANY);
             try {
                 while (it.hasNext()) {
                     Node object = it.next().getObject();
-                    if (object.isLiteral() && !object.getLiteralLexicalForm().isBlank()
-                            && (best == null || preferred(object, best))) {
-                        best = object;
+                    if (object.isLiteral() && !object.getLiteralLexicalForm().isBlank()) {
+                        found.add(object);
                     }
                 }
             } finally {
                 it.close();
             }
-            if (best != null) {
-                return best.getLiteralLexicalForm();
+            if (!found.isEmpty()) {
+                found.sort((a, b) -> preferred(a, b) ? -1 : (preferred(b, a) ? 1 : 0));
+                List<String> labels = new ArrayList<>();
+                for (Node n : found) {
+                    String lex = n.getLiteralLexicalForm();
+                    if (!labels.contains(lex)) {
+                        labels.add(lex);
+                    }
+                }
+                return List.copyOf(labels);
             }
         }
-        return null;
+        return List.of();
     }
 
     /** True if label {@code a} is to be preferred over label {@code b}. */
