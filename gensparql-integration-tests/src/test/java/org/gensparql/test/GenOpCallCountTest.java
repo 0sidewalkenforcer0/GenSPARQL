@@ -106,6 +106,44 @@ class GenOpCallCountTest {
     }
 
     @Test
+    void filterOnTheRestrictingPatternsRunsBeforeGenop() {
+        AtomicLong calls = new AtomicLong();
+        int rows = run("?p ex:playsFor ?t ; rdfs:label ?n . ?t rdfs:label ?tn . FILTER(?tn = \"France\") "
+                + "GENOP(\"Position of {?n}?\", (?pos), <model:mock:test>)", calls);
+        assertEquals(1, rows);
+        assertEquals(1, calls.get(), "only the French player reaches the LLM");
+    }
+
+    @Test
+    void filterOnTheGeneratedValueRunsAfterGenop() {
+        AtomicLong calls = new AtomicLong();
+        int rows = run("?p ex:playsFor ?t ; rdfs:label ?n . "
+                + "GENOP(\"Position of {?n}?\", (?pos), <model:mock:test>) FILTER(?pos = \"Forward\")", calls);
+        assertEquals(0, rows, "the mock answers Lionel Messi, never Forward");
+        assertEquals(3, calls.get());
+    }
+
+    @Test
+    void filterMentioningTheGeneratedValueStaysAfterGenop() {
+        AtomicLong calls = new AtomicLong();
+        int rows = run("?p ex:playsFor ?t ; rdfs:label ?n . ?t rdfs:label ?tn . "
+                + "GENOP(\"Position of {?n}?\", (?pos), <model:mock:test>) "
+                + "FILTER(?tn = \"France\" || ?pos = \"Lionel Messi\")", calls);
+        assertEquals(3, rows, "every player passes: the mock answers Lionel Messi for all");
+        assertEquals(3, calls.get());
+    }
+
+    @Test
+    void filterWithExistsStaysAfterGenop() {
+        AtomicLong calls = new AtomicLong();
+        int rows = run("?p ex:playsFor ?t ; rdfs:label ?n . "
+                + "FILTER EXISTS { ?t rdfs:label \"France\" } "
+                + "GENOP(\"Position of {?n}?\", (?pos), <model:mock:test>)", calls);
+        assertEquals(1, rows);
+        assertEquals(3, calls.get(), "an EXISTS filter is left at the end of the group");
+    }
+
+    @Test
     void baseModeWithAnEmptyPatternSendsItsPromptOnce() {
         AtomicLong calls = new AtomicLong();
         int rows = run("?p a ex:Athlete . "

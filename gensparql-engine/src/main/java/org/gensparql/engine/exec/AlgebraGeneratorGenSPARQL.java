@@ -5,7 +5,10 @@ import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.*;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.expr.Expr;
+import org.apache.jena.sparql.expr.ExprFunction;
+import org.apache.jena.sparql.expr.ExprFunctionOp;
 import org.apache.jena.sparql.expr.ExprList;
+import org.apache.jena.sparql.expr.ExprVars;
 import org.apache.jena.sparql.syntax.*;
 import org.gensparql.engine.GenSPARQLConfig;
 import org.gensparql.engine.op.OpGenerate;
@@ -81,10 +84,25 @@ public class AlgebraGeneratorGenSPARQL {
         // joins commute, so the rewrite is semantics-preserving.
         List<Element> elements = reorderGenopLast(group.getElements());
 
+        // A filter that reads only the patterns placed before GENOP runs before GENOP, so the
+        // LLM never receives the solutions it removes (see earlyFilters).
+        Set<Element> early = elements == group.getElements()
+                ? Collections.emptySet() : earlyFilters(elements);
+        boolean earlyApplied = early.isEmpty();
         for (Element e : elements) {
             if (e instanceof ElementFilter) {
-                filters.add(((ElementFilter) e).getExpr());
+                if (!early.contains(e)) {
+                    filters.add(((ElementFilter) e).getExpr());
+                }
             } else {
+                if (!earlyApplied && e instanceof ElementGenerate) {
+                    ExprList before = new ExprList();
+                    for (Element f : early) {
+                        before.add(((ElementFilter) f).getExpr());
+                    }
+                    current = OpFilter.filterBy(before, current);
+                    earlyApplied = true;
+                }
                 current = accumulate(current, e);
             }
         }
@@ -148,6 +166,49 @@ public class AlgebraGeneratorGenSPARQL {
         ordered.addAll(after);
         ordered.addAll(filters);
         return ordered;
+    }
+
+    /**
+     * The filters of a reordered group that read only variables of the patterns placed before
+     * the first GENOP. A filter scopes over the whole group, but those patterns bind each of
+     * its variables in every solution, and GENOP and the patterns after it only extend these
+     * solutions. The filter therefore keeps the same solutions when it runs before GENOP.
+     * A filter with EXISTS or NOT EXISTS reads a graph pattern and stays at the end.
+     */
+    private static Set<Element> earlyFilters(List<Element> ordered) {
+        Set<Var> bound = new HashSet<>();
+        for (Element e : ordered) {
+            if (e instanceof ElementGenerate) {
+                break;
+            }
+            if (e instanceof ElementTriplesBlock || e instanceof ElementPathBlock) {
+                bound.addAll(PatternVars.vars(e));
+            }
+        }
+        Set<Element> early = new LinkedHashSet<>();
+        for (Element e : ordered) {
+            if (e instanceof ElementFilter) {
+                Expr expr = ((ElementFilter) e).getExpr();
+                if (!readsPattern(expr) && bound.containsAll(ExprVars.getVarsMentioned(expr))) {
+                    early.add(e);
+                }
+            }
+        }
+        return early;
+    }
+
+    private static boolean readsPattern(Expr expr) {
+        if (expr instanceof ExprFunctionOp) {
+            return true;
+        }
+        if (expr instanceof ExprFunction) {
+            for (Expr arg : ((ExprFunction) expr).getArgs()) {
+                if (readsPattern(arg)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
