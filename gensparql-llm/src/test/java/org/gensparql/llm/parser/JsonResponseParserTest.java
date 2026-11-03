@@ -134,6 +134,14 @@ class JsonResponseParserTest {
     }
 
     @Test
+    void testParseObjectWithDeclinedValue_YieldsZeroBindings() {
+        // Asked to decline with an empty array, a model may wrap the array into an object.
+        assertTrue(parser.parse("{\"x\": \"[]\"}", List.of("x")).isEmpty());
+        assertTrue(parser.parse("{\"x\": []}", List.of("x")).isEmpty());
+        assertTrue(parser.parse("{\"x\": \"\"}", List.of("x")).isEmpty());
+    }
+
+    @Test
     void testParseNoOutputVars_UsesDefaultResult() {
         String content = "Some result";
         List<Map<String, String>> bindings = parser.parse(content, null);

@@ -60,7 +60,7 @@ public class JsonResponseParser implements ResponseParser {
             } else if (json.isObject()) {
                 LOG.debug("Parsing single JSON object");
                 Map<String, String> binding = parseJsonObject(json, outputVars);
-                if (!binding.isEmpty()) {
+                if (!binding.isEmpty() && !declines(binding)) {
                     bindings.add(binding);
                 }
                 LOG.info("Parsed {} bindings from JSON object", bindings.size());

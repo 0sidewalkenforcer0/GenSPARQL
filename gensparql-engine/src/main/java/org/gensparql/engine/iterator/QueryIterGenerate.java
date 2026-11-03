@@ -25,6 +25,7 @@ import org.gensparql.llm.LLMProvider;
 import org.gensparql.llm.LLMProviderRegistry;
 import org.gensparql.llm.batch.BatchedPromptBuilder;
 import org.gensparql.llm.batch.BatchedResponseParser;
+import org.gensparql.llm.parser.JsonResponseParser;
 import org.gensparql.llm.prompt.PromptBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -515,12 +516,21 @@ public class QueryIterGenerate extends QueryIteratorBase {
                     }
                 }
             } else if (response.getRawText() != null && opGen.getOutputVariables().size() == 1) {
-                // Fallback: use raw text for a single output variable.
+                // A provider that leaves the bindings empty: parse the raw text like every
+                // other answer. An empty JSON array or a declined value yields no solution,
+                // and plain text binds to the single output variable.
                 String rawText = response.getRawText().trim();
-                if (isValidResponse(rawText)) {
-                    outputMaps.add(Map.of(opGen.getOutputVariables().get(0).getName(), rawText));
-                } else {
-                    LOG.warn("Filtered out invalid raw text response: {}", truncate(rawText, 200));
+                List<String> names = new ArrayList<>();
+                for (Var v : opGen.getOutputVariables()) {
+                    names.add(v.getName());
+                }
+                for (Map<String, String> parsed : new JsonResponseParser().parse(rawText, names)) {
+                    Map<String, String> validatedBinding = validateOutputBinding(normalizeExplicitScalar(parsed));
+                    if (validatedBinding != null) {
+                        outputMaps.add(validatedBinding);
+                    } else {
+                        LOG.warn("Filtered out invalid raw text response: {}", truncate(rawText, 200));
+                    }
                 }
             }
         } catch (QueryCancelledException e) {

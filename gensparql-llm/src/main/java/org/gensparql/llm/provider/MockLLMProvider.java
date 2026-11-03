@@ -2,6 +2,7 @@ package org.gensparql.llm.provider;
 
 import org.gensparql.core.model.*;
 import org.gensparql.llm.LLMProvider;
+import org.gensparql.llm.parser.JsonResponseParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,7 +88,9 @@ public class MockLLMProvider implements LLMProvider {
         if (outputVars == null || outputVars.isEmpty()) {
             bindings.add(Map.of("result", response));
         } else if (outputVars.size() == 1) {
-            bindings.add(Map.of(outputVars.get(0), response));
+            // Parsed like the answer of a real provider: a JSON array gives one binding per
+            // element and an empty array none, and plain text binds as it is.
+            bindings.addAll(new JsonResponseParser().parse(response, outputVars));
         } else {
             // For multiple vars, create a simple mapping
             Map<String, String> binding = new HashMap<>();
