@@ -1,165 +1,167 @@
 /* GenSPARQL demo data.
- * Pre-recorded results are REAL (eval/wc2026_x1_results.json, worldcup2026.ttl).
+ * The recorded mode replays answers of the evaluation of the WWW'27 demo paper: the
+ * answers, counts and rates come from docs/recorded-runs.js, which
+ * eval/www27/make_recorded_data.py writes from eval/www27/results. The queries below are
+ * the queries of that evaluation.
  * In Live (BYOK) mode the grounding query is executed for real from the browser
  * with the viewer's own API key. The Java engine is not run on this static page.
  */
-window.DEMO_DATA = {
+(function(){
+  const R = window.RECORDED_RUNS;
+  const factor = (a, b) => `${(a / b).toFixed(1)}×`;
+  const short = model => model.split("/").pop();
+  const POSITION_PROMPT =
+`"Which position does the footballer {?name}
+          primarily play: goalkeeper, defender,
+          midfielder or forward?"`;
 
-  // Default OpenAI-compatible endpoints for Live mode (all editable in the UI).
-  live: {
-    chatBase: "https://api.groq.com/openai/v1",
-    chatModel: "openai/gpt-oss-120b",
-    embBase: "https://api.openai.com/v1",
-    embModels: ["text-embedding-3-small", "text-embedding-3-large"]
-  },
+  window.DEMO_DATA = {
 
-  scenarios: [
-    {
-      id: "entity",
-      tab: "Ground entities",
-      hero: true,                 // uses the KG graph + Live mode
-      query:
+    // Default OpenAI-compatible endpoints for Live mode (all editable in the UI).
+    live: {
+      chatBase: "https://api.groq.com/openai/v1",
+      chatModel: "openai/gpt-oss-120b",
+      embBase: "https://api.openai.com/v1",
+      embModels: ["text-embedding-3-small", "text-embedding-3-large"]
+    },
+
+    scenarios: [
+      {
+        id: "entity",
+        tab: "Ground entities",
+        hero: true,                 // uses the KG graph + Live mode
+        recordedModel: short(R.wcEntity.model),
+        query:
 `SELECT ?team WHERE {
   ?team a ex:Team .
-  GENOP("List national teams in the
-         2026 FIFA World Cup.",
+  GENOP("List the national teams that play
+         at the 2026 FIFA World Cup.",
         (?team), <model>, {theta})
 }`,
-      prompt: "List national teams competing at the 2026 FIFA World Cup. Return ONLY a JSON array of team names, nothing else.",
-      // Pre-recorded base-mode generation (real qualifiers + variants + non-qualifiers).
-      generated: ["Brazil","Argentina","France","Japan","United States","Mexico",
-                  "Türkiye","Czech Republic","Italy","Russia","Serbia"]
-    },
-    {
-      id: "attribute",
-      tab: "Generate attributes",
-      hero: false,
-      query:
+        prompt: R.wcEntity.prompt,
+        // The names that Mistral-7B listed in the evaluation (E2).
+        generated: R.wcEntity.generated
+      },
+      {
+        id: "attribute",
+        tab: "Generate attributes",
+        hero: false,
+        recordedModel: short(R.wcAttribute.model),
+        query:
 `SELECT ?name ?pos WHERE {
-  ?p a ex:Athlete ; rdfs:label ?name .
-  GENOP("Position of {?name}?",
+  ?p ex:playsFor ?t .
+  ?t rdfs:label "Argentina" .
+  ?p rdfs:label ?name .
+  GENOP(${POSITION_PROMPT},
         (?pos), <model>)
 }`,
-      rows: [
-        { name: "Folarin Balogun", gen: "Forward",    state: "correct" },
-        { name: "Piero Hincapié",  gen: "Defender",   state: "correct" },
-        { name: "Lionel Messi",    gen: "Midfielder", state: "correct" },
-        { name: "Jude Bellingham", gen: "Midfielder", state: "correct" },
-        { name: "Jamal Musiala",   gen: "Midfielder", state: "correct" },
-        { name: "Fabian Rieder",   gen: "Forward",    state: "wrong"   },
-        { name: "Ange-Yoan Bonny", gen: "Defender",   state: "wrong"   },
-        { name: "Zineddine Belaïd",gen: "Unknown",    state: "abstain" }
-      ],
-      stat: { a: "77%", b: "70%" }   // answer rate / accuracy
-    },
-    {
-      id: "composition",
-      tab: "Compose + defer",
-      hero: false,
-      query:
-`SELECT ?name WHERE {
+        rows: R.wcAttribute.rows,
+        stat: R.wcAttribute.stat,
+        metricLabel: `Accuracy vs Wikidata P413 (all ${R.wcAttribute.players.toLocaleString("en")} players)`,
+        note: `Answers of ${short(R.wcAttribute.model)} through GENOP in the evaluation over all ${R.wcAttribute.players.toLocaleString("en")} players. Answer rate and accuracy refer to all players; the rows are the 26 Argentine players. SPARQL alone returns no position, because the graph leaves out the positions that Wikidata records.`
+      },
+      {
+        id: "composition",
+        tab: "Compose + defer",
+        hero: false,
+        recordedModel: short(R.wcComposition.model),
+        query:
+`SELECT ?name ?pos WHERE {
   ?t ex:inGroup ?g .
   ?g rdfs:label "Group A" .
   ?p ex:playsFor ?t ; rdfs:label ?name .
-  GENOP("Position of {?name}?", (?pos), <model>)
-  FILTER(?pos = "Defender")
+  GENOP(${POSITION_PROMPT},
+        (?pos), <model>)
+  FILTER(LCASE(STR(?pos)) = "defender")
 }`,
-      result: { defenders: 35, total: 104,
-        defenderIds: ["http://www.wikidata.org/entity/Q84312754", "http://www.wikidata.org/entity/Q13360752", "http://www.wikidata.org/entity/Q107647351", "http://www.wikidata.org/entity/Q15113326", "http://www.wikidata.org/entity/Q114713721", "http://www.wikidata.org/entity/Q27919903", "http://www.wikidata.org/entity/Q96070453", "http://www.wikidata.org/entity/Q6160707", "http://www.wikidata.org/entity/Q96613620", "http://www.wikidata.org/entity/Q24034870", "http://www.wikidata.org/entity/Q20816441", "http://www.wikidata.org/entity/Q27859514", "http://www.wikidata.org/entity/Q39161128", "http://www.wikidata.org/entity/Q107739233", "http://www.wikidata.org/entity/Q124420330", "http://www.wikidata.org/entity/Q22092356", "http://www.wikidata.org/entity/Q127324870", "http://www.wikidata.org/entity/Q137299823", "http://www.wikidata.org/entity/Q26405966", "http://www.wikidata.org/entity/Q133464757", "http://www.wikidata.org/entity/Q133794425", "http://www.wikidata.org/entity/Q58580967", "http://www.wikidata.org/entity/Q58810793", "http://www.wikidata.org/entity/Q127514195", "http://www.wikidata.org/entity/Q122207713", "http://www.wikidata.org/entity/Q117790110", "http://www.wikidata.org/entity/Q106779330", "http://www.wikidata.org/entity/Q28699707", "http://www.wikidata.org/entity/Q79904514", "http://www.wikidata.org/entity/Q61100362", "http://www.wikidata.org/entity/Q119432409", "http://www.wikidata.org/entity/Q31146726", "http://www.wikidata.org/entity/Q69696842", "http://www.wikidata.org/entity/Q97205258", "http://www.wikidata.org/entity/Q98829565"]
-      },
-      // genopFirst = every ex:Athlete in worldcup2026.ttl (1,248).
-      // planned    = the ?p bindings that survive the Group A patterns (104),
-      //              i.e. the same 104 the recorded result is reported over.
-      // factor     = 1248 / 104.
-      cost: { genopFirst: 1248, planned: 104, factor: "12.0×" }
-    }
-  ],
+        filterLabel: 'LCASE(STR(?pos)) = "defender"',
+        result: { defenders: R.wcComposition.defenders, total: R.wcComposition.total,
+                  defenderIds: R.wcComposition.defenderIds },
+        // Measured through the service: GENOP written before the Group A patterns makes
+        // genopFirst calls with the reordering switched off and planned calls with it on.
+        cost: { genopFirst: R.wcComposition.genopFirst, planned: R.wcComposition.planned,
+                factor: factor(R.wcComposition.genopFirst, R.wcComposition.planned) }
+      }
+    ],
 
-  nobelScenarios: [
-    {
-      id: "entity",
-      tab: "Ground Nobel fields",
-      name: "Ground Nobel Prize fields",
-      hero: true,
-      targetType: "NobelField",
-      targetLabel: "Nobel fields",
-      query:
+    nobelScenarios: [
+      {
+        id: "entity",
+        tab: "Ground Nobel fields",
+        name: "Ground Nobel Prize fields",
+        hero: true,
+        targetType: "NobelField",
+        targetLabel: "Nobel fields",
+        recordedModel: short(R.nobelEntity.model),
+        query:
 `SELECT ?field WHERE {
   ?field a ex:NobelField .
-  GENOP("List the official Nobel Prize fields.",
+  GENOP("List the fields in which the Nobel
+         Prize is awarded.",
         (?field), <model>, {theta})
 }`,
-      prompt: "List the official Nobel Prize fields. Return ONLY a JSON array of field names.",
-      generated: [
-        "Nobel Prize in Physics",
-        "Nobel Prize in Chemistry",
-        "Nobel Prize in Physiology or Medicine",
-        "Nobel Prize in Literature",
-        "Nobel Peace Prize",
-        "Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel",
-        "Nobel Prize in Mathematics"
-      ]
-    },
-    {
-      id: "attribute",
-      tab: "Generate attributes",
-      name: "Generate laureate contributions",
-      hero: false,
-      sourceType: "NobelLaureate",
-      generatedPredicate: "?contribution",
-      generatedTitle: "Generated laureate contributions",
-      metricLabel: "Recorded sample accuracy",
-      note: "The contribution is generated by GENOP and is not stored in the Nobel KG.",
-      query:
-`SELECT ?name ?contribution WHERE {
+        prompt: R.nobelEntity.prompt,
+        // The fields that Qwen3-30B listed in the evaluation (E2). Their labels in the graph
+        // read "Nobel Prize in Physics" and so on, so the short names need a low threshold.
+        generated: R.nobelEntity.generated
+      },
+      {
+        id: "attribute",
+        tab: "Generate attributes",
+        name: "Generate laureate birth years",
+        hero: false,
+        sourceType: "NobelLaureate",
+        recordedModel: short(R.nobelAttribute.model),
+        generatedPredicate: "?year",
+        generatedTitle: "Generated birth years",
+        metricLabel: `Accuracy vs Wikidata P569 (all ${R.nobelAttribute.laureates.toLocaleString("en")} laureates)`,
+        note: `Answers of ${short(R.nobelAttribute.model)} through GENOP in the evaluation over all ${R.nobelAttribute.laureates.toLocaleString("en")} laureates. Answer rate and accuracy refer to all laureates; the rows are the Physics laureates since 2020.`,
+        query:
+`SELECT ?name ?year WHERE {
   ?laureate a ex:NobelLaureate ;
             rdfs:label ?name .
-  GENOP("Main contribution of {?name}?",
-        (?contribution), <model>)
+  GENOP("In which year was the Nobel laureate
+         {?name} born? Answer with the year only.",
+        (?year), <model>)
 }`,
-      rows: [
-        {name:"Marie Curie",gen:"Radioactivity",state:"correct"},
-        {name:"Albert Einstein",gen:"Photoelectric effect",state:"correct"},
-        {name:"Alexander Fleming",gen:"Penicillin",state:"correct"},
-        {name:"Donna Strickland",gen:"Chirped pulse amplification",state:"correct"},
-        {name:"Andrea M. Ghez",gen:"Galactic-center black hole",state:"correct"},
-        {name:"Anne L'Huillier",gen:"Attosecond light pulses",state:"correct"},
-        {name:"Bob Dylan",gen:"Literature and song",state:"correct"},
-        {name:"Niels Bohr",gen:"Unknown",state:"abstain"}
-      ],
-      stat:{a:"88%",b:"100%"}
-    },
-    {
-      id: "composition",
-      tab: "Compose + defer",
-      name: "Compose Nobel selection + generated motivations",
-      hero: false,
-      query:
+        rows: R.nobelAttribute.rows,
+        stat: R.nobelAttribute.stat
+      },
+      {
+        id: "composition",
+        tab: "Compose + defer",
+        name: "Compose Physics laureates since 2020 with generated contributions",
+        hero: false,
+        recordedModel: short(R.nobelComposition.model),
+        query:
 `PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
-SELECT ?name ?motivation WHERE {
-  ?award ex:field wd:Q38104 ;
-         ex:year ?year ;
-         ex:winner ?laureate .
-  FILTER(xsd:integer(?year) >= 2020)
-  ?laureate rdfs:label ?name .
-  GENOP(
-    "What contribution earned {?name} the Nobel Prize in Physics? Return one concise sentence.",
-    (?motivation), <model>
-  )
+SELECT ?name ?c WHERE {
+  ?a ex:field wd:Q38104 ;
+     ex:winningYear ?y ;
+     ex:winner ?l .
+  ?l rdfs:label ?name .
+  FILTER(xsd:integer(STR(?y)) >= 2020)
+  GENOP("For which contribution did {?name}
+         receive the Nobel Prize in Physics?
+         Answer with one short phrase.",
+        (?c), <model>)
 }`,
-      result:{
-        matches:17,total:17
-      },
-      cost:{genopFirst:1018,planned:17,factor:"59.9×"},
-      bindingLabel:"Nobel laureates",
-      selectionLabel:"Physics awards since 2020",
-      generatedVariable:"?motivation",
-      generatedLabel:"Award motivation",
-      sinceYear:2020,
-      hasFilter:false,
-      resultLabel:"generated motivations"
-    }
-  ]
-};
+        result: { matches: R.nobelComposition.answered, total: R.nobelComposition.total,
+                  answeredNames: R.nobelComposition.answeredNames },
+        // Measured through the service: with the reordering switched off the FILTER runs
+        // after GENOP (genopFirst calls), with it on before GENOP (planned calls).
+        cost: { genopFirst: R.nobelComposition.genopFirst, planned: R.nobelComposition.planned,
+                factor: factor(R.nobelComposition.genopFirst, R.nobelComposition.planned) },
+        bindingLabel: "Physics award bindings",
+        selectionLabel: "Physics awards since 2020",
+        generatedVariable: "?c",
+        generatedLabel: "Contribution",
+        sinceYear: 2020,
+        hasFilter: false,
+        resultLabel: "generated contributions"
+      }
+    ]
+  };
+})();

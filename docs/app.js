@@ -22,13 +22,13 @@
   const scenarioList = () => CFG.scenariosByDatabase?.[state.dbKey] || CFG.scenarios;
   const currentScenario = () => scenarioList()[state.scenarioIndex] || scenarioList()[0];
   const similarityLabel = method => String(method || "").trim().toLowerCase() === "text"
-    ? "similarity"
+    ? "Jaccard similarity"
     : `${String(method || "").trim()} similarity`.trim();
   // ?print (page-mode.js) lays the graph out for a figure: a similarity box shows only its
   // score and is smaller, and the fit leaves room for the larger labels of styles.css.
   const PRINT_LAYOUT=document.documentElement.hasAttribute("data-print");
-  const SIMILARITY_BOX_WIDTH=PRINT_LAYOUT?54:96;
-  const SIMILARITY_BOX_HEIGHT=PRINT_LAYOUT?25:27;
+  const SIMILARITY_BOX_WIDTH=PRINT_LAYOUT?62:96;
+  const SIMILARITY_BOX_HEIGHT=PRINT_LAYOUT?28:27;
   const SIMILARITY_BOX_GAP=5;
 
   function cloneGraph(graph){
@@ -327,6 +327,9 @@
       isComposition
       ? "Compose + defer compares the same logical query under two physical execution orders: GENOP-first versus planner-deferred GENOP."
       : `${currentDb().label} uses the full ${currentDb().source} knowledge graph.`;
+    if(s.recordedModel&&executionLabel==="pre-recorded"){
+      $("caption").textContent+=` Recorded answers of ${s.recordedModel} from the evaluation of the paper.`;
+    }
   }
 
 
@@ -2527,6 +2530,14 @@ ORDER BY ?year`
 
       $("graphTitle").textContent=generated?"Grounding Result":"Knowledge Graph";
       const similarityMethod=state.graph.nodes.find(n=>n.generatedCandidate)?.similarityMethod;
+      if(PRINT_LAYOUT&&state.printFolded){
+        const f=state.printFolded;
+        $("graphTitle").textContent="Mapping of generated names";
+        $("graphStatus").textContent=`${similarityLabel(similarityMethod)} · θ = ${f.theta.toFixed(2)} · ${f.total} generated names · ${f.names.length} equal a label and map (not drawn)`;
+        const legend=document.querySelector(".legend");
+        if(legend)legend.innerHTML='<span><i class="lg-kg"></i>entity of the graph</span><span><i class="lg-llm"></i>generated name</span><span><i class="lg-drop"></i>name below θ</span>';
+        return;
+      }
       $("graphStatus").textContent=generated
         ? `${similarityLabel(similarityMethod)} · ${matchedCountries} matched KG targets · ${remainingCountries} remaining targets · ${generated} generated candidates · ${grounded} grounded`
         : `${db.label} · full KG · ${state.graph.nodes.length} nodes · ${state.graph.links.length} edges`;
@@ -2628,14 +2639,23 @@ ORDER BY ?year`
 
     const w=$("graphStage").clientWidth;
     const h=$("graphStage").clientHeight;
-    const pad=PRINT_LAYOUT?84:42;
+    const pad=PRINT_LAYOUT?8:42;
     const padY=PRINT_LAYOUT?18:pad;
+    // In the figure layout a name is drawn left of its node and a label right of its node,
+    // so the fit makes room for the text, measured in the font of the page at 20 px.
+    const ctx=PRINT_LAYOUT?document.createElement("canvas").getContext("2d"):null;
+    const family=getComputedStyle(document.body).fontFamily;
+    const textWidth=d=>{
+      if(!ctx)return 0;
+      ctx.font=`${d.generatedCandidate?"700 ":""}20px ${family}`;
+      return ctx.measureText(String(d.label||"")).width+nodeRadius(d)+10;
+    };
     const left=d=>d.generatedCandidate&&Number.isFinite(d.similarityBoxX)
-      ? Math.min(d.x,d.x+d.similarityBoxX)
+      ? Math.min(d.x-textWidth(d),d.x+d.similarityBoxX)
       : d.x;
     const right=d=>d.generatedCandidate&&Number.isFinite(d.similarityBoxX)
       ? Math.max(d.x,d.x+d.similarityBoxX+SIMILARITY_BOX_WIDTH)
-      : d.x;
+      : d.x+textWidth(d);
     const top=d=>d.generatedCandidate&&Number.isFinite(d.similarityBoxY)
       ? Math.min(d.y,d.y+d.similarityBoxY)
       : d.y;
@@ -2650,7 +2670,8 @@ ORDER BY ?year`
 
     const bw=Math.max(maxX-minX,160);
     const bh=Math.max(maxY-minY,160);
-    const scale=Math.max(.14,Math.min(2.85,.86/Math.max(bw/w,bh/h)));
+    const fill=PRINT_LAYOUT?.98:.86;
+    const scale=Math.max(.14,Math.min(2.85,fill/Math.max(bw/w,bh/h)));
     const tx=w/2-scale*(minX+maxX)/2;
     const ty=h/2-scale*(minY+maxY)/2;
 
@@ -2856,6 +2877,15 @@ ORDER BY ?year`
     }else{
       matches=textGroundingMatches();
       method="Text";
+    }
+
+    // In the figure layout, the names that equal a label are listed in the status line
+    // instead of drawn, so that the figure shows the names the similarity join decides on.
+    state.printFolded=null;
+    if(PRINT_LAYOUT){
+      const folded=matches.filter(m=>m.best&&m.score>=1).map(m=>m.name);
+      state.printFolded={names:folded,total:matches.length,theta:Number($("theta").value)};
+      matches=matches.filter(m=>!(m.best&&m.score>=1));
     }
 
     const generatedNodes=[];
@@ -3628,7 +3658,12 @@ ORDER BY ?year`
     const physicsId="http://www.wikidata.org/entity/Q38104",sinceYear=s.sinceYear||2020;
     const awardIds=new Set(full.links.filter(link=>link.predicate==="field"&&link.target===physicsId&&nobelAwardYear({id:link.source})>=sinceYear).map(link=>link.source));
     const selectedIds=[...new Set(full.links.filter(link=>link.predicate==="winner"&&awardIds.has(link.source)).map(link=>link.target))];
-    return {s,full,byId,physicsId,sinceYear,selectedIds,allIds:full.nodes.filter(node=>node.type==="NobelLaureate").map(node=>node.id)};
+    // Without the reordering, the FILTER on the year runs after GENOP, so GENOP sees the
+    // winner of every Physics award.
+    const physicsAwards=new Set(full.links.filter(link=>link.predicate==="field"&&link.target===physicsId).map(link=>link.source));
+    const allIds=[...new Set(full.links.filter(link=>link.predicate==="winner"&&physicsAwards.has(link.source)).map(link=>link.target))];
+    const answered=new Set((s.result?.answeredNames||[]).map(name=>norm(name)));
+    return {s,full,byId,physicsId,sinceYear,selectedIds,allIds,answered};
   }
 
   function buildNobelCompositionStage({selected=false,withGenerated=false}={}){
@@ -3654,6 +3689,7 @@ ORDER BY ?year`
     nodes.push(...sources);
     const generated=[];
     if(withGenerated)sources.forEach((source,index)=>{
+      if(selected&&data.answered.size&&!data.answered.has(norm(source.label)))return;
       const angle=dense?stableUnit(source.id,331)*Math.PI*2:-Math.PI/2+index*Math.PI*2/Math.max(sources.length,1);
       const distance=dense?3.4:14;
       const node={
@@ -3675,13 +3711,13 @@ ORDER BY ?year`
     state.compositionStrategy=strategy;state.compositionStep=safeIndex;setActiveExecutionStep(safeIndex);
     let selected=false,withGenerated=false,title,status;
     if(strategy==="genop-first"){
-      if(safeIndex===0){title="Step 1 · Nobel laureate bindings";status=`${cost.genopFirst} laureate bindings before GENOP`;}
-      else if(safeIndex===1){withGenerated=true;title="Step 2 · GENOP";status=`${cost.genopFirst} generated motivation nodes · ${cost.genopFirst} LLM calls`;}
-      else {selected=true;withGenerated=true;title=safeIndex===2?"Step 3 · KG selection":"Step 4 · Result";status=`Physics ${s.sinceYear}+ leaves ${cost.planned} laureates and ${cost.planned} generated motivations`;}
+      if(safeIndex===0){title="Step 1 · Physics award bindings";status=`${cost.genopFirst} Physics award bindings before GENOP`;}
+      else if(safeIndex===1){withGenerated=true;title="Step 2 · GENOP";status=`${cost.genopFirst} LLM calls, one per binding`;}
+      else {selected=true;withGenerated=true;title=safeIndex===2?"Step 3 · KG selection":"Step 4 · Result";status=`Physics ${s.sinceYear}+ leaves ${cost.planned} laureates · ${result.matches} generated contributions`;}
     }else{
       selected=true;
-      if(safeIndex===0){title="Step 1 · KG selection";status=`Physics ${s.sinceYear}+ reduces ${cost.genopFirst} laureates to ${cost.planned} bindings before GENOP`;}
-      else {withGenerated=true;title=safeIndex===1?"Step 2 · GENOP":"Step 3 · Result";status=`Only ${cost.planned} generated motivation nodes · ${cost.planned} LLM calls`;}
+      if(safeIndex===0){title="Step 1 · KG selection";status=`Physics ${s.sinceYear}+ reduces ${cost.genopFirst} award bindings to ${cost.planned} before GENOP`;}
+      else {withGenerated=true;title=safeIndex===1?"Step 2 · GENOP":"Step 3 · Result";status=`${cost.planned} LLM calls · ${result.matches} generated contributions`;}
     }
     const graph=buildNobelCompositionStage({selected,withGenerated});
     const finalStep=safeIndex===steps.length-1;
