@@ -13,6 +13,7 @@ queries to the GenSPARQL HTTP service and records the bindings, the number of LL
 | `job.sbatch` | Starts vLLM (model and `BAAI/bge-large-en-v1.5`) and the service, then runs `run_eval.py` |
 | `stub_llm.py` | An OpenAI-compatible stub that answers `[]`, for counting calls without a model |
 | `measure_calls.py` | Counts the LLM calls of the E3 queries with the planner on or off; results in `results/planner-calls.json` |
+| `replay_e2.sbatch` | Replays the recorded LLM answers of E2 with the current engine; only the embedding model runs |
 
 On the cluster (from the repository root; the login node only submits jobs):
 
