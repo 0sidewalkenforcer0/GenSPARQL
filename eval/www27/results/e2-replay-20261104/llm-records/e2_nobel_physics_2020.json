@@ -1,0 +1,101 @@
+{
+  "openai:Qwen/Qwen3-30B-A3B-Instruct-2507:90a2229a3cc369b869a3474f0f0640268476cc3eeb12906ba15d6ab70e155445:0.00:1000:x" : {
+    "rawText" : "[\n  \"Roger Penrose\",\n  \"Reinhard Genzel\",\n  \"Andrea Ghez\",\n  \"Giorgio Parisi\",\n  \"John F. Clauser\",\n  \"Alain Aspect\",\n  \"Anton Zeilinger\",\n  \"Pierre Agostini\",\n  \"Ferenc Krausz\",\n  \"Anne L’Huillier\",\n  \"Louis Néel\",\n  \"Pierre-Gilles de Gennes\",\n  \"Jean-Pierre Sauvage\",\n  \"J. Fraser Stoddart\",\n  \"Ben Feringa\",\n  \"David J. Thouless\",\n  \"F. Duncan M. Haldane\",\n  \"J. Michael Kosterlitz\",\n  \"Arthur Ashkin\",\n  \"Gérard Mourou\",\n  \"Donna Strickland\",\n  \"Rainer Weiss\",\n  \"Barry Barish\",\n  \"Kip Thorne\",\n  \"James Peebles\",\n  \"Michel Mayor\",\n  \"Didier Queloz\",\n  \"Andrea Ghez\",\n  \"Reinhard Genzel\",\n  \"Roger Penrose\"\n]",
+    "bindings" : [ {
+      "x" : "Roger Penrose"
+    }, {
+      "x" : "Reinhard Genzel"
+    }, {
+      "x" : "Andrea Ghez"
+    }, {
+      "x" : "Giorgio Parisi"
+    }, {
+      "x" : "John F. Clauser"
+    }, {
+      "x" : "Alain Aspect"
+    }, {
+      "x" : "Anton Zeilinger"
+    }, {
+      "x" : "Pierre Agostini"
+    }, {
+      "x" : "Ferenc Krausz"
+    }, {
+      "x" : "Anne L’Huillier"
+    }, {
+      "x" : "Louis Néel"
+    }, {
+      "x" : "Pierre-Gilles de Gennes"
+    }, {
+      "x" : "Jean-Pierre Sauvage"
+    }, {
+      "x" : "J. Fraser Stoddart"
+    }, {
+      "x" : "Ben Feringa"
+    }, {
+      "x" : "David J. Thouless"
+    }, {
+      "x" : "F. Duncan M. Haldane"
+    }, {
+      "x" : "J. Michael Kosterlitz"
+    }, {
+      "x" : "Arthur Ashkin"
+    }, {
+      "x" : "Gérard Mourou"
+    }, {
+      "x" : "Donna Strickland"
+    }, {
+      "x" : "Rainer Weiss"
+    }, {
+      "x" : "Barry Barish"
+    }, {
+      "x" : "Kip Thorne"
+    }, {
+      "x" : "James Peebles"
+    }, {
+      "x" : "Michel Mayor"
+    }, {
+      "x" : "Didier Queloz"
+    } ],
+    "success" : true,
+    "errorMessage" : null,
+    "model" : "Qwen/Qwen3-30B-A3B-Instruct-2507",
+    "promptTokens" : 125,
+    "completionTokens" : 236
+  },
+  "openai:mistralai/Mistral-7B-Instruct-v0.3:90a2229a3cc369b869a3474f0f0640268476cc3eeb12906ba15d6ab70e155445:0.00:1000:x" : {
+    "rawText" : " [\"Roger Penrose\", \"Reinhard Genzel\", \"Andrea Ghez\"]\n[\"Barry C. Barish\", \"Kip S. Thorne\", \"Rainer Weiss\"]\n[\"Alain Aspect\", \"John F. Clauser\", \"Anton Zeilinger\"]\n[\"Frances H. Arnold\", \"Carlos Barrios\", \"George P. Smith\"]\n[\"Jennifer Ruth Doudna\", \"Emmanuelle Charpentier\"]",
+    "bindings" : [ {
+      "x" : "Jennifer Ruth Doudna"
+    }, {
+      "x" : "Emmanuelle Charpentier"
+    } ],
+    "success" : true,
+    "errorMessage" : null,
+    "model" : "mistralai/Mistral-7B-Instruct-v0.3",
+    "promptTokens" : 137,
+    "completionTokens" : 107
+  },
+  "openai:Qwen/Qwen3-8B:90a2229a3cc369b869a3474f0f0640268476cc3eeb12906ba15d6ab70e155445:0.00:1000:x" : {
+    "rawText" : "[\"Roger Penrose\", \"Reinhard Genzel\", \"Andrea Ghez\", \"Syukuro Manabe\", \"Klaus Hasselmann\", \"George Smoot\", \"John Mather\"]",
+    "bindings" : [ {
+      "x" : "Roger Penrose"
+    }, {
+      "x" : "Reinhard Genzel"
+    }, {
+      "x" : "Andrea Ghez"
+    }, {
+      "x" : "Syukuro Manabe"
+    }, {
+      "x" : "Klaus Hasselmann"
+    }, {
+      "x" : "George Smoot"
+    }, {
+      "x" : "John Mather"
+    } ],
+    "success" : true,
+    "errorMessage" : null,
+    "model" : "Qwen/Qwen3-8B",
+    "promptTokens" : 129,
+    "completionTokens" : 44
+  }
+}

@@ -1,0 +1,466 @@
+{
+ "prompt": "List the laureates of the Nobel Prize in Physics from 2020 to 2025.",
+ "pattern": "?x a ex:NobelLaureate .",
+ "runs": [
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelLaureate . GENOP(\"List the laureates of the Nobel Prize in Physics from 2020 to 2025.\", (?x), <model>, 0.5) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q56068"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q17280087"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.5
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelLaureate . GENOP(\"List the laureates of the Nobel Prize in Physics from 2020 to 2025.\", (?x), <model>, 0.6) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q56068"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q17280087"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.6
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelLaureate . GENOP(\"List the laureates of the Nobel Prize in Physics from 2020 to 2025.\", (?x), <model>, 0.7) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q17280087"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.7
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelLaureate . GENOP(\"List the laureates of the Nobel Prize in Physics from 2020 to 2025.\", (?x), <model>, 0.8) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q17280087"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.8
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelLaureate . GENOP(\"List the laureates of the Nobel Prize in Physics from 2020 to 2025.\", (?x), <model>, 0.85) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q17280087"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.85
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelLaureate . GENOP(\"List the laureates of the Nobel Prize in Physics from 2020 to 2025.\", (?x), <model>, 0.9) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q17280087"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.9
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelLaureate . GENOP(\"List the laureates of the Nobel Prize in Physics from 2020 to 2025.\", (?x), <model>, 1.0) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q17280087"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 1.0
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelLaureate . GENOP(\"List the laureates of the Nobel Prize in Physics from 2020 to 2025.\", (?x), <model>, 0.5) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q56855591"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q172254"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q49325"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q49330"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q272855"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q131721"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q242169"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q41042"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q32732"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q109588"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q152760"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q565544"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q122368"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q133232"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q135180"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q26703310"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7442"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q180989"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q26322"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q124013"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q179888"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q364997"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47484"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q56068"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q193803"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q180409"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q30547"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q22007112"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q62891"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q185007"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q131549"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q740308"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q202146"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q153178"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q254032"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q34670"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q115448"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q208670"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q156482"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47619"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q77174"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7487"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q185777"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q37463"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q40874"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7186"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q234819"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q57066"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q103844"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q42247"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q234590"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q88608397"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q188620"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q80871"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q104104"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q93137"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q7728"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q42970"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q72334"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q215139"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q107402"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q210960"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q49747"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q231402"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47243"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q110968"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q5878"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q216872"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q9364"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q556543"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q204733"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q158850"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q434509"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q157690"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q9130"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q1153825"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q26321"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q57074"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q17280087"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q18391"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q44519"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.5
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelLaureate . GENOP(\"List the laureates of the Nobel Prize in Physics from 2020 to 2025.\", (?x), <model>, 0.6) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q56068"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q47243"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q17280087"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.6
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelLaureate . GENOP(\"List the laureates of the Nobel Prize in Physics from 2020 to 2025.\", (?x), <model>, 0.7) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q56068"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q17280087"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.7
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelLaureate . GENOP(\"List the laureates of the Nobel Prize in Physics from 2020 to 2025.\", (?x), <model>, 0.8) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q56068"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q17280087"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.8
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelLaureate . GENOP(\"List the laureates of the Nobel Prize in Physics from 2020 to 2025.\", (?x), <model>, 0.85) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q56068"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q17280087"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.85
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelLaureate . GENOP(\"List the laureates of the Nobel Prize in Physics from 2020 to 2025.\", (?x), <model>, 0.9) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q56068"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q17280087"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.9
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelLaureate . GENOP(\"List the laureates of the Nobel Prize in Physics from 2020 to 2025.\", (?x), <model>, 1.0) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q17280087"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 1.0
+  }
+ ],
+ "llm_record": "e2_nobel_physics_2020.json",
+ "generated_before": {
+  "query": "SELECT ?x WHERE { GENOP(\"List the laureates of the Nobel Prize in Physics from 2020 to 2025.\", (?x), <model>) }",
+  "rows": [
+   {
+    "x": "Jennifer Ruth Doudna"
+   },
+   {
+    "x": "Emmanuelle Charpentier"
+   }
+  ],
+  "calls": 1,
+  "seconds": 0.0
+ },
+ "generated_after": {
+  "query": "SELECT ?x WHERE { GENOP(\"List the laureates of the Nobel Prize in Physics from 2020 to 2025.\", (?x), <model>) }",
+  "rows": [
+   {
+    "x": "Jennifer Ruth Doudna"
+   },
+   {
+    "x": "Emmanuelle Charpentier"
+   }
+  ],
+  "calls": 1,
+  "seconds": 0.0
+ },
+ "model": "mistralai/Mistral-7B-Instruct-v0.3"
+}

@@ -32,6 +32,8 @@ E2 records the first LLM answer of each list query in `results/<model>/llm-recor
 
 The E1 records of 2026-11-03 contain rows whose value is `[]`: the service of that day bound an empty array to the single output variable instead of dropping the solution. `score.py` counts such a row as no answer, so the scores are those of the corrected engine. The E2 records contain the same rows for the two queries that Qwen3-30B and Qwen3-8B declined; the threshold runs at 0.5 and 0.6 map this value to entities, which `score.py` counts as wrong matches.
 
+The E2 numbers of the paper come from `results/e2-replay-20261104/` (engine `ee196ca`): `replay_e2.sbatch` replayed the recorded LLM answers of 2026-11-03 with the engine that compares a generated name with every label of an entity, and `score.py` scored them with the completed manual check (`summary.json` there). The generated names are those of the run of 2026-11-03; E1 and E3 come from that run (`results/summary.json`).
+
 The planner measurement runs locally with the stub as the LLM, once with the service started as usual and once with `-Dgensparql.planner.reorder=false`:
 
 ```
