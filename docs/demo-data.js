@@ -58,7 +58,7 @@
         rows: R.wcAttribute.rows,
         stat: R.wcAttribute.stat,
         metricLabel: `Accuracy vs Wikidata P413 (all ${R.wcAttribute.players.toLocaleString("en")} players)`,
-        note: `Answers of ${short(R.wcAttribute.model)} through GENOP in the evaluation over all ${R.wcAttribute.players.toLocaleString("en")} players. Answer rate and accuracy refer to all players; the rows are the 26 Argentine players. SPARQL alone returns no position, because the graph leaves out the positions that Wikidata records.`
+        note: `Answers of ${short(R.wcAttribute.model)} through GENOP in the evaluation over all ${R.wcAttribute.players.toLocaleString("en")} players. Answer rate and accuracy refer to all players; the rows are the 26 Argentine players, and under each name the answers of ${R.wcAttribute.otherModels.join(" and ")} to the same prompt. SPARQL alone returns no position, because the graph leaves out the positions that Wikidata records.`
       },
       {
         id: "composition",

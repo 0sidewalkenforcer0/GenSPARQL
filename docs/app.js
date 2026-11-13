@@ -3196,12 +3196,23 @@ ORDER BY ?year`
       : `The planner evaluates ${s.selectionLabel||"selective KG patterns"} first and defers GENOP until only ${cost.planned} bindings remain. This reduces LLM calls from ${cost.genopFirst} to ${cost.planned} (${cost.factor} fewer) while preserving the recorded logical query result.`;
   }
 
+  // The positions that the recorded model generated for the players in the evaluation (E1,
+  // with the prompt of the composed query), keyed by IRI. They stay outside the graph, which
+  // leaves positions out.
+  function recordedPositions(){
+    const codes={Goalkeeper:"GK",Defender:"DF",Midfielder:"MF",Forward:"FW"};
+    const byQid=window.RECORDED_RUNS?.wcComposition?.positions||{};
+    const out={};
+    Object.entries(byQid).forEach(([q,label])=>{
+      out[`http://www.wikidata.org/entity/${q}`]={code:codes[label]||"?",label};
+    });
+    return out;
+  }
+
   function compositionData(){
     const source=cloneGraph(currentDb().graph);
     const nodeById=new Map(source.nodes.map(node=>[node.id,node]));
-    // Pre-recorded GENOP visualization values. They stay outside the KG so
-    // position remains an intentionally missing attribute in the database.
-    const positionById=window.FIFA2026_POSITIONS||{};
+    const positionById=recordedPositions();
     const allAthletes=source.nodes
       .filter(node=>node.type==="Athlete")
       .sort((a,b)=>(a.label||a.id).localeCompare(b.label||b.id,undefined,{sensitivity:"base"}));
@@ -3238,9 +3249,9 @@ ORDER BY ?year`
     const groupEntries=[];
     teamsWithPlayers.forEach(entry=>entry.players.forEach(player=>groupEntries.push({player,teamId:entry.teamId})));
 
-    // Positions remain intentionally absent from the KG. The recorded Compose
-    // result therefore stores FIFA's official POS=DF identities separately
-    // from the graph and uses them only to visualize the pre-recorded GENOP output.
+    // The defenders are the players that the recorded run of the composed query kept (E3).
+    // The positions on the generated nodes are the answers of the same model to the same
+    // prompt in E1, which keep the same 80 defenders of Group A.
     const recordedDefenderIds=compositionContext().result.defenderIds||[];
     const groupPlayerIds=new Set(groupEntries.map(entry=>entry.player.id));
     const defenderIds=new Set(recordedDefenderIds.filter(id=>groupPlayerIds.has(id)));
@@ -3757,9 +3768,13 @@ ORDER BY ?year`
     $("attributeSampleSummary").textContent=
       `Displayed sample · ${counts.correct} correct · ${counts.wrong} wrong · ${counts.abstain} abstain`;
 
+    // Under each name, the answers of the other recorded LLMs to the same prompt.
+    const others=r=>(r.others||[]).length
+      ? `<span class="attribute-others">${r.others.map(o=>`${esc(o.model)}: ${esc(o.gen)} (${esc(o.state)})`).join(" · ")}</span>`
+      : "";
     $("attributeRows").innerHTML=rows.map(r=>`
       <div class="attribute-row">
-        <span class="attribute-player">${esc(r.name)}</span>
+        <span class="attribute-player">${esc(r.name)}${others(r)}</span>
         <span class="attribute-generated-value">${esc(r.gen)}</span>
         <span class="attribute-state ${esc(r.state)}">${esc(r.state)}</span>
       </div>

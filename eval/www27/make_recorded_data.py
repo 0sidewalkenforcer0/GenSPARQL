@@ -21,7 +21,10 @@ RES = os.path.join(HERE, "results")
 EX = rdflib.Namespace("http://example.org/")
 WD = rdflib.Namespace("http://www.wikidata.org/entity/")
 Q30B = "Qwen/Qwen3-30B-A3B-Instruct-2507"
+Q8B = "Qwen/Qwen3-8B"
 MISTRAL = "mistralai/Mistral-7B-Instruct-v0.3"
+MODELS = [Q30B, Q8B, MISTRAL]
+SHORT = {Q30B: "Qwen3-30B", Q8B: "Qwen3-8B", MISTRAL: "Mistral-7B"}
 BUCKETS = {"goalkeeper": "Goalkeeper", "defender": "Defender", "midfielder": "Midfielder", "forward": "Forward"}
 
 
@@ -38,6 +41,10 @@ def qid(iri):
     return str(iri).rsplit("/", 1)[-1]
 
 
+def short(model):
+    return SHORT[model]
+
+
 def pct(x):
     return f"{100 * x:.1f}%"
 
@@ -52,30 +59,43 @@ def graph(name):
     return g
 
 
-def wc_attribute(wc, summary):
-    """The answers of Qwen3-30B for the 26 Argentine players (query of Figure 1(a))."""
-    gold = load(HERE, "gold", "wc_positions.json")
-    rows = load(model_dir(Q30B), "e1_wc_positions.json")["rows"]
+def position_answers(model):
+    """The E1 answers of a model, by the QID of the player."""
     answers = {}
-    for r in rows:
+    for r in load(model_dir(model), "e1_wc_positions.json")["rows"]:
         answers.setdefault(qid(r["p"]), []).append(r.get("v", ""))
+    return answers
+
+
+def judge_position(values, gold_groups):
+    """The shown answer and its state: correct, wrong, unscored (no gold) or abstain."""
+    values = [v for v in values if not declined(v)]
+    bucket = BUCKETS.get(values[0].strip().lower()) if len(values) == 1 else None
+    if not values:
+        return "no answer", "abstain"
+    if gold_groups is None:
+        return bucket or values[0], "unscored"
+    return bucket or values[0], ("correct" if bucket in gold_groups else "wrong")
+
+
+def wc_attribute(wc, summary):
+    """The answers of the three LLMs for the 26 Argentine players (query of Figure 1(a)).
+    The rows hold the answers of Qwen3-30B, and under "others" those of the other two."""
+    gold = load(HERE, "gold", "wc_positions.json")
+    answers = {m: position_answers(m) for m in MODELS}
     players = sorted(wc.subjects(EX.playsFor, WD.Q79800), key=lambda p: str(wc.value(p, RDFS.label)))
     out = []
     for p in players:
         q = qid(p)
-        values = [v for v in answers.get(q, []) if not declined(v)]
-        bucket = BUCKETS.get(values[0].strip().lower()) if len(values) == 1 else None
-        if not values:
-            state, shown = "abstain", "no answer"
-        elif q not in gold:
-            state, shown = "unscored", bucket or values[0]
-        else:
-            state = "correct" if bucket in gold[q] else "wrong"
-            shown = bucket or values[0]
-        out.append({"name": str(wc.value(p, RDFS.label)), "gen": shown, "state": state})
+        shown, state = judge_position(answers[Q30B].get(q, []), gold.get(q))
+        others = []
+        for m in MODELS[1:]:
+            o_shown, o_state = judge_position(answers[m].get(q, []), gold.get(q))
+            others.append({"model": short(m), "gen": o_shown, "state": o_state})
+        out.append({"name": str(wc.value(p, RDFS.label)), "gen": shown, "state": state, "others": others})
     s = summary[Q30B.replace("/", "_")]["e1_wc_positions"]
-    return {"model": Q30B, "rows": out, "stat": {"a": pct(s["answer_rate"]), "b": pct(s["accuracy"])},
-            "players": s["entities"]}
+    return {"model": Q30B, "otherModels": [short(m) for m in MODELS[1:]], "rows": out,
+            "stat": {"a": pct(s["answer_rate"]), "b": pct(s["accuracy"])}, "players": s["entities"]}
 
 
 def wc_entity():
@@ -93,7 +113,10 @@ def nobel_entity():
 
 
 def wc_composition(wc, calls):
-    """The defenders of Group A that Qwen3-30B generated in E3, and the measured calls."""
+    """The defenders of Group A that Qwen3-30B generated in E3, the positions it generated for
+    every player in E1 with the same prompt, and the measured calls. The page shows these
+    positions on the generated nodes. For the players of Group A they agree with E3: E1 and E3
+    both have the same 80 defenders."""
     group_a = next(wc.subjects(RDFS.label, rdflib.Literal("Group A")))
     players = {}
     for t in wc.subjects(EX.inGroup, group_a):
@@ -106,8 +129,19 @@ def wc_composition(wc, calls):
         if len(match) != 1:
             raise SystemExit(f"name {r['name']!r} is not unique in Group A")
         ids.append(match[0])
+    positions = {}
+    for q, values in position_answers(Q30B).items():
+        values = [v for v in values if not declined(v)]
+        if len(values) == 1:
+            positions[q] = BUCKETS.get(values[0].strip().lower(), values[0])
+    e1_defenders = {str(p) for p in ids if positions.get(qid(p)) == "Defender"}
+    if e1_defenders != set(ids) or sum(
+            1 for t in wc.subjects(EX.inGroup, group_a) for p in wc.subjects(EX.playsFor, t)
+            if positions.get(qid(p)) == "Defender") != len(ids):
+        raise SystemExit("the E1 positions of Group A disagree with the defenders of E3")
     c = calls["queries"]["wc_group_a_defenders"]["genop before the patterns for Group A"]
     return {"model": Q30B, "defenders": len(ids), "total": rec["calls"], "defenderIds": sorted(ids),
+            "positions": positions,
             "genopFirst": c["calls_planner_off"], "planned": c["calls_planner_on"]}
 
 
@@ -165,7 +199,8 @@ def main():
     print("wrote", path)
     for k, v in data.items():
         if isinstance(v, dict):
-            print(k, {x: (y if not isinstance(y, list) else f"[{len(y)} items]") for x, y in v.items()})
+            print(k, {x: (f"[{len(y)} items]" if isinstance(y, (list, dict)) and len(y) > 4 else y)
+                      for x, y in v.items()})
 
 
 if __name__ == "__main__":

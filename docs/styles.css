@@ -483,6 +483,14 @@ button{cursor:pointer}
   font-size:10.8px;
   font-weight:700;
 }
+.attribute-others{
+  display:block;
+  margin-top:2px;
+  white-space:normal;
+  font-size:10px;
+  font-weight:400;
+  color:var(--muted);
+}
 .attribute-generated-value{
   min-width:0;
   overflow:hidden;
