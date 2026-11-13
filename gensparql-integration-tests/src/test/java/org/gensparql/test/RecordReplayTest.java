@@ -25,8 +25,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Verifies the record-replay layer — the foundation of the deterministic eval protocol
- * (docs/RESEARCH_IDEA1_PLAN.md §4): a recorded run can be replayed byte-for-byte with the
+ * Verifies the record-replay layer that the evaluation (eval/www27) relies on: a recorded
+ * run can be replayed with the
  * real LLM never touched, and a missing recording fails loud instead of silently calling out.
  */
 public class RecordReplayTest {

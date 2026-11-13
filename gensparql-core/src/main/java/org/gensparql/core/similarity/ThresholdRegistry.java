@@ -17,9 +17,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ThresholdRegistry {
 
     private final Map<Var, Double> thresholds = new ConcurrentHashMap<>();
-    // 0.85: in the WWW'27 evaluation (eval/www27), the lowest threshold at which the embedding
-    // similarity mapped no generated name to a wrong entity; the Jaccard similarity made no
-    // wrong match from 0.6 on.
+    // 0.85: in the WWW'27 evaluation (eval/www27, results/e2-replay-20261113), the embedding
+    // similarity maps 83% of the entities that the generated names denote at 0.85, with one
+    // wrong match (George P. Smith also maps to George E. Smith), and none from 0.9 on. The
+    // Jaccard similarity makes no wrong match from 0.6 on and maps 67% at 0.85.
     private volatile double defaultThreshold = 0.85;
 
     /**

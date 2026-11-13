@@ -6,8 +6,7 @@ import java.util.regex.Pattern;
 
 /**
  * Estimates the fan-out F of a GENOP — the number of result rows a single call produces —
- * for the cost model (C1). Component C2, tiers 1 + 3 of the design in
- * docs/RESEARCH_IDEA1_PLAN.md.
+ * for the cost model, which is used only when cost-based planning is switched on.
  *
  * <ul>
  *   <li><b>Tier 1 (static prompt prior):</b> read the prompt template for an explicit

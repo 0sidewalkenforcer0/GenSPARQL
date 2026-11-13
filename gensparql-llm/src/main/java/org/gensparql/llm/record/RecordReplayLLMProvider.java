@@ -21,8 +21,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Record-replay decorator for deterministic, reproducible evaluation.
  *
- * <p>The eval methodology (see docs/RESEARCH_IDEA1_PLAN.md) requires that all plan
- * variants run against the SAME LLM responses, so the only variable is the plan. Real
+ * <p>The evaluation (eval/www27) requires that all runs of a list query, for every threshold
+ * and similarity, see the SAME LLM responses, so the only variable is the run. Real
  * LLMs are non-deterministic, so we:
  * <ul>
  *   <li><b>RECORD</b> — call the delegate once per distinct request, persist the response;
