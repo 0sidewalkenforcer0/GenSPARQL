@@ -1,5 +1,8 @@
 package org.gensparql.test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -99,6 +102,37 @@ public class RecordReplayTest {
         Collections.sort(recorded);
         Collections.sort(replayed);
         assertEquals(recorded, replayed, "replay must reproduce the recorded results exactly");
+    }
+
+    @Test
+    void testReplayParsesTheStoredAnswerAgain(@TempDir Path tmp) throws Exception {
+        Path store = tmp.resolve("reparse.json");
+        MockLLMProvider recDelegate = new MockLLMProvider()
+                .withDefaultResponse("[\"Roger Penrose\"]\n[\"Andrea Ghez\"]");
+        RecordReplayLLMProvider recorder =
+                new RecordReplayLLMProvider(recDelegate, RecordReplayLLMProvider.Mode.RECORD, store);
+        LLMProviderRegistry.setDefault(recorder);
+        run(model("Physics"));
+        recorder.close();
+
+        // A store written by an older parser, which bound only the last array of the answer.
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode root = (ObjectNode) mapper.readTree(store.toFile());
+        root.fields().forEachRemaining(entry -> {
+            ArrayNode old = mapper.createArrayNode();
+            old.addObject().put("desc", "Andrea Ghez");
+            ((ObjectNode) entry.getValue()).set("bindings", old);
+        });
+        mapper.writeValue(store.toFile(), root);
+
+        RecordReplayLLMProvider replayer = new RecordReplayLLMProvider(
+                new MockLLMProvider(), RecordReplayLLMProvider.Mode.REPLAY, store);
+        LLMProviderRegistry.setDefault(replayer);
+        List<String> rows = run(model("Physics"));
+        Collections.sort(rows);
+
+        assertEquals(List.of("Physics|Andrea Ghez", "Physics|Roger Penrose"), rows,
+                "the replay must parse the stored answer with the current parser");
     }
 
     @Test

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.gensparql.core.model.*;
 import org.gensparql.llm.LLMProvider;
 import org.gensparql.llm.cache.CacheKey;
+import org.gensparql.llm.parser.JsonResponseParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,7 +93,7 @@ public class RecordReplayLLMProvider implements LLMProvider {
         StoredResponse stored = store.get(key);
         if (stored != null) {
             if (mode == Mode.REPLAY) replayHits.incrementAndGet();
-            return CompletableFuture.completedFuture(stored.toResponse());
+            return CompletableFuture.completedFuture(stored.toResponse(request.getOutputVariables()));
         }
 
         if (mode == Mode.REPLAY) {
@@ -223,10 +224,20 @@ public class RecordReplayLLMProvider implements LLMProvider {
             return s;
         }
 
-        GenerateResponse toResponse() {
+        /**
+         * The stored answer as a response. The bindings come from parsing the stored text
+         * again with the current parser, so a replay reflects the engine of the replay and
+         * not the parser of the recording day. A response stored without text keeps its
+         * bindings.
+         */
+        GenerateResponse toResponse(List<String> outputVariables) {
+            List<Map<String, String>> parsed = bindings;
+            if (rawText != null && outputVariables != null && !outputVariables.isEmpty()) {
+                parsed = new JsonResponseParser().parse(rawText, outputVariables);
+            }
             return GenerateResponse.builder()
                     .rawText(rawText)
-                    .bindings(bindings)
+                    .bindings(parsed)
                     .success(success)
                     .errorMessage(errorMessage)
                     .metadata(new GenerateResponse.ResponseMetadata(

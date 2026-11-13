@@ -75,18 +75,51 @@ class JsonResponseParserTest {
     }
 
     @Test
-    void testParseMultipleCodeBlocks_UsesLastValid() {
-        // LLM might output multiple attempts, we should use the last valid one
-        String content = "Here's my first attempt:\n" +
-                "```json\n[{\"scientist\": \"Wrong\", \"award\": \"Bad\"}]\n```\n" +
-                "Let me correct that:\n" +
+    void testParseMultipleCodeBlocks_BindsEveryArray() {
+        String content = "The first laureate:\n" +
+                "```json\n[{\"scientist\": \"Curie\", \"award\": \"1903 Physics\"}]\n```\n" +
+                "And the second:\n" +
                 "```json\n[{\"scientist\": \"Einstein\", \"award\": \"1921 Physics\"}]\n```";
 
         List<Map<String, String>> bindings = parser.parse(content, List.of("scientist", "award"));
 
-        assertEquals(1, bindings.size());
-        assertEquals("Einstein", bindings.get(0).get("scientist"));
-        assertEquals("1921 Physics", bindings.get(0).get("award"));
+        assertEquals(2, bindings.size());
+        assertEquals("Curie", bindings.get(0).get("scientist"));
+        assertEquals("Einstein", bindings.get(1).get("scientist"));
+        assertEquals("1921 Physics", bindings.get(1).get("award"));
+    }
+
+    @Test
+    void testParseListSplitOverSeveralArrays_BindsEveryName() {
+        // The answer of Mistral-7B to the Physics laureates of 2020 to 2025 in the evaluation:
+        // one array per year, each on its own line.
+        String content = " [\"Roger Penrose\", \"Reinhard Genzel\", \"Andrea Ghez\"]\n"
+                + "[\"Alain Aspect\", \"John F. Clauser\", \"Anton Zeilinger\"]\n"
+                + "[\"Jennifer Ruth Doudna\", \"Emmanuelle Charpentier\"]";
+
+        List<Map<String, String>> bindings = parser.parse(content, List.of("x"));
+
+        assertEquals(8, bindings.size());
+        assertEquals("Roger Penrose", bindings.get(0).get("x"));
+        assertEquals("Emmanuelle Charpentier", bindings.get(7).get("x"));
+    }
+
+    @Test
+    void testParseArrayFollowedByEmptyArray_KeepsTheAnswer() {
+        String content = "[\"Lionel Messi\"]\n\nIf there is no answer, I would return [].";
+
+        List<Map<String, String>> bindings = parser.parse(content, List.of("x"));
+
+        assertEquals(List.of(Map.of("x", "Lionel Messi")), bindings);
+    }
+
+    @Test
+    void testParseArrayFollowedByExampleObject_KeepsTheArray() {
+        String content = "[\"Forward\"]\nExample of the format: {\"position\": \"Midfielder\"}";
+
+        List<Map<String, String>> bindings = parser.parse(content, List.of("position"));
+
+        assertEquals(List.of(Map.of("position", "Forward")), bindings);
     }
 
     // ========== Edge Cases ==========

@@ -2,6 +2,7 @@ package org.gensparql.llm.parser;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -292,23 +293,41 @@ public class JsonResponseParser implements ResponseParser {
             text = extracted.toString().trim();
         }
 
-        // Step 2: Find all JSON structures and return the last valid JSON array
+        // Step 2: Find all JSON structures. The answer is a JSON array, and a model that
+        // splits its list over several arrays (one per line, or one per code block) still
+        // answers with all of them, so the elements of every array count. Empty arrays add
+        // nothing. A JSON object counts only when the answer holds no array at all.
         List<String> jsonCandidates = findAllJsonStructures(text);
-
-        // Prefer the last valid JSON array (LLM might correct itself)
-        for (int i = jsonCandidates.size() - 1; i >= 0; i--) {
-            String candidate = jsonCandidates.get(i);
-            // Try original first
-            if (isValidJson(candidate)) {
-                LOG.debug("Using JSON candidate #{}: {}", i + 1, truncate(candidate, 100));
-                return candidate;
+        List<JsonNode> arrays = new ArrayList<>();
+        String lastValid = null;
+        for (String candidate : jsonCandidates) {
+            String valid = isValidJson(candidate) ? candidate : repairJson(candidate);
+            if (!isValidJson(valid)) {
+                continue;
             }
-            // Try repaired version
-            String repaired = repairJson(candidate);
-            if (isValidJson(repaired)) {
-                LOG.debug("Using repaired JSON candidate #{}: {}", i + 1, truncate(repaired, 100));
-                return repaired;
+            lastValid = valid;
+            try {
+                JsonNode node = objectMapper.readTree(valid);
+                if (node.isArray()) {
+                    arrays.add(node);
+                }
+            } catch (Exception e) {
+                LOG.debug("Could not read JSON candidate: {}", e.getMessage());
             }
+        }
+        if (arrays.size() == 1) {
+            return arrays.get(0).toString();
+        }
+        if (arrays.size() > 1) {
+            ArrayNode merged = objectMapper.createArrayNode();
+            for (JsonNode array : arrays) {
+                merged.addAll((ArrayNode) array);
+            }
+            LOG.debug("Merged {} JSON arrays into one with {} elements", arrays.size(), merged.size());
+            return merged.toString();
+        }
+        if (lastValid != null) {
+            return lastValid;
         }
 
         // Step 3: Try to extract first JSON structure directly
