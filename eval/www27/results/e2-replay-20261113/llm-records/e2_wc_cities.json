@@ -1,0 +1,107 @@
+{
+  "openai:Qwen/Qwen3-30B-A3B-Instruct-2507:5eab7a64031daa92caa0f9505f98ee92b828306d57de13625d8695d7ae2e5fd1:0.00:1000:x" : {
+    "rawText" : "[\"Los Angeles\", \"New York/New Jersey\", \"Miami\", \"Dallas\", \"Seattle\", \"Atlanta\", \"Boston\", \"San Francisco\", \"Mexico City\", \"Guadalajara\", \"Monterrey\"]",
+    "bindings" : [ {
+      "x" : "Los Angeles"
+    }, {
+      "x" : "New York/New Jersey"
+    }, {
+      "x" : "Miami"
+    }, {
+      "x" : "Dallas"
+    }, {
+      "x" : "Seattle"
+    }, {
+      "x" : "Atlanta"
+    }, {
+      "x" : "Boston"
+    }, {
+      "x" : "San Francisco"
+    }, {
+      "x" : "Mexico City"
+    }, {
+      "x" : "Guadalajara"
+    }, {
+      "x" : "Monterrey"
+    } ],
+    "success" : true,
+    "errorMessage" : null,
+    "model" : "Qwen/Qwen3-30B-A3B-Instruct-2507",
+    "promptTokens" : 117,
+    "completionTokens" : 45
+  },
+  "openai:Qwen/Qwen3-8B:5eab7a64031daa92caa0f9505f98ee92b828306d57de13625d8695d7ae2e5fd1:0.00:1000:x" : {
+    "rawText" : "[\"Milan\", \"Rome\", \"Naples\", \"Turin\", \"Bologna\", \"Genoa\", \"Verona\", \"Padua\", \"Bari\", \"Palermo\", \"Catania\", \"Messina\", \"Cagliari\", \"Sassari\", \"Livorno\", \"Genoa\", \"Bologna\", \"Verona\", \"Padua\", \"Bari\", \"Palermo\", \"Catania\", \"Messina\", \"Cagliari\", \"Sassari\", \"Livorno\"]",
+    "bindings" : [ {
+      "x" : "Milan"
+    }, {
+      "x" : "Rome"
+    }, {
+      "x" : "Naples"
+    }, {
+      "x" : "Turin"
+    }, {
+      "x" : "Bologna"
+    }, {
+      "x" : "Genoa"
+    }, {
+      "x" : "Verona"
+    }, {
+      "x" : "Padua"
+    }, {
+      "x" : "Bari"
+    }, {
+      "x" : "Palermo"
+    }, {
+      "x" : "Catania"
+    }, {
+      "x" : "Messina"
+    }, {
+      "x" : "Cagliari"
+    }, {
+      "x" : "Sassari"
+    }, {
+      "x" : "Livorno"
+    } ],
+    "success" : true,
+    "errorMessage" : null,
+    "model" : "Qwen/Qwen3-8B",
+    "promptTokens" : 121,
+    "completionTokens" : 110
+  },
+  "openai:mistralai/Mistral-7B-Instruct-v0.3:5eab7a64031daa92caa0f9505f98ee92b828306d57de13625d8695d7ae2e5fd1:0.00:1000:x" : {
+    "rawText" : " [\"Mexico City\", \"Guadalajara\", \"Monterrey\", \"León\", \"San Juan del Rio\", \"Toluca\", \"Cancun\", \"Houston\", \"Los Angeles\", \"Philadelphia\", \"Boston\", \"New York/New Jersey\", \"Atlanta\"]",
+    "bindings" : [ {
+      "x" : "Mexico City"
+    }, {
+      "x" : "Guadalajara"
+    }, {
+      "x" : "Monterrey"
+    }, {
+      "x" : "León"
+    }, {
+      "x" : "San Juan del Rio"
+    }, {
+      "x" : "Toluca"
+    }, {
+      "x" : "Cancun"
+    }, {
+      "x" : "Houston"
+    }, {
+      "x" : "Los Angeles"
+    }, {
+      "x" : "Philadelphia"
+    }, {
+      "x" : "Boston"
+    }, {
+      "x" : "New York/New Jersey"
+    }, {
+      "x" : "Atlanta"
+    } ],
+    "success" : true,
+    "errorMessage" : null,
+    "model" : "mistralai/Mistral-7B-Instruct-v0.3",
+    "promptTokens" : 126,
+    "completionTokens" : 69
+  }
+}

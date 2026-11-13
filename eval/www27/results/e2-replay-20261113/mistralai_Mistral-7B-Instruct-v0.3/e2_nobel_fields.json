@@ -1,0 +1,229 @@
+{
+ "prompt": "List the fields in which the Nobel Prize is awarded.",
+ "pattern": "?x a ex:NobelField .",
+ "runs": [
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelField . GENOP(\"List the fields in which the Nobel Prize is awarded.\", (?x), <model>, 0.5) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q80061"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.5
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelField . GENOP(\"List the fields in which the Nobel Prize is awarded.\", (?x), <model>, 0.6) }",
+   "rows": [],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.6
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelField . GENOP(\"List the fields in which the Nobel Prize is awarded.\", (?x), <model>, 0.7) }",
+   "rows": [],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.7
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelField . GENOP(\"List the fields in which the Nobel Prize is awarded.\", (?x), <model>, 0.8) }",
+   "rows": [],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.8
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelField . GENOP(\"List the fields in which the Nobel Prize is awarded.\", (?x), <model>, 0.85) }",
+   "rows": [],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.85
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelField . GENOP(\"List the fields in which the Nobel Prize is awarded.\", (?x), <model>, 0.9) }",
+   "rows": [],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.9
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelField . GENOP(\"List the fields in which the Nobel Prize is awarded.\", (?x), <model>, 1.0) }",
+   "rows": [],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 1.0
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelField . GENOP(\"List the fields in which the Nobel Prize is awarded.\", (?x), <model>, 0.5) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q47170"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q80061"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q37922"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q38104"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q35637"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q44585"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.5
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelField . GENOP(\"List the fields in which the Nobel Prize is awarded.\", (?x), <model>, 0.6) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q47170"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q80061"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q37922"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q38104"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q35637"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q44585"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.6
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelField . GENOP(\"List the fields in which the Nobel Prize is awarded.\", (?x), <model>, 0.7) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q80061"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q37922"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q38104"
+    },
+    {
+     "x": "http://www.wikidata.org/entity/Q44585"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.7
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelField . GENOP(\"List the fields in which the Nobel Prize is awarded.\", (?x), <model>, 0.8) }",
+   "rows": [
+    {
+     "x": "http://www.wikidata.org/entity/Q80061"
+    }
+   ],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.8
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelField . GENOP(\"List the fields in which the Nobel Prize is awarded.\", (?x), <model>, 0.85) }",
+   "rows": [],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.85
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelField . GENOP(\"List the fields in which the Nobel Prize is awarded.\", (?x), <model>, 0.9) }",
+   "rows": [],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.9
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x a ex:NobelField . GENOP(\"List the fields in which the Nobel Prize is awarded.\", (?x), <model>, 1.0) }",
+   "rows": [],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 1.0
+  }
+ ],
+ "llm_record": "e2_nobel_fields.json",
+ "generated_before": {
+  "query": "SELECT ?x WHERE { GENOP(\"List the fields in which the Nobel Prize is awarded.\", (?x), <model>) }",
+  "rows": [
+   {
+    "x": "Physics"
+   },
+   {
+    "x": "Chemistry"
+   },
+   {
+    "x": "Medicine or Physiology"
+   },
+   {
+    "x": "Literature"
+   },
+   {
+    "x": "Peace"
+   },
+   {
+    "x": "Economic Sciences"
+   }
+  ],
+  "calls": 1,
+  "seconds": 0.0
+ },
+ "generated_after": {
+  "query": "SELECT ?x WHERE { GENOP(\"List the fields in which the Nobel Prize is awarded.\", (?x), <model>) }",
+  "rows": [
+   {
+    "x": "Physics"
+   },
+   {
+    "x": "Chemistry"
+   },
+   {
+    "x": "Medicine or Physiology"
+   },
+   {
+    "x": "Literature"
+   },
+   {
+    "x": "Peace"
+   },
+   {
+    "x": "Economic Sciences"
+   }
+  ],
+  "calls": 1,
+  "seconds": 0.0
+ },
+ "model": "mistralai/Mistral-7B-Instruct-v0.3"
+}

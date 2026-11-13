@@ -1,0 +1,132 @@
+{
+ "prompt": "List the players in the squad of Argentina at the 2026 FIFA World Cup.",
+ "pattern": "?x ex:playsFor wd:Q79800 .",
+ "runs": [
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 0.5) }",
+   "rows": [],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.5
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 0.6) }",
+   "rows": [],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.6
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 0.7) }",
+   "rows": [],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.7
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 0.8) }",
+   "rows": [],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.8
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 0.85) }",
+   "rows": [],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.85
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 0.9) }",
+   "rows": [],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 0.9
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 1.0) }",
+   "rows": [],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "jaccard",
+   "theta": 1.0
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 0.5) }",
+   "rows": [],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.5
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 0.6) }",
+   "rows": [],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.6
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 0.7) }",
+   "rows": [],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.7
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 0.8) }",
+   "rows": [],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.8
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 0.85) }",
+   "rows": [],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.85
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 0.9) }",
+   "rows": [],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 0.9
+  },
+  {
+   "query": "SELECT DISTINCT ?x WHERE { ?x ex:playsFor wd:Q79800 . GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>, 1.0) }",
+   "rows": [],
+   "calls": 1,
+   "seconds": 0.0,
+   "similarity": "embedding",
+   "theta": 1.0
+  }
+ ],
+ "llm_record": "e2_wc_argentina.json",
+ "generated_before": {
+  "query": "SELECT ?x WHERE { GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>) }",
+  "rows": [],
+  "calls": 1,
+  "seconds": 0.0
+ },
+ "generated_after": {
+  "query": "SELECT ?x WHERE { GENOP(\"List the players in the squad of Argentina at the 2026 FIFA World Cup.\", (?x), <model>) }",
+  "rows": [],
+  "calls": 1,
+  "seconds": 0.0
+ },
+ "model": "Qwen/Qwen3-8B"
+}

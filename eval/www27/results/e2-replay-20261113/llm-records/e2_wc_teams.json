@@ -1,0 +1,77 @@
+{
+  "openai:mistralai/Mistral-7B-Instruct-v0.3:107ce2286547884bfb2a8d2f9d9f1a2a89a66b900a665adb750ddbedd9532c03:0.00:1000:x" : {
+    "rawText" : " [\"Argentina\", \"Australia\", \"Brazil\", \"Canada\", \"Denmark\", \"England\", \"France\", \"Germany\", \"India\", \"Iran\", \"Italy\", \"Japan\", \"Mexico\", \"Netherlands\", \"New Zealand\", \"Peru\", \"Portugal\", \"Qatar\", \"Republic of Ireland\", \"South Korea\", \"Spain\", \"Sweden\", \"Switzerland\", \"United States\"]",
+    "bindings" : [ {
+      "x" : "Argentina"
+    }, {
+      "x" : "Australia"
+    }, {
+      "x" : "Brazil"
+    }, {
+      "x" : "Canada"
+    }, {
+      "x" : "Denmark"
+    }, {
+      "x" : "England"
+    }, {
+      "x" : "France"
+    }, {
+      "x" : "Germany"
+    }, {
+      "x" : "India"
+    }, {
+      "x" : "Iran"
+    }, {
+      "x" : "Italy"
+    }, {
+      "x" : "Japan"
+    }, {
+      "x" : "Mexico"
+    }, {
+      "x" : "Netherlands"
+    }, {
+      "x" : "New Zealand"
+    }, {
+      "x" : "Peru"
+    }, {
+      "x" : "Portugal"
+    }, {
+      "x" : "Qatar"
+    }, {
+      "x" : "Republic of Ireland"
+    }, {
+      "x" : "South Korea"
+    }, {
+      "x" : "Spain"
+    }, {
+      "x" : "Sweden"
+    }, {
+      "x" : "Switzerland"
+    }, {
+      "x" : "United States"
+    } ],
+    "success" : true,
+    "errorMessage" : null,
+    "model" : "mistralai/Mistral-7B-Instruct-v0.3",
+    "promptTokens" : 128,
+    "completionTokens" : 106
+  },
+  "openai:Qwen/Qwen3-8B:107ce2286547884bfb2a8d2f9d9f1a2a89a66b900a665adb750ddbedd9532c03:0.00:1000:x" : {
+    "rawText" : "[]",
+    "bindings" : [ ],
+    "success" : true,
+    "errorMessage" : null,
+    "model" : "Qwen/Qwen3-8B",
+    "promptTokens" : 123,
+    "completionTokens" : 2
+  },
+  "openai:Qwen/Qwen3-30B-A3B-Instruct-2507:107ce2286547884bfb2a8d2f9d9f1a2a89a66b900a665adb750ddbedd9532c03:0.00:1000:x" : {
+    "rawText" : "[]",
+    "bindings" : [ ],
+    "success" : true,
+    "errorMessage" : null,
+    "model" : "Qwen/Qwen3-30B-A3B-Instruct-2507",
+    "promptTokens" : 119,
+    "completionTokens" : 2
+  }
+}

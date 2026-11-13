@@ -1,5 +1,5 @@
 {
- "_note": "Generated names that denote an entity of the query's target set although none of the entity's English names in Wikidata equals them (manual check, 2026-11-03). A null value marks a name that was checked and denotes no entity of the target set. The four host-city names map to the city entities of the graph that carry the name as a second label (Arlington/Dallas, Inglewood/Los Angeles, Guadalupe/Monterrey, East Rutherford/New York).",
+ "_note": "Generated names that denote an entity of the query's target set although none of the entity's English names in Wikidata equals them (manual check, 2026-11-03). A null value marks a name that was checked and denotes no entity of the target set. The four host-city names map to the city entities of the graph that carry the name as a second label (Arlington/Dallas, Inglewood/Los Angeles, Guadalupe/Monterrey, East Rutherford/New York). The names Frances H. Arnold, George P. Smith and Carlos Barrios, which the parser of 2026-11-13 binds from the earlier arrays of Mistral-7B's answer to the Physics laureates of 2020 to 2025, were checked on 2026-11-13: the first two are the Chemistry laureates of 2018 in the graph, the third denotes no laureate.",
  "nobel_fields": {
   "Physics": "Q38104",
   "Chemistry": "Q44585",
@@ -28,7 +28,10 @@
   "F. Duncan M. Haldane": "Q1002250",
   "Barry Barish": "Q15900993",
   "Kip Thorne": "Q323320",
-  "Jennifer Ruth Doudna": "Q56068"
+  "Jennifer Ruth Doudna": "Q56068",
+  "Frances H. Arnold": "Q4273363",
+  "George P. Smith": "Q56868017",
+  "Carlos Barrios": null
  },
  "wc_venues": {
   "CenturyLink Field": "Q612736",

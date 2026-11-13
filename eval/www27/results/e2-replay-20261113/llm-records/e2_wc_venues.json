@@ -1,0 +1,163 @@
+{
+  "openai:mistralai/Mistral-7B-Instruct-v0.3:3435059233eac994c4232865a941331103a71910c1e3c194e16dd506a6e7d3b4:0.00:1000:x" : {
+    "rawText" : " [\"MetLife Stadium\", \"AT&T Stadium\", \"Solider Field\", \"NRG Stadium\", \"Levi's Stadium\", \"State Farm Stadium\", \"Empower Field at Mile High\", \"Allegiant Stadium\", \"SoFi Stadium\", \"Lincoln Financial Field\", \"Ford Field\", \"Mercedes-Benz Stadium\", \"Bank of America Stadium\", \"Raymond James Stadium\", \"Gillette Stadium\", \"Lumen Field\", \"CenturyLink Field\", \"Oracle Park\", \"AT&T Park\", \"Glendale Stadium\", \"Las Vegas Stadium\", \"Pasadena Rose Bowl\", \"Santa Clara Stadium\", \"Inglewood Stadium\"]",
+    "bindings" : [ {
+      "x" : "MetLife Stadium"
+    }, {
+      "x" : "AT&T Stadium"
+    }, {
+      "x" : "Solider Field"
+    }, {
+      "x" : "NRG Stadium"
+    }, {
+      "x" : "Levi's Stadium"
+    }, {
+      "x" : "State Farm Stadium"
+    }, {
+      "x" : "Empower Field at Mile High"
+    }, {
+      "x" : "Allegiant Stadium"
+    }, {
+      "x" : "SoFi Stadium"
+    }, {
+      "x" : "Lincoln Financial Field"
+    }, {
+      "x" : "Ford Field"
+    }, {
+      "x" : "Mercedes-Benz Stadium"
+    }, {
+      "x" : "Bank of America Stadium"
+    }, {
+      "x" : "Raymond James Stadium"
+    }, {
+      "x" : "Gillette Stadium"
+    }, {
+      "x" : "Lumen Field"
+    }, {
+      "x" : "CenturyLink Field"
+    }, {
+      "x" : "Oracle Park"
+    }, {
+      "x" : "AT&T Park"
+    }, {
+      "x" : "Glendale Stadium"
+    }, {
+      "x" : "Las Vegas Stadium"
+    }, {
+      "x" : "Pasadena Rose Bowl"
+    }, {
+      "x" : "Santa Clara Stadium"
+    }, {
+      "x" : "Inglewood Stadium"
+    } ],
+    "success" : true,
+    "errorMessage" : null,
+    "model" : "mistralai/Mistral-7B-Instruct-v0.3",
+    "promptTokens" : 130,
+    "completionTokens" : 147
+  },
+  "openai:Qwen/Qwen3-30B-A3B-Instruct-2507:3435059233eac994c4232865a941331103a71910c1e3c194e16dd506a6e7d3b4:0.00:1000:x" : {
+    "rawText" : "[\"MetLife Stadium\", \"Rose Bowl\", \"AT&T Stadium\", \"Soldier Field\", \"Lincoln Financial Field\", \"Mercedes-Benz Stadium\", \"Levi's Stadium\", \"Gillette Stadium\", \"Hard Rock Stadium\", \"State Farm Stadium\", \"Bankers Life Field\", \"Camping World Stadium\", \"Nissan Stadium\", \"Raymond James Stadium\", \"Fenway Park\", \"SoFi Stadium\", \"Lumen Field\", \"Empire Field\", \"BMO Field\", \"Estadio Azteca\", \"Estadio Jalisco\", \"Estadio Akron\", \"Estadio BBVA\", \"Estadio León\", \"Estadio Ciudad de los Deportes\", \"Estadio Universitario\", \"Estadio Akron\", \"Estadio Corona\", \"Estadio Akron\", \"Estadio Akron\"]",
+    "bindings" : [ {
+      "x" : "MetLife Stadium"
+    }, {
+      "x" : "Rose Bowl"
+    }, {
+      "x" : "AT&T Stadium"
+    }, {
+      "x" : "Soldier Field"
+    }, {
+      "x" : "Lincoln Financial Field"
+    }, {
+      "x" : "Mercedes-Benz Stadium"
+    }, {
+      "x" : "Levi's Stadium"
+    }, {
+      "x" : "Gillette Stadium"
+    }, {
+      "x" : "Hard Rock Stadium"
+    }, {
+      "x" : "State Farm Stadium"
+    }, {
+      "x" : "Bankers Life Field"
+    }, {
+      "x" : "Camping World Stadium"
+    }, {
+      "x" : "Nissan Stadium"
+    }, {
+      "x" : "Raymond James Stadium"
+    }, {
+      "x" : "Fenway Park"
+    }, {
+      "x" : "SoFi Stadium"
+    }, {
+      "x" : "Lumen Field"
+    }, {
+      "x" : "Empire Field"
+    }, {
+      "x" : "BMO Field"
+    }, {
+      "x" : "Estadio Azteca"
+    }, {
+      "x" : "Estadio Jalisco"
+    }, {
+      "x" : "Estadio Akron"
+    }, {
+      "x" : "Estadio BBVA"
+    }, {
+      "x" : "Estadio León"
+    }, {
+      "x" : "Estadio Ciudad de los Deportes"
+    }, {
+      "x" : "Estadio Universitario"
+    }, {
+      "x" : "Estadio Corona"
+    } ],
+    "success" : true,
+    "errorMessage" : null,
+    "model" : "Qwen/Qwen3-30B-A3B-Instruct-2507",
+    "promptTokens" : 120,
+    "completionTokens" : 169
+  },
+  "openai:Qwen/Qwen3-8B:3435059233eac994c4232865a941331103a71910c1e3c194e16dd506a6e7d3b4:0.00:1000:x" : {
+    "rawText" : "[\"Giants Stadium\", \"SoFi Stadium\", \"Rose Bowl\", \"Dignity Health Stadium\", \"Allegiant Stadium\", \"Tottenham Hotspur Stadium\", \"Wembley Stadium\", \"Old Trafford\", \"Stade de France\", \"Estadio Azteca\", \"Estadio Jalisco\", \"Estadio Monumental\", \"Estadio Azteca\", \"Estadio Olímpico Universitario\", \"Estadio BBVA\", \"Estadio Akron\", \"Estadio Azteca\", \"Estadio de Béisbol Monterrey\", \"Estadio Jalisco\", \"Estadio Azteca\"]",
+    "bindings" : [ {
+      "x" : "Giants Stadium"
+    }, {
+      "x" : "SoFi Stadium"
+    }, {
+      "x" : "Rose Bowl"
+    }, {
+      "x" : "Dignity Health Stadium"
+    }, {
+      "x" : "Allegiant Stadium"
+    }, {
+      "x" : "Tottenham Hotspur Stadium"
+    }, {
+      "x" : "Wembley Stadium"
+    }, {
+      "x" : "Old Trafford"
+    }, {
+      "x" : "Stade de France"
+    }, {
+      "x" : "Estadio Azteca"
+    }, {
+      "x" : "Estadio Jalisco"
+    }, {
+      "x" : "Estadio Monumental"
+    }, {
+      "x" : "Estadio Olímpico Universitario"
+    }, {
+      "x" : "Estadio BBVA"
+    }, {
+      "x" : "Estadio Akron"
+    }, {
+      "x" : "Estadio de Béisbol Monterrey"
+    } ],
+    "success" : true,
+    "errorMessage" : null,
+    "model" : "Qwen/Qwen3-8B",
+    "promptTokens" : 124,
+    "completionTokens" : 130
+  }
+}
