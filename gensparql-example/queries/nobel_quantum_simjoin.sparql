@@ -23,7 +23,7 @@ WHERE {
     GENOP(
       "Name one Nobel Prize in Physics laureate who made a foundational contribution to quantum mechanics. Return only the laureate's full name.",
       (?laureate),
-      <model:openrouter:nvidia/nemotron-3-ultra-550b-a55b:free>,
+      <model:openrouter:openai/gpt-4o-mini>,
       0.75
     )
   }

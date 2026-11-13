@@ -2,8 +2,8 @@
 PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$PROJECT_ROOT"
 
-# Set OpenRouter API Key
-export OPENROUTER_API_KEY=YOUR_OPENROUTER_API_KEY
+# The queries call OpenRouter: export OPENROUTER_API_KEY before running this script
+: "${OPENROUTER_API_KEY:?export OPENROUTER_API_KEY first}"
 
 # Ensure project is compiled (including gensparql-example)
 mvn compile -DskipTests -q > /dev/null 2>&1

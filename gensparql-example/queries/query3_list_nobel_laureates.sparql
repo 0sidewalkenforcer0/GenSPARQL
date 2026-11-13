@@ -7,6 +7,6 @@ PREFIX ex: <http://example.org/>
 SELECT ?scientist ?award WHERE {
   GENOP("List all prize marie curie got. Return as JSON array with objects containing 'scientist' and 'award' fields", 
         (?scientist, ?award), 
-        <model:openrouter:xiaomi/mimo-v2-flash:free>)
+        <model:openrouter:openai/gpt-4o-mini>)
 }
 

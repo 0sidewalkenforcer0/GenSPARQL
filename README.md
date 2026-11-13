@@ -41,7 +41,7 @@ A SPARQL query returns only what a knowledge graph (KG) explicitly stores, so it
 |-------------|---------|---------------|
 | Java (JDK)  | **17 or higher** | `java -version` |
 | Maven       | **3.8 or higher** | `mvn -version` |
-| LLM backend | a hosted key, a local vLLM model, or `mock` | see [LLM Providers and Models](#llm-providers-and-models) |
+| LLM backend | a local model (Ollama or vLLM), a hosted API key, or `mock` | see [LLM Providers and Models](#llm-providers-and-models) |
 
 ### Installing Java 17 (if needed)
 
@@ -62,26 +62,9 @@ Download from [Adoptium](https://adoptium.net/temurin/releases/?version=17)
 
 ## Installation
 
-### From Maven Central
+### Maven Central (planned)
 
-GenSPARQL releases from 0.1.0 on are published to Maven Central under the group `org.gensparql`. The aggregate dependency `gensparql-libs` brings the parser, the query engine, the LLM providers and the `gen:*` functions. As with Jena's `apache-jena-libs`, Maven declares it with `<type>pom</type>`:
-
-```xml
-<dependency>
-  <groupId>org.gensparql</groupId>
-  <artifactId>gensparql-libs</artifactId>
-  <version>0.1.0</version>
-  <type>pom</type>
-</dependency>
-```
-
-Gradle:
-
-```kotlin
-implementation("org.gensparql:gensparql-libs:0.1.0")
-```
-
-The modules can also be added one by one: `gensparql-core`, `gensparql-parser`, `gensparql-llm`, `gensparql-engine`, `gensparql-functions` and `gensparql-server` (the embedded Fuseki server behind the web workbench). GenSPARQL requires Java 17 or later. See [Programmatic Use](#programmatic-use-java-api) for a first query, and [RELEASING.md](RELEASING.md) for how releases are made.
+A first release, 0.1.0, is planned for Maven Central under the group `org.gensparql`, with the aggregate dependency `gensparql-libs` (declared with `<type>pom</type>`, as Jena's `apache-jena-libs`). It is not published yet, so build GenSPARQL from source as below. [RELEASING.md](RELEASING.md) describes how releases will be made.
 
 ### From Source
 
@@ -100,28 +83,27 @@ GenSPARQL is a multi-module Maven project on top of Apache Jena ARQ. Compiling a
 mvn -q compile
 ```
 
-**Expected output:**
-```
-[INFO] BUILD SUCCESS
-```
+With `-q`, Maven prints nothing when the build succeeds.
 
 ---
 
 ## Quick Verification
 
-### Start the Web UI and Fuseki backend
+### Start the web workbench
 
-The `gensparql-server` module embeds Fuseki, serves the UI in `docs/`, and exposes a
+The `gensparql-server` module embeds Fuseki, serves the workbench in `docs/`, and exposes a
 GenSPARQL-aware API. Unlike Fuseki's standard query endpoint, the API parses queries with
 `GenSPARQLQueryFactory`, so it accepts the `GENOP` syntax.
 
 ```bash
-./start-fuseki.sh              # port 8080
+./start-fuseki.sh              # builds the modules and serves http://localhost:8080/
 # or: ./start-fuseki.sh 9090
 ```
 
-Then open `http://localhost:8080/`. The standard Fuseki dataset is available at
-`/gensparql`, while the UI uses:
+- `http://localhost:8080/` opens the recorded mode. It replays the answers that the LLMs gave in the evaluation, so it needs no model.
+- `http://localhost:8080/?mode=live` opens the live mode, which sends each query to the service.
+
+The service answers only connections from this machine, because a query names the endpoint that the service sends its prompts to. To accept connections from the network, start it with `MAVEN_OPTS=-Dgensparql.server.allowRemote=true ./start-fuseki.sh`. The read-only Fuseki dataset is at `/gensparql`, and the workbench uses:
 
 ```text
 GET  /api/gensparql/health
@@ -129,14 +111,20 @@ POST /api/gensparql/datasets
 POST /api/gensparql/query
 ```
 
-For a live OpenAI-compatible model, enter the API key, base URL, and model in the Live UI.
-These values are applied only to that query and are not persisted by the server. Environment
-configuration remains available for non-UI clients:
+### Live mode with a local model (Ollama, no provider account)
 
 ```bash
-export OPENAI_API_KEY="sk-..."
-# Optional for vLLM/Ollama/another compatible server:
-export OPENAI_BASE_URL="http://localhost:8000/v1"
+ollama pull qwen3:8b                 # once; Ollama serves on http://localhost:11434
+./start-fuseki.sh
+```
+
+Open `http://localhost:8080/?mode=live` and, in the live panel, set the endpoint to `http://localhost:11434/v1` and the model to `qwen3:8b`. The API key field must not be empty, but Ollama ignores its value, so any text such as `ollama` will do. Keep the text (Jaccard) similarity. The prompts then go to Ollama on this machine and nowhere else.
+
+The endpoint, model and key apply only to that query; the server does not store them. Clients other than the workbench can configure the provider through the environment instead:
+
+```bash
+export OPENAI_API_KEY=ollama
+export OPENAI_BASE_URL=http://localhost:11434/v1   # or a vLLM server, or a hosted API
 ./start-fuseki.sh
 ```
 
@@ -148,17 +136,15 @@ mvn -q test
 
 ### Run a Sample Query
 
-The `mock` provider needs no API key and is the fastest way to confirm the engine works end to end:
-
 ```bash
 cd gensparql-example
-./run_query1.sh          # basic SPARQL, no LLM call
+./run_query1.sh          # plain SPARQL over the demo data, no LLM call
 ```
 
-To run a query that actually calls an LLM, set a provider key first (see [below](#llm-providers-and-models)):
+The other scripts run `GENOP` queries through OpenRouter and stop with a message if `OPENROUTER_API_KEY` is not set (see [below](#llm-providers-and-models)):
 
 ```bash
-export OPENROUTER_API_KEY="sk-..."
+export OPENROUTER_API_KEY="sk-or-..."
 ./run_query2.sh          # context-mode GENOP over the demo dataset
 ```
 
@@ -169,7 +155,7 @@ export OPENROUTER_API_KEY="sk-..."
 
 ### Example Queries
 
-The `gensparql-example/queries/` directory contains ready-to-use queries, each with a matching `run_queryN.sh` script:
+The `gensparql-example/queries/` directory contains ready-to-use queries. The queries 1 to 8 have a matching `run_queryN.sh` script, and they call `<model:openrouter:openai/gpt-4o-mini>`; any other model of a configured provider works too:
 
 | File | Demonstrates |
 |------|--------------|
@@ -184,7 +170,7 @@ The `gensparql-example/queries/` directory contains ready-to-use queries, each w
 | `query6_simscore_join.sparql` | Similarity join between KG and generated values |
 | `query7_cartesian_product.sparql` | `GENOP` inputs from independent BGPs |
 | `query8_genop_before_bgp.sparql` | `GENOP` inputs bound by a later BGP |
-| `query9_join_with_threshold.sparql` | Similarity join with an explicit threshold |
+| `query9_join_with_threshold.sparql` | Similarity join with the default threshold |
 
 Run one from the example module:
 
@@ -244,7 +230,7 @@ The bracketed `options` set parameters such as the grounding similarity threshol
 
 ## Entity Grounding (Similarity Join)
 
-A generated value is free text, whereas a KG term is an IRI or typed literal, so the two cannot be joined by equality. When a `GENOP` output variable is also bound by another graph pattern, GenSPARQL joins them by **similarity** instead: it compares each generated string against the canonical labels of the KG entities using text or embedding similarity, and keeps a match only when the score clears a threshold `θ` (ordinary equality join is the case `θ = 1`). The threshold is supplied as a `GENOP` option, as in `query9_join_with_threshold.sparql`.
+A generated value is free text, whereas a KG term is an IRI or typed literal, so the two cannot be joined by equality. When a base-mode `GENOP` (a prompt without placeholders) shares an output variable with a graph pattern of its group, GenSPARQL joins them by **similarity** instead: it compares each generated name with the labels of the entities that the pattern binds, by the Jaccard similarity of the lowercase word sets or by the cosine similarity of text embeddings, and keeps a match when the similarity reaches a threshold `θ`. The default is 0.85, and the fourth argument of `GENOP` sets another value, as in `query6_simscore_join.sparql` (0.75). A context-mode `GENOP` joins by equality. The similarity join does not yet apply inside `UNION` or `OPTIONAL`.
 
 Grounding guarantees **membership, not truth**. It drops any generated name the KG does not contain, so no hallucinated *entity* leaks through. Generated *attribute* values are literals, are not grounded, and are only as reliable as the model that produced them.
 
@@ -284,9 +270,10 @@ The target model is named inline in the query as `<model:PROVIDER:MODEL>`. Suppo
 | OpenAI | `<model:openai:gpt-4o>` | `OPENAI_API_KEY` |
 | Anthropic | `<model:anthropic:claude-...>` | `ANTHROPIC_API_KEY` |
 | Self-hosted (vLLM, OpenAI-compatible) | `<model:openai:Qwen/Qwen3-30B-A3B-Instruct-2507>` | `OPENAI_BASE_URL` (+ `OPENAI_API_KEY`) |
+| Ollama (local, OpenAI-compatible) | `<model:openai:qwen3:8b>` | `OPENAI_BASE_URL=http://localhost:11434/v1`, `OPENAI_API_KEY=ollama` |
 | Mock (no network) | `<model:mock:...>` | none |
 
-A response cache and request batching reduce repeated calls.
+Every provider asks the model for a JSON array and reads the values of every array in the answer; an empty array means no answer.
 
 ### Using open-weight models (vLLM)
 
@@ -306,13 +293,13 @@ export OPENAI_EMBEDDING_MODEL=BAAI/bge-large-en-v1.5
 
 ## Evaluation
 
-The paper evaluates GenSPARQL on a 2026 FIFA World Cup KG built from Wikidata (48 national teams, 825 official squad players, 913 entities with real IRIs and `rdfs:label`s):
+The evaluation runs on the two graphs of the workbench, built from Wikidata: the 2026 FIFA World Cup (1,248 players, 48 teams, 16 host cities and their stadiums; 4,000 triples) and the Nobel laureates (1,018 laureates, 1,026 awards; 10,849 triples). Three open LLMs (Qwen3-30B-A3B-Instruct-2507, Qwen3-8B and Mistral-7B-Instruct-v0.3) were served by vLLM at temperature 0, and every answer went through `GENOP` in the HTTP service.
 
-- **Coverage.** `GENOP` recovers an attribute the KG never modeled (player position) with 69-91% accuracy across three model families, where SPARQL alone returns nothing.
-- **Validity.** Grounding binds every returned entity to a real KG node, with no hallucinated entity getting through (100% validity).
-- **Cost.** Deferring `GENOP` behind selective KG patterns reduces LLM calls by 31x without changing the result.
+- **Completing attributes.** The generated positions are correct for 55-59% of the answered players (a uniform guess among the four positions: 26%), and the birth years for 69-90% of the answered laureates.
+- **Mapping generated names.** Over six list queries, 20-61% of the generated names denote no entity of the graph. At `θ = 0.85`, the embedding similarity (bge-large-en-v1.5) maps 83% of the entities that the names denote, with one wrong match; the Jaccard similarity maps 67%, with none from `θ = 0.6` on.
+- **LLM calls.** The planner reduces the calls of a composed query from 1,248 to 104, and those of a second one from 230 to 17.
 
-See [`docs/EVALUATION.md`](docs/EVALUATION.md) for the full protocol and numbers.
+[`eval/www27/README.md`](eval/www27/README.md) describes how to rerun the evaluation; `eval/www27/results/` holds the queries' results, the recorded LLM answers and the scores, and `eval/www27/gold/` the gold data.
 
 ---
 
@@ -331,15 +318,18 @@ GenSPARQL/
 ├── gensparql-parser/             # JavaCC grammar: SPARQL 1.1 + the GENOP extension
 ├── gensparql-engine/             # OpGenerate algebra operator, QueryIterGenerate, similarity join, grounding
 ├── gensparql-functions/          # gen:* SPARQL extension functions
+├── gensparql-server/             # HTTP service: embedded Fuseki, the workbench API
+├── gensparql-libs/               # Aggregate dependency of the library modules
 ├── gensparql-integration-tests/  # Cross-module tests
 ├── gensparql-example/            # Runnable example queries and demo data
 │   ├── data/                     # Demo RDF datasets
 │   ├── queries/                  # Sample SPARQL queries
 │   └── run_query*.sh             # Per-query run scripts
 ├── gensparql-benchmark/          # KG-completion benchmark harness (FB15k-237, NELL-995)
-├── eval/                         # Experiment runner and evaluation result JSON (X1-X4)
+├── eval/www27/                   # Evaluation: runner, scoring, gold data, results and recorded LLM answers
 ├── deploy/                       # vLLM serving scripts for local open-weight models (SLURM)
-├── docs/                         # Evaluation notes and issue/fix history
+├── docs/                         # Web workbench (GitHub Pages) and the two graphs
+├── start-fuseki.sh               # Builds and starts the HTTP service with the workbench
 └── pom.xml                       # Maven build configuration
 ```
 
@@ -354,7 +344,7 @@ java -version  # should show 17 or higher
 ```
 
 ### Missing or invalid API key
-`GENOP` queries need a provider key exported in the shell (or edited into the `run_query*.sh` script). Use the `mock` provider or `run_query1.sh` to test without a key.
+`GENOP` queries need a provider key exported in the shell; the `run_query*.sh` scripts stop when `OPENROUTER_API_KEY` is not set. To try GenSPARQL without a provider account, use the workbench with Ollama (see [Quick Verification](#quick-verification)), the `mock` provider, or `run_query1.sh`.
 
 ### Parser errors after editing the grammar
 The parser is generated at build time. Recompile from the project root so the grammar is regenerated:
@@ -366,15 +356,14 @@ mvn -q compile
 
 ## Citing
 
-If you use GenSPARQL, please cite the ISWC 2026 demo paper:
+If you use GenSPARQL, please cite the software:
 
 ```bibtex
-@inproceedings{gensparql2026,
-  title     = {GenSPARQL: A Generative Extension of SPARQL for Incomplete Knowledge Graphs},
-  author    = {Wu, Jingcheng and Wang, Yi and Zhou, Hongkuan and Staab, Steffen and Xiong, Bo},
-  booktitle = {ISWC 2026: The 25th International Semantic Web Conference,
-               Posters, Demos, and Industry Tracks},
-  year      = {2026}
+@software{gensparql2026,
+  title  = {GenSPARQL: A Generative Extension of SPARQL for Incomplete Knowledge Graphs},
+  author = {Wu, Jingcheng and Wang, Yi and Zhou, Hongkuan and Staab, Steffen and Xiong, Bo},
+  year   = {2026},
+  url    = {https://github.com/0sidewalkenforcer0/GenSPARQL}
 }
 ```
 

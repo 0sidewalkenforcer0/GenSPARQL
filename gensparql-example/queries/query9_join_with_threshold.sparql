@@ -30,7 +30,7 @@ SELECT ?scientist ?awardLabel WHERE {
     # Part 2: Generate Nobel Prize winners using GENOP
     GENOP("List five scientists who won Nobel Prize. Return as JSON array with objects containing 'scientist' and 'awardLabel' fields", 
           (?scientist, ?awardLabel), 
-          <model:openrouter:xiaomi/mimo-v2-flash:free>)
+          <model:openrouter:openai/gpt-4o-mini>)
   }
 }
 

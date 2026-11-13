@@ -26,7 +26,7 @@ SELECT ?scientist ?awardLabel ?description WHERE {
   # This demonstrates that pattern order doesn't matter for natural joins
   GENOP("Write a brief one-sentence description about the achievements of {?scientist}.",
         ?description,
-        <model:openrouter:xiaomi/mimo-v2-flash:free>)
+        <model:openrouter:openai/gpt-4o-mini>)
   
   # BGP: Binds ?scientist and ?awardLabel (appears AFTER GENOP)
   # The query engine should still provide ?scientist to GENOP above

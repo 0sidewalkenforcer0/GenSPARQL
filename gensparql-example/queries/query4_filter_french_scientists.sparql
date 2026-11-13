@@ -13,7 +13,7 @@ SELECT ?scientist ?award WHERE {
   ?award rdfs:label ?awardLabel .
   GENOP("Was the scientist '{?scientist}' born in Germany or German territory? Answer only 'yes' or 'no'", 
         ?isGermany, 
-        <model:openrouter:xiaomi/mimo-v2-flash:free>)
+        <model:openrouter:openai/gpt-4o-mini>)
   FILTER(CONTAINS(LCASE(?isGermany), "yes"))
 }
 

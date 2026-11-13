@@ -30,7 +30,7 @@ SELECT ?scientist ?awardLabel ?description WHERE {
   {
     GENOP("List three famous scientists with their major contributions. Return as JSON array with objects containing 'scientist' (name) and 'description' (one sentence) fields.", 
           (?scientist, ?description), 
-          <model:openrouter:xiaomi/mimo-v2-flash:free>,
+          <model:openrouter:openai/gpt-4o-mini>,
           0.75)
     # Threshold 0.75 means 75% similarity is required for matching
     # This threshold applies to the ?scientist variable for SimScore evaluation

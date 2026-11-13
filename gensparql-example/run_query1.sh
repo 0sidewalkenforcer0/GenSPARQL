@@ -2,9 +2,6 @@
 PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$PROJECT_ROOT"
 
-# Set OpenRouter API Key
-export OPENROUTER_API_KEY=YOUR_OPENROUTER_API_KEY
-
 # Ensure project is compiled (including gensparql-example)
 mvn compile -DskipTests -q > /dev/null 2>&1
 
@@ -22,6 +19,6 @@ CLASSPATH="$CLASSPATH:$PROJECT_ROOT/gensparql-engine/target/classes"
 CLASSPATH="$CLASSPATH:$PROJECT_ROOT/gensparql-functions/target/classes"
 CLASSPATH="$CLASSPATH:$PROJECT_ROOT/gensparql-example/target/classes"
 
-# Run (preserve environment variables, especially OPENROUTER_API_KEY)
+# Run (plain SPARQL, no LLM call)
 cd "$PROJECT_ROOT/gensparql-example"
 java -cp "$CLASSPATH" org.gensparql.example.Query1Example

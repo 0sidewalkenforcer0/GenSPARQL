@@ -34,6 +34,6 @@ SELECT ?scientist ?awardLabel ?description WHERE {
   # This will be called for each combination from the Cartesian product
   GENOP("Write a one-sentence description about {?scientist} and their relationship to {?awardLabel}. Be creative and interesting.",
         ?description,
-        <model:openrouter:xiaomi/mimo-v2-flash:free>)
+        <model:openrouter:openai/gpt-4o-mini>)
 }
 

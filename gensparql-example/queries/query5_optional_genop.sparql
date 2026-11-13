@@ -18,7 +18,7 @@ SELECT ?scientist ?awardLabel ?additionalInfo WHERE {
   OPTIONAL {
     GENOP("Provide additional information about {?scientist} who won {?awardLabel}. Include their birthplace and one major contribution. Format as a brief paragraph (2-3 sentences)", 
           ?additionalInfo, 
-          <model:openrouter:xiaomi/mimo-v2-flash:free>)
+          <model:openrouter:openai/gpt-4o-mini>)
   }
 }
 
