@@ -6,6 +6,8 @@ import okhttp3.*;
 import org.gensparql.core.exception.LLMException;
 import org.gensparql.core.model.*;
 import org.gensparql.llm.LLMProvider;
+import org.gensparql.llm.parser.JsonResponseParser;
+import org.gensparql.llm.prompt.PromptBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,12 +93,16 @@ public class AnthropicProvider implements LLMProvider {
         String model = request.getModelSpec() != null ?
                 request.getModelSpec().getModel() : DEFAULT_MODEL;
 
+        // The same output format as for every other provider: a JSON array, and an empty
+        // array when there is no answer (unless the prompt already carries its own format).
+        String enhancedPrompt = PromptBuilder.buildStructuredPrompt(request);
+
         // Build request body (Anthropic Messages API format)
         Map<String, Object> body = new HashMap<>();
         body.put("model", model);
         body.put("max_tokens", request.getMaxTokens());
         body.put("messages", List.of(
-                Map.of("role", "user", "content", request.getPrompt())
+                Map.of("role", "user", "content", enhancedPrompt)
         ));
 
         // Add temperature if not default
@@ -149,8 +155,9 @@ public class AnthropicProvider implements LLMProvider {
 
             LOG.debug("Anthropic response: {} tokens in {}ms", inputTokens + outputTokens, latency);
 
-            // Parse output into bindings
-            List<Map<String, String>> bindings = parseOutput(content, request.getOutputVariables());
+            // Parse output into bindings, as for every other provider
+            List<Map<String, String>> bindings =
+                    new JsonResponseParser().parse(content, request.getOutputVariables());
 
             return GenerateResponse.builder()
                     .rawText(content)
@@ -167,38 +174,6 @@ public class AnthropicProvider implements LLMProvider {
         return CompletableFuture.completedFuture(
                 EmbedResponse.error("Anthropic does not support embedding API")
         );
-    }
-
-    private List<Map<String, String>> parseOutput(String content, List<String> outputVars) {
-        List<Map<String, String>> bindings = new ArrayList<>();
-
-        if (outputVars == null || outputVars.isEmpty()) {
-            bindings.add(Map.of("result", content.trim()));
-            return bindings;
-        }
-
-        if (outputVars.size() == 1) {
-            bindings.add(Map.of(outputVars.get(0), content.trim()));
-            return bindings;
-        }
-
-        try {
-            JsonNode json = objectMapper.readTree(content);
-            Map<String, String> binding = new HashMap<>();
-            for (String var : outputVars) {
-                if (json.has(var)) {
-                    binding.put(var, json.get(var).asText());
-                }
-            }
-            if (!binding.isEmpty()) {
-                bindings.add(binding);
-            }
-        } catch (Exception e) {
-            LOG.debug("Could not parse JSON output, using raw text");
-            bindings.add(Map.of(outputVars.get(0), content.trim()));
-        }
-
-        return bindings;
     }
 
     private static String truncate(String s, int maxLen) {
