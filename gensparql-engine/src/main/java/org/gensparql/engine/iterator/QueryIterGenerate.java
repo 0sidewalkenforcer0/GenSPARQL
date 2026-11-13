@@ -444,9 +444,12 @@ public class QueryIterGenerate extends QueryIteratorBase {
             return Collections.emptyIterator();
         }
 
-        // C3: reuse parsed outputs for a prompt already generated this execution.
+        // Reuse the parsed outputs of a prompt already sent in this execution. Base mode always
+        // does: its prompt is constant and is sent once, however many solutions come in.
+        // Context mode does when deduplication is switched on.
+        boolean memoize = dedupEnabled || opGen.isBaseMode();
         List<Map<String, String>> outputMaps;
-        if (dedupEnabled && promptMemo.containsKey(finalPrompt)) {
+        if (memoize && promptMemo.containsKey(finalPrompt)) {
             outputMaps = promptMemo.get(finalPrompt);
             dedupSavedCalls++;
             LOG.debug("Dedup hit: reusing {} output map(s) for repeated prompt (saved {} call(s))",
@@ -457,7 +460,7 @@ public class QueryIterGenerate extends QueryIteratorBase {
                 // Failed call: produce no rows and do NOT memoize, so an identical later
                 // prompt is retried rather than permanently poisoned with an empty result.
                 outputMaps = Collections.emptyList();
-            } else if (dedupEnabled) {
+            } else if (memoize) {
                 promptMemo.put(finalPrompt, outputMaps);
             }
         }

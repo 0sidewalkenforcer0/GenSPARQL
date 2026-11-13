@@ -101,16 +101,22 @@ public class QueryIterSimScoreFilter extends QueryIteratorBase {
      */
     private boolean evaluateFilter(Binding binding) {
         try {
-            // Check if this is an equality expression that might involve GEN types
-            if (expr instanceof E_Equals) {
-                return evaluateEquality((E_Equals) expr, binding);
-            }
-
-            // Check for NOT equality
-            if (expr instanceof E_NotEquals) {
-                return !evaluateEquality(
-                        new E_Equals(((E_NotEquals) expr).getArg1(), ((E_NotEquals) expr).getArg2()),
-                        binding);
+            if (expr instanceof E_Equals || expr instanceof E_NotEquals) {
+                ExprFunction2 comparison = (ExprFunction2) expr;
+                EvalResult left = evaluateArg(comparison.getArg1(), binding);
+                EvalResult right = evaluateArg(comparison.getArg2(), binding);
+                // An unbound variable or an evaluation error makes the filter false, for = and
+                // for != alike, as in SPARQL. Negating the result of = would keep such rows.
+                if (left == null || right == null) {
+                    LOG.debug("Filter: unbound variable or evaluation error -> false");
+                    return false;
+                }
+                if (left.sourceType == SourceType.GEN || right.sourceType == SourceType.GEN) {
+                    boolean similar = similar(left, right);
+                    return expr instanceof E_Equals ? similar : !similar;
+                }
+                // Two terms of the graph compare as SPARQL compares them, by value.
+                return evaluateStandard(binding);
             }
 
             // For other expressions, use standard evaluation
@@ -127,46 +133,15 @@ public class QueryIterSimScoreFilter extends QueryIteratorBase {
     }
 
     /**
-     * Evaluate equality expression with SimScore for GEN types.
-     *
-     * Implements paper's filter evaluation:
-     * - v = c: If τ(v) = gen, then SimScore(μ(v), (c, rdf), v)
-     * - v = v': If gen ∈ {τ(v), τ(v')}, then SimScore(μ(v), μ(v'), v)
+     * Whether two bound arguments, at least one of them generated, are similar: the
+     * similarity of the generated value and the other term reaches the threshold.
      */
-    private boolean evaluateEquality(E_Equals eqExpr, Binding binding) {
-        Expr arg1 = eqExpr.getArg1();
-        Expr arg2 = eqExpr.getArg2();
-
-        // Extract nodes and determine types
-        EvalResult left = evaluateArg(arg1, binding);
-        EvalResult right = evaluateArg(arg2, binding);
-
-        // If either is unbound, return false (error state ε)
-        if (left == null || right == null) {
-            LOG.debug("Filter: unbound variable -> ε (false)");
-            return false;
-        }
-
-        // Check if GEN types are involved
-        boolean leftIsGen = left.sourceType == SourceType.GEN;
-        boolean rightIsGen = right.sourceType == SourceType.GEN;
-
-        if (leftIsGen || rightIsGen) {
-            // Use SimScore for comparison
-            TypedValue tv1 = new TypedValue(left.node, left.sourceType);
-            TypedValue tv2 = new TypedValue(right.node, right.sourceType);
-
-            // Determine which variable to use for threshold lookup
-            Var thresholdVar = left.var != null ? left.var : (right.var != null ? right.var : Var.alloc("_filter"));
-
-            boolean result = simScoreEvaluator.evaluate(tv1, tv2, thresholdVar);
-            LOG.debug("Filter SimScore: {} = {} -> {}", left.node, right.node, result);
-            return result;
-        }
-
-        // Both are RDF types - use exact equality
-        boolean result = left.node.equals(right.node);
-        LOG.debug("Filter exact: {} = {} -> {}", left.node, right.node, result);
+    private boolean similar(EvalResult left, EvalResult right) {
+        TypedValue tv1 = new TypedValue(left.node, left.sourceType);
+        TypedValue tv2 = new TypedValue(right.node, right.sourceType);
+        Var thresholdVar = left.var != null ? left.var : (right.var != null ? right.var : Var.alloc("_filter"));
+        boolean result = simScoreEvaluator.evaluate(tv1, tv2, thresholdVar);
+        LOG.debug("Filter similarity: {} ~ {} -> {}", left.node, right.node, result);
         return result;
     }
 

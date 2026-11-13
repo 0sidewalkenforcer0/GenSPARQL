@@ -489,8 +489,10 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
             return false;
         }
 
-        // Use SimJoin only for base mode GENOP
-        boolean result = leftHasBaseGenOp || rightHasBaseGenOp || hasGenVariables();
+        // Use SimJoin only for base mode GENOP. Whether some GENOP elsewhere in the query has
+        // already produced generated values does not matter: a join without a base-mode GENOP
+        // compares terms by equality.
+        boolean result = leftHasBaseGenOp || rightHasBaseGenOp;
         LOG.debug("needsSimJoin: {} (base mode check)", result);
         return result;
     }
@@ -615,13 +617,12 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
         LOG.debug("executeSimJoinForSequence: left={}, right={}",
                   leftOp.getClass().getSimpleName(), rightOp.getClass().getSimpleName());
 
-        // Get the initial binding from input (typically empty root binding)
-        Binding initialBinding = input.hasNext() ? input.next() : org.apache.jena.sparql.engine.binding.BindingFactory.empty();
-
-        // Execute left side (e.g., BGP) - these are RDF sourced
-        // All variables from left side default to RDF type
+        // The similarity join is evaluated once, from the empty solution, as SPARQL evaluates a
+        // group, and its solutions are then joined with every incoming solution. Reading only
+        // the first incoming solution lost the others whenever the join sat below another one.
         Map<Var, SourceType> leftTypes = new HashMap<>();
-        QueryIterator leftIter = executeOp(leftOp, QueryIterRoot.create(initialBinding, execCxt), execCxt);
+        QueryIterator leftIter = executeOp(leftOp,
+                QueryIterRoot.create(org.apache.jena.sparql.engine.binding.BindingFactory.empty(), execCxt), execCxt);
 
         // Execute right side (e.g., OpGenerate) independently with empty binding
         // For base mode GENOP, it doesn't need input bindings
@@ -635,8 +636,9 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
 
         LOG.debug("executeSimJoinForSequence: leftTypes={}, rightTypes={}", leftTypes, rightTypes);
 
-        return new QueryIterSimJoin(leftIter, rightIter, newSimScoreEvaluator(execCxt),
+        QueryIterator simJoin = new QueryIterSimJoin(leftIter, rightIter, newSimScoreEvaluator(execCxt),
                 leftTypes, rightTypes, execCxt);
+        return org.apache.jena.sparql.engine.join.Join.join(input, simJoin, execCxt);
     }
 
     /**
