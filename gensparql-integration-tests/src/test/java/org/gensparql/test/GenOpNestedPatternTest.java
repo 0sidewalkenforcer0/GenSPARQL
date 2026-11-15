@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * GENOP inside UNION, VALUES, a sub-select and EXISTS, run as the HTTP service runs it
@@ -188,5 +190,26 @@ class GenOpNestedPatternTest {
                 row("name", "Kylian Mbappe", "p", EX + "p2", "pos", "Forward"),
                 row("name", "Lionel Messi", "p", EX + "p1", "pos", "Forward"),
                 row("name", "Raul Jimenez", "p", EX + "p3", "pos", "Forward")), rows);
+    }
+
+    // ---- B5: EXISTS and NOT EXISTS ----
+
+    @Test
+    void aGenopInsideNotExistsIsRejectedWithAMessage() {
+        Exception e = assertThrows(Exception.class, () -> GenSPARQLQueryFactory.create(PREFIXES
+                + "SELECT * WHERE { ?p a ex:Athlete . ?p rdfs:label ?name . "
+                + "FILTER NOT EXISTS { GENOP(\"Position of {?name}?\", (?pos), " + M + ") } }"));
+        assertTrue(e.getMessage().contains("GENOP inside EXISTS or NOT EXISTS is not supported"),
+                e.getMessage());
+    }
+
+    @Test
+    void existsWithoutGenopStillWorksInAQueryWithGenop() {
+        List<Map<String, String>> rows = run(
+                "?p a ex:Athlete . ?p rdfs:label ?name . FILTER EXISTS { ?p ex:playsFor ?t } "
+                        + "GENOP(\"Position of {?name}?\", (?pos), " + M + ")",
+                new MockLLMProvider().withDefaultResponse("[\"Forward\"]"));
+
+        assertEquals(3, rows.size());
     }
 }

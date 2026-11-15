@@ -114,6 +114,33 @@ public class GenSPARQLParserImpl {
         return NodeFactory.createURI(uri);
     }
 
+    /** Whether a GENOP appears anywhere in the pattern. */
+    private static boolean containsGenerate(Element el) {
+        if (el instanceof ElementGenerate) {
+            return true;
+        }
+        if (el instanceof ElementGroup) {
+            for (Element e : ((ElementGroup) el).getElements()) {
+                if (containsGenerate(e)) return true;
+            }
+        } else if (el instanceof ElementUnion) {
+            for (Element e : ((ElementUnion) el).getElements()) {
+                if (containsGenerate(e)) return true;
+            }
+        } else if (el instanceof ElementOptional) {
+            return containsGenerate(((ElementOptional) el).getOptionalElement());
+        } else if (el instanceof ElementMinus) {
+            return containsGenerate(((ElementMinus) el).getMinusElement());
+        } else if (el instanceof ElementNamedGraph) {
+            return containsGenerate(((ElementNamedGraph) el).getElement());
+        } else if (el instanceof ElementService) {
+            return containsGenerate(((ElementService) el).getElement());
+        } else if (el instanceof ElementSubQuery) {
+            return containsGenerate(((ElementSubQuery) el).getQuery().getQueryPattern());
+        }
+        return false;
+    }
+
     private Node createPrefixedURI(String prefixedName) {
         int colonPos = prefixedName.indexOf(':');
         String prefix = prefixedName.substring(0, colonPos);
@@ -2283,5 +2310,13 @@ Expr GroupGraphPatternExpr() :
 }
 {
     el = GroupGraphPattern()
-    { return new E_Exists(el); }
+    {
+        // The pattern of EXISTS is compiled by Jena, which does not know GENOP, and is evaluated
+        // outside the GenSPARQL engine. Reject it here with a message instead of the internal
+        // error that the compilation raised.
+        if (containsGenerate(el)) {
+            throw new ParseException("GENOP inside EXISTS or NOT EXISTS is not supported");
+        }
+        return new E_Exists(el);
+    }
 }
