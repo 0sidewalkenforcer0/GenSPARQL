@@ -143,4 +143,19 @@ class GenOpNestedPatternTest {
                 row("name", "Raul Jimenez", "p", EX + "p3", "pos", "Forward"),
                 row("p", EX + "gA"), row("p", EX + "gB")), rows);
     }
+
+    // ---- B3: VALUES in the middle of a group ----
+
+    @Test
+    void valuesInTheMiddleOfAGroupKeepsTheSolutionsBeforeIt() {
+        List<Map<String, String>> rows = run(
+                "?p a ex:Athlete . ?p rdfs:label ?name . VALUES ?p { ex:p1 ex:p3 } "
+                        + "GENOP(\"Position of {?name}?\", (?pos), " + M + ")",
+                new MockLLMProvider().withDefaultResponse("[\"Forward\"]"));
+
+        assertEquals(2, calls(), "a prompt for each of the two athletes that VALUES admits");
+        assertEquals(List.of(
+                row("name", "Lionel Messi", "p", EX + "p1", "pos", "Forward"),
+                row("name", "Raul Jimenez", "p", EX + "p3", "pos", "Forward")), rows);
+    }
 }

@@ -374,7 +374,11 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                 // Unit table - pass through input
                 return input;
             }
-            return opTable.getTable().iterator(execCxt);
+            // VALUES is joined with the solutions that come in, as SPARQL joins it with the rest
+            // of the group. Returning the rows of the table alone dropped the solutions of the
+            // patterns written before a VALUES in the middle of a group.
+            return org.apache.jena.sparql.engine.join.Join.join(
+                    input, opTable.getTable().iterator(execCxt), execCxt);
         }
 
         // Handle OpSlice
