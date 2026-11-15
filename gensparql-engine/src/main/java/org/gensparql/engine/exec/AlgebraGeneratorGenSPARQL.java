@@ -114,12 +114,15 @@ public class AlgebraGeneratorGenSPARQL {
     }
 
     /**
-     * Reorder a group's elements so each ElementGenerate runs after every plain KG pattern
-     * that does NOT depend on its output variables. Since basic-pattern joins commute, moving
-     * GENOP-independent triple/path blocks ahead of GENOP is semantics-preserving, and it means
-     * context-mode GENOP fires only on the bindings the KG has already constrained — turning an
-     * O(all-entities) fan-out into O(selected). Applied only to "simple" groups (triple/path
-     * blocks, GENOP, FILTER); any OPTIONAL/UNION/MINUS/BIND/etc. leaves the order untouched.
+     * Reorder a group's elements so each ElementGenerate runs after every triple or path
+     * pattern that does not mention its output variables. Such a pattern belongs to the pattern
+     * P of the GENOP, and the LLM then receives only the solutions that P selects. The unit is
+     * the single pattern, not the block of consecutive patterns: a block that binds a
+     * placeholder variable and also mentions an output variable is split, so the GENOP still
+     * receives its input. The patterns that mention an output variable form one block after the
+     * GENOP operators, which is joined with their solutions. Applied only to "simple" groups
+     * (triple/path blocks, GENOP, FILTER); any OPTIONAL/UNION/MINUS/BIND/etc. leaves the order
+     * untouched.
      */
     private static List<Element> reorderGenopLast(List<Element> original) {
         // Switched off (gensparql.planner.reorder=false), the query keeps the order in
@@ -153,24 +156,62 @@ public class AlgebraGeneratorGenSPARQL {
             }
         }
         List<Element> before = new ArrayList<>(), gens = new ArrayList<>(),
-                after = new ArrayList<>(), filters = new ArrayList<>();
+                filters = new ArrayList<>();
+        ElementPathBlock after = new ElementPathBlock();
         for (Element e : original) {
             if (e instanceof ElementFilter) {
                 filters.add(e);
             } else if (e instanceof ElementGenerate) {
                 gens.add(e);
             } else {
-                Set<Var> v = new HashSet<>(PatternVars.vars(e));
-                v.retainAll(genOut);
-                (v.isEmpty() ? before : after).add(e);   // depends on GENOP output -> after
+                List<org.apache.jena.sparql.core.TriplePath> patterns = patternsOf(e);
+                ElementPathBlock independent = new ElementPathBlock();
+                for (org.apache.jena.sparql.core.TriplePath tp : patterns) {
+                    if (mentionsAny(tp, genOut)) {
+                        after.addTriplePath(tp);
+                    } else {
+                        independent.addTriplePath(tp);
+                    }
+                }
+                if (independent.getPattern().size() == patterns.size()) {
+                    before.add(e);   // the block mentions no output variable and stays whole
+                } else if (!independent.isEmpty()) {
+                    before.add(independent);
+                }
             }
         }
-        List<Element> ordered = new ArrayList<>(original.size());
+        List<Element> ordered = new ArrayList<>(original.size() + 1);
         ordered.addAll(before);
         ordered.addAll(gens);
-        ordered.addAll(after);
+        if (!after.isEmpty()) {
+            ordered.add(after);
+        }
         ordered.addAll(filters);
         return ordered;
+    }
+
+    /** The triple and path patterns of a block, in written order. */
+    private static List<org.apache.jena.sparql.core.TriplePath> patternsOf(Element block) {
+        List<org.apache.jena.sparql.core.TriplePath> patterns = new ArrayList<>();
+        if (block instanceof ElementPathBlock) {
+            patterns.addAll(((ElementPathBlock) block).getPattern().getList());
+        } else {
+            for (org.apache.jena.graph.Triple t : ((ElementTriplesBlock) block).getPattern().getList()) {
+                patterns.add(new org.apache.jena.sparql.core.TriplePath(t));
+            }
+        }
+        return patterns;
+    }
+
+    /** Whether the pattern mentions one of the variables. A path expression has none. */
+    private static boolean mentionsAny(org.apache.jena.sparql.core.TriplePath tp, Set<Var> vars) {
+        for (org.apache.jena.graph.Node n
+                : new org.apache.jena.graph.Node[]{tp.getSubject(), tp.getPredicate(), tp.getObject()}) {
+            if (n != null && n.isVariable() && vars.contains(Var.alloc(n))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
