@@ -56,6 +56,26 @@ public class SimScoreEvaluator {
     }
 
     /**
+     * The evaluator of a query execution: the similarity and the thresholds of its context, and
+     * the labels of the graph it runs over. A context without them gets the Jaccard similarity
+     * and an empty threshold registry, which are then kept in the context.
+     */
+    public static SimScoreEvaluator forExecution(org.apache.jena.sparql.engine.ExecutionContext execCxt) {
+        org.apache.jena.sparql.util.Context cxt = execCxt.getContext();
+        ThresholdRegistry registry = cxt.get(org.gensparql.engine.GenSPARQLConstants.THRESHOLD_REGISTRY);
+        if (registry == null) {
+            registry = new ThresholdRegistry();
+            cxt.set(org.gensparql.engine.GenSPARQLConstants.THRESHOLD_REGISTRY, registry);
+        }
+        SimText simText = cxt.get(org.gensparql.engine.GenSPARQLConstants.SIM_TEXT);
+        if (simText == null) {
+            simText = new org.gensparql.core.similarity.JaccardSimText();
+            cxt.set(org.gensparql.engine.GenSPARQLConstants.SIM_TEXT, simText);
+        }
+        return new SimScoreEvaluator(simText, registry, new GraphLabels(execCxt.getActiveGraph()));
+    }
+
+    /**
      * Canon(t): the label of an IRI if it has one, otherwise what {@link CanonicalForm#canon}
      * gives (the process-wide label table, then the local name). Literals and blank nodes are
      * unaffected.

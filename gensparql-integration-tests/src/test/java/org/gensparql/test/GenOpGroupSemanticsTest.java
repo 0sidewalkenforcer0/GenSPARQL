@@ -141,4 +141,43 @@ class GenOpGroupSemanticsTest {
         assertEquals(List.of(row("name", "Lionel Messi", "nick", "La Pulga", "p", EX + "p1")), rows,
                 "only the stored nickname that equals the generated one survives");
     }
+
+    // ---- A2: an output variable that the input already binds is joined, not overwritten ----
+
+    @Test
+    void contextModeJoinsAnOutputThatTheInputBindsByEquality() {
+        String where = "?p a ex:Athlete . ?p rdfs:label ?name . ?p ex:nickname ?x . BIND(1 AS ?one) "
+                + "GENOP(\"Nickname of {?name}?\", (?x), " + M + ")";
+
+        assertEquals(List.of(), run(where, new MockLLMProvider().withDefaultResponse("[\"The Flea\"]")),
+                "the generated nickname differs from the stored one");
+        assertEquals(List.of(row("name", "Lionel Messi", "one", "1", "p", EX + "p1", "x", "La Pulga")),
+                run(where, new MockLLMProvider().withDefaultResponse("[\"La Pulga\"]")));
+    }
+
+    @Test
+    void anOptionalGenopKeepsTheValueThatTheRequiredPartBinds() {
+        List<Map<String, String>> rows = run(
+                "?p a ex:Athlete . ?p rdfs:label ?name . ?p ex:nickname ?x "
+                        + "OPTIONAL { GENOP(\"Nickname of {?name}?\", (?x), " + M + ") }",
+                new MockLLMProvider().withDefaultResponse("[\"The Flea\"]"));
+
+        assertEquals(List.of(row("name", "Lionel Messi", "p", EX + "p1", "x", "La Pulga")), rows);
+    }
+
+    @Test
+    void baseModeJoinsAnOutputThatTheInputBindsBySimilarity() {
+        List<Map<String, String>> rows = run(
+                "?team a ex:Team . BIND(1 AS ?one) "
+                        + "GENOP(\"Describe {?one}.\", (?d), " + M + ") "
+                        + "GENOP(\"List the teams.\", (?team), " + M + ")",
+                new MockLLMProvider().withResponse("Describe", "[\"a team\"]")
+                        .withDefaultResponse("[\"argentina\", \"France\", \"Mexico\"]"));
+
+        assertEquals(List.of(
+                row("d", "a team", "one", "1", "team", WD + "Q164089"),
+                row("d", "a team", "one", "1", "team", WD + "Q47774"),
+                row("d", "a team", "one", "1", "team", WD + "Q79800")), rows,
+                "each team keeps its IRI and matches only the name similar to its label");
+    }
 }

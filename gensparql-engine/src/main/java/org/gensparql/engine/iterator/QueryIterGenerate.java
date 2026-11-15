@@ -92,6 +92,9 @@ public class QueryIterGenerate extends QueryIteratorBase {
     private final Map<String, Node> groundedNodeCache = new HashMap<>();
     private int groundingCacheHits = 0;
 
+    // Compares a generated value with a term the input already binds to its variable (base mode).
+    private org.gensparql.engine.similarity.SimScoreEvaluator simScoreEvaluator;
+
     private Iterator<Binding> currentResults;
     private Binding currentInputBinding;
     private boolean exhausted = false;
@@ -677,6 +680,19 @@ public class QueryIterGenerate extends QueryIteratorBase {
                     node = NodeFactory.createLiteralString(value);
                 }
 
+                // The input may already bind the variable, when the GENOP follows a pattern
+                // that mentions it in a group the planner keeps in written order, or in the
+                // optional part of an OPTIONAL whose required part binds it. The generated value
+                // is then joined with that term instead of overwriting it.
+                Node existing = inputBinding.get(var);
+                if (existing != null) {
+                    if (!agrees(var, existing, node)) {
+                        return null;
+                    }
+                    bound++;
+                    continue;
+                }
+
                 builder.add(var, node);
                 bound++;
             }
@@ -697,6 +713,24 @@ public class QueryIterGenerate extends QueryIteratorBase {
         }
 
         return builder.build();
+    }
+
+    /**
+     * Whether a generated value joins with the term that the input already binds to its
+     * variable. In base mode the join is the similarity join of the semantics: the similarity
+     * between the value and the labels of the term reaches the threshold, and the solution keeps
+     * its term. In context mode the join compares the terms by equality.
+     */
+    private boolean agrees(Var var, Node existing, Node generated) {
+        if (!opGen.isBaseMode()) {
+            return existing.equals(generated);
+        }
+        if (simScoreEvaluator == null) {
+            simScoreEvaluator = org.gensparql.engine.similarity.SimScoreEvaluator.forExecution(execCxt);
+        }
+        double threshold = opGen.hasThreshold() ? opGen.getThreshold() : simScoreEvaluator.getThreshold(var);
+        return simScoreEvaluator.computeSimilarity(TypedValue.rdf(existing), TypedValue.gen(generated))
+                >= threshold;
     }
 
     @Override
