@@ -88,19 +88,24 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
      * it lets the optimizer loose on a tree it cannot analyse.
      */
     private static boolean planContainsGenOp(Op op) {
+        return planContains(op, g -> true);
+    }
+
+    /** Whether a GENOP that passes the test appears anywhere in the plan, walking by arity. */
+    private static boolean planContains(Op op, java.util.function.Predicate<OpGenerate> test) {
         if (op instanceof OpGenerate) {
-            return true;
+            return test.test((OpGenerate) op);
         }
         if (op instanceof org.apache.jena.sparql.algebra.op.Op1) {
-            return planContainsGenOp(((org.apache.jena.sparql.algebra.op.Op1) op).getSubOp());
+            return planContains(((org.apache.jena.sparql.algebra.op.Op1) op).getSubOp(), test);
         }
         if (op instanceof org.apache.jena.sparql.algebra.op.Op2) {
             org.apache.jena.sparql.algebra.op.Op2 op2 = (org.apache.jena.sparql.algebra.op.Op2) op;
-            return planContainsGenOp(op2.getLeft()) || planContainsGenOp(op2.getRight());
+            return planContains(op2.getLeft(), test) || planContains(op2.getRight(), test);
         }
         if (op instanceof org.apache.jena.sparql.algebra.op.OpN) {
             for (Op e : ((org.apache.jena.sparql.algebra.op.OpN) op).getElements()) {
-                if (planContainsGenOp(e)) {
+                if (planContains(e, test)) {
                     return true;
                 }
             }
@@ -357,23 +362,7 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
         if (op instanceof OpFilter) {
             OpFilter opFilter = (OpFilter) op;
             QueryIterator subIter = executeOp(opFilter.getSubOp(), input, execCxt);
-
-            // Check if GEN types are involved - use SimScore-aware filter
-            boolean hasGenVars = hasGenVariables();
-
-            // Apply filters manually
-            for (org.apache.jena.sparql.expr.Expr expr : opFilter.getExprs()) {
-                if (hasGenVars && isEqualityExpr(expr)) {
-                    // Use SimScore-aware filter for equality expressions with GEN types
-                    SimScoreEvaluator evaluator = newSimScoreEvaluator(execCxt);
-                    LOG.debug("Using SimScoreFilter for expr: {}", expr);
-                    subIter = new QueryIterSimScoreFilter(subIter, expr, evaluator, sourceTypes, execCxt);
-                } else {
-                    subIter = new org.apache.jena.sparql.engine.iterator.QueryIterFilterExpr(
-                            subIter, expr, execCxt);
-                }
-            }
-            return subIter;
+            return applyFilter(opFilter.getExprs(), subIter, execCxt);
         }
 
         // Handle OpTable
@@ -445,17 +434,53 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                     subIter, opOrder.getConditions(), execCxt);
         }
 
-        // OPTIONAL with a context-mode GENOP in its optional part. The prompt of the GENOP names
-        // variables of the required part, as in OPTIONAL { GENOP("... {?name} ...", ?info, m) }.
-        // ARQ evaluates the optional part against the root binding, so the GENOP saw its input
-        // unbound and every row lost the generated value. Evaluate the optional part once per
-        // solution of the required part instead, and keep a solution unchanged when the
-        // optional part yields nothing.
-        if (op instanceof OpLeftJoin && containsGenOpWithInputVars(((OpLeftJoin) op).getRight())) {
+        // OPTIONAL with a GENOP anywhere in its optional part. ARQ evaluates an optional part on
+        // its own, against the root binding, and without the operators of this engine. A
+        // context-mode GENOP then saw its input variables unbound and sent no prompt, also when
+        // a BIND after it hid it from a check that did not look below BIND. A base-mode GENOP was
+        // joined with the graph pattern next to it by equality, so no generated name matched an
+        // entity. A FILTER of the optional part, which becomes the condition of the left join,
+        // compared generated values by their terms, and so did one whose generated values come
+        // from the required part. The engine therefore evaluates such an OPTIONAL itself, and a
+        // solution of the required part without any extension is kept unchanged.
+        if (op instanceof OpLeftJoin && (planContainsGenOp(((OpLeftJoin) op).getRight())
+                || (((OpLeftJoin) op).getExprs() != null
+                        && (hasGenVariables() || planContainsGenOp(((OpLeftJoin) op).getLeft()))))) {
             OpLeftJoin opLeftJoin = (OpLeftJoin) op;
+            Op optional = opLeftJoin.getRight();
+            org.apache.jena.sparql.expr.ExprList exprs = opLeftJoin.getExprs();
             QueryIterator required = executeOp(opLeftJoin.getLeft(), input, execCxt);
-            return new QueryIterGenOptional(required, opLeftJoin.getRight(), opLeftJoin.getExprs(),
-                    execCxt, (optional, in) -> executeOp(optional, in, execCxt));
+            java.util.function.Function<Binding, QueryIterator> extensions;
+            if (planContains(optional, g -> !g.isBaseMode())) {
+                // The prompt of a context-mode GENOP names variables of the required part, so
+                // the optional part is evaluated once for every solution, starting from it.
+                extensions = b -> executeOp(optional,
+                        org.apache.jena.sparql.engine.iterator.QueryIterSingleton.create(b, execCxt),
+                        execCxt);
+            } else {
+                // No context-mode GENOP: the optional part reads nothing from the required part.
+                // It is evaluated once, as SPARQL evaluates an optional part, so each base-mode
+                // prompt in it is sent once, and its solutions are joined with every solution of
+                // the required part by equality.
+                java.util.concurrent.atomic.AtomicReference<List<Binding>> solutions =
+                        new java.util.concurrent.atomic.AtomicReference<>();
+                extensions = b -> {
+                    if (solutions.get() == null) {
+                        solutions.set(evaluateIndependently(optional, execCxt));
+                    }
+                    List<Binding> merged = new ArrayList<>();
+                    for (Binding s : solutions.get()) {
+                        if (org.apache.jena.sparql.algebra.Algebra.compatible(b, s)) {
+                            merged.add(org.apache.jena.sparql.algebra.Algebra.merge(b, s));
+                        }
+                    }
+                    return org.apache.jena.sparql.engine.iterator.QueryIterPlainWrapper.create(
+                            merged.iterator(), execCxt);
+                };
+            }
+            return new QueryIterGenOptional(required, execCxt, b -> exprs == null
+                    ? extensions.apply(b)
+                    : applyFilter(exprs, extensions.apply(b), execCxt));
         }
 
         // Fallback to standard QC execution for other ops (BGP, etc.)
@@ -575,6 +600,49 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
      */
     private boolean hasGenVariables() {
         return sourceTypes.values().contains(SourceType.GEN);
+    }
+
+    /**
+     * Filter the solutions by the expressions. Once a GENOP has generated values, {@code =} and
+     * {@code !=} compare a generated value by similarity, and every other expression is
+     * evaluated as in SPARQL. A FILTER of a group and the condition of a left join both go
+     * through here.
+     */
+    private QueryIterator applyFilter(Iterable<org.apache.jena.sparql.expr.Expr> exprs,
+                                      QueryIterator subIter, ExecutionContext execCxt) {
+        boolean hasGenVars = hasGenVariables();
+        for (org.apache.jena.sparql.expr.Expr expr : exprs) {
+            if (hasGenVars && isEqualityExpr(expr)) {
+                LOG.debug("Using SimScoreFilter for expr: {}", expr);
+                subIter = new QueryIterSimScoreFilter(subIter, expr, newSimScoreEvaluator(execCxt),
+                        sourceTypes, execCxt);
+            } else {
+                subIter = new org.apache.jena.sparql.engine.iterator.QueryIterFilterExpr(
+                        subIter, expr, execCxt);
+            }
+        }
+        return subIter;
+    }
+
+    /**
+     * The solutions of an operator evaluated from the empty solution, as SPARQL evaluates the
+     * optional part of OPTIONAL. The source types registered before stay registered: a
+     * similarity join inside the operator resets them to find its generating side, and the
+     * filters above still need to know which of their variables were generated.
+     */
+    private List<Binding> evaluateIndependently(Op op, ExecutionContext execCxt) {
+        Map<Var, SourceType> registered = new HashMap<>(sourceTypes);
+        List<Binding> solutions = new ArrayList<>();
+        QueryIterator it = executeOp(op,
+                QueryIterRoot.create(org.apache.jena.sparql.engine.binding.BindingFactory.empty(), execCxt),
+                execCxt);
+        try {
+            it.forEachRemaining(solutions::add);
+        } finally {
+            it.close();
+        }
+        registered.forEach(sourceTypes::putIfAbsent);
+        return solutions;
     }
 
     /**

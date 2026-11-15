@@ -1,57 +1,43 @@
 package org.gensparql.engine.iterator;
 
-import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.binding.Binding;
-import org.apache.jena.sparql.engine.iterator.QueryIterFilterExpr;
 import org.apache.jena.sparql.engine.iterator.QueryIterRepeatApply;
 import org.apache.jena.sparql.engine.iterator.QueryIterSingleton;
-import org.apache.jena.sparql.expr.Expr;
-import org.apache.jena.sparql.expr.ExprList;
 
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
- * OPTIONAL whose optional part contains a context-mode GENOP.
+ * OPTIONAL whose optional part contains a GENOP.
  *
- * <p>The prompt of such a GENOP names variables of the required part, as in
- * {@code OPTIONAL { GENOP("Position of {?name}?", (?pos), <model>) }}. The optional part is
- * therefore evaluated once for every solution of the required part, with that solution as its
- * input. Each result of the optional part is kept when it satisfies the expressions of the
- * left join, and a solution without any such result is returned unchanged, without the
- * generated variables.
+ * <p>For every solution of the required part, the engine supplies the solutions of the optional
+ * part that extend it and satisfy the expressions of the left join. How it computes them
+ * depends on the GENOP: a context-mode GENOP, as in
+ * {@code OPTIONAL { GENOP("Position of {?name}?", (?pos), <model>) }}, names variables of the
+ * required part, so the optional part is evaluated once for every solution, starting from its
+ * bindings. A solution without any extension is returned unchanged, without the variables of
+ * the optional part.
  */
 public class QueryIterGenOptional extends QueryIterRepeatApply {
 
-    private final Op optional;
-    private final ExprList exprs;
-    private final BiFunction<Op, QueryIterator, QueryIterator> executor;
+    private final Function<Binding, QueryIterator> extensions;
 
     /**
-     * @param required  solutions of the required part
-     * @param optional  the optional part
-     * @param exprs     the expressions of the left join, or null
-     * @param execCxt   execution context
-     * @param executor  evaluates an operator over an input iterator
+     * @param required    solutions of the required part
+     * @param execCxt     execution context
+     * @param extensions  the solutions of the optional part that extend a solution of the
+     *                    required part and satisfy the expressions of the left join
      */
-    public QueryIterGenOptional(QueryIterator required, Op optional, ExprList exprs,
-                                ExecutionContext execCxt,
-                                BiFunction<Op, QueryIterator, QueryIterator> executor) {
+    public QueryIterGenOptional(QueryIterator required, ExecutionContext execCxt,
+                                Function<Binding, QueryIterator> extensions) {
         super(required, execCxt);
-        this.optional = optional;
-        this.exprs = exprs;
-        this.executor = executor;
+        this.extensions = extensions;
     }
 
     @Override
     protected QueryIterator nextStage(Binding binding) {
-        QueryIterator results = executor.apply(optional, QueryIterSingleton.create(binding, getExecContext()));
-        if (exprs != null) {
-            for (Expr expr : exprs) {
-                results = new QueryIterFilterExpr(results, expr, getExecContext());
-            }
-        }
+        QueryIterator results = extensions.apply(binding);
         if (results.hasNext()) {
             return results;
         }
