@@ -436,6 +436,29 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                     subIter, opOrder.getConditions(), execCxt);
         }
 
+        // UNION with a GENOP in a branch. ARQ evaluated the branches itself, so a base-mode GENOP
+        // in a branch was joined with the patterns next to it by equality and its branch came back
+        // empty, and an OPTIONAL in a branch never reached this engine. The engine evaluates every
+        // branch for every incoming solution, as ARQ does, and concatenates the results. The
+        // answers of a base-mode GENOP are kept for the query execution, so its prompt is still
+        // sent once.
+        if (op instanceof OpUnion && planContainsGenOp(op)) {
+            List<Op> branches = List.of(((OpUnion) op).getLeft(), ((OpUnion) op).getRight());
+            return new org.apache.jena.sparql.engine.iterator.QueryIterRepeatApply(input, execCxt) {
+                @Override
+                protected QueryIterator nextStage(Binding binding) {
+                    org.apache.jena.sparql.engine.iterator.QueryIterConcat concat =
+                            new org.apache.jena.sparql.engine.iterator.QueryIterConcat(execCxt);
+                    for (Op branch : branches) {
+                        concat.add(executeOp(branch,
+                                org.apache.jena.sparql.engine.iterator.QueryIterSingleton.create(binding, execCxt),
+                                execCxt));
+                    }
+                    return concat;
+                }
+            };
+        }
+
         // OPTIONAL with a GENOP anywhere in its optional part. ARQ evaluates an optional part on
         // its own, against the root binding, and without the operators of this engine. A
         // context-mode GENOP then saw its input variables unbound and sent no prompt, also when
