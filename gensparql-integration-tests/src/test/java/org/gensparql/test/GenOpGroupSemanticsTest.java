@@ -275,6 +275,64 @@ class GenOpGroupSemanticsTest {
                         + "MINUS { ?p ex:nickname ?n } ?p ex:playsFor ?team", teams));
     }
 
+    private static MockLLMProvider teamList() {
+        return new MockLLMProvider().withDefaultResponse("[\"argentina\", \"France\", \"Mexico\"]");
+    }
+
+    @Test
+    void aBaseModeGenopIsJoinedWithItsPatternAcrossBind() {
+        List<Map<String, String>> rows = run(
+                "GENOP(\"List the teams.\", (?team), " + M + ") BIND(1 AS ?one) ?team a ex:Team",
+                teamList());
+
+        assertEquals(1, calls());
+        assertEquals(List.of(
+                row("one", "1", "team", WD + "Q164089"),
+                row("one", "1", "team", WD + "Q47774"),
+                row("one", "1", "team", WD + "Q79800")), rows);
+    }
+
+    @Test
+    void aBaseModeGenopIsJoinedWithItsPatternAcrossOptional() {
+        List<Map<String, String>> rows = run(
+                "?g a ex:Group . GENOP(\"List the teams.\", (?team), " + M + ") "
+                        + "OPTIONAL { ?g rdfs:label ?gl } ?team ex:inGroup ?g",
+                teamList());
+
+        assertEquals(1, calls());
+        assertEquals(List.of(
+                row("g", EX + "gA", "gl", "Group A", "team", WD + "Q164089"),
+                row("g", EX + "gA", "gl", "Group A", "team", WD + "Q79800"),
+                row("g", EX + "gB", "gl", "Group B", "team", WD + "Q47774")), rows);
+    }
+
+    @Test
+    void anOptionalAfterAGenopAndItsPatternSeesTheMappedEntities() {
+        List<Map<String, String>> rows = run(
+                "GENOP(\"List the teams.\", (?team), " + M + ") ?team a ex:Team "
+                        + "OPTIONAL { ?team ex:inGroup ?g }",
+                teamList());
+
+        assertEquals(1, calls());
+        assertEquals(List.of(
+                row("g", EX + "gA", "team", WD + "Q164089"),
+                row("g", EX + "gA", "team", WD + "Q79800"),
+                row("g", EX + "gB", "team", WD + "Q47774")), rows);
+    }
+
+    @Test
+    void aBaseModeGenopIsJoinedWithItsPatternAcrossMinus() {
+        List<Map<String, String>> rows = run(
+                "?g a ex:Group . GENOP(\"List the teams.\", (?team), " + M + ") "
+                        + "MINUS { ?g rdfs:label \"Group B\" } ?team ex:inGroup ?g",
+                teamList());
+
+        assertEquals(1, calls());
+        assertEquals(List.of(
+                row("g", EX + "gA", "team", WD + "Q164089"),
+                row("g", EX + "gA", "team", WD + "Q79800")), rows);
+    }
+
     // ---- A3: a later GENOP reads the solutions of an earlier one ----
 
     private static MockLLMProvider teamsPositionsCoaches() {
