@@ -138,16 +138,19 @@ public class AlgebraGeneratorGenSPARQL {
             return original;
         }
 
-        boolean hasGenop = false;
+        boolean hasGenop = false, complex = false;
         for (Element e : original) {
             if (e instanceof ElementGenerate) { hasGenop = true; }
             else if (!(e instanceof ElementFilter || e instanceof ElementTriplesBlock
                        || e instanceof ElementPathBlock)) {
-                return original;   // complex group -> preserve author order
+                complex = true;
             }
         }
         if (!hasGenop) {
             return original;
+        }
+        if (complex) {
+            return movePatternsBeforeFirstGenop(original);
         }
         // The GENOP operators keep their written order, and each later one has the earlier ones
         // in its pattern P. A pattern that mentions output variables goes right after the last
@@ -212,6 +215,148 @@ public class AlgebraGeneratorGenSPARQL {
         }
         ordered.addAll(filters);
         return ordered;
+    }
+
+    /**
+     * A group with OPTIONAL, MINUS, BIND, VALUES or a nested pattern keeps its written order,
+     * except that a triple or path pattern written after the first GENOP moves before it when
+     * it mentions no output variable and the move leaves the solutions unchanged. A pattern t
+     * crosses an element e of the group in between only when
+     * <ul>
+     *   <li>e is a GENOP of the group, a FILTER or another triple or path pattern;</li>
+     *   <li>e is OPTIONAL or MINUS without a GENOP, and every variable that t shares with its
+     *       pattern is bound by a triple or path pattern written before e, so the left join
+     *       and the difference see the same solutions;</li>
+     *   <li>e is BIND, t does not mention its variable, and every variable that t shares with
+     *       its expression is bound by a triple or path pattern written before e;</li>
+     *   <li>e is VALUES, a group, a UNION, a sub-select or GRAPH without a GENOP, which are
+     *       joined with the rest and commute with t.</li>
+     * </ul>
+     * Any other element stops the move.
+     */
+    private static List<Element> movePatternsBeforeFirstGenop(List<Element> original) {
+        int first = -1;
+        Set<Var> genOut = new HashSet<>();
+        for (int i = 0; i < original.size(); i++) {
+            if (original.get(i) instanceof ElementGenerate) {
+                if (first < 0) {
+                    first = i;
+                }
+                genOut.addAll(((ElementGenerate) original.get(i)).getOutputVariables());
+            }
+        }
+        // The variables that the triple and path patterns written before each element bind.
+        Set<Var> certain = new HashSet<>();
+        Map<Element, Set<Var>> certainBefore = new IdentityHashMap<>();
+        for (Element e : original) {
+            certainBefore.put(e, new HashSet<>(certain));
+            if (e instanceof ElementTriplesBlock || e instanceof ElementPathBlock) {
+                certain.addAll(PatternVars.vars(e));
+            }
+        }
+        ElementPathBlock moved = new ElementPathBlock();
+        List<Element> tail = new ArrayList<>();
+        List<Element> crossed = new ArrayList<>();
+        for (int i = first; i < original.size(); i++) {
+            Element e = original.get(i);
+            if (e instanceof ElementTriplesBlock || e instanceof ElementPathBlock) {
+                List<org.apache.jena.sparql.core.TriplePath> patterns = patternsOf(e);
+                ElementPathBlock stay = new ElementPathBlock();
+                for (org.apache.jena.sparql.core.TriplePath tp : patterns) {
+                    if (!mentionsAny(tp, genOut) && crossesAll(tp, crossed, certainBefore)) {
+                        moved.addTriplePath(tp);
+                    } else {
+                        stay.addTriplePath(tp);
+                    }
+                }
+                if (stay.getPattern().size() == patterns.size()) {
+                    tail.add(e);
+                } else if (!stay.isEmpty()) {
+                    tail.add(stay);
+                }
+            } else {
+                tail.add(e);
+                crossed.add(e);
+            }
+        }
+        if (moved.isEmpty()) {
+            return original;
+        }
+        List<Element> ordered = new ArrayList<>(original.subList(0, first));
+        ordered.add(moved);
+        ordered.addAll(tail);
+        return ordered;
+    }
+
+    /** Whether the pattern can move before every element of the list, see above. */
+    private static boolean crossesAll(org.apache.jena.sparql.core.TriplePath tp, List<Element> crossed,
+                                      Map<Element, Set<Var>> certainBefore) {
+        Set<Var> vars = new HashSet<>();
+        for (org.apache.jena.graph.Node n
+                : new org.apache.jena.graph.Node[]{tp.getSubject(), tp.getPredicate(), tp.getObject()}) {
+            if (n != null && n.isVariable()) {
+                vars.add(Var.alloc(n));
+            }
+        }
+        for (Element e : crossed) {
+            if (e instanceof ElementGenerate || e instanceof ElementFilter) {
+                continue;
+            }
+            if (elementContainsGenerate(e)) {
+                return false;
+            }
+            Set<Var> shared = new HashSet<>(vars);
+            if (e instanceof ElementOptional) {
+                shared.retainAll(PatternVars.vars(((ElementOptional) e).getOptionalElement()));
+            } else if (e instanceof ElementMinus) {
+                shared.retainAll(PatternVars.vars(((ElementMinus) e).getMinusElement()));
+            } else if (e instanceof ElementBind) {
+                if (vars.contains(((ElementBind) e).getVar())) {
+                    return false;
+                }
+                shared.retainAll(ExprVars.getVarsMentioned(((ElementBind) e).getExpr()));
+            } else if (e instanceof ElementData || e instanceof ElementGroup || e instanceof ElementUnion
+                    || e instanceof ElementSubQuery || e instanceof ElementNamedGraph) {
+                continue;
+            } else {
+                return false;
+            }
+            if (!certainBefore.get(e).containsAll(shared)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** Whether a GENOP appears anywhere inside the element. */
+    private static boolean elementContainsGenerate(Element e) {
+        if (e instanceof ElementGenerate) {
+            return true;
+        }
+        if (e instanceof ElementGroup) {
+            for (Element inner : ((ElementGroup) e).getElements()) {
+                if (elementContainsGenerate(inner)) {
+                    return true;
+                }
+            }
+        } else if (e instanceof ElementUnion) {
+            for (Element inner : ((ElementUnion) e).getElements()) {
+                if (elementContainsGenerate(inner)) {
+                    return true;
+                }
+            }
+        } else if (e instanceof ElementOptional) {
+            return elementContainsGenerate(((ElementOptional) e).getOptionalElement());
+        } else if (e instanceof ElementMinus) {
+            return elementContainsGenerate(((ElementMinus) e).getMinusElement());
+        } else if (e instanceof ElementNamedGraph) {
+            return elementContainsGenerate(((ElementNamedGraph) e).getElement());
+        } else if (e instanceof ElementService) {
+            return elementContainsGenerate(((ElementService) e).getElement());
+        } else if (e instanceof ElementSubQuery) {
+            return elementContainsGenerate(((ElementSubQuery) e).getQuery().getQueryPattern());
+        }
+        return false;
     }
 
     /** Whether a group element of a reordered group is or contains a GENOP. */

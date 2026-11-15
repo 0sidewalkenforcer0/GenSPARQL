@@ -79,6 +79,7 @@ class GenOpNestedPatternTest {
         m.add(p2, RDF.type, athlete).add(p2, RDFS.label, "Kylian Mbappe").add(p2, playsFor, fra);
         m.add(p3, RDF.type, athlete).add(p3, RDFS.label, "Raul Jimenez").add(p3, playsFor, mex);
         m.add(p1, m.createProperty(EX + "nickname"), "La Pulga");
+        m.add(p2, m.createProperty(EX + "nickname"), "Donatello");
         return m;
     }
 
@@ -211,5 +212,53 @@ class GenOpNestedPatternTest {
                 new MockLLMProvider().withDefaultResponse("[\"Forward\"]"));
 
         assertEquals(3, rows.size());
+    }
+
+    // ---- B2: a pattern after the GENOP in a group with OPTIONAL or BIND ----
+
+    private static final String POSITION = "GENOP(\"Position of {?name}?\", (?pos), " + M + ") ";
+
+    @Test
+    void aPatternMovesBeforeTheGenopAcrossAnOptionalWhoseSharedVariableIsBound() {
+        List<Map<String, String>> rows = run(
+                "?p a ex:Athlete . " + POSITION + "OPTIONAL { ?p ex:nickname ?nick } ?p rdfs:label ?name",
+                new MockLLMProvider().withDefaultResponse("[\"Forward\"]"));
+
+        assertEquals(3, calls(), "the label reaches the prompt");
+        assertEquals(List.of(
+                row("name", "Kylian Mbappe", "nick", "Donatello", "p", EX + "p2", "pos", "Forward"),
+                row("name", "Lionel Messi", "nick", "La Pulga", "p", EX + "p1", "pos", "Forward"),
+                row("name", "Raul Jimenez", "p", EX + "p3", "pos", "Forward")), rows);
+    }
+
+    @Test
+    void aPatternThatSharesAnUnboundVariableWithAnOptionalStaysAfterIt() {
+        List<Map<String, String>> rows = run(
+                "?p a ex:Athlete . ?p rdfs:label ?name . " + POSITION
+                        + "OPTIONAL { ?p ex:nickname ?nick } ?q ex:nickname ?nick",
+                new MockLLMProvider().withDefaultResponse("[\"Forward\"]"));
+
+        assertEquals(4, rows.size(), "each nickname of the optional part joins one ?q, and Raul Jimenez,"
+                + " who has none, joins both; moving the pattern before OPTIONAL would give 6");
+    }
+
+    @Test
+    void aPatternMovesBeforeTheGenopAcrossABindThatDoesNotReadIt() {
+        List<Map<String, String>> rows = run(
+                "?p a ex:Athlete . " + POSITION + "BIND(\"x\" AS ?tag) ?p rdfs:label ?name",
+                new MockLLMProvider().withDefaultResponse("[\"Forward\"]"));
+
+        assertEquals(3, calls());
+        assertEquals(3, rows.size());
+    }
+
+    @Test
+    void aPatternThatABindReadsStaysAfterIt() {
+        List<Map<String, String>> rows = run(
+                "?p a ex:Athlete . " + POSITION + "BIND(UCASE(?name) AS ?n) ?p rdfs:label ?name",
+                new MockLLMProvider().withDefaultResponse("[\"Forward\"]"));
+
+        assertEquals(0, calls(), "the GENOP keeps its written place and its placeholder is unbound");
+        assertEquals(List.of(), rows);
     }
 }
