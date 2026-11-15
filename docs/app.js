@@ -1786,25 +1786,20 @@ ORDER BY DESC(xsd:integer(?goals))`,
       nobelQuantumLaureates:`PREFIX ex:   <http://example.org/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-SELECT DISTINCT ?laureate ?year
+SELECT DISTINCT ?person ?laureate ?year
 WHERE {
-  {
-    ?person a ex:NobelLaureate ;
-            rdfs:label ?laureate ;
-            ex:wonNobelPrize ?award .
+  ?person a ex:NobelLaureate ;
+          rdfs:label ?laureate ;
+          ex:wonNobelPrize ?award .
 
-    ?award ex:field <http://www.wikidata.org/entity/Q38104> ;
-           ex:winningYear ?year .
-  }
+  ?award ex:field <http://www.wikidata.org/entity/Q38104> ;
+         ex:winningYear ?year .
 
-  {
-    GENOP(
-      "Nobel Prize in Physics {?laureate} who made foundational contributions to quantum mechanics. Return only the names ",
-      (?laureate),
-      <model>,
-      0.0
-    )
-  }
+  GENOP(
+    "List the Nobel laureates in Physics who made foundational contributions to quantum mechanics. Return only the names.",
+    (?person),
+    <model>
+  )
 }
 ORDER BY ?year`
     };
