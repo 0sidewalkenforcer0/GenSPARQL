@@ -730,14 +730,11 @@ public class QueryIterGenerate extends QueryIteratorBase {
 
     /**
      * Whether a generated value joins with the term that the input already binds to its
-     * variable. In base mode the join is the similarity join of the semantics: the similarity
+     * variable. In both modes the join is the similarity join of the semantics: the similarity
      * between the value and the labels of the term reaches the threshold, and the solution keeps
-     * its term. In context mode the join compares the terms by equality.
+     * its term.
      */
     private boolean agrees(Var var, Node existing, Node generated) {
-        if (!opGen.isBaseMode()) {
-            return existing.equals(generated);
-        }
         if (simScoreEvaluator == null) {
             simScoreEvaluator = org.gensparql.engine.similarity.SimScoreEvaluator.forExecution(execCxt);
         }

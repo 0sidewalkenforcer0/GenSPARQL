@@ -200,10 +200,13 @@ public class AlgebraGeneratorGenSPARQL {
             ElementPathBlock joined = after.get(i);
             if (joined.isEmpty()) {
                 ordered.add(gen);
-            } else if (gen.isBaseMode() && !alone) {
-                // A base-mode GENOP and the patterns that mention its output form a group of
-                // their own, whose similarity join maps the generated names to entities before
-                // anything else reads them. A group that holds nothing else stays as it is.
+            } else if (!alone) {
+                // A GENOP and the patterns that mention its output form a group of their own,
+                // whose similarity join maps the generated values to the terms of the graph
+                // before anything else reads them. In both modes the group compiles to a join
+                // with the GENOP on the left. A context-mode GENOP in it still receives the
+                // solutions of the patterns before it, see GenSPARQLQueryEngine. A group that
+                // holds nothing else stays as it is.
                 ElementGroup mapped = new ElementGroup();
                 mapped.addElement(gen);
                 mapped.addElement(joined);

@@ -253,6 +253,9 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
             // Check if similarity join is needed (when GEN variables are involved)
             if (simEnabled && needs) {
                 LOG.debug("Using similarity join for OpJoin");
+                if (isContextSimJoin(opJoin)) {
+                    return executeContextSimJoin(opJoin.getLeft(), opJoin.getRight(), input, execCxt);
+                }
                 return executeSimJoin(opJoin, input, execCxt);
             }
 
@@ -347,9 +350,10 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                     .collect(java.util.stream.Collectors.joining(", ")));
             }
 
-            // A similarity join applies to a base-mode GENOP only: it matches generated values
-            // against KG values, and a context-mode GENOP has to receive its bindings from the
-            // preceding elements instead, which the standard sequence does.
+            // In a sequence, a similarity join applies to a base-mode GENOP only: a context-mode
+            // GENOP has to receive its bindings from the preceding elements, which the standard
+            // sequence does. The planner compiles a GENOP and the patterns that mention its
+            // output as a join, not as a sequence, and needsSimJoin covers both modes there.
             //
             // The two-element restriction is structural: the similarity join takes one generating
             // side and one KG side, and with more elements there is no single pair to hand it.
@@ -538,21 +542,31 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
     }
 
     /**
-     * Check if a join operation needs similarity-based matching.
-     * Returns true ONLY for base mode GENOP (no input variables) that needs SimJoin.
-     * Context mode GENOP (with input variables) should use standard join to pass bindings.
+     * Check if a join operation needs similarity-based matching. In both modes the patterns that
+     * mention an output variable of a GENOP are joined with its solutions by similarity.
+     * <ul>
+     *   <li>A join whose left side has a context-mode GENOP and whose right side has no GENOP
+     *       but mentions an output variable of a GENOP on the left is such a join, see
+     *       {@link #isContextSimJoin}.</li>
+     *   <li>Any other join with a context-mode GENOP passes the solutions of its left side to
+     *       its right side, from which the GENOP reads the values of its placeholders. An output
+     *       variable that these solutions already bind is then compared by similarity in the
+     *       GENOP itself.</li>
+     *   <li>A join with a base-mode GENOP and without a context-mode one is a similarity join.</li>
+     * </ul>
      */
     private boolean needsSimJoin(OpJoin opJoin) {
-        // Only use SimJoin for base mode GENOP (no input variables)
-        // Context mode GENOP needs standard join to receive bindings from left side
+        if (isContextSimJoin(opJoin)) {
+            LOG.debug("needsSimJoin: true (context mode GENOP and patterns that mention its output)");
+            return true;
+        }
         boolean leftHasBaseGenOp = containsBaseGenOp(opJoin.getLeft());
         boolean rightHasBaseGenOp = containsBaseGenOp(opJoin.getRight());
         boolean leftHasContextGenOp = containsGenOpWithInputVars(opJoin.getLeft());
         boolean rightHasContextGenOp = containsGenOpWithInputVars(opJoin.getRight());
 
-        // If there's a context mode GENOP, don't use SimJoin - use standard join
         if (leftHasContextGenOp || rightHasContextGenOp) {
-            LOG.debug("needsSimJoin: false (has context mode GENOP)");
+            LOG.debug("needsSimJoin: false (context mode GENOP that reads the left side)");
             return false;
         }
 
@@ -749,6 +763,111 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
         QueryIterator simJoin = new QueryIterSimJoin(leftIter, rightIter, newSimScoreEvaluator(execCxt),
                 leftTypes, rightTypes, execCxt);
         return org.apache.jena.sparql.engine.join.Join.join(input, simJoin, execCxt);
+    }
+
+    /**
+     * Whether the join is a GENOP side and a pattern side that the semantics joins by
+     * similarity although the GENOP side has a context-mode GENOP: the right side has no GENOP
+     * and mentions an output variable of a GENOP on the left. The planner compiles a GENOP and
+     * the patterns that mention its output in this shape, and so does a group whose patterns
+     * after the GENOP stay where they are written.
+     */
+    private boolean isContextSimJoin(OpJoin opJoin) {
+        if (planContainsGenOp(opJoin.getRight())) {
+            return false;
+        }
+        List<OpGenerate> generating = new ArrayList<>();
+        collectGeneratingSide(opJoin.getLeft(), generating);
+        if (generating.stream().allMatch(OpGenerate::isBaseMode)) {
+            return false;
+        }
+        Set<Var> mentioned = org.apache.jena.sparql.algebra.OpVars.visibleVars(opJoin.getRight());
+        for (OpGenerate g : generating) {
+            for (Var v : g.getOutputVariables()) {
+                if (mentioned.contains(v)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * The GENOPs whose solutions a side of a join passes on: through joins, sequences, filters,
+     * BIND, the required part of OPTIONAL and the left side of MINUS, not into a sub-select, a
+     * UNION, an optional part or the right side of MINUS.
+     */
+    private static void collectGeneratingSide(Op op, List<OpGenerate> out) {
+        if (op instanceof OpGenerate) {
+            out.add((OpGenerate) op);
+        } else if (op instanceof OpJoin) {
+            collectGeneratingSide(((OpJoin) op).getLeft(), out);
+            collectGeneratingSide(((OpJoin) op).getRight(), out);
+        } else if (op instanceof OpSequence) {
+            for (Op e : ((OpSequence) op).getElements()) {
+                collectGeneratingSide(e, out);
+            }
+        } else if (op instanceof OpFilter) {
+            collectGeneratingSide(((OpFilter) op).getSubOp(), out);
+        } else if (op instanceof org.apache.jena.sparql.algebra.op.OpExtend) {
+            collectGeneratingSide(((org.apache.jena.sparql.algebra.op.OpExtend) op).getSubOp(), out);
+        } else if (op instanceof OpLeftJoin) {
+            collectGeneratingSide(((OpLeftJoin) op).getLeft(), out);
+        } else if (op instanceof org.apache.jena.sparql.algebra.op.OpMinus) {
+            collectGeneratingSide(((org.apache.jena.sparql.algebra.op.OpMinus) op).getLeft(), out);
+        }
+    }
+
+    /**
+     * The similarity join of a side with a context-mode GENOP and the patterns that mention an
+     * output variable of a GENOP on that side.
+     *
+     * <p>The GENOP side is evaluated from the incoming solutions, because a context-mode GENOP
+     * reads the values of its placeholders from them, and it is materialized. The pattern side is
+     * evaluated on its own, from the empty solution. Two solutions join when every output
+     * variable that they share has a generated value similar enough to a label of the term of
+     * the pattern side, and every other shared variable has the same term on both sides. The
+     * joined solution keeps the term of the pattern side. The GENOP side already carries the
+     * incoming solutions, so the result is not joined with them again.
+     */
+    private QueryIterator executeContextSimJoin(Op generatingOp, Op patternOp, QueryIterator input,
+                                                ExecutionContext execCxt) {
+        LOG.debug("executeContextSimJoin: generating={}, patterns={}",
+                generatingOp.getClass().getSimpleName(), patternOp.getClass().getSimpleName());
+        Map<Var, SourceType> registered = new HashMap<>(sourceTypes);
+        QueryIterator patterns = executeOp(patternOp,
+                QueryIterRoot.create(org.apache.jena.sparql.engine.binding.BindingFactory.empty(), execCxt),
+                execCxt);
+
+        // Only the output variables of the GENOP side count as generated in the join.
+        sourceTypes.clear();
+        List<Binding> generated = new ArrayList<>();
+        QueryIterator it = executeOp(generatingOp, input, execCxt);
+        try {
+            it.forEachRemaining(generated::add);
+        } finally {
+            it.close();
+        }
+        Map<Var, SourceType> generatedTypes = new HashMap<>(sourceTypes);
+        // Part of the GENOP side may have been evaluated by ARQ, for example an OPTIONAL without
+        // a GENOP in its optional part, which registers neither the output variables of the
+        // GENOPs below it nor their thresholds.
+        List<OpGenerate> generating = new ArrayList<>();
+        collectGeneratingSide(generatingOp, generating);
+        for (OpGenerate g : generating) {
+            for (Var v : g.getOutputVariables()) {
+                generatedTypes.putIfAbsent(v, SourceType.GEN);
+                if (g.hasThreshold()) {
+                    getThresholdRegistry(execCxt).setThreshold(v, g.getThreshold());
+                }
+            }
+        }
+        // The filters above still need the variables generated before this join.
+        registered.forEach(sourceTypes::putIfAbsent);
+
+        return new QueryIterSimJoin(patterns,
+                org.apache.jena.sparql.engine.iterator.QueryIterPlainWrapper.create(generated.iterator(), execCxt),
+                newSimScoreEvaluator(execCxt), new HashMap<>(), generatedTypes, execCxt);
     }
 
     /**
