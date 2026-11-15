@@ -451,9 +451,10 @@ public class QueryIterGenerate extends QueryIteratorBase {
         // does: its prompt is constant and is sent once, however many solutions come in.
         // Context mode does when deduplication is switched on.
         boolean memoize = dedupEnabled || opGen.isBaseMode();
+        Map<String, List<Map<String, String>>> memo = opGen.isBaseMode() ? baseModeAnswers() : promptMemo;
         List<Map<String, String>> outputMaps;
-        if (memoize && promptMemo.containsKey(finalPrompt)) {
-            outputMaps = promptMemo.get(finalPrompt);
+        if (memoize && memo.containsKey(finalPrompt)) {
+            outputMaps = memo.get(finalPrompt);
             dedupSavedCalls++;
             LOG.debug("Dedup hit: reusing {} output map(s) for repeated prompt (saved {} call(s))",
                     outputMaps.size(), dedupSavedCalls);
@@ -464,7 +465,7 @@ public class QueryIterGenerate extends QueryIteratorBase {
                 // prompt is retried rather than permanently poisoned with an empty result.
                 outputMaps = Collections.emptyList();
             } else if (memoize) {
-                promptMemo.put(finalPrompt, outputMaps);
+                memo.put(finalPrompt, outputMaps);
             }
         }
 
@@ -478,6 +479,18 @@ public class QueryIterGenerate extends QueryIteratorBase {
         }
         LOG.debug("Produced {} output binding(s) from {} output map(s)", results.size(), outputMaps.size());
         return results.iterator();
+    }
+
+    /**
+     * The answers of this base-mode GENOP in the current query execution. An OPTIONAL with a
+     * context-mode GENOP evaluates its optional part once for every solution of the required
+     * part, each time with a new iterator, so a memo of the iterator alone would send the
+     * constant prompt again for every solution.
+     */
+    private Map<String, List<Map<String, String>>> baseModeAnswers() {
+        Map<OpGenerate, Map<String, List<Map<String, String>>>> all =
+                execCxt.getContext().get(org.gensparql.engine.GenSPARQLConstants.BASE_MODE_ANSWERS);
+        return all == null ? promptMemo : all.computeIfAbsent(opGen, op -> new HashMap<>());
     }
 
     /**

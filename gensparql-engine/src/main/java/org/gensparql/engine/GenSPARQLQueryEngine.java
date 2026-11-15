@@ -127,6 +127,8 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
 
         // Clear source types for new query
         sourceTypes.clear();
+        context.set(GenSPARQLConstants.BASE_MODE_ANSWERS,
+                java.util.Collections.synchronizedMap(new java.util.IdentityHashMap<>()));
 
         QueryIterator result = executeOp(op, qIter, execCxt);
         LOG.debug("[DEBUG GenSPARQLQueryEngine.eval] executeOp returned: " + result.getClass().getSimpleName());

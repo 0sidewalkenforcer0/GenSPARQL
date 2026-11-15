@@ -180,4 +180,72 @@ class GenOpGroupSemanticsTest {
                 row("d", "a team", "one", "1", "team", WD + "Q79800")), rows,
                 "each team keeps its IRI and matches only the name similar to its label");
     }
+
+    // ---- A3: a later GENOP reads the solutions of an earlier one ----
+
+    private static MockLLMProvider teamsPositionsCoaches() {
+        return new MockLLMProvider()
+                .withResponse("Position of", "[\"Forward\"]")
+                .withResponse("Coach of", "[\"Someone\"]")
+                .withDefaultResponse("[\"Argentina\", \"France\", \"Mexico\"]");
+    }
+
+    @Test
+    void aContextModeGenopReadsTheEntitiesOfAnEarlierBaseModeGenop() {
+        List<Map<String, String>> rows = run(
+                "?p rdfs:label ?name ; ex:playsFor ?team . "
+                        + "GENOP(\"List the teams.\", (?team), " + M + ") "
+                        + "GENOP(\"Position of {?name}?\", (?pos), " + M + ")",
+                teamsPositionsCoaches());
+
+        assertEquals(4, calls(), "one list of teams and one position for each player");
+        assertEquals(List.of(
+                row("name", "Kylian Mbappe", "p", EX + "p2", "pos", "Forward", "team", WD + "Q47774"),
+                row("name", "Lionel Messi", "p", EX + "p1", "pos", "Forward", "team", WD + "Q79800"),
+                row("name", "Raul Jimenez", "p", EX + "p3", "pos", "Forward", "team", WD + "Q164089")), rows);
+    }
+
+    @Test
+    void thePromptOfTheLaterGenopNamesTheMappedEntities() {
+        List<Map<String, String>> rows = run(
+                "?team a ex:Team . GENOP(\"List the teams.\", (?team), " + M + ") "
+                        + "?team rdfs:label ?tn . GENOP(\"Coach of {?tn}?\", (?coach), " + M + ")",
+                teamsPositionsCoaches());
+
+        assertEquals(4, calls());
+        assertEquals(3, rows.size());
+        assertEquals(List.of("Coach of Argentina?", "Coach of France?", "Coach of Mexico?"),
+                mock.getRequestHistory().stream().map(r -> r.getPrompt())
+                        .filter(p -> p.startsWith("Coach of")).sorted().toList());
+    }
+
+    @Test
+    void aBaseModeGenopAfterAContextModeOneIsStillMappedBySimilarity() {
+        List<Map<String, String>> rows = run(
+                "?p a ex:Athlete . ?p rdfs:label ?name . "
+                        + "GENOP(\"Position of {?name}?\", (?pos), " + M + ") "
+                        + "?p ex:playsFor ?team . GENOP(\"List the teams.\", (?team), " + M + ")",
+                teamsPositionsCoaches());
+
+        assertEquals(4, calls());
+        assertEquals(List.of(
+                row("name", "Kylian Mbappe", "p", EX + "p2", "pos", "Forward", "team", WD + "Q47774"),
+                row("name", "Lionel Messi", "p", EX + "p1", "pos", "Forward", "team", WD + "Q79800"),
+                row("name", "Raul Jimenez", "p", EX + "p3", "pos", "Forward", "team", WD + "Q164089")), rows);
+    }
+
+    @Test
+    void anOptionalPartWithBothModesSendsTheBaseModePromptOnce() {
+        List<Map<String, String>> rows = run(
+                "?g a ex:Group OPTIONAL { ?team ex:inGroup ?g . "
+                        + "GENOP(\"List the teams.\", (?team), " + M + ") "
+                        + "?team rdfs:label ?tn . GENOP(\"Coach of {?tn}?\", (?coach), " + M + ") }",
+                teamsPositionsCoaches());
+
+        assertEquals(4, calls(), "one list of teams for both groups and one coach for each team");
+        assertEquals(List.of(
+                row("coach", "Someone", "g", EX + "gA", "team", WD + "Q164089", "tn", "Mexico"),
+                row("coach", "Someone", "g", EX + "gA", "team", WD + "Q79800", "tn", "Argentina"),
+                row("coach", "Someone", "g", EX + "gB", "team", WD + "Q47774", "tn", "France")), rows);
+    }
 }

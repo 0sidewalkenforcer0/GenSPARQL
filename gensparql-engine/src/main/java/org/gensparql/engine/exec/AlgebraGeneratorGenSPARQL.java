@@ -95,7 +95,7 @@ public class AlgebraGeneratorGenSPARQL {
                     filters.add(((ElementFilter) e).getExpr());
                 }
             } else {
-                if (!earlyApplied && e instanceof ElementGenerate) {
+                if (!earlyApplied && generates(e)) {
                     ExprList before = new ExprList();
                     for (Element f : early) {
                         before.add(((ElementFilter) f).getExpr());
@@ -149,26 +149,35 @@ public class AlgebraGeneratorGenSPARQL {
         if (!hasGenop) {
             return original;
         }
-        Set<Var> genOut = new HashSet<>();
+        // The GENOP operators keep their written order, and each later one has the earlier ones
+        // in its pattern P. A pattern that mentions output variables goes right after the last
+        // GENOP whose output it mentions, so the GENOP operators after it receive the join.
+        List<ElementGenerate> gens = new ArrayList<>();
         for (Element e : original) {
             if (e instanceof ElementGenerate) {
-                genOut.addAll(((ElementGenerate) e).getOutputVariables());
+                gens.add((ElementGenerate) e);
             }
         }
-        List<Element> before = new ArrayList<>(), gens = new ArrayList<>(),
-                filters = new ArrayList<>();
-        ElementPathBlock after = new ElementPathBlock();
+        List<Element> before = new ArrayList<>(), filters = new ArrayList<>();
+        List<ElementPathBlock> after = new ArrayList<>();
+        for (int i = 0; i < gens.size(); i++) {
+            after.add(new ElementPathBlock());
+        }
         for (Element e : original) {
             if (e instanceof ElementFilter) {
                 filters.add(e);
-            } else if (e instanceof ElementGenerate) {
-                gens.add(e);
-            } else {
+            } else if (!(e instanceof ElementGenerate)) {
                 List<org.apache.jena.sparql.core.TriplePath> patterns = patternsOf(e);
                 ElementPathBlock independent = new ElementPathBlock();
                 for (org.apache.jena.sparql.core.TriplePath tp : patterns) {
-                    if (mentionsAny(tp, genOut)) {
-                        after.addTriplePath(tp);
+                    int last = -1;
+                    for (int i = 0; i < gens.size(); i++) {
+                        if (mentionsAny(tp, new HashSet<>(gens.get(i).getOutputVariables()))) {
+                            last = i;
+                        }
+                    }
+                    if (last >= 0) {
+                        after.get(last).addTriplePath(tp);
                     } else {
                         independent.addTriplePath(tp);
                     }
@@ -180,14 +189,44 @@ public class AlgebraGeneratorGenSPARQL {
                 }
             }
         }
-        List<Element> ordered = new ArrayList<>(original.size() + 1);
+        List<Element> ordered = new ArrayList<>(original.size() + gens.size());
         ordered.addAll(before);
-        ordered.addAll(gens);
-        if (!after.isEmpty()) {
-            ordered.add(after);
+        boolean alone = before.isEmpty() && gens.size() == 1;
+        for (int i = 0; i < gens.size(); i++) {
+            ElementGenerate gen = gens.get(i);
+            ElementPathBlock joined = after.get(i);
+            if (joined.isEmpty()) {
+                ordered.add(gen);
+            } else if (gen.isBaseMode() && !alone) {
+                // A base-mode GENOP and the patterns that mention its output form a group of
+                // their own, whose similarity join maps the generated names to entities before
+                // anything else reads them. A group that holds nothing else stays as it is.
+                ElementGroup mapped = new ElementGroup();
+                mapped.addElement(gen);
+                mapped.addElement(joined);
+                ordered.add(mapped);
+            } else {
+                ordered.add(gen);
+                ordered.add(joined);
+            }
         }
         ordered.addAll(filters);
         return ordered;
+    }
+
+    /** Whether a group element of a reordered group is or contains a GENOP. */
+    private static boolean generates(Element e) {
+        if (e instanceof ElementGenerate) {
+            return true;
+        }
+        if (e instanceof ElementGroup) {
+            for (Element inner : ((ElementGroup) e).getElements()) {
+                if (inner instanceof ElementGenerate) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /** The triple and path patterns of a block, in written order. */
@@ -224,7 +263,7 @@ public class AlgebraGeneratorGenSPARQL {
     private static Set<Element> earlyFilters(List<Element> ordered) {
         Set<Var> bound = new HashSet<>();
         for (Element e : ordered) {
-            if (e instanceof ElementGenerate) {
+            if (generates(e)) {
                 break;
             }
             if (e instanceof ElementTriplesBlock || e instanceof ElementPathBlock) {

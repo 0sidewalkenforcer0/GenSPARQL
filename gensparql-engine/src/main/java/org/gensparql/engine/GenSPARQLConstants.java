@@ -47,6 +47,12 @@ public class GenSPARQLConstants {
      */
     public static final double DEFAULT_THRESHOLD_VALUE = 0.85;
 
+    /**
+     * Context symbol for the answers of the base-mode GENOP operators of one query execution,
+     * so that each constant prompt is sent once even when its GENOP is evaluated several times.
+     */
+    public static final Symbol BASE_MODE_ANSWERS = Symbol.create(NS + "baseModeAnswers");
+
     // Prevent instantiation
     private GenSPARQLConstants() {}
 }
