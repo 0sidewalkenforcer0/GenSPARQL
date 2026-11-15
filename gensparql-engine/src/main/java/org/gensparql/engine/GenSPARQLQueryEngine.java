@@ -224,6 +224,19 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
         // Handle OpProject
         if (op instanceof OpProject) {
             OpProject opProject = (OpProject) op;
+            if (!(input instanceof QueryIterRoot)) {
+                // A sub-select that receives the solutions of the patterns before it. SPARQL
+                // evaluates a sub-select on its own, its variables that it does not select are
+                // local to it, and its solutions are joined with the others by equality.
+                // Projecting the incoming solutions instead dropped every variable of the outer
+                // pattern that the sub-select does not select.
+                QueryIterator own = new org.apache.jena.sparql.engine.iterator.QueryIterProject(
+                        executeOp(opProject.getSubOp(), QueryIterRoot.create(
+                                org.apache.jena.sparql.engine.binding.BindingFactory.empty(), execCxt),
+                                execCxt),
+                        opProject.getVars(), execCxt);
+                return org.apache.jena.sparql.engine.join.Join.join(input, own, execCxt);
+            }
             QueryIterator subIter = executeOp(opProject.getSubOp(), input, execCxt);
             return new org.apache.jena.sparql.engine.iterator.QueryIterProject(
                     subIter, opProject.getVars(), execCxt);

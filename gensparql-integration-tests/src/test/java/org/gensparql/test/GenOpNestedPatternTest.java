@@ -158,4 +158,35 @@ class GenOpNestedPatternTest {
                 row("name", "Lionel Messi", "p", EX + "p1", "pos", "Forward"),
                 row("name", "Raul Jimenez", "p", EX + "p3", "pos", "Forward")), rows);
     }
+
+    // ---- B4: a sub-select joined with the patterns of the outer group ----
+
+    @Test
+    void aSubSelectIsJoinedWithTheOuterPatternsByEquality() {
+        List<Map<String, String>> rows = run(
+                "?p rdfs:label ?name . { SELECT ?p ?pos WHERE { ?p a ex:Athlete ; rdfs:label ?n . "
+                        + "GENOP(\"Position of {?n}?\", (?pos), " + M + ") } }",
+                new MockLLMProvider().withDefaultResponse("[\"Forward\"]"));
+
+        assertEquals(3, calls());
+        assertEquals(List.of(
+                row("name", "Kylian Mbappe", "p", EX + "p2", "pos", "Forward"),
+                row("name", "Lionel Messi", "p", EX + "p1", "pos", "Forward"),
+                row("name", "Raul Jimenez", "p", EX + "p3", "pos", "Forward")), rows,
+                "the outer ?name stays in every solution");
+    }
+
+    @Test
+    void aVariableThatTheSubSelectDoesNotSelectIsLocalToIt() {
+        List<Map<String, String>> rows = run(
+                "?p rdfs:label ?name . { SELECT ?p WHERE { ?p a ex:Athlete . ?p ex:playsFor ?name } } "
+                        + "GENOP(\"Position of {?name}?\", (?pos), " + M + ")",
+                new MockLLMProvider().withDefaultResponse("[\"Forward\"]"));
+
+        assertEquals(3, calls(), "the ?name of the sub-select does not constrain the outer one");
+        assertEquals(List.of(
+                row("name", "Kylian Mbappe", "p", EX + "p2", "pos", "Forward"),
+                row("name", "Lionel Messi", "p", EX + "p1", "pos", "Forward"),
+                row("name", "Raul Jimenez", "p", EX + "p3", "pos", "Forward")), rows);
+    }
 }
