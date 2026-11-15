@@ -248,4 +248,31 @@ class GenOpGroupSemanticsTest {
                 row("coach", "Someone", "g", EX + "gA", "team", WD + "Q79800", "tn", "Argentina"),
                 row("coach", "Someone", "g", EX + "gB", "team", WD + "Q47774", "tn", "France")), rows);
     }
+
+    // ---- A4: the patterns that mention the output of a base-mode GENOP join it together ----
+
+    @Test
+    void twoBlocksThatMentionTheOutputOfABaseModeGenopAreBothJoined() {
+        List<Map<String, String>> rows = run(
+                "?p a ex:Athlete . "
+                        + "GENOP(\"List footballers who have won the World Cup.\", (?p), " + M + ") "
+                        + "?p ex:playsFor ?t . ?t rdfs:label \"Argentina\"",
+                new MockLLMProvider().withDefaultResponse("[\"Lionel Messi\", \"Kylian Mbappe\"]"));
+
+        assertEquals(1, calls());
+        assertEquals(List.of(row("p", EX + "p1", "t", WD + "Q79800")), rows,
+                "Messi is mapped to his entity and plays for Argentina");
+    }
+
+    @Test
+    void aPatternAfterTheMappingComparesTheMappedEntitiesByEquality() {
+        List<Map<String, String>> rows = run(
+                "?team a ex:Team . GENOP(\"List the teams.\", (?team), " + M + ") "
+                        + "?team ex:inGroup ?g . ?g rdfs:label \"Group A\"",
+                new MockLLMProvider().withDefaultResponse("[\"Argentina\", \"France\", \"Mexico\"]"));
+
+        assertEquals(List.of(
+                row("g", EX + "gA", "team", WD + "Q164089"),
+                row("g", EX + "gA", "team", WD + "Q79800")), rows);
+    }
 }
