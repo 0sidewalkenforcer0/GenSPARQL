@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
-"""The bge-large-en-v1.5 similarity of each team name that Mistral-7B listed in E2 to each of the
-48 teams of the graph, for the recorded mode of the workbench (from the repository root):
+"""The bge-large-en-v1.5 similarity of each name that an LLM listed in E2 to each entity of the
+graph that the query asks for, for the recorded mode of the workbench (from the repository root):
 
-  embedding_scores.py inputs IN.json             the names and labels to embed
+  embedding_scores.py inputs IN.json [QUERY]          the names and labels to embed
   sbatch eval/www27/embed_texts.sbatch IN.json VECTORS.json   (on the cluster, no GPU needed)
-  embedding_scores.py scores VECTORS.json        writes results/e2-embedding-scores/e2_wc_teams.json
+  embedding_scores.py scores VECTORS.json [QUERY]     writes results/e2-embedding-scores/<QUERY>.json
+
+QUERY is e2_wc_teams (the default: the team names of Mistral-7B and the 48 teams) or
+e2_nobel_fields (the field names of Qwen3-30B and the 6 Nobel fields), the two queries whose
+names the workbench maps.
 
 The score of a name and a team is the one that the similarity join of the engine computes
 (SimScoreEvaluator with EmbeddingSimText): the maximum, over the labels of the team, of 1 for an
@@ -26,11 +30,14 @@ from rdflib.namespace import RDF, RDFS
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
-MISTRAL = "mistralai_Mistral-7B-Instruct-v0.3"
-NAMES = os.path.join(HERE, "results", MISTRAL, "e2_wc_teams.json")
-REPLAY = os.path.join(HERE, "results", "e2-replay-20261113", MISTRAL, "e2_wc_teams.json")
-OUT = os.path.join(HERE, "results", "e2-embedding-scores", "e2_wc_teams.json")
 EX = rdflib.Namespace("http://example.org/")
+# The model whose names the workbench shows, the graph and the class of the entities, and the key
+# of the entities in the output (e2_wc_teams.json keeps its key "teams").
+QUERIES = {
+    "e2_wc_teams": ("mistralai_Mistral-7B-Instruct-v0.3", "worldcup2026.ttl", EX.Team, "teams"),
+    "e2_nobel_fields": ("Qwen_Qwen3-30B-A3B-Instruct-2507", "nobel-prize.ttl", EX.NobelField, "entities"),
+}
+QUERY = "e2_wc_teams"
 
 
 def load(path):
@@ -39,17 +46,19 @@ def load(path):
 
 
 def names():
-    """The names that Mistral-7B generated, as make_recorded_data.py shows them."""
-    rows = load(NAMES)["generated_before"]["rows"]
+    """The names that the model generated, as make_recorded_data.py shows them."""
+    model = QUERIES[QUERY][0]
+    rows = load(os.path.join(HERE, "results", model, QUERY + ".json"))["generated_before"]["rows"]
     return [r["x"] for r in rows if r.get("x", "").strip() not in ("", "[]", '[""]')]
 
 
 def team_labels():
-    """The labels of every ex:Team of the graph, by IRI."""
+    """The labels of every entity of the class of the query, by IRI."""
+    _, graph, cls, _ = QUERIES[QUERY]
     g = rdflib.Graph()
-    g.parse(os.path.join(ROOT, "docs", "worldcup2026.ttl"), format="turtle")
+    g.parse(os.path.join(ROOT, "docs", graph), format="turtle")
     return {str(t): sorted(str(l) for l in g.objects(t, RDFS.label))
-            for t in sorted(g.subjects(RDF.type, EX.Team), key=str)}
+            for t in sorted(g.subjects(RDF.type, cls), key=str)}
 
 
 def similarity(a, b, vec):
@@ -85,7 +94,8 @@ def scores(vectors_path):
 
     # Each embedding run of the replay against the teams that the scores reach.
     check = []
-    for run in load(REPLAY)["runs"]:
+    replay = os.path.join(HERE, "results", "e2-replay-20261113", QUERIES[QUERY][0], QUERY + ".json")
+    for run in load(replay)["runs"]:
         if run["similarity"] != "embedding":
             continue
         theta = run["theta"]
@@ -100,15 +110,17 @@ def scores(vectors_path):
 
     out = {"model": emb["model"],
            "source": f"{emb.get('runtime', '')}, job {emb.get('job', '')}",
-           "names": generated, "teams": labels,
+           "names": generated, QUERIES[QUERY][3]: labels,
            "scores": {n: {t: round(s, 6) for t, s in score[n].items()} for n in generated},
            "best": best, "check": check}
-    os.makedirs(os.path.dirname(OUT), exist_ok=True)
-    with open(OUT, "w", encoding="utf-8") as f:
+    path = os.path.join(HERE, "results", "e2-embedding-scores", QUERY + ".json")
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
         json.dump(out, f, indent=1, ensure_ascii=False)
-    print("wrote", OUT)
-    print("United States vs USA:", round(similarity("United States", "USA", vec), 6)
-          if "USA" in vec and "United States" in vec else "not embedded")
+    print("wrote", path)
+    if QUERY == "e2_wc_teams":
+        print("United States vs USA:", round(similarity("United States", "USA", vec), 6)
+              if "USA" in vec and "United States" in vec else "not embedded")
     for b in best:
         print(f"  {b['name']:22s} -> {b['label']:22s} {b['score']:.4f}")
     if not all(c["joinedEqual"] for c in check):
@@ -116,6 +128,9 @@ def scores(vectors_path):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3 or sys.argv[1] not in ("inputs", "scores"):
+    if len(sys.argv) not in (3, 4) or sys.argv[1] not in ("inputs", "scores") \
+            or (len(sys.argv) == 4 and sys.argv[3] not in QUERIES):
         sys.exit(__doc__)
+    if len(sys.argv) == 4:
+        QUERY = sys.argv[3]
     (inputs if sys.argv[1] == "inputs" else scores)(sys.argv[2])

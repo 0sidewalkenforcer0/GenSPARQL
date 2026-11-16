@@ -1,0 +1,192 @@
+{
+ "model": "BAAI/bge-large-en-v1.5",
+ "source": "transformers 5.14.1, torch 2.11.0+cu130, CPU float32, CLS pooling, job 120379",
+ "names": [
+  "Physics",
+  "Chemistry",
+  "Physiology or Medicine",
+  "Literature",
+  "Peace",
+  "Economic Sciences"
+ ],
+ "entities": {
+  "http://www.wikidata.org/entity/Q35637": [
+   "Nobel Peace Prize"
+  ],
+  "http://www.wikidata.org/entity/Q37922": [
+   "Nobel Prize in Literature"
+  ],
+  "http://www.wikidata.org/entity/Q38104": [
+   "Nobel Prize in Physics"
+  ],
+  "http://www.wikidata.org/entity/Q44585": [
+   "Nobel Prize in Chemistry"
+  ],
+  "http://www.wikidata.org/entity/Q47170": [
+   "Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel"
+  ],
+  "http://www.wikidata.org/entity/Q80061": [
+   "Nobel Prize in Physiology or Medicine"
+  ]
+ },
+ "scores": {
+  "Physics": {
+   "http://www.wikidata.org/entity/Q35637": 0.532406,
+   "http://www.wikidata.org/entity/Q37922": 0.521172,
+   "http://www.wikidata.org/entity/Q38104": 0.703592,
+   "http://www.wikidata.org/entity/Q44585": 0.589379,
+   "http://www.wikidata.org/entity/Q47170": 0.427715,
+   "http://www.wikidata.org/entity/Q80061": 0.571973
+  },
+  "Chemistry": {
+   "http://www.wikidata.org/entity/Q35637": 0.53778,
+   "http://www.wikidata.org/entity/Q37922": 0.523735,
+   "http://www.wikidata.org/entity/Q38104": 0.583603,
+   "http://www.wikidata.org/entity/Q44585": 0.702363,
+   "http://www.wikidata.org/entity/Q47170": 0.428481,
+   "http://www.wikidata.org/entity/Q80061": 0.570389
+  },
+  "Physiology or Medicine": {
+   "http://www.wikidata.org/entity/Q35637": 0.528681,
+   "http://www.wikidata.org/entity/Q37922": 0.511171,
+   "http://www.wikidata.org/entity/Q38104": 0.540685,
+   "http://www.wikidata.org/entity/Q44585": 0.546756,
+   "http://www.wikidata.org/entity/Q47170": 0.469825,
+   "http://www.wikidata.org/entity/Q80061": 0.801891
+  },
+  "Literature": {
+   "http://www.wikidata.org/entity/Q35637": 0.602946,
+   "http://www.wikidata.org/entity/Q37922": 0.728538,
+   "http://www.wikidata.org/entity/Q38104": 0.625904,
+   "http://www.wikidata.org/entity/Q44585": 0.603931,
+   "http://www.wikidata.org/entity/Q47170": 0.458608,
+   "http://www.wikidata.org/entity/Q80061": 0.56237
+  },
+  "Peace": {
+   "http://www.wikidata.org/entity/Q35637": 0.667374,
+   "http://www.wikidata.org/entity/Q37922": 0.575257,
+   "http://www.wikidata.org/entity/Q38104": 0.580219,
+   "http://www.wikidata.org/entity/Q44585": 0.569046,
+   "http://www.wikidata.org/entity/Q47170": 0.481334,
+   "http://www.wikidata.org/entity/Q80061": 0.571304
+  },
+  "Economic Sciences": {
+   "http://www.wikidata.org/entity/Q35637": 0.533199,
+   "http://www.wikidata.org/entity/Q37922": 0.526227,
+   "http://www.wikidata.org/entity/Q38104": 0.547369,
+   "http://www.wikidata.org/entity/Q44585": 0.551434,
+   "http://www.wikidata.org/entity/Q47170": 0.615043,
+   "http://www.wikidata.org/entity/Q80061": 0.558285
+  }
+ },
+ "best": [
+  {
+   "name": "Physics",
+   "team": "http://www.wikidata.org/entity/Q38104",
+   "label": "Nobel Prize in Physics",
+   "score": 0.703592
+  },
+  {
+   "name": "Chemistry",
+   "team": "http://www.wikidata.org/entity/Q44585",
+   "label": "Nobel Prize in Chemistry",
+   "score": 0.702363
+  },
+  {
+   "name": "Physiology or Medicine",
+   "team": "http://www.wikidata.org/entity/Q80061",
+   "label": "Nobel Prize in Physiology or Medicine",
+   "score": 0.801891
+  },
+  {
+   "name": "Literature",
+   "team": "http://www.wikidata.org/entity/Q37922",
+   "label": "Nobel Prize in Literature",
+   "score": 0.728538
+  },
+  {
+   "name": "Peace",
+   "team": "http://www.wikidata.org/entity/Q35637",
+   "label": "Nobel Peace Prize",
+   "score": 0.667374
+  },
+  {
+   "name": "Economic Sciences",
+   "team": "http://www.wikidata.org/entity/Q47170",
+   "label": "Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel",
+   "score": 0.615043
+  }
+ ],
+ "check": [
+  {
+   "theta": 0.5,
+   "returned": 6,
+   "joined": 6,
+   "shown": 6,
+   "joinedEqual": true,
+   "shownEqual": true,
+   "onlyReturned": [],
+   "onlyJoined": []
+  },
+  {
+   "theta": 0.6,
+   "returned": 6,
+   "joined": 6,
+   "shown": 6,
+   "joinedEqual": true,
+   "shownEqual": true,
+   "onlyReturned": [],
+   "onlyJoined": []
+  },
+  {
+   "theta": 0.7,
+   "returned": 4,
+   "joined": 4,
+   "shown": 4,
+   "joinedEqual": true,
+   "shownEqual": true,
+   "onlyReturned": [],
+   "onlyJoined": []
+  },
+  {
+   "theta": 0.8,
+   "returned": 1,
+   "joined": 1,
+   "shown": 1,
+   "joinedEqual": true,
+   "shownEqual": true,
+   "onlyReturned": [],
+   "onlyJoined": []
+  },
+  {
+   "theta": 0.85,
+   "returned": 0,
+   "joined": 0,
+   "shown": 0,
+   "joinedEqual": true,
+   "shownEqual": true,
+   "onlyReturned": [],
+   "onlyJoined": []
+  },
+  {
+   "theta": 0.9,
+   "returned": 0,
+   "joined": 0,
+   "shown": 0,
+   "joinedEqual": true,
+   "shownEqual": true,
+   "onlyReturned": [],
+   "onlyJoined": []
+  },
+  {
+   "theta": 1.0,
+   "returned": 0,
+   "joined": 0,
+   "shown": 0,
+   "joinedEqual": true,
+   "shownEqual": true,
+   "onlyReturned": [],
+   "onlyJoined": []
+  }
+ ]
+}

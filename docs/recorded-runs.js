@@ -3189,7 +3189,94 @@ window.RECORDED_RUNS = {
    "Literature",
    "Peace",
    "Economic Sciences"
-  ]
+  ],
+  "embedding": {
+   "model": "BAAI/bge-large-en-v1.5",
+   "best": {
+    "Physics": {
+     "team": "http://www.wikidata.org/entity/Q38104",
+     "score": 0.7036
+    },
+    "Chemistry": {
+     "team": "http://www.wikidata.org/entity/Q44585",
+     "score": 0.7024
+    },
+    "Physiology or Medicine": {
+     "team": "http://www.wikidata.org/entity/Q80061",
+     "score": 0.8019
+    },
+    "Literature": {
+     "team": "http://www.wikidata.org/entity/Q37922",
+     "score": 0.7285
+    },
+    "Peace": {
+     "team": "http://www.wikidata.org/entity/Q35637",
+     "score": 0.6674
+    },
+    "Economic Sciences": {
+     "team": "http://www.wikidata.org/entity/Q47170",
+     "score": 0.615
+    }
+   },
+   "teams": [
+    "http://www.wikidata.org/entity/Q35637",
+    "http://www.wikidata.org/entity/Q37922",
+    "http://www.wikidata.org/entity/Q38104",
+    "http://www.wikidata.org/entity/Q44585",
+    "http://www.wikidata.org/entity/Q47170",
+    "http://www.wikidata.org/entity/Q80061"
+   ],
+   "scores": {
+    "Physics": [
+     0.532406,
+     0.521172,
+     0.703592,
+     0.589379,
+     0.427715,
+     0.571973
+    ],
+    "Chemistry": [
+     0.53778,
+     0.523735,
+     0.583603,
+     0.702363,
+     0.428481,
+     0.570389
+    ],
+    "Physiology or Medicine": [
+     0.528681,
+     0.511171,
+     0.540685,
+     0.546756,
+     0.469825,
+     0.801891
+    ],
+    "Literature": [
+     0.602946,
+     0.728538,
+     0.625904,
+     0.603931,
+     0.458608,
+     0.56237
+    ],
+    "Peace": [
+     0.667374,
+     0.575257,
+     0.580219,
+     0.569046,
+     0.481334,
+     0.571304
+    ],
+    "Economic Sciences": [
+     0.533199,
+     0.526227,
+     0.547369,
+     0.551434,
+     0.615043,
+     0.558285
+    ]
+   }
+  }
  },
  "nobelAttribute": {
   "model": "Qwen/Qwen3-30B-A3B-Instruct-2507",

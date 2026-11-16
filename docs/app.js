@@ -1918,12 +1918,12 @@ ORDER BY ?year`
     syncDemoGrounding();
   }
 
-  // The recorded embedding scores cover the World Cup teams only. Elsewhere the recorded mode
-  // offers Jaccard alone and says why.
+  // The recorded embedding scores cover the names of the two built-in graphs. For an uploaded
+  // graph the recorded mode offers Jaccard alone and says why.
   function syncDemoGrounding(){
     const embedding=$("demoGroundEmbedding");
     if(!embedding)return;
-    const available=Boolean(window.RECORDED_RUNS?.wcEntity?.embedding)&&state.dbKey==="fifa2026";
+    const available=Boolean(recordedEntityRun()?.embedding);
     embedding.disabled=!available;
     embedding.closest("label")?.classList.toggle("is-disabled",!available);
     $("demoGroundNote").hidden=available;
@@ -2950,10 +2950,16 @@ ORDER BY ?year`
   // The recorded mode has no embedding endpoint. For the names of the recorded run it uses the
   // bge-large-en-v1.5 similarity of each name to each team, which eval/www27/
   // embedding_scores.py computed as the similarity join of the engine does.
+  // The recorded entity scenario of the database: the team names or the Nobel field names.
+  function recordedEntityRun(){
+    const key=state.dbKey==="fifa2026"?"wcEntity":state.dbKey==="nobelPrize"?"nobelEntity":null;
+    return key?window.RECORDED_RUNS?.[key]:null;
+  }
+
   function recordedEmbeddingMatches(){
-    const rec=window.RECORDED_RUNS?.wcEntity?.embedding;
+    const rec=recordedEntityRun()?.embedding;
     const names=currentScenario().generated||[];
-    if(!rec||state.dbKey!=="fifa2026"||!names.length||!names.every(n=>rec.best?.[n]))return null;
+    if(!rec||!names.length||!names.every(n=>rec.best?.[n]))return null;
     const nodes=new Map(currentDb().graph.nodes.map(n=>[n.id,n]));
     return names.map(name=>{
       const best=rec.best[name];
@@ -2964,7 +2970,7 @@ ORDER BY ?year`
   }
 
   function recordedEmbeddingModel(){
-    return String(window.RECORDED_RUNS?.wcEntity?.embedding?.model||"").replace(/^.*\//,"");
+    return String(recordedEntityRun()?.embedding?.model||"").replace(/^.*\//,"");
   }
 
   // The similarity named in the status line, with the model of recorded embedding scores.
@@ -2982,7 +2988,7 @@ ORDER BY ?year`
     const key=embeddingKey();
     if(!key){
       const recorded=recordedEmbeddingMatches();
-      if(!recorded)throw new Error("Recorded embedding scores exist only for the World Cup teams. Use Jaccard, or enter an API key and an embedding endpoint in the local workbench.");
+      if(!recorded)throw new Error("Recorded embedding scores exist only for the names of the two built-in graphs. Use Jaccard, or enter an API key and an embedding endpoint in the local workbench.");
       state.recordedEmbedding=recordedEmbeddingModel();
       return recorded;
     }

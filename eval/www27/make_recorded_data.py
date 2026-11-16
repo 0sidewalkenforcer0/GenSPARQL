@@ -117,10 +117,18 @@ def wc_entity():
 
 
 def nobel_entity():
-    """The Nobel fields that Qwen3-30B listed in E2."""
+    """The Nobel fields that Qwen3-30B listed in E2, and for the embedding similarity of the
+    recorded mode the bge-large-en-v1.5 similarity of each name to each field, as for the teams
+    (embedding_scores.py)."""
     rec = load(model_dir(Q30B), "e2_nobel_fields.json")
     names = [r["x"] for r in rec["generated_before"]["rows"] if not declined(r.get("x", ""))]
-    return {"model": Q30B, "prompt": rec["prompt"], "generated": names}
+    emb = load(RES, "e2-embedding-scores", "e2_nobel_fields.json")
+    assert emb["names"] == names, "the embedding scores belong to other names"
+    best = {b["name"]: {"team": b["team"], "score": round(b["score"], 4)} for b in emb["best"]}
+    fields = sorted(emb["entities"])
+    scores = {n: [emb["scores"][n][t] for t in fields] for n in names}
+    return {"model": Q30B, "prompt": rec["prompt"], "generated": names,
+            "embedding": {"model": emb["model"], "best": best, "teams": fields, "scores": scores}}
 
 
 def wc_composition(wc, calls):
