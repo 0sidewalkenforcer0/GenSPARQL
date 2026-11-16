@@ -6,7 +6,7 @@
   <title>GenSPARQL · Interactive KG Explorer</title>
   <meta name="description" content="GenSPARQL interactive demo with the World Cup 2026 knowledge graph.">
   <script src="page-mode.js?v=20261103-1"></script>
-  <link rel="stylesheet" href="styles.css?v=20261116-1">
+  <link rel="stylesheet" href="styles.css?v=20261116-3">
 
 </head>
 <body>
@@ -312,6 +312,7 @@
             <button id="zoomOut" type="button">−</button>
             <button id="zoomIn" type="button">+</button>
             <button id="fitGraph" type="button">Fit</button>
+            <button id="lightAll" type="button" aria-pressed="false" title="Keep every node bright while a node or query result is in focus">Light all</button>
             <button id="resetGraph" type="button">Reset</button>
           </div>
         </div>
@@ -319,7 +320,7 @@
         <div class="graph-stage" id="graphStage">
           <svg id="kgGraph" role="img" aria-label="Interactive knowledge graph"></svg>
           <div class="tooltip" id="tooltip" hidden></div>
-          <div class="graph-help">Independent from Live results · Drag nodes · Pan canvas · Scroll to zoom · Click a node for 1-hop context</div>
+          <div class="graph-help">Independent from Live results · Hover a node to focus its neighbours · Click to keep the focus · Drag a node to pull its neighbours · Scroll to zoom</div>
         </div>
 
         <div class="legend">
@@ -346,13 +347,14 @@
     <p class="caption" id="caption"></p>
   </main>
 
-  <script src="native-graph.js"></script>
+  <script src="vendor/d3.v7.8.5.min.js"></script>
+  <script src="native-graph.js?v=20261116-1"></script>
   <script src="recorded-runs.js?v=20261116-1"></script>
   <script src="demo-data.js?v=20261116-1"></script>
   <script src="fifa2026-data.js"></script>
   <script src="nobel-prize-data.js?v=20260826-1"></script>
   <script src="database-adapters.js?v=20260826-2"></script>
   <script src="engine-client.js?v=20260903-1"></script>
-  <script src="app.js?v=20261116-2"></script>
+  <script src="app.js?v=20261116-7"></script>
 </body>
 </html>

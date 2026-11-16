@@ -51,7 +51,7 @@ active mode is initialized by `app.js`.
 
 ## Visualization
 
-The knowledge graph uses the local `native-graph.js` SVG renderer for layout, zoom, pan, drag, and collision handling. It has no D3 dependency. The stylesheet still imports Cormorant Garamond from Google Fonts; KG rendering, parsing, and local query execution otherwise run in the browser.
+The knowledge graph uses the local `native-graph.js` SVG renderer for zoom, pan and drag. Its layout runs on d3-force from the local copy `vendor/d3.v7.8.5.min.js` (ISC license, `vendor/d3-LICENSE.txt`), and the interaction follows the knowledge-graph explorer of the Circular Factory demo: dragging a node pulls its neighbours along and the graph springs back to its layout, hovering a node keeps it and its neighbours bright and dims the rest, a click keeps that focus, labels of small nodes follow the zoom in large graphs, and *Light all* turns the dimming off. The figure layout (`?print`) keeps the built-in simulation, so the figures of the paper do not change. The stylesheet still imports Cormorant Garamond from Google Fonts; KG rendering, parsing, and local query execution otherwise run in the browser.
 
 ## Start locally
 

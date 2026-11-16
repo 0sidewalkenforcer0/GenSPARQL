@@ -32,4 +32,12 @@
     return{force(name,f){forces.set(name,f);if(name==="link"){const map=new Map(nodes.map(n=>[f.idFn()(n),n]));f.links.forEach(l=>{if(typeof l.source!=="object")l.source=map.get(l.source);if(typeof l.target!=="object")l.target=map.get(l.target)})}return this},on(n,f){handlers[n]=f;if(n==="tick"&&!frame)frame=requestAnimationFrame(tick);return this},stop(){running=false;if(frame)cancelAnimationFrame(frame);frame=0;return this},restart(){if(!running){running=true;frame=requestAnimationFrame(tick)}return this},alpha(v){if(v===undefined)return alpha;alpha=v;return this},alphaTarget(v){target=v;if(v>0)this.restart();return this},alphaDecay(v){if(v===undefined)return decay;decay=Math.max(0,Math.min(1,v));return this},alphaMin(v){if(v===undefined)return minAlpha;minAlpha=Math.max(0,v);return this},velocityDecay(v){if(v===undefined)return velocity;velocity=Math.max(0,Math.min(1,v));return this}}
   }
   window.NativeGraph={select,drag,zoom,forceSimulation,forceLink,forceManyBody,forceCenter,forceCollide,min:(a,f=x=>x)=>Math.min(...a.map(f)),max:(a,f=x=>x)=>Math.max(...a.map(f)),zoomTransform:n=>n?.__ngTransform||transform(),zoomIdentity:transform()};
+  // When the page loads d3 (docs/vendor), its forces drive the layout outside the figure layout:
+  // a velocity Verlet integration with a Barnes-Hut many-body force, in which a dragged node
+  // pulls its neighbours. ?print keeps the built-in simulation, so the figures do not change.
+  const d3=window.d3;
+  if(d3&&d3.forceSimulation&&!document.documentElement.hasAttribute("data-print")){
+    Object.assign(window.NativeGraph,{forceSimulation:d3.forceSimulation,forceLink:d3.forceLink,forceManyBody:d3.forceManyBody,
+      forceCenter:d3.forceCenter,forceCollide:d3.forceCollide,forceX:d3.forceX,forceY:d3.forceY,physics:"d3"});
+  }
 })();

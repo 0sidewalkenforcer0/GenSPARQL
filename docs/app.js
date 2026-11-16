@@ -27,6 +27,9 @@
   // ?print (page-mode.js) lays the graph out for a figure: a similarity box shows only its
   // score and is smaller, and the fit leaves room for the larger labels of styles.css.
   const PRINT_LAYOUT=document.documentElement.hasAttribute("data-print");
+  // Outside the figure layout, d3-force drives the layout (native-graph.js), and the graph reacts
+  // to dragging and hovering as the explorer of the Circular Factory demo does.
+  const INTERACTIVE=!PRINT_LAYOUT&&window.NativeGraph?.physics==="d3";
   const SIMILARITY_BOX_WIDTH=PRINT_LAYOUT?62:96;
   const SIMILARITY_BOX_HEIGHT=PRINT_LAYOUT?28:27;
   const SIMILARITY_BOX_GAP=5;
@@ -1980,19 +1983,24 @@ ORDER BY ?year`
       .attr("y",nodeLabelY)
       .style("font-size",d=>Number.isFinite(d.liveLabelFont)?`${d.liveLabelFont}px`:null,"important")
       .text(d=>d.label);
+    // The labels of the leaves of an overview appear when the graph is zoomed in or the node is
+    // in focus (styles.css).
+    if(INTERACTIVE&&overviewGraph){
+      state.nodeSel.filter(d=>overviewLeafTypes.has(d.type)).append("text")
+        .attr("class","leaf-label")
+        .attr("x",d=>nodeLabelX(d))
+        .attr("text-anchor",d=>nodeLabelAnchor(d))
+        .attr("y",nodeLabelY)
+        .text(d=>d.label);
+    }
 
     appendSimilarityBoxes(state.nodeSel);
 
-    state.zoom=NativeGraph.zoom().scaleExtent([.12,6]).on("zoom",e=>state.zoomLayer.attr("transform",e.transform));
+    state.zoom=NativeGraph.zoom().scaleExtent([.12,6]).on("zoom",e=>{state.zoomLayer.attr("transform",e.transform);updateZoomLabels(e.transform.k)});
     svg.call(state.zoom).on("dblclick.zoom",null);
 
-    state.nodeSel.call(NativeGraph.drag()
-      .on("start",(e,d)=>{if(!staticNobelOverview&&!e.active)state.simulation.alphaTarget(.22).restart();d.fx=d.x;d.fy=d.y})
-      .on("drag",(e,d)=>{d.fx=e.x;d.fy=e.y})
-      .on("end",(e,d)=>{if(staticNobelOverview){state.simulation.stop();tick();return}if(!e.active)state.simulation.alphaTarget(0);if(!state.focusMode){d.fx=null;d.fy=null}}))
-      .on("mouseenter",(e,d)=>showTip(e,d))
-      .on("mousemove",e=>{if(!state.tooltipPinnedId)moveTip(e)})
-      .on("mouseleave",()=>{if(!state.tooltipPinnedId)$("tooltip").hidden=true})
+    state.nodeSel.call(nodeDrag(staticNobelOverview));
+    focusOnHover(state.nodeSel)
       .on("click",(e,d)=>{
         e.stopPropagation();
         if(state.graph?.nobelOverview&&d.type==="NobelField"){
@@ -2023,6 +2031,7 @@ ORDER BY ?year`
       .force("center",NativeGraph.forceCenter(width/2,height/2))
       .force("collision",NativeGraph.forceCollide().radius(d=>nodeRadius(d)+3).iterations(1))
       .on("tick",tick);
+    state.anchored=makeElastic(state.simulation,state.graph.nodes);
 
     // A dense overview does not need
     // that level of precision and was keeping the main thread busy for several seconds.
@@ -2039,6 +2048,11 @@ ORDER BY ?year`
     // Dense graphs settle in a short, aggressively decayed native simulation.
     // Fit as soon as that layout is useful instead of making the UI feel blocked.
     setTimeout(()=>fitGraph(false),staticNobelOverview?0:(overviewGraph?240:600));
+    // A free d3 layout keeps spreading after that, so it is fitted once more when it comes to rest.
+    if(INTERACTIVE&&!state.anchored){
+      const sim=state.simulation;
+      sim.on("end.fit",()=>{sim.on("end.fit",null);if(state.simulation===sim)fitGraph(false)});
+    }
   }
 
   function cssSafe(s){return String(s||"Entity").replace(/[^A-Za-z0-9_-]/g,"-")}
@@ -2468,45 +2482,151 @@ ORDER BY ?year`
     return out;
   }
 
+  // ---- Obsidian-style interaction, after the knowledge-graph explorer of the Circular Factory
+  // demo (INTERACTIVE, defined with PRINT_LAYOUT). ----
+
+  // The positions that a layout computed become anchors: a spring holds each node there instead
+  // of pinning it, a link between two anchored nodes rests at its drawn length, and anchored
+  // nodes do not repel, so the graph is at rest as drawn. A dragged node pulls its neighbours
+  // along its links, and when it is let go the graph springs back to the drawn layout. A graph
+  // without computed positions keeps its forces.
+  function makeElastic(sim,nodes){
+    if(!INTERACTIVE)return false;
+    const placed=nodes.filter(n=>n.fx!=null&&n.fy!=null);
+    if(!placed.length)return false;
+    placed.forEach(n=>{n.ax=n.x=n.fx;n.ay=n.y=n.fy;n.fx=null;n.fy=null});
+    const anchored=n=>n&&n.ax!=null;
+    const link=sim.force("link");
+    if(link){
+      const distance=link.distance();
+      link.distance((l,i,ls)=>anchored(l.source)&&anchored(l.target)
+        ?Math.hypot(l.target.ax-l.source.ax,l.target.ay-l.source.ay):distance(l,i,ls));
+    }
+    const charge=sim.force("charge");
+    if(charge){
+      const strength=charge.strength();
+      charge.strength((n,i,ns)=>anchored(n)?0:strength(n,i,ns));
+    }
+    if(placed.length===nodes.length)sim.force("collision",null);
+    sim.force("center",null)
+      .force("anchorX",NativeGraph.forceX(n=>anchored(n)?n.ax:0).strength(n=>anchored(n)?.25:0))
+      .force("anchorY",NativeGraph.forceY(n=>anchored(n)?n.ay:0).strength(n=>anchored(n)?.25:0))
+      .alphaDecay(.012);   // cools slowly enough for the springs to bring every node back
+    if(placed.length===nodes.length)sim.alpha(0);
+    return true;
+  }
+
+  // Dragging reheats the simulation. A dropped node is released: in an anchored graph it springs
+  // back with its neighbours, otherwise the forces place it, or it stays pinned while query
+  // results are focused.
+  function nodeDrag(staticLayout=false){
+    return NativeGraph.drag()
+      .on("start",(e,d)=>{
+        if((INTERACTIVE||!staticLayout)&&!e.active){
+          // At full heat at once, so that the neighbours follow from the first move.
+          if(INTERACTIVE)state.simulation.alpha(Math.max(state.simulation.alpha(),.3));
+          state.simulation.alphaTarget(INTERACTIVE?.3:.22).restart();
+        }
+        d.fx=d.x;d.fy=d.y;
+        if(INTERACTIVE){state.dragId=d.id;scheduleClasses()}
+      })
+      .on("drag",(e,d)=>{d.fx=e.x;d.fy=e.y})
+      .on("end",(e,d)=>{
+        if(!INTERACTIVE&&staticLayout){state.simulation.stop();tick();return}
+        if(!e.active)state.simulation.alphaTarget(0);
+        if(INTERACTIVE){state.dragId=null;scheduleClasses()}
+        if(state.anchored||!state.focusMode){d.fx=null;d.fy=null}
+      });
+  }
+
+  // The tooltip, and outside the figure layout the focus: the hovered node and its neighbours
+  // stay bright and the rest dims (applyClasses).
+  function focusOnHover(selection){
+    return selection
+      .on("mouseenter",(e,d)=>{showTip(e,d);if(INTERACTIVE){state.hoverId=d.id;scheduleClasses()}})
+      .on("mousemove",e=>{if(!state.tooltipPinnedId)moveTip(e)})
+      .on("mouseleave",()=>{
+        if(!state.tooltipPinnedId)$("tooltip").hidden=true;
+        if(INTERACTIVE){state.hoverId=null;scheduleClasses()}
+      });
+  }
+
+  function scheduleClasses(){
+    if(state.classFrame)return;
+    state.classFrame=requestAnimationFrame(()=>{state.classFrame=0;applyClasses()});
+  }
+
+  // In a large graph the labels of the small nodes fade out when zoomed out, and the labels of
+  // the leaves fade in when zoomed in (styles.css).
+  function updateZoomLabels(k){
+    if(!INTERACTIVE)return;
+    const svg=$("kgGraph"),large=(state.graph?.nodes?.length||0)>300;
+    svg.classList.toggle("zoom-far",large&&k<.45);
+    svg.classList.toggle("zoom-near",k>=1.6);
+  }
+
+  function baseLinkClass(d,s,t){
+    if(d.generatedAttributeLink){
+      let cls=linkClass(d);
+      if(state.focusMode && !state.resultIds.has(s) && !state.resultIds.has(t) && !state.contextIds.has(s) && !state.contextIds.has(t)){
+        cls+=" faded";
+      }
+      return cls;
+    }
+
+    if(d.groundingLink)return"link grounding-link";
+    if(d.potentialGroundingLink)return"link potential-grounding-link";
+    if(d.compositionBindingLink)return"link composition-binding-link";
+    if(d.compositionPathLink)return"link composition-path-link";
+
+    if(state.focusMode){
+      const liveDepthClass=d.liveQueryLinkDepth===2?" live-context-link-2":d.liveQueryLinkDepth===1?" live-context-link-1":"";
+      if(state.resultIds.has(s)&&state.resultIds.has(t))return"link query-link live-result-link";
+      if((state.resultIds.has(s)&&state.contextIds.has(t))||(state.resultIds.has(t)&&state.contextIds.has(s)))return"link context-link"+liveDepthClass;
+      if(state.contextIds.has(s)&&state.contextIds.has(t))return"link context-link"+liveDepthClass;
+      return"link faded";
+    }
+    if(state.selectedId)return(s===state.selectedId||t===state.selectedId)?"link context-link":"link faded";
+    return"link";
+  }
+
+  // A clicked node keeps the focus on itself and its neighbours until the canvas is clicked. A
+  // hovered or dragged node shows its neighbourhood the same way, more softly, except while query
+  // results are lit, which then stay as they are. "Light all" keeps everything bright.
   function applyClasses(){
-    const inspect=new Set();
-    if(state.selectedId){inspect.add(state.selectedId);neighborIds(new Set([state.selectedId])).forEach(x=>inspect.add(x))}
+    const hover=INTERACTIVE?(state.dragId||state.hoverId):null;
+    const focus=state.selectedId||hover;
+    const near=new Set();
+    if(focus){near.add(focus);neighborIds(new Set([focus])).forEach(x=>near.add(x))}
+    const dim=!state.lightAll;
+    const hoverDims=dim&&!!hover&&!state.selectedId&&!state.focusMode;
     state.nodeSel
       .classed("query-result",d=>state.resultIds.has(d.id))
       .classed("context",d=>state.contextIds.has(d.id)&&!state.resultIds.has(d.id))
-      .classed("inspect",d=>state.selectedId===d.id)
+      .classed("inspect",d=>state.selectedId===d.id||hover===d.id)
+      .classed("neighbor",d=>INTERACTIVE&&!!focus&&focus!==d.id&&near.has(d.id))
       .classed("faded",d=>{
+        if(!dim)return false;
         if(state.focusMode)return !state.resultIds.has(d.id)&&!state.contextIds.has(d.id);
-        if(state.selectedId)return !inspect.has(d.id);
+        if(state.selectedId)return !near.has(d.id);
         return false;
-      });
+      })
+      .classed("dimmed",d=>hoverDims&&!near.has(d.id));
+    const ends=d=>[typeof d.source==="object"?d.source.id:d.source,typeof d.target==="object"?d.target.id:d.target];
     state.linkSel.attr("class",d=>{
-      const s=typeof d.source==="object"?d.source.id:d.source;
-      const t=typeof d.target==="object"?d.target.id:d.target;
-
-      if(d.generatedAttributeLink){
-        let cls=linkClass(d);
-        if(state.focusMode && !state.resultIds.has(s) && !state.resultIds.has(t) && !state.contextIds.has(s) && !state.contextIds.has(t)){
-          cls+=" faded";
-        }
-        return cls;
-      }
-
-      if(d.groundingLink)return"link grounding-link";
-      if(d.potentialGroundingLink)return"link potential-grounding-link";
-      if(d.compositionBindingLink)return"link composition-binding-link";
-    if(d.compositionPathLink)return"link composition-path-link";
-
-      if(state.focusMode){
-        const liveDepthClass=d.liveQueryLinkDepth===2?" live-context-link-2":d.liveQueryLinkDepth===1?" live-context-link-1":"";
-        if(state.resultIds.has(s)&&state.resultIds.has(t))return"link query-link live-result-link";
-        if((state.resultIds.has(s)&&state.contextIds.has(t))||(state.resultIds.has(t)&&state.contextIds.has(s)))return"link context-link"+liveDepthClass;
-        if(state.contextIds.has(s)&&state.contextIds.has(t))return"link context-link"+liveDepthClass;
-        return"link faded";
-      }
-      if(state.selectedId)return(s===state.selectedId||t===state.selectedId)?"link context-link":"link faded";
-      return"link";
+      const [s,t]=ends(d);
+      let cls=baseLinkClass(d,s,t);
+      if(!dim)cls=cls.replace(/ faded\b/g,"");
+      if(INTERACTIVE&&focus&&(s===focus||t===focus))cls+=" focus-link";
+      else if(hoverDims)cls+=" dimmed";
+      return cls;
     });
+    if(state.generatedLabelSel){
+      state.generatedLabelSel.classed("dimmed",d=>{
+        const [s,t]=ends(d);
+        return hoverDims&&s!==focus&&t!==focus;
+      });
+    }
   }
 
   function resetGraph(){
@@ -4018,16 +4138,11 @@ ORDER BY ?year`
 
     state.zoom=NativeGraph.zoom()
       .scaleExtent([.12,6])
-      .on("zoom",e=>state.zoomLayer.attr("transform",e.transform));
+      .on("zoom",e=>{state.zoomLayer.attr("transform",e.transform);updateZoomLabels(e.transform.k)});
     svg.call(state.zoom).on("dblclick.zoom",null);
 
-    state.nodeSel.call(NativeGraph.drag()
-      .on("start",(e,d)=>{if(!e.active)state.simulation.alphaTarget(.22).restart();d.fx=d.x;d.fy=d.y})
-      .on("drag",(e,d)=>{d.fx=e.x;d.fy=e.y})
-      .on("end",(e,d)=>{if(!e.active)state.simulation.alphaTarget(0);if(!state.focusMode){d.fx=null;d.fy=null}}))
-      .on("mouseenter",(e,d)=>showTip(e,d))
-      .on("mousemove",e=>{if(!state.tooltipPinnedId)moveTip(e)})
-      .on("mouseleave",()=>{if(!state.tooltipPinnedId)$("tooltip").hidden=true})
+    state.nodeSel.call(nodeDrag());
+    focusOnHover(state.nodeSel)
       .on("click",(e,d)=>{
         e.stopPropagation();
         if(d.compositionPosNode){
@@ -4055,6 +4170,7 @@ ORDER BY ?year`
       .force("center",NativeGraph.forceCenter(width/2,height/2))
       .force("collision",NativeGraph.forceCollide().radius(d=>nodeRadius(d)+.8).iterations(1))
       .on("tick",tick);
+    state.anchored=makeElastic(state.simulation,graphSnapshot.nodes);
 
     updateStatus();
   }
@@ -4174,6 +4290,11 @@ ORDER BY ?year`
     }
     $("resetGraph").onclick=resetGraph;
     $("fitGraph").onclick=()=>fitGraph(state.focusMode);
+    $("lightAll").onclick=()=>{
+      state.lightAll=!state.lightAll;
+      $("lightAll").setAttribute("aria-pressed",String(state.lightAll));
+      if(state.nodeSel)applyClasses();
+    };
     $("zoomIn").onclick=()=>NativeGraph.select("#kgGraph").transition().duration(160).call(state.zoom.scaleBy,1.25);
     $("zoomOut").onclick=()=>NativeGraph.select("#kgGraph").transition().duration(160).call(state.zoom.scaleBy,.8);
     window.addEventListener("resize",()=>{
