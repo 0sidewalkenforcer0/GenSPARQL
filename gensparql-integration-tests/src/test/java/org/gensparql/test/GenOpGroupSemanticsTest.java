@@ -427,4 +427,92 @@ class GenOpGroupSemanticsTest {
                 row("g", EX + "gA", "team", WD + "Q164089"),
                 row("g", EX + "gA", "team", WD + "Q79800")), rows);
     }
+
+    // ---- The order of the translation: Q0, G1, Q1, ..., Gn, Qn, then OPTIONAL, MINUS, BIND of R ----
+
+    @Test
+    void anOptionalBetweenAGenopAndItsPatternIsAppliedAfterTheSimilarityJoin() {
+        List<Map<String, String>> rows = run(
+                "GENOP(\"List the teams.\", (?team), " + M + ") "
+                        + "OPTIONAL { ?team ex:inGroup ?g } ?team a ex:Team",
+                teamList());
+
+        assertEquals(1, calls());
+        assertEquals(List.of(
+                row("g", EX + "gA", "team", WD + "Q164089"),
+                row("g", EX + "gA", "team", WD + "Q79800"),
+                row("g", EX + "gB", "team", WD + "Q47774")), rows,
+                "the OPTIONAL mentions the output, so it is applied to the mapped entities");
+    }
+
+    @Test
+    void aMinusBetweenAGenopAndItsPatternIsAppliedAfterTheSimilarityJoin() {
+        List<Map<String, String>> rows = run(
+                "GENOP(\"List the teams.\", (?team), " + M + ") "
+                        + "MINUS { ?team ex:inGroup ?g . ?g rdfs:label \"Group B\" } ?team a ex:Team",
+                teamList());
+
+        assertEquals(1, calls());
+        assertEquals(List.of(row("team", WD + "Q164089"), row("team", WD + "Q79800")), rows,
+                "France, in Group B, is removed");
+    }
+
+    @Test
+    void aBindBetweenAGenopAndItsPatternReadsTheMappedEntity() {
+        List<Map<String, String>> rows = run(
+                "GENOP(\"List the teams.\", (?team), " + M + ") "
+                        + "BIND(STR(?team) AS ?s) ?team a ex:Team",
+                teamList());
+
+        assertEquals(List.of(
+                row("s", WD + "Q164089", "team", WD + "Q164089"),
+                row("s", WD + "Q47774", "team", WD + "Q47774"),
+                row("s", WD + "Q79800", "team", WD + "Q79800")), rows,
+                "?s is the string of the IRI, not the generated name");
+    }
+
+    @Test
+    void anOptionalWithoutOutputAfterTheGenopBindsItsPlaceholder() {
+        List<Map<String, String>> rows = run(
+                "GENOP(\"Position of {?nick}?\", (?pos), " + M + ") "
+                        + "?p a ex:Athlete OPTIONAL { ?p ex:nickname ?nick }",
+                new MockLLMProvider().withDefaultResponse("[\"Forward\"]"));
+
+        assertEquals(List.of("Position of La Pulga?"),
+                mock.getRequestHistory().stream().map(r -> r.getPrompt()).toList(),
+                "the OPTIONAL mentions no output and comes before the GENOP");
+        assertEquals(List.of(row("nick", "La Pulga", "p", EX + "p1", "pos", "Forward")), rows,
+                "an athlete without a nickname leaves the placeholder unbound and is skipped");
+    }
+
+    @Test
+    void valuesWithoutOutputAfterTheGenopRestrictsItsInput() {
+        List<Map<String, String>> rows = run(
+                "?p a ex:Athlete . ?p rdfs:label ?name . "
+                        + "GENOP(\"Position of {?name}?\", (?pos), " + M + ") VALUES ?p { ex:p1 ex:p2 }",
+                new MockLLMProvider().withDefaultResponse("[\"Forward\"]"));
+
+        assertEquals(2, calls(), "only the athletes that VALUES admits reach the prompt");
+        assertEquals(List.of(
+                row("name", "Kylian Mbappe", "p", EX + "p2", "pos", "Forward"),
+                row("name", "Lionel Messi", "p", EX + "p1", "pos", "Forward")), rows);
+    }
+
+    @Test
+    void theOutputOfAnEarlierGenopIsComparedByEqualityInTheJoinOfALaterOne() {
+        MockLLMProvider lists = new MockLLMProvider()
+                .withResponse("List the teams", "[\"argentina\", \"France\", \"Mexico\"]")
+                .withDefaultResponse("[\"Lionel Messi\", \"Kylian Mbappe\"]");
+        String teams = "GENOP(\"List the teams.\", (?team), " + M + ") ";
+        String players = "GENOP(\"Who plays for {?team}?\", (?p), " + M + ") ";
+
+        assertEquals(List.of(
+                row("p", EX + "p1", "tag", "x", "team", WD + "Q79800"),
+                row("p", EX + "p2", "tag", "x", "team", WD + "Q47774")),
+                run(teams + "?team a ex:Team . BIND(\"x\" AS ?tag) " + players + "?p ex:playsFor ?team", lists),
+                "?team a ex:Team maps the teams, and ?p ex:playsFor ?team compares them by equality");
+        assertEquals(List.of(),
+                run(teams + "BIND(\"x\" AS ?tag) " + players + "?p ex:playsFor ?team", lists),
+                "without that pattern ?team keeps the generated names, which equal no entity");
+    }
 }

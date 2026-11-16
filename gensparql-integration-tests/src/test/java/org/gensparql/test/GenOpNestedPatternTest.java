@@ -214,7 +214,7 @@ class GenOpNestedPatternTest {
         assertEquals(3, rows.size());
     }
 
-    // ---- B2: a pattern after the GENOP in a group with OPTIONAL or BIND ----
+    // ---- A group with OPTIONAL or BIND: the elements without output variables come first ----
 
     private static final String POSITION = "GENOP(\"Position of {?name}?\", (?pos), " + M + ") ";
 
@@ -253,12 +253,14 @@ class GenOpNestedPatternTest {
     }
 
     @Test
-    void aPatternThatABindReadsStaysAfterIt() {
+    void aBindAndThePatternItReadsComeBeforeTheGenopInWrittenOrder() {
         List<Map<String, String>> rows = run(
                 "?p a ex:Athlete . " + POSITION + "BIND(UCASE(?name) AS ?n) ?p rdfs:label ?name",
                 new MockLLMProvider().withDefaultResponse("[\"Forward\"]"));
 
-        assertEquals(0, calls(), "the GENOP keeps its written place and its placeholder is unbound");
-        assertEquals(List.of(), rows);
+        assertEquals(3, calls(), "both mention no output, so the label reaches the prompt");
+        assertEquals(3, rows.size());
+        assertTrue(rows.stream().noneMatch(r -> r.containsKey("n")),
+                "the BIND is written before the pattern that binds ?name and keeps that place");
     }
 }

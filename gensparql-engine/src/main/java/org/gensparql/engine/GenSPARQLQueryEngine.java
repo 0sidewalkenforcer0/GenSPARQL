@@ -532,6 +532,27 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                     : applyFilter(exprs, extensions.apply(b), execCxt));
         }
 
+        // MINUS with a GENOP. ARQ evaluated the left side itself and joined a GENOP there with
+        // the patterns that mention its output by equality. The engine evaluates the left side
+        // and evaluates the right side on its own, as SPARQL does, and removes each solution of
+        // the left side that shares a variable with a compatible solution of the right side.
+        if (op instanceof org.apache.jena.sparql.algebra.op.OpMinus && planContainsGenOp(op)) {
+            org.apache.jena.sparql.algebra.op.OpMinus opMinus = (org.apache.jena.sparql.algebra.op.OpMinus) op;
+            QueryIterator left = executeOp(opMinus.getLeft(), input, execCxt);
+            List<Binding> removed = evaluateIndependently(opMinus.getRight(), execCxt);
+            return new org.apache.jena.sparql.engine.iterator.QueryIterProcessBinding(left, execCxt) {
+                @Override
+                public Binding accept(Binding b) {
+                    for (Binding r : removed) {
+                        if (sharesVariable(b, r) && org.apache.jena.sparql.algebra.Algebra.compatible(b, r)) {
+                            return null;
+                        }
+                    }
+                    return b;
+                }
+            };
+        }
+
         // Fallback to standard QC execution for other ops (BGP, etc.)
         LOG.debug("Falling back to QC.execute for: {}", op.getClass().getSimpleName());
         return QC.execute(op, input, execCxt);
@@ -663,6 +684,16 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
         return sourceTypes.values().contains(SourceType.GEN);
     }
 
+    /** Whether the two solutions bind a common variable, which MINUS requires. */
+    private static boolean sharesVariable(Binding a, Binding b) {
+        for (java.util.Iterator<Var> it = a.vars(); it.hasNext(); ) {
+            if (b.contains(it.next())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Filter the solutions by the expressions. Once a GENOP has generated values, {@code =} and
      * {@code !=} compare a generated value by similarity, and every other expression is
@@ -762,6 +793,10 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
 
         // rightTypes now contains GEN variables from OpGenerate execution
         Map<Var, SourceType> rightTypes = new HashMap<>(sourceTypes);
+        List<OpGenerate> generating = new ArrayList<>();
+        collectGeneratingSide(rightOp, generating);
+        keepOnlyCurrentOutputs(rightTypes, generating, leftOp);
+        rightTypes.keySet().removeAll(patternBoundVars(rightOp));
 
         LOG.debug("executeSimJoinForSequence: leftTypes={}, rightTypes={}", leftTypes, rightTypes);
 
@@ -773,10 +808,10 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
     /**
      * Whether the join is a GENOP side and a pattern side that the semantics joins by
      * similarity: the right side has no GENOP and mentions an output variable of a GENOP on the
-     * left, see {@link #collectGeneratingSide}. The planner compiles a GENOP and the patterns
-     * that mention its output in this shape, and so does a group whose patterns after the
-     * GENOP stay where they are written, also when a BIND, OPTIONAL or MINUS stands between
-     * them. A left side with base-mode GENOPs only that {@link #containsBaseGenOp} recognises
+     * left, see {@link #collectGeneratingSide}. The planner compiles a GENOP and the elements
+     * that mention its output in this shape, and so does a group in written order when the
+     * planner is switched off, also when a BIND, OPTIONAL or MINUS stands between them. A left
+     * side with base-mode GENOPs only that {@link #containsBaseGenOp} recognises
      * keeps the similarity join of both sides evaluated on their own.
      */
     private boolean isGeneratingSideSimJoin(OpJoin opJoin) {
@@ -833,8 +868,9 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
      * reads the values of its placeholders from them and the patterns before a GENOP are part of
      * this side, and it is materialized. The pattern side is
      * evaluated on its own, from the empty solution. Two solutions join when every output
-     * variable that they share has a generated value similar enough to a label of the term of
-     * the pattern side, and every other shared variable has the same term on both sides. The
+     * variable of the current GENOP that they share has a generated value similar enough to a
+     * label of the term of the pattern side, and every other shared variable has the same term
+     * on both sides. The
      * joined solution keeps the term of the pattern side. The GENOP side already carries the
      * incoming solutions, so the result is not joined with them again.
      */
@@ -847,7 +883,6 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                 QueryIterRoot.create(org.apache.jena.sparql.engine.binding.BindingFactory.empty(), execCxt),
                 execCxt);
 
-        // Only the output variables of the GENOP side count as generated in the join.
         sourceTypes.clear();
         List<Binding> generated = new ArrayList<>();
         QueryIterator it = executeOp(generatingOp, input, execCxt);
@@ -870,12 +905,77 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                 }
             }
         }
+        keepOnlyCurrentOutputs(generatedTypes, generating, patternOp);
+        generatedTypes.keySet().removeAll(patternBoundVars(generatingOp));
         // The filters above still need the variables generated before this join.
         registered.forEach(sourceTypes::putIfAbsent);
 
         return new QueryIterSimJoin(patterns,
                 org.apache.jena.sparql.engine.iterator.QueryIterPlainWrapper.create(generated.iterator(), execCxt),
                 newSimScoreEvaluator(execCxt), new HashMap<>(), generatedTypes, execCxt);
+    }
+
+    /**
+     * Keep generated only the output variables of the current GENOP of a generating side: the
+     * last one, in written order, whose output the other side mentions, Gi for the patterns Qi.
+     * The output variables of the other GENOPs of the side are compared by equality, as every
+     * shared variable outside v̄i is: Ti-1 has already mapped them, or they keep their
+     * generated values.
+     */
+    private static void keepOnlyCurrentOutputs(Map<Var, SourceType> types, List<OpGenerate> generating,
+                                               Op other) {
+        Set<Var> mentioned = org.apache.jena.sparql.algebra.OpVars.visibleVars(other);
+        OpGenerate current = null;
+        for (OpGenerate g : generating) {
+            if (!java.util.Collections.disjoint(g.getOutputVariables(), mentioned)) {
+                current = g;
+            }
+        }
+        if (current == null) {
+            return;
+        }
+        Set<Var> kept = new HashSet<>(current.getOutputVariables());
+        for (OpGenerate g : generating) {
+            for (Var v : g.getOutputVariables()) {
+                if (!kept.contains(v)) {
+                    types.remove(v);
+                }
+            }
+        }
+    }
+
+    /**
+     * The variables that a graph pattern or VALUES of the operator binds, outside its GENOPs. An
+     * output variable among them has been joined with the graph on that side, as in a group
+     * whose GENOP and patterns form Ti, so its values are terms of the graph, compared by
+     * equality.
+     */
+    private static Set<Var> patternBoundVars(Op op) {
+        Set<Var> vars = new HashSet<>();
+        collectPatternBoundVars(op, vars);
+        return vars;
+    }
+
+    private static void collectPatternBoundVars(Op op, Set<Var> out) {
+        if (op instanceof OpGenerate) {
+            return;
+        }
+        if (op instanceof org.apache.jena.sparql.algebra.op.OpBGP
+                || op instanceof org.apache.jena.sparql.algebra.op.OpTriple
+                || op instanceof org.apache.jena.sparql.algebra.op.OpPath
+                || op instanceof org.apache.jena.sparql.algebra.op.OpQuadPattern
+                || op instanceof OpTable) {
+            out.addAll(org.apache.jena.sparql.algebra.OpVars.mentionedVars(op));
+        } else if (op instanceof org.apache.jena.sparql.algebra.op.Op1) {
+            collectPatternBoundVars(((org.apache.jena.sparql.algebra.op.Op1) op).getSubOp(), out);
+        } else if (op instanceof org.apache.jena.sparql.algebra.op.Op2) {
+            collectPatternBoundVars(((org.apache.jena.sparql.algebra.op.Op2) op).getLeft(), out);
+            collectPatternBoundVars(((org.apache.jena.sparql.algebra.op.Op2) op).getRight(), out);
+        } else if (op instanceof org.apache.jena.sparql.algebra.op.OpN) {
+            for (Op e : ((org.apache.jena.sparql.algebra.op.OpN) op).getElements()) {
+                collectPatternBoundVars(e, out);
+            }
+        }
     }
 
     /**
