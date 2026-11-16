@@ -2307,7 +2307,7 @@ ORDER BY ?year`
   // column, one row per name. The mapped names come first, then the names whose closest
   // entity stays below θ, then the names that share no word with any label. A similarity
   // box sits on the edge of its name, or right of the name when there is no edge.
-  function layoutGroundingColumns(candidates,targets,cx,cy){
+  function layoutGroundingColumns(candidates,targets,cx,cy,links=[]){
     const ROW=29,HALF=95;
     const rank=c=>c.grounded?0:(c.bestId?1:2);
     const rows=[...candidates].sort((a,b)=>rank(a)-rank(b)||String(a.label).localeCompare(String(b.label)));
@@ -2318,6 +2318,19 @@ ORDER BY ?year`
       c.x=cx-HALF;c.y=y;c.fx=c.x;c.fy=y;
       c.labelSide="left";
       if(c.bestId&&!targetRow.has(c.bestId))targetRow.set(c.bestId,y);
+    });
+    // A target that only an additional pair reaches takes the free row nearest to the first
+    // name that reaches it.
+    const rowOf=new Map(rows.map((c,i)=>[c.id,top+i*ROW]));
+    const used=new Set(targetRow.values());
+    links.forEach(link=>{
+      const source=typeof link.source==="object"?link.source.id:link.source;
+      const target=typeof link.target==="object"?link.target.id:link.target;
+      if(!link.groundingLink||targetRow.has(target)||!rowOf.has(source))return;
+      const y0=rowOf.get(source);
+      const free=[...rowOf.values()].filter(y=>!used.has(y)).sort((p,q)=>Math.abs(p-y0)-Math.abs(q-y0));
+      const y=free.length?free[0]:y0;
+      targetRow.set(target,y);used.add(y);
     });
     targets.forEach(t=>{
       const y=targetRow.has(t.id)?targetRow.get(t.id):cy;
@@ -2710,8 +2723,6 @@ ORDER BY ?year`
       }
       const targetType=currentScenario()?.targetType||"Team";
       const countryNodes=state.graph.nodes.filter(n=>n.type===targetType);
-      const remainingCountries=countryNodes.filter(n=>n.outerCountry).length;
-      const matchedCountries=countryNodes.length-remainingCountries;
       const generated=state.graph.nodes.filter(n=>n.generatedCandidate).length;
       const grounded=state.graph.nodes.filter(n=>n.generatedCandidate&&n.grounded).length;
 
@@ -2725,8 +2736,10 @@ ORDER BY ?year`
         if(legend)legend.innerHTML='<span><i class="lg-kg"></i>entity of the graph</span><span><i class="lg-llm"></i>generated name</span><span><i class="lg-drop"></i>name below θ</span>';
         return;
       }
+      const mappedTargets=countryNodes.filter(n=>n.groundedTarget).length;
+      const pairs=state.graph.links.filter(l=>l.groundingLink).length;
       $("graphStatus").textContent=generated
-        ? `${similarityStatus(similarityMethod)} · ${matchedCountries} matched KG targets · ${remainingCountries} remaining targets · ${generated} generated candidates · ${grounded} grounded`
+        ? `${similarityStatus(similarityMethod)} · θ ${Number($("theta").value).toFixed(2)} · ${mappedTargets} KG targets mapped · ${pairs} pairs ≥ θ from ${grounded} of ${generated} generated names`
         : `${db.label} · full KG · ${state.graph.nodes.length} nodes · ${state.graph.links.length} edges`;
       return;
     }
@@ -2917,28 +2930,37 @@ ORDER BY ?year`
       // best match, and reporting the first team examined as one drew a grounding link to an
       // arbitrary country. "Italy" scores 0.000 against all 48 teams, which is what the old
       // per-name exception for it was hiding.
+      // The similarity to every entity is kept, because the similarity join pairs a name
+      // with every entity whose similarity reaches θ.
       let best=null,score=0;
+      const scores=new Map();
       teams.forEach(team=>{
         const aliases=[team.label,...(team.aliases||[])];
         const candidateScore=Math.max(...aliases.map(alias=>jac(name,alias)));
+        scores.set(team.id,candidateScore);
         if(candidateScore>score){
           score=candidateScore;
           best=team;
         }
       });
-      return {name,best,score};
+      return {name,best,score,scores};
     });
   }
 
   // The recorded mode has no embedding endpoint. For the names of the recorded run it uses the
-  // best team of each name and its bge-large-en-v1.5 similarity, which eval/www27/
+  // bge-large-en-v1.5 similarity of each name to each team, which eval/www27/
   // embedding_scores.py computed as the similarity join of the engine does.
   function recordedEmbeddingMatches(){
     const rec=window.RECORDED_RUNS?.wcEntity?.embedding;
     const names=currentScenario().generated||[];
     if(!rec||state.dbKey!=="fifa2026"||!names.length||!names.every(n=>rec.best?.[n]))return null;
     const nodes=new Map(currentDb().graph.nodes.map(n=>[n.id,n]));
-    return names.map(name=>({name,best:nodes.get(rec.best[name].team)||null,score:rec.best[name].score}));
+    return names.map(name=>{
+      const best=rec.best[name];
+      const row=rec.scores?.[name];
+      const scores=new Map(row?rec.teams.map((team,i)=>[team,row[i]]):[[best.team,best.score]]);
+      return {name,best:nodes.get(best.team)||null,score:scores.get(best.team)??best.score,scores};
+    });
   }
 
   function recordedEmbeddingModel(){
@@ -2977,11 +2999,13 @@ ORDER BY ?year`
     return names.map((name,i)=>{
       // As in the text case, no similarity at all means no best match.
       let best=null,score=0;
+      const scores=new Map();
       teams.forEach((team,j)=>{
         const v=cosine(nameVectors[i],teamVectors[j]);
+        scores.set(team.id,v);
         if(v>score){score=v;best=team}
       });
-      return {name,best,score};
+      return {name,best,score,scores};
     });
   }
 
@@ -3013,62 +3037,43 @@ ORDER BY ?year`
     return dot/(Math.sqrt(na)*Math.sqrt(nb)||1);
   }
 
+  // θ only decides which of the computed pairs the view draws, so a new θ redraws the mapping
+  // from the similarities of the last Run, without computing them again.
   function updateGroundingThresholdOnly(){
     if(currentScenario()?.id!=="entity"||!state.graph)return;
+    const cache=state.groundingMatches;
+    if(!cache||cache.db!==state.dbKey||!state.graph.nodes.some(n=>n.generatedCandidate))return;
+
+    renderGroundingView(cache.matches,cache.method,{preserveViewport:true});
 
     const theta=Number($("theta").value);
     const candidates=state.graph.nodes.filter(n=>n.generatedCandidate);
-    if(!candidates.length)return;
-
-    const byCandidateId=new Map(candidates.map(n=>[n.id,n]));
-    const groundedTargets=new Set();
-    const potentialTargets=new Set();
-
-    candidates.forEach(candidate=>{
-      candidate.grounded=Boolean(candidate.bestId&&candidate.score>=theta);
-      if(candidate.bestId){
-        potentialTargets.add(candidate.bestId);
-        if(candidate.grounded)groundedTargets.add(candidate.bestId);
-      }
-    });
-
-    state.graph.nodes.forEach(node=>{
-      if(node.generatedCandidate)return;
-      node.groundedTarget=groundedTargets.has(node.id);
-      node.potentialGroundTarget=!node.groundedTarget&&potentialTargets.has(node.id);
-    });
-
-    state.graph.links.forEach(link=>{
-      if(!link.groundingLink&&!link.potentialGroundingLink)return;
-
-      const sourceId=typeof link.source==="object"?link.source.id:link.source;
-      const candidate=byCandidateId.get(sourceId);
-      if(!candidate)return;
-
-      link.groundingLink=candidate.grounded;
-      link.potentialGroundingLink=!candidate.grounded;
-      link.predicate=candidate.grounded?"SIMJOIN":"best match";
-    });
-
-    // Update style only: no node rerender, no simulation, no auto-fit.
-    state.nodeSel.attr("class",d=>nodeClass(d));
-    state.linkSel.attr("class",d=>linkClass(d));
-    applyClasses();
-    state.nodeSel.selectAll(".similarity-box")
-      .attr("class",d=>"similarity-box "+(d.grounded?"pass":"fail"));
-
     const grounded=candidates.filter(n=>n.grounded).length;
-    const potential=candidates.length-grounded;
-    const method=candidates[0]?.similarityMethod||"Text";
-
-    updateStatus();
     showMessage(
-      `${similarityStatus(method)} · θ ${theta.toFixed(2)} · ${grounded} grounded · ${potential} potential · only relation edges changed.`,
+      `${similarityStatus(cache.method)} · θ ${theta.toFixed(2)} · ${grounded} names mapped · ${candidates.length-grounded} below θ.`,
       "ok"
     );
   }
 
   async function buildGroundEntityView(options={}){
+    let matches;
+    let method;
+    if($("groundEmbedding").checked){
+      matches=await embeddingGroundingMatches();
+      method="Embedding";
+    }else{
+      matches=textGroundingMatches();
+      method="Text";
+      state.recordedEmbedding=null;
+    }
+    state.groundingMatches={db:state.dbKey,method,matches};
+    renderGroundingView(matches,method,options);
+  }
+
+  // The similarity join keeps every pair of a generated name and an entity whose similarity
+  // reaches θ, so the view draws an edge for each such pair. A name without one keeps a dotted
+  // edge to its closest entity, whose similarity its box shows, so the viewer sees why it fails.
+  function renderGroundingView(allMatches,method,options={}){
     const preserveViewport=Boolean(options.preserveViewport);
     const theta=Number($("theta").value);
 
@@ -3089,16 +3094,7 @@ ORDER BY ?year`
     // Recompute against the full database, then render only relevant targets.
     const fullTeamGraph=graphForCurrentScenario();
 
-    let matches;
-    let method;
-    if($("groundEmbedding").checked){
-      matches=await embeddingGroundingMatches();
-      method="Embedding";
-    }else{
-      matches=textGroundingMatches();
-      method="Text";
-      state.recordedEmbedding=null;
-    }
+    let matches=allMatches;
 
     // In the figure layout, the names that equal a label are listed in the status line
     // instead of drawn, so that the figure shows the names the similarity join decides on.
@@ -3121,7 +3117,8 @@ ORDER BY ?year`
     const radius=Math.min(width,height)*.24;
 
     matches.forEach((match,index)=>{
-      const grounded=Boolean(match.best&&match.score>=theta);
+      const pairs=[...(match.scores||[])].filter(([,score])=>score>=theta).sort((x,y)=>y[1]-x[1]);
+      const grounded=pairs.length>0;
       const id=`generated:team:${state.dbKey}:${index}:${norm(match.name)}`;
       const old=oldPositions.get(id);
 
@@ -3151,41 +3148,46 @@ ORDER BY ?year`
 
       generatedNodes.push(generatedNode);
 
-      // A candidate with no best match keeps its node and its score, and simply has no
-      // relation to draw.
-      if(match.best){
-        potentialTargets.add(match.best.id);
-
-        if(grounded){
-          groundedTargets.add(match.best.id);
+      // A candidate with no best match keeps its node and its score, and has no relation to
+      // draw below θ.
+      if(match.best)potentialTargets.add(match.best.id);
+      if(grounded){
+        pairs.forEach(([targetId,score])=>{
+          groundedTargets.add(targetId);
           matchLinks.push({
             source:id,
-            target:match.best.id,
+            target:targetId,
             predicate:"SIMJOIN",
             groundingLink:true,
             potentialGroundingLink:false,
-            score:match.score
+            score,
+            additionalPair:targetId!==match.best?.id
           });
-        }else{
-          matchLinks.push({
-            source:id,
-            target:match.best.id,
-            predicate:"best match",
-            groundingLink:false,
-            potentialGroundingLink:true,
-            score:match.score
-          });
-        }
+        });
+      }else if(match.best){
+        matchLinks.push({
+          source:id,
+          target:match.best.id,
+          predicate:"best match",
+          groundingLink:false,
+          potentialGroundingLink:true,
+          score:match.score
+        });
       }
     });
 
+    // The box of a name shows its best similarity. The other pairs carry their similarity on
+    // the edge while the edges are few enough to read.
+    if(matchLinks.length<=60){
+      matchLinks.forEach(link=>{if(link.additionalPair)link.scoreLabel=link.score.toFixed(2)});
+    }
+
     // Keep the existing grounding result intact, then add every remaining
     // country as unlinked KG context on a separate outer ring.
-    const relevantTargetIds=new Set(
-      generatedNodes
-        .map(n=>n.bestId)
-        .filter(Boolean)
-    );
+    const relevantTargetIds=new Set([
+      ...generatedNodes.map(n=>n.bestId).filter(Boolean),
+      ...groundedTargets
+    ]);
     const allCountries=fullTeamGraph.nodes.filter(n=>n.type===(currentScenario().targetType||"Team"));
 
     const relevantCountries=allCountries
@@ -3235,6 +3237,18 @@ ORDER BY ?year`
         targetOrder.push(key);
         targetSeen.add(key);
       }
+    });
+    // A target that only an additional pair reaches sits right after the closest entity of
+    // the first name that reaches it, so that the edge stays short.
+    const candidateById=new Map(generatedNodes.map(candidate=>[candidate.id,candidate]));
+    const insertedAfter=new Map();
+    matchLinks.forEach(link=>{
+      if(!link.groundingLink||targetSeen.has(link.target))return;
+      const anchor=candidateLayoutKey(candidateById.get(link.source));
+      const count=insertedAfter.get(anchor)||0;
+      targetOrder.splice(targetOrder.indexOf(anchor)+1+count,0,link.target);
+      targetSeen.add(link.target);
+      insertedAfter.set(anchor,count+1);
     });
     relevantCountries.forEach(country=>{
       if(!targetSeen.has(country.id)){
@@ -3297,7 +3311,7 @@ ORDER BY ?year`
     // collision pass offsets nearby boxes tangentially/radially as needed.
     layoutSimilarityBoxes(generatedNodes,cx,cy);
 
-    if(PRINT_LAYOUT)layoutGroundingColumns(generatedNodes,relevantCountries,cx,cy);
+    if(PRINT_LAYOUT)layoutGroundingColumns(generatedNodes,relevantCountries,cx,cy,matchLinks);
 
     // Remaining KG countries form a stable, unlinked halo beyond the original
     // result. The initial camera still fits only the original result nodes.
@@ -3328,7 +3342,9 @@ ORDER BY ?year`
       NativeGraph.select("#kgGraph").call(state.zoom.transform,previousTransform);
 
       // Threshold-dependent radial positions are already fixed in fx/fy; keep viewport unchanged.
+      // Stopped before its first tick, the simulation would leave every node at (0,0).
       state.simulation.alpha(0).stop();
+      tick();
     }else{
       // Initial Run enlarges the relevant-only result. Threshold changes
       // preserve the user's current zoom/pan and never refit.
@@ -4163,16 +4179,17 @@ ORDER BY ?year`
 
     state.generatedLabelSel=labelLayer
       .selectAll("text")
-      .data(graphSnapshot.links.filter(d=>d.generatedAttributeLink&&!d.hideGeneratedEdgeLabel))
+      .data(graphSnapshot.links.filter(d=>(d.generatedAttributeLink&&!d.hideGeneratedEdgeLabel)||d.scoreLabel))
       .join("text")
       .attr("class",d=>{
         let cls="generated-edge-label";
+        if(d.scoreLabel)cls+=" grounding-score-label";
         if(d.compositionResultLink)cls+=" composition-generated-edge";
         if(d.evaluationState==="wrong")cls+=" wrong";
         if(d.evaluationState==="abstain")cls+=" abstain";
         return cls;
       })
-      .text(d=>d.predicate||"?generated");
+      .text(d=>d.scoreLabel||d.predicate||"?generated");
 
     state.nodeSel=nodeLayer
       .selectAll("g")

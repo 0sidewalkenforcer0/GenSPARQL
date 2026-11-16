@@ -2910,3 +2910,4 @@ html[data-print] .graph-status{white-space:normal!important;line-height:1.3}
 .graph-controls button[aria-pressed="true"]{background:var(--kg-soft);border-color:var(--kg);color:var(--kg)}
 .theta-similarity label.is-disabled{color:var(--muted);cursor:not-allowed;opacity:.6}
 .theta-similarity-note{flex-basis:100%;font-size:10.5px;color:var(--muted)}
+#kgGraph .generated-edge-label.grounding-score-label{fill:var(--kg-strong)}

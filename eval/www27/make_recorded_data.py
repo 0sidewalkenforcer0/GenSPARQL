@@ -101,15 +101,19 @@ def wc_attribute(wc, summary):
 
 def wc_entity():
     """The team names that Mistral-7B listed in E2 (Qwen3-30B and Qwen3-8B declined), and for the
-    embedding similarity of the recorded mode the best team of each name and its similarity
-    with bge-large-en-v1.5 (embedding_scores.py)."""
+    embedding similarity of the recorded mode the bge-large-en-v1.5 similarity of each name to
+    each team (embedding_scores.py): the best team of each name, and in `scores` the row of each
+    name in the order of `teams`, so that the mapping view draws every pair that reaches θ, as
+    the similarity join keeps it."""
     rec = load(model_dir(MISTRAL), "e2_wc_teams.json")
     names = [r["x"] for r in rec["generated_before"]["rows"] if not declined(r.get("x", ""))]
     emb = load(RES, "e2-embedding-scores", "e2_wc_teams.json")
     assert emb["names"] == names, "the embedding scores belong to other names"
     best = {b["name"]: {"team": b["team"], "score": round(b["score"], 4)} for b in emb["best"]}
+    teams = sorted(emb["teams"])
+    scores = {n: [emb["scores"][n][t] for t in teams] for n in names}
     return {"model": MISTRAL, "prompt": rec["prompt"], "generated": names,
-            "embedding": {"model": emb["model"], "best": best}}
+            "embedding": {"model": emb["model"], "best": best, "teams": teams, "scores": scores}}
 
 
 def nobel_entity():
