@@ -48,3 +48,29 @@ mvn -q -f gensparql-server/pom.xml exec:java -Dexec.mainClass=org.gensparql.serv
 python3 eval/www27/measure_calls.py --gs http://localhost:8080 --llm-base http://localhost:8089/v1 \
     --data docs --label reorder-on --out eval/www27/results
 ```
+
+## Details of the paper's evaluation
+
+These details belong to Section 4 of the paper. Each can be recomputed from the files named.
+
+**Gold positions (E1).** When the gold data were fetched on 2026-11-04, Wikidata recorded a position played (P413) for 1,122 of the 1,248 players. `gold/wc_positions.json` keeps 1,119 of them. The positions of the other three fall outside the four groups goalkeeper, defender, midfielder and forward (`coarse` in `fetch_gold.py`).
+
+**Players without an answer (E1).** Qwen3-30B and Mistral-7B each left one player without a position: Qwen3-30B answered `[]` for Q133105064, and Mistral-7B answered `[""]` for Q127271091 (`results/<model>/e1_wc_positions.json`). Qwen3-8B answered `[]` for 316 players.
+
+**Defender answers of Qwen3-30B (E1).** Qwen3-30B answered defender for 830 players. Of the 719 defender answers for players with a gold position, 324 (45%) are correct. Its other answers are correct for 90% of the goalkeepers (56 of 62), 87% of the forwards (142 of 164) and 76% of the midfielders (131 of 173).
+
+**Names outside the graph (E2).** In the replay of 2026-11-13 (`results/e2-replay-20261113/`), 80 generated names denote no entity of the graph:
+
+| Names | Count | LLM and list query |
+| --- | --- | --- |
+| Stadiums without a match of the tournament | 38 | Qwen3-30B 14, Qwen3-8B 12, Mistral-7B 12 (venues) |
+| Players outside the Argentine squad | 17 | Mistral-7B (Argentine squad) |
+| Italian cities | 15 | Qwen3-8B (host cities) |
+| Other Mexican cities: León, San Juan del Rio, Toluca, Cancun | 4 | Mistral-7B (host cities) |
+| National teams outside the tournament: Denmark, India, Italy, Peru, Republic of Ireland | 5 | Mistral-7B (teams) |
+| Carlos Barrios, who received no Nobel Prize | 1 | Mistral-7B (Physics laureates of 2020 to 2025) |
+
+**How the names were checked (E2).** `score.py` first matches each generated name against the English labels and aliases in Wikidata of the entities that the list query asks for (`gold/e2_entities.json`). The remaining names were checked by hand, and `gold/e2_manual.json` records each decision, with `null` for a name that denotes none of these entities.
+
+**A correct mapping of a wrong answer (E2).** Among the Physics laureates of 2020 to 2025, Qwen3-30B listed Kip Thorne (Physics, 2017) and Ben Feringa (Chemistry, 2016). At θ = 0.85 the embedding similarity maps both names to their entities in the graph, so the mapping is correct while the answer of the LLM is wrong. The Jaccard similarity maps only Ben Feringa, since the graph labels the other entity Kip S. Thorne.
+
