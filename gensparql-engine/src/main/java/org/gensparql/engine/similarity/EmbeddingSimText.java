@@ -51,16 +51,10 @@ public class EmbeddingSimText implements SimText {
             return s1 == s2 ? 1.0 : 0.0;
         }
 
-        // Quick exact match check
+        // Equal strings have the same embedding, whose cosine with itself is 1.
         if (s1.equals(s2)) {
             LOG.debug("Exact match: \"{}\" == \"{}\" -> 1.0", s1, s2);
             return 1.0;
-        }
-
-        // Case-insensitive match (consistent with JaccardSimText)
-        if (s1.equalsIgnoreCase(s2)) {
-            LOG.debug("Case-insensitive match: \"{}\" ~= \"{}\" -> 0.95", s1, s2);
-            return 0.95;
         }
 
         try {

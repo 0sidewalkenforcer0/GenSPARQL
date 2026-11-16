@@ -124,7 +124,8 @@ public class MockLLMProvider implements LLMProvider {
      */
     private float[] generateDeterministicEmbedding(String text, int dimensions) {
         float[] embedding = new float[dimensions];
-        int hash = text.hashCode();
+        // A model embeds a name and its case variants nearly alike; the mock embeds them alike.
+        int hash = text.toLowerCase(java.util.Locale.ROOT).hashCode();
         Random random = new Random(hash);
 
         for (int i = 0; i < dimensions; i++) {

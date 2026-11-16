@@ -197,7 +197,7 @@ class GenOpReviewFixesTest {
 
     @Test
     void aFilterOnAContextModeOutputUsesSimilarity() {
-        // "Forward" and "forward" differ only in case (0.95).
+        // "Forward" and "forward" differ only in case.
         assertEquals(3, run("?p a ex:Athlete . ?p rdfs:label ?name . "
                 + "GENOP(\"Position of {?name}?\", (?pos), " + M + ") FILTER(?pos = \"forward\")",
                 positionsAndTeams()).size());

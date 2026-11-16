@@ -116,15 +116,13 @@ public class JaccardIndexTest {
     }
 
     @Test
-    @DisplayName("a case-only difference is still a candidate, though it scores below 1")
+    @DisplayName("a case-only difference scores 1 and is a candidate")
     void caseInsensitiveMatchSurvives() {
-        // JaccardSimText reports 0.95 for a case-only difference while the token sets are
-        // identical. The index reasons about the tokens, which is the higher of the two, so it
-        // cannot exclude such an entry.
+        // JaccardSimText compares the lower-case word sets, which are identical here.
         JaccardIndex<String> index = indexOf(CORPUS);
 
-        assertEquals(0.95, SIM.similarity("brazil", "Brazil"), 1e-9);
-        assertTrue(index.candidates("brazil", 0.95).contains("Brazil"));
+        assertEquals(1.0, SIM.similarity("brazil", "Brazil"), 1e-9);
+        assertTrue(index.candidates("brazil", 1.0).contains("Brazil"));
     }
 
     @Test

@@ -12,8 +12,7 @@ names the workbench maps.
 
 The score of a name and a team is the one that the similarity join of the engine computes
 (SimScoreEvaluator with EmbeddingSimText): the maximum, over the labels of the team, of 1 for an
-equal label, 0.95 for a label equal up to case, and otherwise the cosine of the two embeddings
-clamped to [0, 1]. The labels are the rdfs:label values of the team, as GraphLabels reads them.
+equal label and otherwise the cosine of the two embeddings clamped to [0, 1]. The labels are the rdfs:label values of the team, as GraphLabels reads them.
 
 The script then checks the scores against the embedding runs of the E2 replay: at every
 threshold, the teams that some name reaches must be the teams that the query returned. The
@@ -62,11 +61,9 @@ def team_labels():
 
 
 def similarity(a, b, vec):
-    """EmbeddingSimText.similarity: equal, equal up to case, else the clamped cosine."""
+    """EmbeddingSimText.similarity: 1 for equal strings, else the clamped cosine."""
     if a == b:
         return 1.0
-    if a.lower() == b.lower():
-        return 0.95
     x, y = vec[a], vec[b]
     dot = sum(p * q for p, q in zip(x, y))
     norm = math.sqrt(sum(p * p for p in x)) * math.sqrt(sum(q * q for q in y))

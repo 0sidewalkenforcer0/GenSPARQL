@@ -2910,12 +2910,12 @@ ORDER BY ?year`
   }
 
   function norm(s){return String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]/g,"")}
-  // The measure of the engine (JaccardSimText): 1 for equal strings, 0.95 for strings equal up
-  // to case, and otherwise the Jaccard coefficient of the two lower-cased word sets. The page
+  // The measure of the engine (JaccardSimText): the Jaccard coefficient of the two lower-cased
+  // word sets, so strings that differ only in case score 1. The page
   // used to compare character trigrams, so it scored pairs the engine scores 0 (Czech Republic
   // and Czechia: 0.38 here, 0 in the engine).
   function words(s){return new Set(String(s).toLowerCase().trim().split(/\s+/))}
-  function jac(a,b){a=String(a??"");b=String(b??"");if(a===b)return 1;if(a.toLowerCase()===b.toLowerCase())return 0.95;const A=words(a),B=words(b),U=new Set([...A,...B]);if(!U.size)return 0;let k=0;A.forEach(x=>{if(B.has(x))k++});return k/U.size}
+  function jac(a,b){a=String(a??"");b=String(b??"");if(a===b)return 1;const A=words(a),B=words(b),U=new Set([...A,...B]);if(!U.size)return 0;let k=0;A.forEach(x=>{if(B.has(x))k++});return k/U.size}
 
   function findByLabel(label,type){
     const n=norm(label);

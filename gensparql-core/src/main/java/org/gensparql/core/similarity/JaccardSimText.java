@@ -8,8 +8,8 @@ import java.util.Set;
  * Jaccard-based text similarity implementation.
  *
  * Computes similarity as the Jaccard coefficient between
- * the word sets of two strings:
- * J(A,B) = |A ∩ B| / |A ∪ B|
+ * the lower-case word sets of two strings, as Section 2.2 of the paper defines it:
+ * J(A,B) = |A ∩ B| / |A ∪ B|. Strings that differ only in case score 1.
  */
 public class JaccardSimText implements SimText {
 
@@ -22,11 +22,6 @@ public class JaccardSimText implements SimText {
         // Exact match
         if (s1.equals(s2)) {
             return 1.0;
-        }
-
-        // Case-insensitive match
-        if (s1.equalsIgnoreCase(s2)) {
-            return 0.95; // High but not perfect similarity
         }
 
         // Tokenize into words
