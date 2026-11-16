@@ -1261,9 +1261,9 @@
   },
   "e2_wc_cities": {
    "generated": 11,
-   "names_denoting_target": 7,
-   "denote_graph_entities": 7,
-   "names_without_entity": 4,
+   "names_denoting_target": 11,
+   "denote_graph_entities": 11,
+   "names_without_entity": 0,
    "unchecked_names": [],
    "same_list_after": true,
    "runs": [
@@ -1273,7 +1273,7 @@
      "mapped": 7,
      "correct": 7,
      "precision": 1.0,
-     "recall": 1.0,
+     "recall": 0.636,
      "wrong": [],
      "calls": 1,
      "error": null
@@ -1284,7 +1284,7 @@
      "mapped": 7,
      "correct": 7,
      "precision": 1.0,
-     "recall": 1.0,
+     "recall": 0.636,
      "wrong": [],
      "calls": 1,
      "error": null
@@ -1295,7 +1295,7 @@
      "mapped": 7,
      "correct": 7,
      "precision": 1.0,
-     "recall": 1.0,
+     "recall": 0.636,
      "wrong": [],
      "calls": 1,
      "error": null
@@ -1306,7 +1306,7 @@
      "mapped": 7,
      "correct": 7,
      "precision": 1.0,
-     "recall": 1.0,
+     "recall": 0.636,
      "wrong": [],
      "calls": 1,
      "error": null
@@ -1317,7 +1317,7 @@
      "mapped": 7,
      "correct": 7,
      "precision": 1.0,
-     "recall": 1.0,
+     "recall": 0.636,
      "wrong": [],
      "calls": 1,
      "error": null
@@ -1328,7 +1328,7 @@
      "mapped": 7,
      "correct": 7,
      "precision": 1.0,
-     "recall": 1.0,
+     "recall": 0.636,
      "wrong": [],
      "calls": 1,
      "error": null
@@ -1339,7 +1339,7 @@
      "mapped": 7,
      "correct": 7,
      "precision": 1.0,
-     "recall": 1.0,
+     "recall": 0.636,
      "wrong": [],
      "calls": 1,
      "error": null
@@ -1348,19 +1348,15 @@
      "similarity": "embedding",
      "theta": 0.5,
      "mapped": 16,
-     "correct": 7,
-     "precision": 0.438,
+     "correct": 11,
+     "precision": 0.688,
      "recall": 1.0,
      "wrong": [
       "Q1345",
       "Q16555",
       "Q172",
-      "Q17943",
       "Q24639",
-      "Q41819",
-      "Q621549",
-      "Q746830",
-      "Q938835"
+      "Q41819"
      ],
      "calls": 1,
      "error": null
@@ -1369,19 +1365,15 @@
      "similarity": "embedding",
      "theta": 0.6,
      "mapped": 16,
-     "correct": 7,
-     "precision": 0.438,
+     "correct": 11,
+     "precision": 0.688,
      "recall": 1.0,
      "wrong": [
       "Q1345",
       "Q16555",
       "Q172",
-      "Q17943",
       "Q24639",
-      "Q41819",
-      "Q621549",
-      "Q746830",
-      "Q938835"
+      "Q41819"
      ],
      "calls": 1,
      "error": null
@@ -1390,17 +1382,15 @@
      "similarity": "embedding",
      "theta": 0.7,
      "mapped": 14,
-     "correct": 7,
-     "precision": 0.5,
-     "recall": 1.0,
+     "correct": 9,
+     "precision": 0.643,
+     "recall": 0.818,
      "wrong": [
       "Q1345",
       "Q16555",
       "Q172",
-      "Q17943",
       "Q24639",
-      "Q41819",
-      "Q621549"
+      "Q41819"
      ],
      "calls": 1,
      "error": null
@@ -1411,7 +1401,7 @@
      "mapped": 11,
      "correct": 7,
      "precision": 0.636,
-     "recall": 1.0,
+     "recall": 0.636,
      "wrong": [
       "Q1345",
       "Q172",
@@ -1427,7 +1417,7 @@
      "mapped": 7,
      "correct": 7,
      "precision": 1.0,
-     "recall": 1.0,
+     "recall": 0.636,
      "wrong": [],
      "calls": 1,
      "error": null
@@ -1438,7 +1428,7 @@
      "mapped": 7,
      "correct": 7,
      "precision": 1.0,
-     "recall": 1.0,
+     "recall": 0.636,
      "wrong": [],
      "calls": 1,
      "error": null
@@ -1449,7 +1439,7 @@
      "mapped": 7,
      "correct": 7,
      "precision": 1.0,
-     "recall": 1.0,
+     "recall": 0.636,
      "wrong": [],
      "calls": 1,
      "error": null
@@ -1671,15 +1661,7 @@
    "names_denoting_target": 13,
    "denote_graph_entities": 13,
    "names_without_entity": 14,
-   "unchecked_names": [
-    "Rose Bowl",
-    "Soldier Field",
-    "State Farm Stadium",
-    "Camping World Stadium",
-    "Nissan Stadium",
-    "Raymond James Stadium",
-    "Fenway Park"
-   ],
+   "unchecked_names": [],
    "same_list_after": true,
    "runs": [
     {
@@ -3004,23 +2986,7 @@
    "names_denoting_target": 0,
    "denote_graph_entities": 0,
    "names_without_entity": 15,
-   "unchecked_names": [
-    "Milan",
-    "Rome",
-    "Naples",
-    "Turin",
-    "Bologna",
-    "Genoa",
-    "Verona",
-    "Padua",
-    "Bari",
-    "Palermo",
-    "Catania",
-    "Messina",
-    "Cagliari",
-    "Sassari",
-    "Livorno"
-   ],
+   "unchecked_names": [],
    "same_list_after": true,
    "runs": [
     {
@@ -3442,13 +3408,7 @@
    "names_denoting_target": 4,
    "denote_graph_entities": 4,
    "names_without_entity": 12,
-   "unchecked_names": [
-    "Rose Bowl",
-    "Allegiant Stadium",
-    "Tottenham Hotspur Stadium",
-    "Wembley Stadium",
-    "Estadio Olímpico Universitario"
-   ],
+   "unchecked_names": [],
    "same_list_after": true,
    "runs": [
     {
@@ -4099,25 +4059,7 @@
    "names_denoting_target": 15,
    "denote_graph_entities": 15,
    "names_without_entity": 17,
-   "unchecked_names": [
-    "Franco Armani",
-    "Nahuel Guzman",
-    "Germán Pezzella",
-    "Marcos Acuna",
-    "Renzo Saravia",
-    "Guido Rodriguez",
-    "Angel Di Maria",
-    "Joel Ferreira",
-    "Lucas Ocampos",
-    "Dario Benedetto",
-    "Joaquin Correa",
-    "Lautaro Caceres",
-    "Nicolas Ibanez",
-    "Juan Foyth",
-    "Nehuen Perez",
-    "Ramiro Funes Mori",
-    "Agustin Marchesin"
-   ],
+   "unchecked_names": [],
    "same_list_after": true,
    "runs": [
     {
@@ -4305,15 +4247,10 @@
   },
   "e2_wc_cities": {
    "generated": 13,
-   "names_denoting_target": 6,
-   "denote_graph_entities": 6,
-   "names_without_entity": 7,
-   "unchecked_names": [
-    "León",
-    "San Juan del Rio",
-    "Toluca",
-    "Cancun"
-   ],
+   "names_denoting_target": 9,
+   "denote_graph_entities": 9,
+   "names_without_entity": 4,
+   "unchecked_names": [],
    "same_list_after": true,
    "runs": [
     {
@@ -4322,7 +4259,7 @@
      "mapped": 6,
      "correct": 6,
      "precision": 1.0,
-     "recall": 1.0,
+     "recall": 0.667,
      "wrong": [],
      "calls": 1,
      "error": null
@@ -4333,7 +4270,7 @@
      "mapped": 6,
      "correct": 6,
      "precision": 1.0,
-     "recall": 1.0,
+     "recall": 0.667,
      "wrong": [],
      "calls": 1,
      "error": null
@@ -4344,7 +4281,7 @@
      "mapped": 6,
      "correct": 6,
      "precision": 1.0,
-     "recall": 1.0,
+     "recall": 0.667,
      "wrong": [],
      "calls": 1,
      "error": null
@@ -4355,7 +4292,7 @@
      "mapped": 6,
      "correct": 6,
      "precision": 1.0,
-     "recall": 1.0,
+     "recall": 0.667,
      "wrong": [],
      "calls": 1,
      "error": null
@@ -4366,7 +4303,7 @@
      "mapped": 6,
      "correct": 6,
      "precision": 1.0,
-     "recall": 1.0,
+     "recall": 0.667,
      "wrong": [],
      "calls": 1,
      "error": null
@@ -4377,7 +4314,7 @@
      "mapped": 6,
      "correct": 6,
      "precision": 1.0,
-     "recall": 1.0,
+     "recall": 0.667,
      "wrong": [],
      "calls": 1,
      "error": null
@@ -4388,7 +4325,7 @@
      "mapped": 6,
      "correct": 6,
      "precision": 1.0,
-     "recall": 1.0,
+     "recall": 0.667,
      "wrong": [],
      "calls": 1,
      "error": null
@@ -4397,8 +4334,8 @@
      "similarity": "embedding",
      "theta": 0.5,
      "mapped": 16,
-     "correct": 6,
-     "precision": 0.375,
+     "correct": 9,
+     "precision": 0.562,
      "recall": 1.0,
      "wrong": [
       "Q159260",
@@ -4407,10 +4344,7 @@
       "Q24639",
       "Q41819",
       "Q5083",
-      "Q621549",
-      "Q721455",
-      "Q746830",
-      "Q938835"
+      "Q721455"
      ],
      "calls": 1,
      "error": null
@@ -4419,8 +4353,8 @@
      "similarity": "embedding",
      "theta": 0.6,
      "mapped": 16,
-     "correct": 6,
-     "precision": 0.375,
+     "correct": 9,
+     "precision": 0.562,
      "recall": 1.0,
      "wrong": [
       "Q159260",
@@ -4429,10 +4363,7 @@
       "Q24639",
       "Q41819",
       "Q5083",
-      "Q621549",
-      "Q721455",
-      "Q746830",
-      "Q938835"
+      "Q721455"
      ],
      "calls": 1,
      "error": null
@@ -4441,9 +4372,9 @@
      "similarity": "embedding",
      "theta": 0.7,
      "mapped": 14,
-     "correct": 6,
-     "precision": 0.429,
-     "recall": 1.0,
+     "correct": 7,
+     "precision": 0.5,
+     "recall": 0.778,
      "wrong": [
       "Q159260",
       "Q172",
@@ -4451,7 +4382,6 @@
       "Q24639",
       "Q41819",
       "Q5083",
-      "Q621549",
       "Q721455"
      ],
      "calls": 1,
@@ -4463,7 +4393,7 @@
      "mapped": 10,
      "correct": 6,
      "precision": 0.6,
-     "recall": 1.0,
+     "recall": 0.667,
      "wrong": [
       "Q159260",
       "Q172",
@@ -4479,7 +4409,7 @@
      "mapped": 6,
      "correct": 6,
      "precision": 1.0,
-     "recall": 1.0,
+     "recall": 0.667,
      "wrong": [],
      "calls": 1,
      "error": null
@@ -4490,7 +4420,7 @@
      "mapped": 6,
      "correct": 6,
      "precision": 1.0,
-     "recall": 1.0,
+     "recall": 0.667,
      "wrong": [],
      "calls": 1,
      "error": null
@@ -4501,7 +4431,7 @@
      "mapped": 6,
      "correct": 6,
      "precision": 1.0,
-     "recall": 1.0,
+     "recall": 0.667,
      "wrong": [],
      "calls": 1,
      "error": null
@@ -4513,13 +4443,7 @@
    "names_denoting_target": 19,
    "denote_graph_entities": 19,
    "names_without_entity": 5,
-   "unchecked_names": [
-    "Denmark",
-    "India",
-    "Italy",
-    "Peru",
-    "Republic of Ireland"
-   ],
+   "unchecked_names": [],
    "same_list_after": true,
    "runs": [
     {
@@ -4770,14 +4694,7 @@
    "names_denoting_target": 12,
    "denote_graph_entities": 9,
    "names_without_entity": 12,
-   "unchecked_names": [
-    "State Farm Stadium",
-    "Empower Field at Mile High",
-    "Allegiant Stadium",
-    "Ford Field",
-    "Bank of America Stadium",
-    "Raymond James Stadium"
-   ],
+   "unchecked_names": [],
    "same_list_after": true,
    "runs": [
     {

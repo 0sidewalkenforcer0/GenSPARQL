@@ -114,12 +114,12 @@ POST /api/gensparql/query
 ### Live mode with a local model (Ollama, no provider account)
 
 ```bash
-ollama pull qwen3:8b                 # once; Ollama serves on http://localhost:11434
+ollama pull mistral:7b               # once; Ollama serves on http://localhost:11434
 ollama pull bge-large                # once, for the embedding similarity
 ./start-fuseki.sh
 ```
 
-Open `http://localhost:8080/?mode=live` and, in the live panel, set the endpoint to `http://localhost:11434/v1` and the model to `qwen3:8b`. The API key field must not be empty, but Ollama ignores its value, so any text such as `ollama` will do. For the embedding similarity, choose *Embedding (cosine)*, set the embedding endpoint to `http://localhost:11434/v1` as well and the embedding model to `bge-large`. The prompts and the texts to embed then go to Ollama on this machine and nowhere else.
+Open `http://localhost:8080/?mode=live` and, in the live panel, set the endpoint to `http://localhost:11434/v1` and the model to `mistral:7b`. Ollama serves a 4-bit build of Mistral-7B-Instruct-v0.3, so its answers can differ from the recorded ones. The API key field must not be empty, but Ollama ignores its value, so any text such as `ollama` will do. For the embedding similarity, choose *Embedding (cosine)*, set the embedding endpoint to `http://localhost:11434/v1` as well and the embedding model to `bge-large`. The prompts and the texts to embed then go to Ollama on this machine and nowhere else.
 
 The endpoint, model and key apply only to that query; the server does not store them. Clients other than the workbench can configure the provider through the environment instead:
 
@@ -225,7 +225,7 @@ SELECT ?player WHERE {
 }
 ```
 
-The bracketed `options` set parameters such as the grounding similarity threshold `θ`. Because `GENOP` lives in the query algebra, the planner places it after the KG patterns that constrain its inputs, so the LLM runs only on the bindings that survive. Within a group, the planner evaluates the elements in the order of the paper's translation: first every element that mentions no output variable of a `GENOP`, including `OPTIONAL`, `MINUS`, `BIND` and `VALUES`, then each `GENOP` in written order followed by the elements that mention its output, then the `OPTIONAL`, `MINUS` and `BIND` that mention an output, and the filters last.
+The bracketed `options` set parameters such as the grounding similarity threshold `θ`. Because `GENOP` lives in the query algebra, the planner places it after the KG patterns that constrain its inputs, so the LLM runs only on the bindings that survive. Within a group, the planner evaluates the elements in the order of the paper's translation. An `OPTIONAL`, `MINUS` or `BIND` that mentions an output variable of a `GENOP`, or a variable of an earlier element that comes after the first `GENOP`, is applied after all other elements, in written order. Of the other elements, the planner first evaluates those that mention no output variable, then the filters whose variables the triple patterns among them bind, and then each `GENOP` in written order, followed by the elements that mention its output. The remaining filters are applied last.
 
 ---
 
@@ -271,7 +271,7 @@ The target model is named inline in the query as `<model:PROVIDER:MODEL>`. Suppo
 | OpenAI | `<model:openai:gpt-4o>` | `OPENAI_API_KEY` |
 | Anthropic | `<model:anthropic:claude-...>` | `ANTHROPIC_API_KEY` |
 | Self-hosted (vLLM, OpenAI-compatible) | `<model:openai:Qwen/Qwen3-30B-A3B-Instruct-2507>` | `OPENAI_BASE_URL` (+ `OPENAI_API_KEY`) |
-| Ollama (local, OpenAI-compatible) | `<model:openai:qwen3:8b>` | `OPENAI_BASE_URL=http://localhost:11434/v1`, `OPENAI_API_KEY=ollama` |
+| Ollama (local, OpenAI-compatible) | `<model:openai:mistral:7b>` | `OPENAI_BASE_URL=http://localhost:11434/v1`, `OPENAI_API_KEY=ollama` |
 | Mock (no network) | `<model:mock:...>` | none |
 
 Every provider asks the model for a JSON array and reads the values of every array in the answer; an empty array means no answer.

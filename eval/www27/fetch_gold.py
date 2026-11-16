@@ -31,7 +31,7 @@ BUCKETS = ["Goalkeeper", "Defender", "Midfielder", "Forward"]
 
 
 def coarse(label):
-    """Map a position label to one of four buckets, as in eval/wc2026_x1_position.py."""
+    """Map a position label to one of four buckets, as in eval/archive/wc2026_x1_position.py."""
     s = label.lower()
     if any(k in s for k in ["goalkeeper", "keeper"]):
         return "Goalkeeper"

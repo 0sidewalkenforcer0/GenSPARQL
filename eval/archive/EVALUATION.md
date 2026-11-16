@@ -1,5 +1,7 @@
 # Preliminary Evaluation — setup, results, and how to reproduce
 
+> **Archived.** An earlier evaluation (Qwen3-30B on the 825 squad players), kept for the record. The evaluation of the WWW'27 paper is in [`../www27/README.md`](../www27/README.md).
+
 Evidence for the demo paper's *Preliminary Evaluation* section. The story is
 **problem-oriented**: knowledge graphs are incomplete and static, so SPARQL can only
 return triples that already exist. GenSPARQL makes an LLM a first-class data source
@@ -18,9 +20,9 @@ cannot. We evaluate three claimed benefits and are candid about the limitation.
 - **KG:** 2026 FIFA World Cup, built from Wikidata (`Q5020214`) — 48 teams, 12 groups,
   16 venues, 12 host cities (+metro aliases), 825 official squad players; 913 entities /
   2,716 triples, real Wikidata IRIs + clean `rdfs:label`. Builder:
-  [`gensparql-example/data/build_worldcup2026_kg.py`](../gensparql-example/data/build_worldcup2026_kg.py).
+  [`gensparql-example/data/build_worldcup2026_kg.py`](../../gensparql-example/data/build_worldcup2026_kg.py).
 - **Generation:** `Qwen/Qwen3-30B-A3B-Instruct-2507`, self-hosted with vLLM
-  (OpenAI-compatible), non-thinking, `temperature=0`. See [`../deploy/`](../deploy/README.md).
+  (OpenAI-compatible), non-thinking, `temperature=0`. See [`../deploy/`](../../deploy/README.md).
 - **Grounding / linking:** `JaccardSimText` (default) or bge-large embeddings via a local
   server; threshold θ = 0.85.
 - **Ground truth (X1):** Wikidata `P413` (position played on team).
@@ -46,7 +48,7 @@ accuracy is consistently well above chance (69–91%), and a clear coverage/prec
 emerges — broader models answer more at moderate precision, conservative models abstain more
 (via the explicit *Unknown*) and are more precise on what they commit. The abstention lets each
 model self-calibrate rather than guess. Driver:
-[`../eval/wc2026_x1_position.py`](../eval/wc2026_x1_position.py).
+[`wc2026_x1_position.py`](wc2026_x1_position.py).
 
 ## X2 — Composition: one query, KG ⨝ LLM
 
@@ -115,7 +117,7 @@ export OPENAI_BASE_URL=http://<llm-node>:8000/v1
 export GS_GEN_MODEL=Qwen/Qwen3-30B-A3B-Instruct-2507
 
 # X1 — column-extension accuracy vs Wikidata P413
-python eval/wc2026_x1_position.py
+python eval/archive/wc2026_x1_position.py
 
 # X2 / X3 — composition + hybrid (live, gated on OPENAI_BASE_URL)
 mvn -pl gensparql-integration-tests test \
@@ -125,5 +127,5 @@ mvn -pl gensparql-integration-tests test \
 mvn -pl gensparql-integration-tests test -Dtest=CostReorderTest
 
 # E1/E2 grounding-backend sweep on the bundled football KG (original drivers)
-OPENROUTER_API_KEY=sk-or-... ./eval/run_eval.sh
+OPENROUTER_API_KEY=sk-or-... ./eval/archive/run_eval.sh
 ```

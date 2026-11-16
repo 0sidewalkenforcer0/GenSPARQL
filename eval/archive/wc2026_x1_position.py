@@ -16,7 +16,7 @@ Env:
   OPENAI_BASE_URL   local vLLM chat endpoint (OpenAI-compatible)
   GS_GEN_MODEL      default Qwen/Qwen3-30B-A3B-Instruct-2507
   X1_SAMPLE         optional: cap the number of players (default: all)
-Output: eval/wc2026_x1_results.json + a printed summary.
+Output: eval/archive/wc2026_x1_results.json + a printed summary.
 """
 import json
 import os
@@ -28,7 +28,7 @@ import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-KG = os.path.join(HERE, "..", "gensparql-example", "data", "worldcup2026.ttl")
+KG = os.path.join(HERE, "..", "..", "gensparql-example", "data", "worldcup2026.ttl")
 WD = "https://query.wikidata.org/sparql"
 UA = "GenSPARQL-X1/1.0 (research; ac-claude-3@ki.uni-stuttgart.de)"
 LLM = os.environ["OPENAI_BASE_URL"].rstrip("/")

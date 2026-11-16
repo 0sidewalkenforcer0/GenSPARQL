@@ -3,8 +3,9 @@
 # answer in the records of results/<model>/llm-records (the run of 2026-11-03), so only the
 # embedding model runs, and the generated names are those of that run.
 #   sbatch --gpus=A40:1 eval/www27/replay_e2.sbatch            (after build.sbatch)
-# Results go to results/e2-replay-<date>/<model>/; score them with
-#   python3 eval/www27/score.py eval/www27/results/e2-replay-<date>/*
+# Results go to results/e2-replay-<date>/<model>/; score the three model directories with
+#   D=eval/www27/results/e2-replay-<date>
+#   python3 eval/www27/score.py $D/Qwen_Qwen3-30B-A3B-Instruct-2507 $D/Qwen_Qwen3-8B $D/mistralai_Mistral-7B-Instruct-v0.3
 #SBATCH --job-name=gs-e2-replay
 #SBATCH --partition=fastlane
 #SBATCH --cpus-per-task=4

@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * Runs against the mock provider (deterministic, no API key), so the headline is the
  * call-count reduction (logical GENOP invocations -> actual LLM calls); wall-clock/$
- * gains follow directly since latency is LLM-bound (see docs/EVALUATION.md E4).
+ * gains follow directly since latency is LLM-bound (see eval/archive/EVALUATION.md E4).
  */
 public class C3DedupWorkloadTest {
 

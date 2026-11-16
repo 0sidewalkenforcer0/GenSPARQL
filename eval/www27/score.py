@@ -3,7 +3,7 @@
 
   score.py RESULTS_DIR [RESULTS_DIR ...]   one directory per model
 
-Writes summary.json and summary.md next to the result directories and prints the tables.
+Writes summary.json next to the result directories and prints the tables.
 
 E1  A player counts as answered when the generated values map to position buckets. The
     answer is correct when it maps to exactly one bucket and Wikidata lists that bucket.

@@ -100,7 +100,7 @@ public final class FanOutEstimator {
     /**
      * Tier 2: expected fraction of generated candidates that ground to a KG entity at the given
      * threshold. Heuristic prior, decreasing in θ, anchored on the repo's E1 grounding rate
-     * (~0.32 at θ=0.85; see docs/EVALUATION.md): {@code survival(θ) = 1 − 0.8·θ}, range [0.2, 1].
+     * (~0.32 at θ=0.85; see eval/archive/EVALUATION.md): {@code survival(θ) = 1 − 0.8·θ}, range [0.2, 1].
      * (Runtime online calibration of this rate is future work — the estimator is not yet fed
      * per-execution grounded/generated counts.)
      */

@@ -7,12 +7,12 @@
 #
 # Grounding uses text similarity (Jaccard) by default. To use embedding-cosine
 # grounding via a foundation text embedder, also export an OpenAI-compatible
-# endpoint (the E1/E2 driver auto-switches); see docs/EVALUATION.md:
+# endpoint (the E1/E2 driver auto-switches); see EVALUATION.md in this directory:
 #   export OPENAI_API_KEY=ollama OPENAI_BASE_URL=http://localhost:11434/v1 \
 #          OPENAI_EMBEDDING_MODEL=nomic-embed-text
 set -e
-PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-EVAL_DIR="$PROJECT_ROOT/eval"
+PROJECT_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+EVAL_DIR="$(cd "$(dirname "$0")" && pwd)"
 DATA="${DATA:-$PROJECT_ROOT/gensparql-example/data/footballers_eval.ttl}"
 
 if [ -z "$OPENROUTER_API_KEY" ]; then

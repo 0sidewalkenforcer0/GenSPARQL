@@ -4,7 +4,7 @@ This package keeps the three existing pre-recorded GenSPARQL workflows and adds 
 
 ## What changed
 
-- **Pre-recorded demo**: the existing Ground entities, Generate attributes, and Compose + defer query structure and execution logic are unchanged. Compose counts are updated to the corrected FIFA KG and FIFA position ground truth.
+- **Pre-recorded demo**: the Ground entities, Generate attributes, and Compose + defer workflows replay the answers that open LLMs gave through the GenSPARQL service (`recorded-runs.js`).
 - **Live mode**: includes a large editable **Query** box. `Ctrl/Cmd + Enter` runs the current query, renders its bindings in a result table, and highlights matching KG entities in the graph.
 - **Upper bar**: adds **Upload KG ↑** beside the Database selector. `.ttl` / `.turtle` files are parsed in the browser, added to the Database menu, and made the active KG.
 - Uploaded KGs hide the built-in pre-recorded demo automatically; Query and graph exploration remain available. Selecting World Cup or Nobel Prize restores the matching pre-recorded workflows.
@@ -19,8 +19,8 @@ This package keeps the three existing pre-recorded GenSPARQL workflows and adds 
 - `worldcup2026.ttl` contains 48 final squads × 26 players = **1,248 Athlete nodes**.
 - Group A is **Czechia, Mexico, South Africa, Korea Republic** = **104 players**.
 - Position remains intentionally absent from the KG, preserving the attribute-completion task.
-- For the pre-recorded Compose filter result, FIFA Squad Lists `POS=DF` is used as external ground truth: **35 Group A defenders** = Czechia 9 + Mexico 7 + South Africa 10 + Korea Republic 9.
-- GENOP-first therefore models **1,248 LLM calls**; Planner models **104 LLM calls**, a **12.0×** reduction.
+- The pre-recorded Compose filter result uses the positions that Qwen3-30B-A3B-Instruct-2507 generated for the players: the model answers *Defender* for **80 of the 104** Group A players.
+- Measured through the service, GENOP-first makes **1,248 LLM calls** and the planner **104**, a **12.0×** reduction.
 
 ## Live query execution
 
@@ -51,7 +51,7 @@ active mode is initialized by `app.js`.
 
 ## Visualization
 
-The knowledge graph uses the local `native-graph.js` SVG renderer for zoom, pan and drag. Its layout runs on d3-force from the local copy `vendor/d3.v7.8.5.min.js` (ISC license, `vendor/d3-LICENSE.txt`), and the interaction follows the knowledge-graph explorer of the Circular Factory demo: dragging a node pulls its neighbours along and the graph springs back to its layout, hovering a node keeps it and its neighbours bright and dims the rest, a click keeps that focus, labels of small nodes follow the zoom in large graphs, and *Light all* turns the dimming off. The figure layout (`?print`) keeps the built-in simulation, so the figures of the paper do not change. The stylesheet still imports Cormorant Garamond from Google Fonts; KG rendering, parsing, and local query execution otherwise run in the browser.
+The knowledge graph uses the local `native-graph.js` SVG renderer for zoom, pan and drag. Its layout runs on d3-force from the local copy `vendor/d3.v7.8.5.min.js` (ISC license, `vendor/d3-LICENSE.txt`), and the interaction follows the knowledge-graph explorer of the Circular Factory demo: dragging a node pulls its neighbours along, hovering a node keeps it and its neighbours bright and dims the rest, a click keeps that focus, and *Light all* turns the dimming off. In the views with a computed layout the graph springs back to it after a drag, and the free layout of a whole graph is held together by a weak pull towards its centre. Labels of small nodes are hidden while a large graph is zoomed out and appear when a graph is zoomed in. The figure layout (`?print`) keeps the built-in simulation, so the figures of the paper do not change. The stylesheet imports Cormorant Garamond from Google Fonts and falls back to local fonts offline. Queries run in the Java engine, while KG rendering and Turtle parsing run in the browser.
 
 ## Start locally
 
@@ -63,14 +63,14 @@ Then open `http://localhost:8000/`.
 
 ## Compose step visualization
 
-The Compose + defer query structure is unchanged; its counts now reflect the corrected FIFA KG and FIFA defender ground truth. The execution-order cards are interactive graph snapshots:
+The execution-order cards of Compose + defer are interactive graph snapshots:
 
 - GENOP-first: Athlete bindings → GENOP → KG selection → FILTER → Result.
 - Planner: KG selection → GENOP → FILTER → Result.
 - Athlete bindings shows every Athlete node in the KG.
 - GENOP attaches a generated yellow `?pos` node to every binding reaching GENOP.
 - KG selection narrows the visualization to Group A bindings.
-- FILTER keeps the recorded 35 Defender bindings and visibly marks the other 69 Group A bindings as dropped.
+- FILTER keeps the 80 bindings whose recorded position is Defender and visibly marks the other 24 Group A bindings as dropped.
 - Clicking any execution step replays that intermediate graph; Run plays the steps in order automatically.
 
 The Live Free Query result table is rendered in the right column directly below the knowledge graph.
@@ -81,14 +81,14 @@ The Live Free Query result table is rendered in the right column directly below 
 The Planner path has four visual steps: `KG selection → GENOP → FILTER → Result`.
 There is no separate Survivors step. The GENOP stage preserves the Group A
 selection graph and adds one yellow generated `?pos` node beside each of the 104
-surviving player bindings. The pre-recorded query structure and execution logic are unchanged; the counts/results are the corrected 1,248 / 104 / 35 values above.
+surviving player bindings. The counts are the 1,248 / 104 / 80 values above.
 
 
 ## Compose position visualization
 
-- `fifa2026-positions.js` stores the pre-recorded FIFA squad `POS` value for each of the 1,248 players. These values are visualization/evaluation data only and are not added to the KG.
+- `recorded-runs.js` stores the position that the recorded model generated for 1,247 of the 1,248 players (it gave no answer for one). These values are not added to the KG.
 - GENOP-first Step 2 keeps the exact Step-1 Athlete-bindings layout and adds one yellow Position point beside every player.
-- Hover a yellow point to see the player name, full Position and FIFA code.
+- Hover a yellow point to see the player name, the generated position and its code (GK, DF, MF, FW).
 - Group-A selection, FILTER, Result, and Planner GENOP/FILTER/Result use the same hoverable Position points.
 
 ## Latest Live-mode layout adjustment
