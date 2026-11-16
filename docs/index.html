@@ -6,7 +6,7 @@
   <title>GenSPARQL · Interactive KG Explorer</title>
   <meta name="description" content="GenSPARQL interactive demo with the World Cup 2026 knowledge graph.">
   <script src="page-mode.js?v=20261103-1"></script>
-  <link rel="stylesheet" href="styles.css?v=20261116-5">
+  <link rel="stylesheet" href="styles.css?v=20261117-1">
 
 </head>
 <body>
@@ -167,7 +167,7 @@
                 <strong id="attributeAnswerRate">—</strong>
               </div>
               <div class="attribute-metric">
-                <span id="attributeAccuracyLabel">Accuracy vs P413</span>
+                <span id="attributeAccuracyLabel">Correct among answered entities in Wikidata</span>
                 <strong id="attributeAccuracy">—</strong>
               </div>
               <div class="attribute-metric">
@@ -180,7 +180,6 @@
             <div class="attribute-rows" id="attributeRows"></div>
 
             <p class="attribute-note" id="attributeResultNote">
-              Accuracy vs P413 is the recorded gold-label evaluation metric. SPARQL alone is 0 because player position is omitted from this KG. The rows above are a small displayed sample, not the full evaluation set.
             </p>
           </section>
         </section>
@@ -350,12 +349,12 @@
 
   <script src="vendor/d3.v7.8.5.min.js"></script>
   <script src="native-graph.js?v=20261116-1"></script>
-  <script src="recorded-runs.js?v=20261116-3"></script>
-  <script src="demo-data.js?v=20261116-1"></script>
+  <script src="recorded-runs.js?v=20261116-4"></script>
+  <script src="demo-data.js?v=20261117-1"></script>
   <script src="fifa2026-data.js"></script>
   <script src="nobel-prize-data.js?v=20260826-1"></script>
   <script src="database-adapters.js?v=20260826-2"></script>
   <script src="engine-client.js?v=20260903-1"></script>
-  <script src="app.js?v=20261116-12"></script>
+  <script src="app.js?v=20261117-1"></script>
 </body>
 </html>

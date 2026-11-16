@@ -10,6 +10,8 @@
   const R = window.RECORDED_RUNS;
   const factor = (a, b) => `${(a / b).toFixed(1)}×`;
   const short = model => model.split("/").pop();
+  // The model reference of a recorded query: the model served by vLLM through its OpenAI-compatible API.
+  const ref = model => `<model:openai:${model}>`;
   const POSITION_PROMPT =
 `"Which position does the footballer {?name}
           primarily play: goalkeeper, defender,
@@ -38,6 +40,7 @@
         tab: "Ground entities",
         hero: true,                 // uses the KG graph + Live mode
         recordedModel: short(R.wcEntity.model),
+        modelRef: ref(R.wcEntity.model),
         query:
 `SELECT ?team WHERE {
   ?team a ex:Team .
@@ -54,6 +57,7 @@
         tab: "Generate attributes",
         hero: false,
         recordedModel: short(R.wcAttribute.model),
+        modelRef: ref(R.wcAttribute.model),
         query:
 `SELECT ?name ?pos WHERE {
   ?p ex:playsFor ?t .
@@ -64,14 +68,15 @@
 }`,
         rows: R.wcAttribute.rows,
         stat: R.wcAttribute.stat,
-        metricLabel: `Accuracy vs Wikidata P413 (all ${R.wcAttribute.players.toLocaleString("en")} players)`,
-        note: `Answers of ${short(R.wcAttribute.model)} through GENOP in the evaluation over all ${R.wcAttribute.players.toLocaleString("en")} players. Answer rate and accuracy refer to all players; the rows are the 26 Argentine players, and under each name the answers of ${R.wcAttribute.otherModels.join(" and ")} to the same prompt. SPARQL alone returns no position, because the graph leaves out the positions that Wikidata records.`
+        metricLabel: "Correct among answered players in Wikidata P413",
+        note: `Answers of ${short(R.wcAttribute.model)} through GENOP in the evaluation over all ${R.wcAttribute.players.toLocaleString("en")} players. The answer rate is the share of the ${R.wcAttribute.players.toLocaleString("en")} players with an answer. The share of correct answers counts the answered players among the ${R.wcAttribute.gold.toLocaleString("en")} players with a position in Wikidata. The rows are the 26 Argentine players, and under each name the answers of ${R.wcAttribute.otherModels.join(" and ")} to the same prompt. SPARQL alone returns no position, because the graph leaves out the positions that Wikidata records.`
       },
       {
         id: "composition",
         tab: "Compose + defer",
         hero: false,
         recordedModel: short(R.wcComposition.model),
+        modelRef: ref(R.wcComposition.model),
         query:
 `SELECT ?name ?pos WHERE {
   ?t ex:inGroup ?g .
@@ -100,6 +105,7 @@
         targetType: "NobelField",
         targetLabel: "Nobel fields",
         recordedModel: short(R.nobelEntity.model),
+        modelRef: ref(R.nobelEntity.model),
         query:
 `SELECT ?field WHERE {
   ?field a ex:NobelField .
@@ -119,10 +125,11 @@
         hero: false,
         sourceType: "NobelLaureate",
         recordedModel: short(R.nobelAttribute.model),
+        modelRef: ref(R.nobelAttribute.model),
         generatedPredicate: "?year",
         generatedTitle: "Generated birth years",
-        metricLabel: `Accuracy vs Wikidata P569 (all ${R.nobelAttribute.laureates.toLocaleString("en")} laureates)`,
-        note: `Answers of ${short(R.nobelAttribute.model)} through GENOP in the evaluation over all ${R.nobelAttribute.laureates.toLocaleString("en")} laureates. Answer rate and accuracy refer to all laureates; the rows are the Physics laureates since 2020, and under each name the answers of ${R.nobelAttribute.otherModels.join(" and ")} to the same prompt.`,
+        metricLabel: "Correct among answered laureates in Wikidata P569",
+        note: `Answers of ${short(R.nobelAttribute.model)} through GENOP in the evaluation over all ${R.nobelAttribute.laureates.toLocaleString("en")} laureates. The answer rate is the share of the ${R.nobelAttribute.laureates.toLocaleString("en")} laureates with an answer. The share of correct answers counts the answered laureates among the ${R.nobelAttribute.gold.toLocaleString("en")} laureates with a birth year in Wikidata. The rows are the Physics laureates since 2020, and under each name the answers of ${R.nobelAttribute.otherModels.join(" and ")} to the same prompt.`,
         query:
 `SELECT ?name ?year WHERE {
   ?laureate a ex:NobelLaureate ;
@@ -140,6 +147,7 @@
         name: "Compose Physics laureates since 2020 with generated contributions",
         hero: false,
         recordedModel: short(R.nobelComposition.model),
+        modelRef: ref(R.nobelComposition.model),
         query:
 `PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>

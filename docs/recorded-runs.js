@@ -456,7 +456,8 @@ window.RECORDED_RUNS = {
    "a": "99.9%",
    "b": "58.4%"
   },
-  "players": 1248
+  "players": 1248,
+  "gold": 1119
  },
  "wcEntity": {
   "model": "mistralai/Mistral-7B-Instruct-v0.3",
@@ -3579,7 +3580,8 @@ window.RECORDED_RUNS = {
    "a": "97.4%",
    "b": "90.2%"
   },
-  "laureates": 1018
+  "laureates": 1018,
+  "gold": 990
  },
  "nobelComposition": {
   "model": "Qwen/Qwen3-30B-A3B-Instruct-2507",

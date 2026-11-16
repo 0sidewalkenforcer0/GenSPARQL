@@ -96,7 +96,8 @@ def wc_attribute(wc, summary):
         out.append({"name": str(wc.value(p, RDFS.label)), "gen": shown, "state": state, "others": others})
     s = summary[Q30B.replace("/", "_")]["e1_wc_positions"]
     return {"model": Q30B, "otherModels": [short(m) for m in MODELS[1:]], "rows": out,
-            "stat": {"a": pct(s["answer_rate"]), "b": pct(s["accuracy"])}, "players": s["entities"]}
+            "stat": {"a": pct(s["answer_rate"]), "b": pct(s["accuracy"])}, "players": s["entities"],
+            "gold": len(gold)}
 
 
 def wc_entity():
@@ -199,7 +200,8 @@ def nobel_attribute(nobel, summary):
         out.append({"name": str(nobel.value(w, RDFS.label)), "gen": shown, "state": state, "others": others})
     s = summary[Q30B.replace("/", "_")]["e1_nobel_birth_years"]
     return {"model": Q30B, "otherModels": [short(m) for m in MODELS[1:]], "rows": out,
-            "stat": {"a": pct(s["answer_rate"]), "b": pct(s["accuracy"])}, "laureates": s["entities"]}
+            "stat": {"a": pct(s["answer_rate"]), "b": pct(s["accuracy"])}, "laureates": s["entities"],
+            "gold": len(gold)}
 
 
 def nobel_composition(calls):

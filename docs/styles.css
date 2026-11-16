@@ -2283,9 +2283,8 @@ button{cursor:pointer}
 
 /* Live Free Query uses the same default content height as Sample Query. */
 #liveQuery{
-  height:142px!important;
   min-height:142px!important;
-  max-height:205px!important;
+  max-height:560px!important;
   resize:vertical!important;
   padding:10px 14px 12px!important;
   font-size:12.5px!important;
@@ -2338,9 +2337,8 @@ button{cursor:pointer}
 .live-panel #liveQuery{
   display:block!important;
   width:100%!important;
-  height:142px!important;
   min-height:142px!important;
-  max-height:205px!important;
+  max-height:560px!important;
   box-sizing:border-box!important;
 }
 
@@ -2911,3 +2909,4 @@ html[data-print] .graph-status{white-space:normal!important;line-height:1.3}
 .theta-similarity label.is-disabled{color:var(--muted);cursor:not-allowed;opacity:.6}
 .theta-similarity-note{flex-basis:100%;font-size:10.5px;color:var(--muted)}
 #kgGraph .generated-edge-label.grounding-score-label{fill:var(--kg-strong)}
+.attribute-row.attribute-head{position:sticky;top:0;z-index:1;background:var(--panel);padding-top:7px;padding-bottom:7px;font:600 9.5px/1.25 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}

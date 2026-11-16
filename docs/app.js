@@ -301,7 +301,7 @@
 
   function renderScenario(){
     const s=currentScenario();
-    const q=s.query.replace("{theta}",Number($("theta").value).toFixed(2)).replace("<model>",liveOn()?"<model:live>":"<model:…>");
+    const q=s.query.replace("{theta}",Number($("theta").value).toFixed(2)).replace("<model>",liveOn()?"<model:live>":(s.modelRef||"<model:…>"));
     $("queryName").textContent=s.name;
     $("query").innerHTML=hl(q);
     renderMode(q);
@@ -320,8 +320,8 @@
       $("attributeResult").hidden=true;
     }
     $("attributeResultTitle").textContent=s.generatedTitle||"Generated player positions";
-    $("attributeAccuracyLabel").textContent=s.metricLabel||"Accuracy vs P413";
-    $("attributeResultNote").textContent=s.note||"Accuracy vs P413 is the recorded gold-label evaluation metric. SPARQL alone is 0 because player position is omitted from this KG. The rows above are a small displayed sample, not the full evaluation set.";
+    $("attributeAccuracyLabel").textContent=s.metricLabel||"Correct among answered entities in Wikidata";
+    $("attributeResultNote").textContent=s.note||"";
 
     const executionLabel=liveOn()&&s.id==="entity"?"live":"pre-recorded";
     $("runModeDefault").textContent=executionLabel;
@@ -1806,7 +1806,11 @@ WHERE {
 }
 ORDER BY ?year`
     };
+    // The editor grows with the query, up to the maximum height of the stylesheet.
+    const fitEditor=()=>{editor.style.height="auto";editor.style.height=`${editor.scrollHeight+2}px`};
+    editor.addEventListener("input",fitEditor);
     editor.value=samples.playerPositionAndGoals;
+    requestAnimationFrame(fitEditor);
     editor.addEventListener("keydown",event=>{
       if(event.key==="Tab"){
         event.preventDefault();
@@ -1820,9 +1824,10 @@ ORDER BY ?year`
     $("loadSampleQuery").onclick=()=>{
       const key=$("liveSampleSelect")?.value||"playerPositionAndGoals";
       editor.value=samples[key]||samples.playerPositionAndGoals;
+      fitEditor();
       editor.focus();
     };
-    $("clearLiveQuery").onclick=()=>{editor.value="";editor.focus();$("liveQueryResult").hidden=true};
+    $("clearLiveQuery").onclick=()=>{editor.value="";fitEditor();editor.focus();$("liveQueryResult").hidden=true};
     $("liveRunBtn").onclick=async()=>{
       clearMessage();
       const btn=$("liveRunBtn");
@@ -4000,7 +4005,7 @@ ORDER BY ?year`
   }
 
 
-  function renderAttributeResult(rows,stat){
+  function renderAttributeResult(rows,stat,model){
     $("attributeResult").hidden=false;
     $("attributeAnswerRate").textContent=stat?.a||"—";
     $("attributeAccuracy").textContent=stat?.b||"—";
@@ -4015,7 +4020,13 @@ ORDER BY ?year`
     const others=r=>(r.others||[]).length
       ? `<span class="attribute-others">${r.others.map(o=>`${esc(o.model)}: ${esc(o.gen)} (${esc(o.state)})`).join(" · ")}</span>`
       : "";
-    $("attributeRows").innerHTML=rows.map(r=>`
+    // A header names the LLM of each column: the recorded model in the middle, the other
+    // recorded LLMs under each name, and the judgement against Wikidata on the right.
+    const otherModels=[...new Set(rows.flatMap(r=>(r.others||[]).map(o=>o.model)))];
+    const head=model
+      ? `<div class="attribute-row attribute-head"><span>Name${otherModels.length?` · below: ${esc(otherModels.join(", "))}`:""}</span><span>${esc(String(model).replace(/-A3B-Instruct-2507$|-Instruct-v0\.3$/,""))}</span><span>vs Wikidata</span></div>`
+      : "";
+    $("attributeRows").innerHTML=head+rows.map(r=>`
       <div class="attribute-row">
         <span class="attribute-player">${esc(r.name)}${others(r)}</span>
         <span class="attribute-generated-value">${esc(r.gen)}</span>
@@ -4260,7 +4271,7 @@ ORDER BY ?year`
   function executeAttribute(){
     const s=currentScenario();
     const rows=s.rows||[];
-    renderAttributeResult(rows,s.stat||{});
+    renderAttributeResult(rows,s.stat||{},s.recordedModel);
 
     const result=addGeneratedAttributeNodes(rows);
 
