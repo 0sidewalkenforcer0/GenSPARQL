@@ -31,6 +31,8 @@ python3 eval/www27/score.py eval/www27/results/Qwen_* eval/www27/results/mistral
 
 All models run at temperature 0 (the default of GENOP). Qwen3-8B runs with thinking turned off.
 
+The sbatch scripts are set up for the authors' Slurm cluster: the repository in `~/workspace/GenSPARQL-www27` (or `$REPO`), vLLM in the conda environment `~/.conda/envs/vllm`, JDK 21 and Maven in `~/tools`, the models in `~/hf_cache`, and the partitions `fastlane` and `slowlane`. On another cluster, change these lines first.
+
 E2 records the first LLM answer of each list query in `results/<model>/llm-records/` and replays it for the threshold runs. `job.sbatch` deletes these records before an E2 run, because a record that exists is loaded and replayed.
 
 The E1 records of 2026-11-03 contain rows whose value is `[]`: the service of that day bound an empty array to the single output variable instead of dropping the solution. `score.py` counts such a row as no answer, so the scores are those of the corrected engine. The E2 records contain the same rows for the two queries that Qwen3-30B and Qwen3-8B declined; the threshold runs at 0.5 and 0.6 map this value to entities, which `score.py` counts as wrong matches.
@@ -39,15 +41,18 @@ The E2 numbers of the paper come from `results/e2-replay-20261113/` (engine `47e
 
 The recorded mode of the workbench uses, for the embedding similarity, the scores in `results/e2-embedding-scores/` (cluster job 119666): `embed_texts.sbatch` embedded the 24 names of Mistral-7B and the labels of the 48 teams with bge-large-en-v1.5 on a CPU in float32, and `embedding_scores.py` computed the similarities as the similarity join does. At every threshold of E2 the teams that the scores reach are the teams of the embedding runs of the replay. The workbench draws only the best team of each name, which below 0.85 is fewer teams than the join returns (20 instead of 48 at 0.5).
 
-The planner measurement runs locally with the stub as the LLM, once with the service started as usual and once with `-Dgensparql.planner.reorder=false`:
+The planner measurement runs locally with the stub as the LLM, once with the service started as usual (label `reorder-on`) and once with `-Dgensparql.planner.reorder=false` (label `reorder-off`). The service started with `-f gensparql-server/pom.xml` takes the other modules from the local Maven repository, so `mvn install` comes first:
 
 ```
+mvn -q install -DskipTests
 python3 eval/www27/stub_llm.py 8089 &
 mvn -q -f gensparql-server/pom.xml exec:java -Dexec.mainClass=org.gensparql.server.GenSPARQLFuseki \
     -Dexec.args=8080 -Dgensparql.ui.dir=docs [-Dgensparql.planner.reorder=false] &
 python3 eval/www27/measure_calls.py --gs http://localhost:8080 --llm-base http://localhost:8089/v1 \
     --data docs --label reorder-on --out eval/www27/results
 ```
+
+Each run writes `planner-calls-<label>.json`. `results/planner-calls.json` combines the two runs of 2026-11-03 in one file (`calls_planner_on`, `calls_planner_off`).
 
 ## Details of the paper's evaluation
 
