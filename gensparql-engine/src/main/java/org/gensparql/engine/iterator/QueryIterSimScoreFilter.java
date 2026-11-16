@@ -93,39 +93,16 @@ public class QueryIterSimScoreFilter extends QueryIteratorBase {
         return result;
     }
 
+    /** The three values of a filter expression in SPARQL: true, false and an error. */
+    private enum Value { TRUE, FALSE, ERROR }
+
     /**
-     * Evaluate the filter expression with SimScore semantics for GEN types.
-     *
-     * @param binding current binding
-     * @return true if filter passes, false otherwise
+     * Evaluate the filter for a solution. A filter keeps the solution when its expression is
+     * true, and an error counts as false, as in SPARQL.
      */
     private boolean evaluateFilter(Binding binding) {
         try {
-            if (expr instanceof E_Equals || expr instanceof E_NotEquals) {
-                ExprFunction2 comparison = (ExprFunction2) expr;
-                EvalResult left = evaluateArg(comparison.getArg1(), binding);
-                EvalResult right = evaluateArg(comparison.getArg2(), binding);
-                // An unbound variable or an evaluation error makes the filter false, for = and
-                // for != alike, as in SPARQL. Negating the result of = would keep such rows.
-                if (left == null || right == null) {
-                    LOG.debug("Filter: unbound variable or evaluation error -> false");
-                    return false;
-                }
-                if (left.sourceType == SourceType.GEN || right.sourceType == SourceType.GEN) {
-                    boolean similar = similar(left, right);
-                    return expr instanceof E_Equals ? similar : !similar;
-                }
-                // Two terms of the graph compare as SPARQL compares them, by value.
-                return evaluateStandard(binding);
-            }
-
-            // For other expressions, use standard evaluation
-            return evaluateStandard(binding);
-
-        } catch (ExprEvalException e) {
-            // Variable not bound or evaluation error - return error state ε (filter to false)
-            LOG.debug("Filter evaluation: expr eval error - returning ε (false): {}", e.getMessage());
-            return false;
+            return value(expr, binding) == Value.TRUE;
         } catch (Exception e) {
             LOG.debug("Filter evaluation error: {}", e.getMessage());
             return false;
@@ -133,13 +110,64 @@ public class QueryIterSimScoreFilter extends QueryIteratorBase {
     }
 
     /**
+     * The value of an expression under the rule of Section 2.2 for a generated value. Wherever
+     * ?x = t, t = ?x, ?x != t or t != ?x occurs in the expression, also inside ||, && and !,
+     * and ?x holds a generated value: the comparison is true when the similarity of the value
+     * and a label of the term of t reaches the threshold of ?x, and false otherwise, and !=
+     * takes the opposite value. A generated variable whose value the similarity join mapped to
+     * an entity is compared as that entity. An unbound variable or an evaluation error is an
+     * error. ||, && and ! combine the values of their operands as SPARQL does, with errors, and
+     * every other expression is evaluated as in SPARQL.
+     */
+    private Value value(Expr e, Binding binding) {
+        if (e instanceof E_LogicalOr) {
+            Value a = value(((E_LogicalOr) e).getArg1(), binding);
+            Value b = value(((E_LogicalOr) e).getArg2(), binding);
+            if (a == Value.TRUE || b == Value.TRUE) {
+                return Value.TRUE;
+            }
+            return a == Value.FALSE && b == Value.FALSE ? Value.FALSE : Value.ERROR;
+        }
+        if (e instanceof E_LogicalAnd) {
+            Value a = value(((E_LogicalAnd) e).getArg1(), binding);
+            Value b = value(((E_LogicalAnd) e).getArg2(), binding);
+            if (a == Value.FALSE || b == Value.FALSE) {
+                return Value.FALSE;
+            }
+            return a == Value.TRUE && b == Value.TRUE ? Value.TRUE : Value.ERROR;
+        }
+        if (e instanceof E_LogicalNot) {
+            Value a = value(((E_LogicalNot) e).getArg(), binding);
+            return a == Value.TRUE ? Value.FALSE : (a == Value.FALSE ? Value.TRUE : Value.ERROR);
+        }
+        if (e instanceof E_Equals || e instanceof E_NotEquals) {
+            ExprFunction2 comparison = (ExprFunction2) e;
+            EvalResult left = evaluateArg(comparison.getArg1(), binding);
+            EvalResult right = evaluateArg(comparison.getArg2(), binding);
+            if (left == null || right == null) {
+                LOG.debug("Filter: unbound variable or evaluation error -> error");
+                return Value.ERROR;
+            }
+            if (left.sourceType == SourceType.GEN || right.sourceType == SourceType.GEN) {
+                boolean similar = similar(left, right);
+                return (e instanceof E_Equals) == similar ? Value.TRUE : Value.FALSE;
+            }
+        }
+        // Two terms of the graph, and every other expression, as SPARQL evaluates them.
+        return standard(e, binding);
+    }
+
+    /**
      * Whether two bound arguments, at least one of them generated, are similar: the
-     * similarity of the generated value and the other term reaches the threshold.
+     * similarity of the generated value and the other term reaches the threshold of the
+     * generated variable.
      */
     private boolean similar(EvalResult left, EvalResult right) {
         TypedValue tv1 = new TypedValue(left.node, left.sourceType);
         TypedValue tv2 = new TypedValue(right.node, right.sourceType);
-        Var thresholdVar = left.var != null ? left.var : (right.var != null ? right.var : Var.alloc("_filter"));
+        Var thresholdVar = left.sourceType == SourceType.GEN && left.var != null ? left.var
+                : right.sourceType == SourceType.GEN && right.var != null ? right.var
+                : left.var != null ? left.var : (right.var != null ? right.var : Var.alloc("_filter"));
         boolean result = simScoreEvaluator.evaluate(tv1, tv2, thresholdVar);
         LOG.debug("Filter similarity: {} ~ {} -> {}", left.node, right.node, result);
         return result;
@@ -173,16 +201,14 @@ public class QueryIterSimScoreFilter extends QueryIteratorBase {
         }
     }
 
-    /**
-     * Standard filter evaluation for non-equality expressions.
-     */
-    private boolean evaluateStandard(Binding binding) {
+    /** The effective boolean value of an expression, as SPARQL evaluates a filter. */
+    private Value standard(Expr e, Binding binding) {
         try {
-            NodeValue nv = expr.eval(binding, execCxt);
-            return nv.getBoolean();
-        } catch (ExprEvalException e) {
-            // Expression evaluation error - return false
-            return false;
+            NodeValue nv = e.eval(binding, execCxt);
+            return org.apache.jena.sparql.expr.nodevalue.XSDFuncOp.booleanEffectiveValue(nv)
+                    ? Value.TRUE : Value.FALSE;
+        } catch (ExprEvalException ex) {
+            return Value.ERROR;
         }
     }
 

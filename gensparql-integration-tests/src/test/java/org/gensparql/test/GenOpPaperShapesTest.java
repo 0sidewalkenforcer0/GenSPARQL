@@ -13,7 +13,9 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.sparql.util.Context;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
+import org.gensparql.core.similarity.JaccardSimText;
 import org.gensparql.engine.GenSPARQLConfig;
+import org.gensparql.engine.GenSPARQLConstants;
 import org.gensparql.engine.boot.GenSPARQL;
 import org.gensparql.llm.LLMProviderRegistry;
 import org.gensparql.llm.provider.MockLLMProvider;
@@ -31,10 +33,11 @@ import java.util.TreeMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Three shapes of Section 2.1 of the paper that the code review of 2026-11-16 found evaluated
- * otherwise (A8): an element of Qi that contains a GENOP of its own, two GENOPs with the same
- * output variable, and an OPTIONAL whose base-mode GENOP generates a variable that the required
- * part binds. Each test states the solutions of the translation of Section 2.1. The queries run
+ * Shapes of Section 2 of the paper that the code review of 2026-11-16 found evaluated otherwise.
+ * A8: an element of Qi that contains a GENOP of its own, two GENOPs with the same output
+ * variable, and an OPTIONAL whose base-mode GENOP generates a variable that the required part
+ * binds. A7: a comparison of a generated value inside ||, && and ! of a FILTER. Each test states
+ * the solutions that Section 2 defines. The queries run
  * as the HTTP service runs them (GenSPARQL.createQueryExecution with a MockLLMProvider). Without
  * a SIM_TEXT in the context the engine uses the mock's embeddings, so "similar" means equal up
  * to case here.
@@ -207,5 +210,66 @@ class GenOpPaperShapesTest {
                                 + ") BIND(true AS ?inA) }",
                         new MockLLMProvider().withDefaultResponse("[\"argentina\", \"Mexico\"]")));
         assertEquals(1, calls());
+    }
+
+    // ---- A comparison of a generated value inside ||, && and ! ----
+
+    private static Context jaccard() {
+        Context c = ARQ.getContext().copy();
+        c.set(GenSPARQLConstants.SIM_TEXT, new JaccardSimText());
+        return c;
+    }
+
+    /** The position of each player, written as the model writes it: capitalized. */
+    private static MockLLMProvider positions() {
+        return new MockLLMProvider().withResponse("Lionel", "[\"Forward\"]")
+                .withResponse("Kylian", "[\"Defender\"]").withResponse("Raul", "[\"Goalkeeper\"]");
+    }
+
+    /** The names of the players whose generated position passes the filter. */
+    private List<String> playersWhere(String filter) {
+        List<String> names = new ArrayList<>();
+        for (Map<String, String> r : run("?p a ex:Athlete . ?p rdfs:label ?name . "
+                + "GENOP(\"Which position does {?name} play?\", (?pos), " + M + ") FILTER(" + filter + ")",
+                positions(), jaccard())) {
+            names.add(r.get("name"));
+        }
+        return names;
+    }
+
+    @Test
+    void equalsAndNotEqualsCompareAGeneratedValueBySimilarity() {
+        // Jaccard compares the lower-case word sets, so "Defender" is similar to "defender".
+        assertEquals(List.of("Kylian Mbappe"), playersWhere("?pos = \"defender\""));
+        assertEquals(List.of("Kylian Mbappe"), playersWhere("\"defender\" = ?pos"));
+        assertEquals(List.of("Lionel Messi", "Raul Jimenez"), playersWhere("?pos != \"defender\""));
+    }
+
+    @Test
+    void aDisjunctionOfComparisonsComparesEachBySimilarity() {
+        assertEquals(List.of("Kylian Mbappe", "Raul Jimenez"),
+                playersWhere("?pos = \"defender\" || ?pos = \"goalkeeper\""));
+    }
+
+    @Test
+    void aNegatedComparisonIsTheOppositeOfTheComparison() {
+        assertEquals(List.of("Lionel Messi", "Raul Jimenez"), playersWhere("!(?pos = \"defender\")"));
+    }
+
+    @Test
+    void aConjunctionWithAnOrdinaryConditionCombinesBoth() {
+        assertEquals(List.of("Lionel Messi"),
+                playersWhere("?pos = \"forward\" && STRSTARTS(?name, \"L\")"));
+        assertEquals(List.of(),
+                playersWhere("?pos = \"forward\" && STRSTARTS(?name, \"K\")"));
+    }
+
+    @Test
+    void anUnboundOperandIsAnErrorThatTheLogicalOperatorsCombineAsSparqlDoes() {
+        // error || true is true, error || false is an error, and !error is an error; a filter
+        // keeps a solution only when its expression is true.
+        assertEquals(List.of("Kylian Mbappe"), playersWhere("?pos = ?unbound || ?pos = \"defender\""));
+        assertEquals(List.of(), playersWhere("!(?pos = ?unbound)"));
+        assertEquals(List.of(), playersWhere("?pos != ?unbound"));
     }
 }

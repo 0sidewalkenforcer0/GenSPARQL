@@ -746,15 +746,15 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
 
     /**
      * Filter the solutions by the expressions. Once a GENOP has generated values, {@code =} and
-     * {@code !=} compare a generated value by similarity, and every other expression is
-     * evaluated as in SPARQL. A FILTER of a group and the condition of a left join both go
+     * {@code !=} compare a generated value by similarity, also inside {@code ||}, {@code &&}
+     * and {@code !}, and every other expression is evaluated as in SPARQL. A FILTER of a group and the condition of a left join both go
      * through here.
      */
     private QueryIterator applyFilter(Iterable<org.apache.jena.sparql.expr.Expr> exprs,
                                       QueryIterator subIter, ExecutionContext execCxt) {
         boolean hasGenVars = hasGenVariables();
         for (org.apache.jena.sparql.expr.Expr expr : exprs) {
-            if (hasGenVars && isEqualityExpr(expr)) {
+            if (hasGenVars && comparesValues(expr)) {
                 LOG.debug("Using SimScoreFilter for expr: {}", expr);
                 subIter = new QueryIterSimScoreFilter(subIter, expr, newSimScoreEvaluator(execCxt),
                         sourceTypes, execCxt);
@@ -788,12 +788,23 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
     }
 
     /**
-     * Check if an expression is an equality or non-equality expression.
-     * These are the expressions that need SimScore semantics for GEN types.
+     * Whether an expression is = or !=, or combines one with ||, && or !: the expressions in which
+     * Section 2.2 compares a generated value by similarity.
      */
-    private boolean isEqualityExpr(org.apache.jena.sparql.expr.Expr expr) {
-        return expr instanceof org.apache.jena.sparql.expr.E_Equals ||
-               expr instanceof org.apache.jena.sparql.expr.E_NotEquals;
+    private static boolean comparesValues(org.apache.jena.sparql.expr.Expr expr) {
+        if (expr instanceof org.apache.jena.sparql.expr.E_Equals
+                || expr instanceof org.apache.jena.sparql.expr.E_NotEquals) {
+            return true;
+        }
+        if (expr instanceof org.apache.jena.sparql.expr.E_LogicalOr
+                || expr instanceof org.apache.jena.sparql.expr.E_LogicalAnd) {
+            org.apache.jena.sparql.expr.ExprFunction2 f = (org.apache.jena.sparql.expr.ExprFunction2) expr;
+            return comparesValues(f.getArg1()) || comparesValues(f.getArg2());
+        }
+        if (expr instanceof org.apache.jena.sparql.expr.E_LogicalNot) {
+            return comparesValues(((org.apache.jena.sparql.expr.E_LogicalNot) expr).getArg());
+        }
+        return false;
     }
 
     /**
