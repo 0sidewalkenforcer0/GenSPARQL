@@ -70,7 +70,10 @@ These details belong to Section 4 of the paper. Each can be recomputed from the 
 | National teams outside the tournament: Denmark, India, Italy, Peru, Republic of Ireland | 5 | Mistral-7B (teams) |
 | Carlos Barrios, who received no Nobel Prize | 1 | Mistral-7B (Physics laureates of 2020 to 2025) |
 
+**Declined list queries (E2).** Qwen3-30B and Qwen3-8B declined to list the teams and the Argentine squad: both answered these two list queries with an empty array, so they generated no names for them.
+
 **How the names were checked (E2).** `score.py` first matches each generated name against the English labels and aliases in Wikidata of the entities that the list query asks for (`gold/e2_entities.json`). The remaining names were checked by hand, and `gold/e2_manual.json` records each decision, with `null` for a name that denotes none of these entities.
 
 **A correct mapping of a wrong answer (E2).** Among the Physics laureates of 2020 to 2025, Qwen3-30B listed Kip Thorne (Physics, 2017) and Ben Feringa (Chemistry, 2016). At θ = 0.85 the embedding similarity maps both names to their entities in the graph, so the mapping is correct while the answer of the LLM is wrong. The Jaccard similarity maps only Ben Feringa, since the graph labels the other entity Kip S. Thorne.
 
+**The only wrong match at θ = 0.85 (E2).** With the embedding similarity at θ = 0.85, the similarity join maps 122 entities, and 121 of them are denoted by a generated name (`results/e2-replay-20261113/summary.json`). Mistral-7B listed George P. Smith (Chemistry, 2018, Q56868017, labelled George Smith in the graph) among the Physics laureates of 2020 to 2025, and the embedding similarity maps the name to that entity and also to George E. Smith (Physics, 2009, Q76373).
