@@ -1915,6 +1915,21 @@ ORDER BY ?year`
     };
     $("demoGroundText").onchange=()=>{$("groundText").checked=true;rebuild()};
     $("demoGroundEmbedding").onchange=()=>{$("groundEmbedding").checked=true;rebuild()};
+    syncDemoGrounding();
+  }
+
+  // The recorded embedding scores cover the World Cup teams only. Elsewhere the recorded mode
+  // offers Jaccard alone and says why.
+  function syncDemoGrounding(){
+    const embedding=$("demoGroundEmbedding");
+    if(!embedding)return;
+    const available=Boolean(window.RECORDED_RUNS?.wcEntity?.embedding)&&state.dbKey==="fifa2026";
+    embedding.disabled=!available;
+    embedding.closest("label")?.classList.toggle("is-disabled",!available);
+    $("demoGroundNote").hidden=available;
+    if(!available&&embedding.checked){
+      $("demoGroundText").checked=true;$("groundText").checked=true;
+    }
   }
 
   function syncGrounding(){
@@ -1927,6 +1942,8 @@ ORDER BY ?year`
     $("message").textContent=text;$("message").className="message show "+kind;
     const live=$("liveRunFeedback");
     if(live){live.textContent=text;live.className="live-run-feedback "+kind;}
+    // The recorded mode hides the live panel that holds both message areas.
+    if(pageMode==="demo"&&kind==="err")$("graphStatus").textContent=text;
   }
   function clearMessage(){
     $("message").className="message";$("message").textContent="";
@@ -1942,6 +1959,7 @@ ORDER BY ?year`
 
     state.graph=graphForInitialDisplay();
     state.resultIds.clear();state.contextIds.clear();state.selectedId=null;state.focusMode=false;state.tooltipPinnedId=null;
+    resetPointerFocus();
     state.compositionStageMeta=null;state.compositionStrategy=null;state.compositionStep=null;
 
     const svg=NativeGraph.select("#kgGraph");svg.selectAll("*").remove();
@@ -2002,6 +2020,7 @@ ORDER BY ?year`
     state.nodeSel.call(nodeDrag(staticNobelOverview));
     focusOnHover(state.nodeSel)
       .on("click",(e,d)=>{
+        if(clickAfterDrag(e))return;
         e.stopPropagation();
         if(state.graph?.nobelOverview&&d.type==="NobelField"){
           state.nobelExpandedField=state.nobelExpandedField===d.id?null:d.id;
@@ -2023,7 +2042,7 @@ ORDER BY ?year`
         applyClasses();
       });
 
-    svg.on("click",()=>{state.tooltipPinnedId=null;$("tooltip").hidden=true;state.selectedId=null;applyClasses()});
+    svg.on("click",e=>{if(clickAfterDrag(e))return;state.tooltipPinnedId=null;$("tooltip").hidden=true;state.selectedId=null;applyClasses()});
 
     state.simulation=NativeGraph.forceSimulation(state.graph.nodes)
       .force("link",NativeGraph.forceLink(state.graph.links).id(d=>d.id).distance(d=>d.source?.type==="Athlete"||d.target?.type==="Athlete"?20:40).strength(.78))
@@ -2493,7 +2512,18 @@ ORDER BY ?year`
   function makeElastic(sim,nodes){
     if(!INTERACTIVE)return false;
     const placed=nodes.filter(n=>n.fx!=null&&n.fy!=null);
-    if(!placed.length)return false;
+    if(!placed.length){
+      // A free layout has no anchors. A weak pull towards the centre, as the gravity of the
+      // Circular Factory explorer, holds its unconnected parts together, and a limited reach of
+      // the repulsion keeps distant parts from pushing each other out of view while a node is
+      // dragged.
+      const center=sim.force("center");
+      const cx=center&&typeof center.x==="function"?center.x():0,cy=center&&typeof center.y==="function"?center.y():0;
+      const charge=sim.force("charge");
+      if(charge&&charge.distanceMax)charge.distanceMax(260);
+      sim.force("gravityX",NativeGraph.forceX(cx).strength(.06)).force("gravityY",NativeGraph.forceY(cy).strength(.06));
+      return false;
+    }
     placed.forEach(n=>{n.ax=n.x=n.fx;n.ay=n.y=n.fy;n.fx=null;n.fy=null});
     const anchored=n=>n&&n.ax!=null;
     const link=sim.force("link");
@@ -2516,12 +2546,29 @@ ORDER BY ?year`
     return true;
   }
 
+  // The nodes under the pointer belong to the graph that was just removed: a removed element
+  // fires no mouseleave, so a kept hover id would dim the next view.
+  function resetPointerFocus(){
+    state.hoverId=null;state.dragId=null;state.dragStart=null;state.dragMoved=false;
+    if(state.classFrame){cancelAnimationFrame(state.classFrame);state.classFrame=0;}
+  }
+
+  // A press and release on a node also fires a click, which selects the node. After a drag
+  // that moved the node, that click is swallowed, so dragging does not select.
+  function clickAfterDrag(e){
+    if(!state.suppressClick)return false;
+    state.suppressClick=false;
+    e.stopPropagation();
+    return true;
+  }
+
   // Dragging reheats the simulation. A dropped node is released: in an anchored graph it springs
   // back with its neighbours, otherwise the forces place it, or it stays pinned while query
   // results are focused.
   function nodeDrag(staticLayout=false){
     return NativeGraph.drag()
       .on("start",(e,d)=>{
+        state.dragStart={x:e.x,y:e.y};state.dragMoved=false;
         if((INTERACTIVE||!staticLayout)&&!e.active){
           // At full heat at once, so that the neighbours follow from the first move.
           if(INTERACTIVE)state.simulation.alpha(Math.max(state.simulation.alpha(),.3));
@@ -2530,8 +2577,16 @@ ORDER BY ?year`
         d.fx=d.x;d.fy=d.y;
         if(INTERACTIVE){state.dragId=d.id;scheduleClasses()}
       })
-      .on("drag",(e,d)=>{d.fx=e.x;d.fy=e.y})
+      .on("drag",(e,d)=>{
+        d.fx=e.x;d.fy=e.y;
+        if(state.dragStart&&Math.hypot(e.x-state.dragStart.x,e.y-state.dragStart.y)>3)state.dragMoved=true;
+      })
       .on("end",(e,d)=>{
+        if(INTERACTIVE&&state.dragMoved){
+          state.suppressClick=true;
+          setTimeout(()=>{state.suppressClick=false},0);
+        }
+        state.dragStart=null;state.dragMoved=false;
         if(!INTERACTIVE&&staticLayout){state.simulation.stop();tick();return}
         if(!e.active)state.simulation.alphaTarget(0);
         if(INTERACTIVE){state.dragId=null;scheduleClasses()}
@@ -2998,6 +3053,7 @@ ORDER BY ?year`
     // Update style only: no node rerender, no simulation, no auto-fit.
     state.nodeSel.attr("class",d=>nodeClass(d));
     state.linkSel.attr("class",d=>linkClass(d));
+    applyClasses();
     state.nodeSel.selectAll(".similarity-box")
       .attr("class",d=>"similarity-box "+(d.grounded?"pass":"fail"));
 
@@ -4089,6 +4145,7 @@ ORDER BY ?year`
     const graphSnapshot=state.graph;
     const svg=NativeGraph.select("#kgGraph");
     svg.selectAll("*").remove();
+    resetPointerFocus();
 
     const width=$("graphStage").clientWidth||760;
     const height=$("graphStage").clientHeight||570;
@@ -4144,6 +4201,7 @@ ORDER BY ?year`
     state.nodeSel.call(nodeDrag());
     focusOnHover(state.nodeSel)
       .on("click",(e,d)=>{
+        if(clickAfterDrag(e))return;
         e.stopPropagation();
         if(d.compositionPosNode){
           state.tooltipPinnedId=state.tooltipPinnedId===d.id?null:d.id;
@@ -4160,7 +4218,7 @@ ORDER BY ?year`
         applyClasses();
       });
 
-    svg.on("click",()=>{state.tooltipPinnedId=null;$("tooltip").hidden=true;state.selectedId=null;applyClasses()});
+    svg.on("click",e=>{if(clickAfterDrag(e))return;state.tooltipPinnedId=null;$("tooltip").hidden=true;state.selectedId=null;applyClasses()});
 
     state.simulation=NativeGraph.forceSimulation(graphSnapshot.nodes)
       .force("link",NativeGraph.forceLink(graphSnapshot.links).id(d=>d.id)
@@ -4248,6 +4306,7 @@ ORDER BY ?year`
       renderTabs(true);
       renderScenario();
       syncPreRecordedVisibility();
+      syncDemoGrounding();
     }
     initGraph();
   }

@@ -2908,3 +2908,5 @@ html[data-print] .graph-status{white-space:normal!important;line-height:1.3}
 #kgGraph.zoom-near .node.type-Athlete text{display:block}
 #kgGraph.zoom-far .node:not(.inspect):not(.neighbor):not(.query-result):not(.type-Team):not(.type-Group):not(.type-NobelPrize):not(.type-NobelField) text{opacity:0}
 .graph-controls button[aria-pressed="true"]{background:var(--kg-soft);border-color:var(--kg);color:var(--kg)}
+.theta-similarity label.is-disabled{color:var(--muted);cursor:not-allowed;opacity:.6}
+.theta-similarity-note{flex-basis:100%;font-size:10.5px;color:var(--muted)}

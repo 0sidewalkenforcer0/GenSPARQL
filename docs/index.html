@@ -6,7 +6,7 @@
   <title>GenSPARQL · Interactive KG Explorer</title>
   <meta name="description" content="GenSPARQL interactive demo with the World Cup 2026 knowledge graph.">
   <script src="page-mode.js?v=20261103-1"></script>
-  <link rel="stylesheet" href="styles.css?v=20261116-3">
+  <link rel="stylesheet" href="styles.css?v=20261116-4">
 
 </head>
 <body>
@@ -87,6 +87,7 @@
               <span>Similarity</span>
               <label><input type="radio" name="demoGroundMethod" id="demoGroundText" value="text" checked> Jaccard</label>
               <label><input type="radio" name="demoGroundMethod" id="demoGroundEmbedding" value="embedding"> Embedding (bge-large-en-v1.5, recorded)</label>
+              <span class="theta-similarity-note" id="demoGroundNote" hidden>Recorded embedding scores cover the World Cup teams only.</span>
             </div>
           </div>
 
@@ -355,6 +356,6 @@
   <script src="nobel-prize-data.js?v=20260826-1"></script>
   <script src="database-adapters.js?v=20260826-2"></script>
   <script src="engine-client.js?v=20260903-1"></script>
-  <script src="app.js?v=20261116-7"></script>
+  <script src="app.js?v=20261116-8"></script>
 </body>
 </html>
