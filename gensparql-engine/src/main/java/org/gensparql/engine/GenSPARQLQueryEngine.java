@@ -786,7 +786,10 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
 
         // Execute right side (e.g., OpGenerate) independently with empty binding
         // For base mode GENOP, it doesn't need input bindings
-        // Clear sourceTypes before executing right side to get fresh GEN types
+        // Clear sourceTypes before executing right side to get fresh GEN types, and restore the
+        // types registered before afterwards: a FILTER above still needs to know which of its
+        // variables an earlier GENOP generated.
+        Map<Var, SourceType> registered = new HashMap<>(sourceTypes);
         sourceTypes.clear();
         QueryIterator rightIter = executeOp(rightOp,
                 QueryIterRoot.create(org.apache.jena.sparql.engine.binding.BindingFactory.empty(), execCxt), execCxt);
@@ -797,6 +800,7 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
         collectGeneratingSide(rightOp, generating);
         keepOnlyCurrentOutputs(rightTypes, generating, leftOp);
         rightTypes.keySet().removeAll(patternBoundVars(rightOp));
+        registered.forEach(sourceTypes::putIfAbsent);
 
         LOG.debug("executeSimJoinForSequence: leftTypes={}, rightTypes={}", leftTypes, rightTypes);
 
@@ -945,10 +949,12 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
     }
 
     /**
-     * The variables that a graph pattern or VALUES of the operator binds, outside its GENOPs. An
-     * output variable among them has been joined with the graph on that side, as in a group
-     * whose GENOP and patterns form Ti, so its values are terms of the graph, compared by
-     * equality.
+     * The variables that a graph pattern or VALUES binds on the path along which a side passes its
+     * solutions on (as {@link #collectGeneratingSide} walks it: joins, sequences, filters, BIND, the
+     * required part of OPTIONAL and the left side of MINUS), outside its GENOPs. An output variable
+     * among them has been joined with the graph on that side, as in a group whose GENOP and
+     * patterns form Ti, so its values are terms of the graph, compared by equality. An optional
+     * part or the right side of MINUS does not bind the solutions that come out.
      */
     private static Set<Var> patternBoundVars(Op op) {
         Set<Var> vars = new HashSet<>();
@@ -957,24 +963,27 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
     }
 
     private static void collectPatternBoundVars(Op op, Set<Var> out) {
-        if (op instanceof OpGenerate) {
-            return;
-        }
         if (op instanceof org.apache.jena.sparql.algebra.op.OpBGP
                 || op instanceof org.apache.jena.sparql.algebra.op.OpTriple
                 || op instanceof org.apache.jena.sparql.algebra.op.OpPath
                 || op instanceof org.apache.jena.sparql.algebra.op.OpQuadPattern
                 || op instanceof OpTable) {
             out.addAll(org.apache.jena.sparql.algebra.OpVars.mentionedVars(op));
-        } else if (op instanceof org.apache.jena.sparql.algebra.op.Op1) {
-            collectPatternBoundVars(((org.apache.jena.sparql.algebra.op.Op1) op).getSubOp(), out);
-        } else if (op instanceof org.apache.jena.sparql.algebra.op.Op2) {
-            collectPatternBoundVars(((org.apache.jena.sparql.algebra.op.Op2) op).getLeft(), out);
-            collectPatternBoundVars(((org.apache.jena.sparql.algebra.op.Op2) op).getRight(), out);
-        } else if (op instanceof org.apache.jena.sparql.algebra.op.OpN) {
-            for (Op e : ((org.apache.jena.sparql.algebra.op.OpN) op).getElements()) {
+        } else if (op instanceof OpJoin) {
+            collectPatternBoundVars(((OpJoin) op).getLeft(), out);
+            collectPatternBoundVars(((OpJoin) op).getRight(), out);
+        } else if (op instanceof OpSequence) {
+            for (Op e : ((OpSequence) op).getElements()) {
                 collectPatternBoundVars(e, out);
             }
+        } else if (op instanceof OpFilter) {
+            collectPatternBoundVars(((OpFilter) op).getSubOp(), out);
+        } else if (op instanceof org.apache.jena.sparql.algebra.op.OpExtend) {
+            collectPatternBoundVars(((org.apache.jena.sparql.algebra.op.OpExtend) op).getSubOp(), out);
+        } else if (op instanceof OpLeftJoin) {
+            collectPatternBoundVars(((OpLeftJoin) op).getLeft(), out);
+        } else if (op instanceof org.apache.jena.sparql.algebra.op.OpMinus) {
+            collectPatternBoundVars(((org.apache.jena.sparql.algebra.op.OpMinus) op).getLeft(), out);
         }
     }
 

@@ -149,8 +149,11 @@ public class SimScoreEvaluator {
             return false;
         }
 
-        // Case 1: Both RDF - require exact match
-        if (tv1.isRdf() && tv2.isRdf()) {
+        // Case 1: no generated value on either side - require exact match. A value of an output
+        // variable that is an IRI or a blank node was mapped to the graph (a generated value is a
+        // literal), so it is compared as a term of the graph, e.g. FILTER(?team = wd:Q79800)
+        // after the similarity join.
+        if (!isGenerated(tv1) && !isGenerated(tv2)) {
             boolean match = tv1.getNode().equals(tv2.getNode());
             LOG.debug("SimScore var=?{} | RDF×RDF | v1=\"{}\" vs v2=\"{}\" | exact={} -> {}",
                 var.getName(), tv1.getLexicalForm(), tv2.getLexicalForm(), match, match ? "PASS" : "FAIL");
@@ -159,8 +162,8 @@ public class SimScoreEvaluator {
 
         double threshold = thresholdRegistry.getThreshold(var);
 
-        // Case 2: Both GEN - use SimText on lexical forms
-        if (tv1.isGen() && tv2.isGen()) {
+        // Case 2: Both generated - use SimText on lexical forms
+        if (isGenerated(tv1) && isGenerated(tv2)) {
             String lex1 = CanonicalForm.lex(tv1.getNode());
             String lex2 = CanonicalForm.lex(tv2.getNode());
             double similarity = simText.similarity(lex1, lex2);
@@ -170,9 +173,9 @@ public class SimScoreEvaluator {
             return pass;
         }
 
-        // Case 3: Mixed types - the generated value against every label of the RDF node
-        Node rdfNode = tv1.isRdf() ? tv1.getNode() : tv2.getNode();
-        String generated = CanonicalForm.lex(tv1.isRdf() ? tv2.getNode() : tv1.getNode());
+        // Case 3: Mixed - the generated value against every label of the other term
+        Node rdfNode = isGenerated(tv1) ? tv2.getNode() : tv1.getNode();
+        String generated = CanonicalForm.lex(isGenerated(tv1) ? tv1.getNode() : tv2.getNode());
         double similarity = bestSimilarity(rdfNode, generated);
         boolean pass = similarity >= threshold;
         LOG.debug("SimScore var=?{} | RDF×GEN | labels={} vs gen=\"{}\" | sim={} threshold={} -> {}",
@@ -193,22 +196,31 @@ public class SimScoreEvaluator {
             return 0.0;
         }
 
-        // Both RDF - exact match or not
-        if (tv1.isRdf() && tv2.isRdf()) {
+        // No generated value - exact match or not
+        if (!isGenerated(tv1) && !isGenerated(tv2)) {
             return tv1.getNode().equals(tv2.getNode()) ? 1.0 : 0.0;
         }
 
-        // Both GEN - compare lexical forms
-        if (tv1.isGen() && tv2.isGen()) {
+        // Both generated - compare lexical forms
+        if (isGenerated(tv1) && isGenerated(tv2)) {
             String lex1 = CanonicalForm.lex(tv1.getNode());
             String lex2 = CanonicalForm.lex(tv2.getNode());
             return simText.similarity(lex1, lex2);
         }
 
-        // Mixed - the generated value against every label of the RDF node
-        Node rdfNode = tv1.isRdf() ? tv1.getNode() : tv2.getNode();
-        String generated = CanonicalForm.lex(tv1.isRdf() ? tv2.getNode() : tv1.getNode());
+        // Mixed - the generated value against every label of the other term
+        Node rdfNode = isGenerated(tv1) ? tv2.getNode() : tv1.getNode();
+        String generated = CanonicalForm.lex(isGenerated(tv1) ? tv1.getNode() : tv2.getNode());
         return bestSimilarity(rdfNode, generated);
+    }
+
+    /**
+     * Whether a value is generated: typed GEN and a literal. An LLM generates string literals, so
+     * an IRI or blank node of an output variable is the term of the graph that a similarity join
+     * mapped the generated value to.
+     */
+    public static boolean isGenerated(TypedValue tv) {
+        return tv != null && tv.isGen() && tv.getNode() != null && tv.getNode().isLiteral();
     }
 
     /**

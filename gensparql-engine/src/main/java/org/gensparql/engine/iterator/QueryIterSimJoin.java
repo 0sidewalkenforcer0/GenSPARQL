@@ -280,7 +280,7 @@ public class QueryIterSimJoin extends QueryIteratorBase {
         if (tv == null || tv.getNode() == null) {
             return null;
         }
-        return tv.isGen() ? CanonicalForm.lex(tv.getNode()) : simScoreEvaluator.canon(tv.getNode());
+        return SimScoreEvaluator.isGenerated(tv) ? CanonicalForm.lex(tv.getNode()) : simScoreEvaluator.canon(tv.getNode());
     }
 
     /**
@@ -292,7 +292,7 @@ public class QueryIterSimJoin extends QueryIteratorBase {
         if (tv == null || tv.getNode() == null) {
             return List.of();
         }
-        return tv.isGen() ? List.of(CanonicalForm.lex(tv.getNode())) : simScoreEvaluator.canonAll(tv.getNode());
+        return SimScoreEvaluator.isGenerated(tv) ? List.of(CanonicalForm.lex(tv.getNode())) : simScoreEvaluator.canonAll(tv.getNode());
     }
 
     /**

@@ -118,7 +118,8 @@ public class AlgebraGeneratorGenSPARQL {
      * var(e) is every variable that occurs in an element, also in a nested pattern or expression.
      * <ul>
      *   <li>R holds the FILTERs, the GENOPs, and each OPTIONAL, MINUS and BIND whose var(e)
-     *       contains an output variable;</li>
+     *       contains an output variable or a variable of an earlier element that contains one or
+     *       belongs to R, since such an element reads solutions that exist only after G1;</li>
      *   <li>Q0 holds every other element whose var(e) contains no output variable, and Qi every
      *       other element whose var(e) meets v̄i and none of the later v̄i+1, ..., v̄n.</li>
      * </ul>
@@ -161,6 +162,10 @@ public class AlgebraGeneratorGenSPARQL {
             q.add(new ArrayList<>());
         }
         Set<Element> built = Collections.newSetFromMap(new IdentityHashMap<>());
+        // The variables of the earlier elements that contain an output variable or belong to R.
+        // An OPTIONAL, MINUS or BIND that reads one of them depends on an element evaluated after
+        // G1, so it belongs to R as well and keeps its place after that element.
+        Set<Var> afterG1 = new HashSet<>();
         for (Element e : original) {
             if (e instanceof ElementGenerate) {
                 continue;
@@ -171,9 +176,11 @@ public class AlgebraGeneratorGenSPARQL {
                 List<org.apache.jena.sparql.core.TriplePath> patterns = patternsOf(e);
                 ElementPathBlock independent = new ElementPathBlock();
                 for (org.apache.jena.sparql.core.TriplePath tp : patterns) {
-                    int last = lastGenop(varsOf(tp), outputs);
+                    Set<Var> vars = varsOf(tp);
+                    int last = lastGenop(vars, outputs);
                     if (last >= 0) {
                         addPattern(q.get(last), tp, built);
+                        afterG1.addAll(vars);
                     } else {
                         independent.addTriplePath(tp);
                     }
@@ -184,13 +191,18 @@ public class AlgebraGeneratorGenSPARQL {
                     q0.add(independent);
                 }
             } else {
-                int last = lastGenop(varsOf(e), outputs);
-                if (last < 0) {
-                    q0.add(e);
-                } else if (e instanceof ElementOptional || e instanceof ElementMinus || e instanceof ElementBind) {
+                Set<Var> vars = varsOf(e);
+                int last = lastGenop(vars, outputs);
+                boolean orderSensitive = e instanceof ElementOptional || e instanceof ElementMinus
+                        || e instanceof ElementBind;
+                if (orderSensitive && (last >= 0 || !Collections.disjoint(vars, afterG1))) {
                     rest.add(e);
+                    afterG1.addAll(vars);
+                } else if (last < 0) {
+                    q0.add(e);
                 } else {
                     q.get(last).add(e);
+                    afterG1.addAll(vars);
                 }
             }
         }
