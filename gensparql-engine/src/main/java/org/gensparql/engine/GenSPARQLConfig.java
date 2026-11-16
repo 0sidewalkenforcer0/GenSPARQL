@@ -31,6 +31,12 @@ public class GenSPARQLConfig {
     // (AlgebraGeneratorGenSPARQL). Off, a query keeps the order in which it is written.
     private static boolean genopReorderEnabled = true;
 
+    /** The default threshold θ0 unless the property gensparql.theta0 sets another. */
+    public static final double DEFAULT_THETA0 = 0.85;
+    // The default threshold θ0 of Section 2.1 of the paper: the threshold of a GENOP that names
+    // none.
+    private static volatile double defaultThreshold = DEFAULT_THETA0;
+
     // Timing configuration
     private static boolean timingEnabled = true;
     private static boolean verboseLogging = false;
@@ -195,6 +201,27 @@ public class GenSPARQLConfig {
      */
     public static void setGenopReorderEnabled(boolean enabled) {
         genopReorderEnabled = enabled;
+    }
+
+    /**
+     * The default threshold θ0: the threshold of a GENOP that names none (Section 2.1 of the
+     * paper). It is 0.85 unless the system property gensparql.theta0 or
+     * {@link #setDefaultThreshold} sets another value, and every query execution reads it.
+     */
+    public static double getDefaultThreshold() {
+        return defaultThreshold;
+    }
+
+    /**
+     * Set the default threshold θ0.
+     *
+     * @throws IllegalArgumentException if the value is not in [0, 1]
+     */
+    public static void setDefaultThreshold(double theta0) {
+        if (!(theta0 >= 0.0 && theta0 <= 1.0)) {
+            throw new IllegalArgumentException("The default threshold must be in [0, 1], got: " + theta0);
+        }
+        defaultThreshold = theta0;
     }
 
     /**
@@ -368,6 +395,8 @@ public class GenSPARQLConfig {
      * - gensparql.batch.maxTokens=8000
      * - gensparql.timing.enabled=true|false
      * - gensparql.verbose=true|false
+     * - gensparql.planner.reorder=true|false
+     * - gensparql.theta0=0.85 (the default threshold θ0; an invalid value keeps 0.85)
      */
     public static void loadFromSystemProperties() {
         // Caching
@@ -431,6 +460,17 @@ public class GenSPARQLConfig {
         String reorder = System.getProperty("gensparql.planner.reorder");
         if (reorder != null) {
             genopReorderEnabled = Boolean.parseBoolean(reorder);
+        }
+
+        String theta0 = System.getProperty("gensparql.theta0");
+        if (theta0 != null) {
+            try {
+                setDefaultThreshold(Double.parseDouble(theta0.trim()));
+            } catch (IllegalArgumentException e) {
+                defaultThreshold = DEFAULT_THETA0;
+                System.err.println("Invalid gensparql.theta0 (a number in [0, 1]): " + theta0
+                        + ", using " + DEFAULT_THETA0);
+            }
         }
 
         // Timing
@@ -509,6 +549,7 @@ public class GenSPARQLConfig {
         batchDedupEnabled = false;
         costBasedPlanningEnabled = false;
         genopReorderEnabled = true;
+        defaultThreshold = DEFAULT_THETA0;
         timingEnabled = true;
         verboseLogging = false;
         constrainedGenerationEnabled = false;

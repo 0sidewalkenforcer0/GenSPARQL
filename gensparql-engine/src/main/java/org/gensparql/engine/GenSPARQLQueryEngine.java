@@ -173,6 +173,8 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
             registry = new ThresholdRegistry();
             execCxt.getContext().set(GenSPARQLConstants.THRESHOLD_REGISTRY, registry);
         }
+        // A GENOP without a threshold of its own takes the default threshold θ0.
+        registry.setDefaultThreshold(GenSPARQLConfig.getDefaultThreshold());
         return registry;
     }
 

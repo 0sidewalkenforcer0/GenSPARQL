@@ -158,9 +158,9 @@ public class GenSPARQL {
     private static void setDefaultConfiguration() {
         Context context = ARQ.getContext();
 
-        // Default similarity threshold for soft joins
+        // The default threshold θ0, which GenSPARQLConfig keeps
         if (!context.isDefined(SIM_THRESHOLD)) {
-            context.set(SIM_THRESHOLD, 0.85);
+            context.set(SIM_THRESHOLD, GenSPARQLConfig.getDefaultThreshold());
         }
 
         LOG.debug("Default configuration set");
@@ -208,25 +208,24 @@ public class GenSPARQL {
     }
 
     /**
-     * Set the default similarity threshold for soft joins.
+     * Set the default threshold θ0, the threshold of a GENOP that names none, for the queries
+     * that run afterwards. The same as the system property gensparql.theta0.
      *
      * @param threshold threshold value (0.0 to 1.0)
      */
     public static void setSimilarityThreshold(double threshold) {
         ensureInitialized();
-        if (threshold < 0 || threshold > 1) {
-            throw new IllegalArgumentException("Threshold must be between 0 and 1");
-        }
+        GenSPARQLConfig.setDefaultThreshold(threshold);
         ARQ.getContext().set(SIM_THRESHOLD, threshold);
-        LOG.debug("Set similarity threshold to: {}", threshold);
+        LOG.debug("Set the default threshold to: {}", threshold);
     }
 
     /**
-     * Get the similarity threshold.
+     * Get the default threshold θ0.
      */
     public static double getSimilarityThreshold() {
         ensureInitialized();
-        return ARQ.getContext().get(SIM_THRESHOLD, 0.85);
+        return GenSPARQLConfig.getDefaultThreshold();
     }
 
     private static void ensureInitialized() {

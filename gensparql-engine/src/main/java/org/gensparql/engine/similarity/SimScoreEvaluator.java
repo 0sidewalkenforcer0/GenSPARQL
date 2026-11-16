@@ -67,6 +67,8 @@ public class SimScoreEvaluator {
             registry = new ThresholdRegistry();
             cxt.set(org.gensparql.engine.GenSPARQLConstants.THRESHOLD_REGISTRY, registry);
         }
+        // A GENOP without a threshold of its own takes the default threshold θ0.
+        registry.setDefaultThreshold(org.gensparql.engine.GenSPARQLConfig.getDefaultThreshold());
         SimText simText = cxt.get(org.gensparql.engine.GenSPARQLConstants.SIM_TEXT);
         if (simText == null) {
             simText = new org.gensparql.core.similarity.JaccardSimText();
