@@ -41,6 +41,10 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
     // Track source types for variables across the query execution
     private final Map<Var, SourceType> sourceTypes = new ConcurrentHashMap<>();
 
+    // The output variables of base-mode GENOPs that the solution an optional part is evaluated
+    // for already binds, see the OPTIONAL case of executeOp.
+    private Set<Var> outputsBoundByInput = Set.of();
+
     public GenSPARQLQueryEngine(Op op, DatasetGraph dataset, Binding input, Context context) {
         super(op, dataset, input, context);
         LOG.debug("[DEBUG GenSPARQLQueryEngine CONSTRUCTOR] Op: " + op.getClass().getSimpleName());
@@ -247,13 +251,29 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
             OpJoin opJoin = (OpJoin) op;
 
             boolean simEnabled = isSimJoinEnabled(execCxt);
+
+            // A later GENOP whose output variable an earlier GENOP of the group already binds
+            // extends the solutions of the earlier one (Section 2.1): it compares its values with
+            // the bound ones by similarity and keeps their terms, and its Qi then maps them. The
+            // right side is therefore evaluated over the solutions of the left side, and so is
+            // the GENOP of a GENOP-and-Qi join there.
+            if (simEnabled && laterGenopSharesOutput(opJoin)) {
+                QueryIterator left = executeOp(opJoin.getLeft(), input, execCxt);
+                Op right = opJoin.getRight();
+                if (right instanceof OpJoin && mapsGeneratedOutput((OpJoin) right)) {
+                    return executeGeneratingSideSimJoin(((OpJoin) right).getLeft(),
+                            ((OpJoin) right).getRight(), left, execCxt);
+                }
+                return executeOp(right, left, execCxt);
+            }
+
             boolean needs = needsSimJoin(opJoin);
             LOG.debug("OpJoin: simJoinEnabled={}, needsSimJoin={}", simEnabled, needs);
 
             // Check if similarity join is needed (when GEN variables are involved)
             if (simEnabled && needs) {
                 LOG.debug("Using similarity join for OpJoin");
-                if (isGeneratingSideSimJoin(opJoin)) {
+                if (isGeneratingSideSimJoin(opJoin) || isQiWithGenop(opJoin)) {
                     return executeGeneratingSideSimJoin(opJoin.getLeft(), opJoin.getRight(), input, execCxt);
                 }
                 return executeSimJoin(opJoin, input, execCxt);
@@ -500,12 +520,30 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
             org.apache.jena.sparql.expr.ExprList exprs = opLeftJoin.getExprs();
             QueryIterator required = executeOp(opLeftJoin.getLeft(), input, execCxt);
             java.util.function.Function<Binding, QueryIterator> extensions;
-            if (planContains(optional, g -> !g.isBaseMode())) {
+            // A base-mode GENOP whose output variable the required part binds extends each
+            // solution of it (Section 2.1): its values are compared with the bound term by
+            // similarity, so the optional part starts from that solution as well.
+            Set<Var> requiredVars = org.apache.jena.sparql.algebra.OpVars.visibleVars(opLeftJoin.getLeft());
+            Set<Var> boundOutputs = new HashSet<>();
+            for (OpGenerate g : allGenerate(optional)) {
+                if (g.isBaseMode()) {
+                    g.getOutputVariables().stream().filter(requiredVars::contains).forEach(boundOutputs::add);
+                }
+            }
+            if (planContains(optional, g -> !g.isBaseMode()) || !boundOutputs.isEmpty()) {
                 // The prompt of a context-mode GENOP names variables of the required part, so
                 // the optional part is evaluated once for every solution, starting from it.
-                extensions = b -> executeOp(optional,
-                        org.apache.jena.sparql.engine.iterator.QueryIterSingleton.create(b, execCxt),
-                        execCxt);
+                extensions = b -> {
+                    Set<Var> saved = outputsBoundByInput;
+                    outputsBoundByInput = boundOutputs;
+                    try {
+                        return executeOp(optional,
+                                org.apache.jena.sparql.engine.iterator.QueryIterSingleton.create(b, execCxt),
+                                execCxt);
+                    } finally {
+                        outputsBoundByInput = saved;
+                    }
+                };
             } else {
                 // No context-mode GENOP: the optional part reads nothing from the required part.
                 // It is evaluated once, as SPARQL evaluates an optional part, so each base-mode
@@ -582,8 +620,20 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
      * </ul>
      */
     private boolean needsSimJoin(OpJoin opJoin) {
+        // In an optional part evaluated for a solution of the required part, a base-mode GENOP
+        // whose output that solution binds extends the solution (Section 2.1), so the join
+        // passes the solutions on instead of evaluating the GENOP on its own.
+        if (!outputsBoundByInput.isEmpty() && planContains(opJoin, g -> g.isBaseMode()
+                && !Collections.disjoint(g.getOutputVariables(), outputsBoundByInput))) {
+            LOG.debug("needsSimJoin: false (a base-mode GENOP whose output the input binds)");
+            return false;
+        }
         if (isGeneratingSideSimJoin(opJoin)) {
             LOG.debug("needsSimJoin: true (GENOP side and patterns that mention its output)");
+            return true;
+        }
+        if (isQiWithGenop(opJoin)) {
+            LOG.debug("needsSimJoin: true (Qi of a GENOP with a GENOP of its own)");
             return true;
         }
         boolean leftHasBaseGenOp = containsBaseGenOp(opJoin.getLeft());
@@ -882,10 +932,12 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                                                        ExecutionContext execCxt) {
         LOG.debug("executeGeneratingSideSimJoin: generating={}, patterns={}",
                 generatingOp.getClass().getSimpleName(), patternOp.getClass().getSimpleName());
-        Map<Var, SourceType> registered = new HashMap<>(sourceTypes);
         QueryIterator patterns = executeOp(patternOp,
                 QueryIterRoot.create(org.apache.jena.sparql.engine.binding.BindingFactory.empty(), execCxt),
                 execCxt);
+        // Taken after the pattern side, so that the outputs of a GENOP in it, as in a nested
+        // group of Qi, stay registered for the filters above.
+        Map<Var, SourceType> registered = new HashMap<>(sourceTypes);
 
         sourceTypes.clear();
         List<Binding> generated = new ArrayList<>();
@@ -917,6 +969,68 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
         return new QueryIterSimJoin(patterns,
                 org.apache.jena.sparql.engine.iterator.QueryIterPlainWrapper.create(generated.iterator(), execCxt),
                 newSimScoreEvaluator(execCxt), new HashMap<>(), generatedTypes, execCxt);
+    }
+
+    /** Every GENOP in the plan, walking by arity as {@link #planContains} does. */
+    private static List<OpGenerate> allGenerate(Op op) {
+        List<OpGenerate> out = new ArrayList<>();
+        planContains(op, g -> {
+            out.add(g);
+            return false;
+        });
+        return out;
+    }
+
+    /** The output variables of the GENOPs whose solutions a side passes on. */
+    private static Set<Var> generatedOutputs(Op side) {
+        List<OpGenerate> generating = new ArrayList<>();
+        collectGeneratingSide(side, generating);
+        Set<Var> outputs = new HashSet<>();
+        generating.forEach(g -> outputs.addAll(g.getOutputVariables()));
+        return outputs;
+    }
+
+    /**
+     * Whether the right side holds a GENOP with an output variable of a GENOP that the left side
+     * passes on: two GENOPs of a group with the same output variable, the later one on the right.
+     */
+    private static boolean laterGenopSharesOutput(OpJoin opJoin) {
+        Set<Var> outputs = generatedOutputs(opJoin.getLeft());
+        return !outputs.isEmpty() && planContains(opJoin.getRight(),
+                g -> !Collections.disjoint(g.getOutputVariables(), outputs));
+    }
+
+    /**
+     * Whether the join is a GENOP side and a side without GENOP that mentions an output variable
+     * of a GENOP on the GENOP side, in either mode.
+     */
+    private static boolean mapsGeneratedOutput(OpJoin opJoin) {
+        if (planContainsGenOp(opJoin.getRight())) {
+            return false;
+        }
+        Set<Var> mentioned = org.apache.jena.sparql.algebra.OpVars.visibleVars(opJoin.getRight());
+        return !Collections.disjoint(generatedOutputs(opJoin.getLeft()), mentioned);
+    }
+
+    /**
+     * Whether the right side is the Qi of a GENOP on the left and contains a GENOP of its own, as
+     * a nested group does: it binds an output variable of that GENOP by a graph pattern, and none
+     * of its GENOPs reads a variable of the left side or generates an output of it. Section 2.1
+     * evaluates Qi on its own and joins it with the solutions of the GENOP by similarity. A right
+     * side whose GENOP reads the left side continues the solutions of the left side instead.
+     */
+    private static boolean isQiWithGenop(OpJoin opJoin) {
+        Op right = opJoin.getRight();
+        if (!planContainsGenOp(right)) {
+            return false;
+        }
+        Set<Var> outputs = generatedOutputs(opJoin.getLeft());
+        if (Collections.disjoint(outputs, patternBoundVars(right))) {
+            return false;
+        }
+        Set<Var> leftVars = org.apache.jena.sparql.algebra.OpVars.visibleVars(opJoin.getLeft());
+        return !planContains(right, g -> !Collections.disjoint(g.getInputVariables(), leftVars)
+                || !Collections.disjoint(g.getOutputVariables(), outputs));
     }
 
     /**
