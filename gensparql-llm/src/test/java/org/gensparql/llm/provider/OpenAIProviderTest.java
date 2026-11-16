@@ -2,6 +2,8 @@ package org.gensparql.llm.provider;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpServer;
+import org.gensparql.core.model.EmbedRequest;
+import org.gensparql.core.model.EmbedResponse;
 import org.gensparql.core.model.GenerateRequest;
 import org.gensparql.core.model.GenerateResponse;
 import org.gensparql.core.model.ModelSpec;
@@ -109,5 +111,33 @@ class OpenAIProviderTest {
 
     private static String baseUrl(HttpServer server) {
         return "http://127.0.0.1:" + server.getAddress().getPort() + "/v1";
+    }
+
+    @Test
+    void theExplicitEmbeddingEndpointReceivesTheGivenKey() throws Exception {
+        List<String> authorizations = new ArrayList<>();
+        HttpServer server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
+        server.createContext("/v1/embeddings", exchange -> {
+            authorizations.add(exchange.getRequestHeaders().getFirst("Authorization"));
+            byte[] out = "{\"data\":[{\"embedding\":[0.6,0.8],\"index\":0}],\"model\":\"m\"}".getBytes();
+            exchange.getResponseHeaders().add("Content-Type", "application/json");
+            exchange.sendResponseHeaders(200, out.length);
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(out);
+            }
+        });
+        server.start();
+        try {
+            String base = "http://127.0.0.1:" + server.getAddress().getPort() + "/v1";
+            EmbedRequest request = new EmbedRequest("Argentina", ModelSpec.fromURI("model:openai:m"));
+            EmbedResponse withOwnKey = new OpenAIProvider("chat-key", base, "embedding-key", base).embed(request).get();
+            EmbedResponse withChatKey = new OpenAIProvider("chat-key", base, "", base).embed(request).get();
+            assertTrue(withOwnKey.isSuccess(), withOwnKey.getErrorMessage());
+            assertTrue(withChatKey.isSuccess(), withChatKey.getErrorMessage());
+            assertEquals(List.of("Bearer embedding-key", "Bearer chat-key"), authorizations,
+                    "the endpoint and key given to the provider are used, whatever the environment says");
+        } finally {
+            server.stop(0);
+        }
     }
 }

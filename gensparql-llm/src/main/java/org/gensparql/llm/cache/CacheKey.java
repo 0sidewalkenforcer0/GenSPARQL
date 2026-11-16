@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -54,7 +55,7 @@ public class CacheKey {
      * Generate a string representation suitable for file names.
      */
     public String toStringKey() {
-        return String.format("%s:%s:%s:%.2f:%d:%s",
+        return String.format(Locale.ROOT, "%s:%s:%s:%.2f:%d:%s",
             provider != null ? provider : "unknown",
             model != null ? model : "unknown",
             promptHash,
@@ -68,7 +69,7 @@ public class CacheKey {
      * Generate a shorter key for in-memory maps (excludes provider/model for brevity).
      */
     public String toShortKey() {
-        return String.format("%s:%.2f:%d",
+        return String.format(Locale.ROOT, "%s:%.2f:%d",
             promptHash,
             temperature,
             maxTokens

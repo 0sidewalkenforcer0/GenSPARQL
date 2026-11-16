@@ -53,15 +53,23 @@ public class OpenAIProvider implements LLMProvider {
     }
 
     public OpenAIProvider(String apiKey, String baseUrl) {
-        this.apiKey = apiKey;
-        this.baseUrl = normalizeBaseUrl(baseUrl != null ? baseUrl : DEFAULT_BASE_URL);
         // OPENAI_EMBEDDING_BASE_URL / OPENAI_EMBEDDING_API_KEY override the endpoint used for
         // embeddings; if unset, embeddings reuse the chat base URL and key.
-        String embUrl = System.getenv("OPENAI_EMBEDDING_BASE_URL");
-        this.embeddingBaseUrl = (embUrl != null && !embUrl.isEmpty())
-                ? normalizeBaseUrl(embUrl) : this.baseUrl;
-        String embKey = System.getenv("OPENAI_EMBEDDING_API_KEY");
-        this.embeddingApiKey = (embKey != null && !embKey.isEmpty()) ? embKey : apiKey;
+        this(apiKey, baseUrl, System.getenv("OPENAI_EMBEDDING_API_KEY"),
+                System.getenv("OPENAI_EMBEDDING_BASE_URL"));
+    }
+
+    /**
+     * A provider with explicit endpoints that reads no environment variable, as the HTTP service
+     * builds one for the endpoint and key of a single request. An embedding key or base URL that
+     * is null or empty falls back to the chat one.
+     */
+    public OpenAIProvider(String apiKey, String baseUrl, String embeddingApiKey, String embeddingBaseUrl) {
+        this.apiKey = apiKey;
+        this.baseUrl = normalizeBaseUrl(baseUrl != null ? baseUrl : DEFAULT_BASE_URL);
+        this.embeddingBaseUrl = (embeddingBaseUrl != null && !embeddingBaseUrl.isEmpty())
+                ? normalizeBaseUrl(embeddingBaseUrl) : this.baseUrl;
+        this.embeddingApiKey = (embeddingApiKey != null && !embeddingApiKey.isEmpty()) ? embeddingApiKey : apiKey;
         this.objectMapper = new ObjectMapper();
         this.responseParser = new JsonResponseParser();
         this.client = new OkHttpClient.Builder()

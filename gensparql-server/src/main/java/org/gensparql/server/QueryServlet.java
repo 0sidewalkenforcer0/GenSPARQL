@@ -76,7 +76,11 @@ final class QueryServlet extends JsonServlet {
                 }
                 if (baseUrl != null) baseUrl = baseUrl.replaceFirst("/+$", "");
                 if (apiKey != null || baseUrl != null || model != null) {
-                    requestProvider = new OpenAIProvider(apiKey == null ? "" : apiKey, baseUrl);
+                    // The endpoint and key of the request apply to this query alone: the provider
+                    // reads no environment variable, so OPENAI_EMBEDDING_* of the server neither
+                    // redirects the request nor sends the server's key to the request's host.
+                    String key = apiKey == null ? "" : apiKey;
+                    requestProvider = new OpenAIProvider(key, baseUrl, key, baseUrl);
                     requestProvider = recording(llm, requestProvider);
                     context.set(GenSPARQL.LLM_PROVIDER, requestProvider);
                     if (model != null) {
@@ -101,9 +105,8 @@ final class QueryServlet extends JsonServlet {
                     if (model == null || model.length() > 200 || model.matches(".*[<>\\s].*")) {
                         throw new IllegalArgumentException("similarity.model is required and must not contain spaces or angle brackets");
                     }
-                    embeddingProvider = new OpenAIProvider(
-                            apiKey == null ? (requestApiKey == null ? "" : requestApiKey) : apiKey,
-                            baseUrl);
+                    String embeddingKey = apiKey == null ? (requestApiKey == null ? "" : requestApiKey) : apiKey;
+                    embeddingProvider = new OpenAIProvider(embeddingKey, baseUrl, embeddingKey, baseUrl);
                     context.set(GenSPARQLConstants.SIM_TEXT,
                             new EmbeddingSimText(new JaccardSimText(), embeddingProvider,
                                     ModelSpec.fromURI("model:openai:" + model)));
