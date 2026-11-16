@@ -5,7 +5,8 @@ evaluation results, so that every number the project page shows comes from a run
   make_recorded_data.py            (from the repository root)
 
 Sources: results/<model>/e1_*.json, e2_wc_teams.json and e3_*.json of the run of
-2026-11-03, results/planner-calls.json (the calls with the planner on and off), the gold
+2026-11-03, results/planner-calls.json (the calls with the planner on and off),
+results/e2-embedding-scores/ (bge-large-en-v1.5 similarities, embedding_scores.py), the gold
 data in gold/ and the two graphs in docs/.
 """
 import json
@@ -99,10 +100,16 @@ def wc_attribute(wc, summary):
 
 
 def wc_entity():
-    """The team names that Mistral-7B listed in E2 (Qwen3-30B and Qwen3-8B declined)."""
+    """The team names that Mistral-7B listed in E2 (Qwen3-30B and Qwen3-8B declined), and for the
+    embedding similarity of the recorded mode the best team of each name and its similarity
+    with bge-large-en-v1.5 (embedding_scores.py)."""
     rec = load(model_dir(MISTRAL), "e2_wc_teams.json")
     names = [r["x"] for r in rec["generated_before"]["rows"] if not declined(r.get("x", ""))]
-    return {"model": MISTRAL, "prompt": rec["prompt"], "generated": names}
+    emb = load(RES, "e2-embedding-scores", "e2_wc_teams.json")
+    assert emb["names"] == names, "the embedding scores belong to other names"
+    best = {b["name"]: {"team": b["team"], "score": round(b["score"], 4)} for b in emb["best"]}
+    return {"model": MISTRAL, "prompt": rec["prompt"], "generated": names,
+            "embedding": {"model": emb["model"], "best": best}}
 
 
 def nobel_entity():
@@ -145,28 +152,42 @@ def wc_composition(wc, calls):
             "genopFirst": c["calls_planner_off"], "planned": c["calls_planner_on"]}
 
 
-def nobel_attribute(nobel, summary):
-    """The birth years that Qwen3-30B generated for the Physics laureates since 2020."""
-    gold = {q: set(v) for q, v in load(HERE, "gold", "nobel_birth_years.json").items()}
-    rows = load(model_dir(Q30B), "e1_nobel_birth_years.json")["rows"]
+def birth_year_answers(model):
+    """The E1 birth-year answers of a model, by the QID of the laureate."""
     answers = {}
-    for r in rows:
+    for r in load(model_dir(model), "e1_nobel_birth_years.json")["rows"]:
         answers.setdefault(qid(r["p"]), []).append(r.get("v", ""))
+    return answers
+
+
+def judge_years(values, gold_years):
+    """The shown years and their state: correct only for a single year that the gold data holds."""
+    years = {int(y) for v in values for y in re.findall(r"\b(1[5-9]\d\d|20[0-2]\d)\b", v)}
+    if not years:
+        return "no answer", "abstain"
+    shown = ", ".join(str(y) for y in sorted(years))
+    return shown, ("correct" if len(years) == 1 and next(iter(years)) in gold_years else "wrong")
+
+
+def nobel_attribute(nobel, summary):
+    """The birth years that the three LLMs generated for the Physics laureates since 2020.
+    The rows hold the answers of Qwen3-30B, and under "others" those of the other two."""
+    gold = {q: set(v) for q, v in load(HERE, "gold", "nobel_birth_years.json").items()}
+    answers = {m: birth_year_answers(m) for m in MODELS}
     year = lambda a: int(re.findall(r"\d{4}", str(nobel.value(a, EX.winningYear)))[0])
     laureates = {w for a in nobel.subjects(EX.field, WD.Q38104) if year(a) >= 2020 for w in nobel.objects(a, EX.winner)}
     out = []
     for w in sorted(laureates, key=lambda w: str(nobel.value(w, RDFS.label))):
         q = qid(w)
-        years = {int(y) for v in answers.get(q, []) for y in re.findall(r"\b(1[5-9]\d\d|20[0-2]\d)\b", v)}
-        if not years:
-            state, shown = "abstain", "no answer"
-        else:
-            shown = ", ".join(str(y) for y in sorted(years))
-            state = "correct" if len(years) == 1 and next(iter(years)) in gold.get(q, set()) else "wrong"
-        out.append({"name": str(nobel.value(w, RDFS.label)), "gen": shown, "state": state})
+        shown, state = judge_years(answers[Q30B].get(q, []), gold.get(q, set()))
+        others = []
+        for m in MODELS[1:]:
+            o_shown, o_state = judge_years(answers[m].get(q, []), gold.get(q, set()))
+            others.append({"model": short(m), "gen": o_shown, "state": o_state})
+        out.append({"name": str(nobel.value(w, RDFS.label)), "gen": shown, "state": state, "others": others})
     s = summary[Q30B.replace("/", "_")]["e1_nobel_birth_years"]
-    return {"model": Q30B, "rows": out, "stat": {"a": pct(s["answer_rate"]), "b": pct(s["accuracy"])},
-            "laureates": s["entities"]}
+    return {"model": Q30B, "otherModels": [short(m) for m in MODELS[1:]], "rows": out,
+            "stat": {"a": pct(s["answer_rate"]), "b": pct(s["accuracy"])}, "laureates": s["entities"]}
 
 
 def nobel_composition(calls):

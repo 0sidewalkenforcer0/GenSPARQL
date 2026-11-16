@@ -1839,7 +1839,7 @@ ORDER BY ?year`
         };
         const similarity=$("groundEmbedding")?.checked?{
           method:"embedding",
-          apiKey:$("key")?.value||"",
+          apiKey:embeddingKey(),
           baseUrl:$("embBase")?.value?.trim()||"",
           model:$("embModel")?.value?.trim()||""
         }:{method:"jaccard"};
@@ -1876,7 +1876,8 @@ ORDER BY ?year`
     $("chatBase").value=CFG.live.chatBase;
     $("chatModel").value=CFG.live.chatModel;
     $("embBase").value=CFG.live.embBase;
-    CFG.live.embModels.forEach(m=>{const o=document.createElement("option");o.value=o.textContent=m;$("embModel").appendChild(o)});
+    $("embModel").value=CFG.live.embModel;
+    CFG.live.embModels.forEach(m=>{const o=document.createElement("option");o.value=m.value;o.label=m.label;$("embModelOptions").appendChild(o)});
     $("key").addEventListener("input",renderScenario);
     $("liveBox").addEventListener("toggle",renderScenario);
     // Both radios need their own handler: a change event only fires on the
@@ -1897,10 +1898,26 @@ ORDER BY ?year`
     syncGrounding();
   }
 
+  // The recorded mode hides the live panel, so the threshold row has its own choice of
+  // similarity. It sets the radios of the live panel, which the grounding view reads.
+  function initDemoGrounding(){
+    const rebuild=async()=>{
+      if(currentScenario()?.id==="entity"&&state.graph?.nodes.some(n=>n.generatedCandidate)){
+        try{
+          await buildGroundEntityView({preserveViewport:true});
+        }catch(err){
+          showMessage(runFailureMessage(err),"err");
+        }
+      }
+    };
+    $("demoGroundText").onchange=()=>{$("groundText").checked=true;rebuild()};
+    $("demoGroundEmbedding").onchange=()=>{$("groundEmbedding").checked=true;rebuild()};
+  }
+
   function syncGrounding(){
     const on=$("groundEmbedding").checked;
     $("embeddingSettings").classList.toggle("is-disabled",!on);
-    $("embBase").disabled=!on;$("embModel").disabled=!on;
+    $("embBase").disabled=!on;$("embModel").disabled=!on;$("embKey").disabled=!on;
   }
 
   function showMessage(text,kind="ok"){
@@ -2534,7 +2551,7 @@ ORDER BY ?year`
         return;
       }
       $("graphStatus").textContent=generated
-        ? `${similarityLabel(similarityMethod)} · ${matchedCountries} matched KG targets · ${remainingCountries} remaining targets · ${generated} generated candidates · ${grounded} grounded`
+        ? `${similarityStatus(similarityMethod)} · ${matchedCountries} matched KG targets · ${remainingCountries} remaining targets · ${generated} generated candidates · ${grounded} grounded`
         : `${db.label} · full KG · ${state.graph.nodes.length} nodes · ${state.graph.links.length} edges`;
       return;
     }
@@ -2738,9 +2755,41 @@ ORDER BY ?year`
     });
   }
 
+  // The recorded mode has no embedding endpoint. For the names of the recorded run it uses the
+  // best team of each name and its bge-large-en-v1.5 similarity, which eval/www27/
+  // embedding_scores.py computed as the similarity join of the engine does.
+  function recordedEmbeddingMatches(){
+    const rec=window.RECORDED_RUNS?.wcEntity?.embedding;
+    const names=currentScenario().generated||[];
+    if(!rec||state.dbKey!=="fifa2026"||!names.length||!names.every(n=>rec.best?.[n]))return null;
+    const nodes=new Map(currentDb().graph.nodes.map(n=>[n.id,n]));
+    return names.map(name=>({name,best:nodes.get(rec.best[name].team)||null,score:rec.best[name].score}));
+  }
+
+  function recordedEmbeddingModel(){
+    return String(window.RECORDED_RUNS?.wcEntity?.embedding?.model||"").replace(/^.*\//,"");
+  }
+
+  // The similarity named in the status line, with the model of recorded embedding scores.
+  function similarityStatus(method){
+    const recorded=state.recordedEmbedding&&String(method||"").toLowerCase()==="embedding";
+    return similarityLabel(method)+(recorded?` (${state.recordedEmbedding}, recorded scores)`:"");
+  }
+
+  // The key of the embedding endpoint: its own field, or the chat key when that is empty.
+  function embeddingKey(){
+    return ($("embKey")?.value||"").trim()||($("key")?.value||"").trim();
+  }
+
   async function embeddingGroundingMatches(){
-    const key=$("key").value.trim();
-    if(!key)throw new Error("Embedding grounding requires an API key in Live demo.");
+    const key=embeddingKey();
+    if(!key){
+      const recorded=recordedEmbeddingMatches();
+      if(!recorded)throw new Error("Recorded embedding scores exist only for the World Cup teams. Use Jaccard, or enter an API key and an embedding endpoint in the local workbench.");
+      state.recordedEmbedding=recordedEmbeddingModel();
+      return recorded;
+    }
+    state.recordedEmbedding=null;
 
     const s=currentScenario();
     const teams=currentDb().graph.nodes.filter(n=>n.type===(s.targetType||"Team"));
@@ -2763,8 +2812,8 @@ ORDER BY ?year`
 
   async function embedForGrounding(texts){
     const base=$("embBase").value.replace(/\/$/,"");
-    const model=$("embModel").value;
-    const key=$("key").value.trim();
+    const model=$("embModel").value.trim();
+    const key=embeddingKey();
 
     const response=await fetch(base+"/embeddings",{
       method:"POST",
@@ -2838,7 +2887,7 @@ ORDER BY ?year`
 
     updateStatus();
     showMessage(
-      `${similarityLabel(method)} · θ ${theta.toFixed(2)} · ${grounded} grounded · ${potential} potential · only relation edges changed.`,
+      `${similarityStatus(method)} · θ ${theta.toFixed(2)} · ${grounded} grounded · ${potential} potential · only relation edges changed.`,
       "ok"
     );
   }
@@ -2872,6 +2921,7 @@ ORDER BY ?year`
     }else{
       matches=textGroundingMatches();
       method="Text";
+      state.recordedEmbedding=null;
     }
 
     // In the figure layout, the names that equal a label are listed in the status line
@@ -4106,6 +4156,7 @@ ORDER BY ?year`
     }
     $("databaseSelect").value=state.dbKey;$("databaseSelect").onchange=changeDb;
     if(pageMode==="demo"){
+      initDemoGrounding();
       $("theta").oninput=()=>{
         $("thetaVal").textContent=Number($("theta").value).toFixed(2);
         renderScenario();

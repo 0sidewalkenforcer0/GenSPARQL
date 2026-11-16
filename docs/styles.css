@@ -2886,3 +2886,8 @@ html[data-print] .graph-status,
 html[data-print] .legend,
 html[data-print] #graphTitle{font-size:18px!important}
 html[data-print] .graph-status{white-space:normal!important;line-height:1.3}
+
+/* The recorded mode hides the live panel, so the threshold row carries the choice of similarity. */
+.theta-similarity{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin-top:8px;font-size:11px;color:var(--muted)}
+.theta-similarity>span{font-weight:800;text-transform:uppercase;font-size:9.5px}
+.theta-similarity label{display:inline-flex;align-items:center;gap:5px;cursor:pointer;color:var(--ink)}

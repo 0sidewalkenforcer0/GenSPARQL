@@ -486,7 +486,108 @@ window.RECORDED_RUNS = {
    "Sweden",
    "Switzerland",
    "United States"
-  ]
+  ],
+  "embedding": {
+   "model": "BAAI/bge-large-en-v1.5",
+   "best": {
+    "Argentina": {
+     "team": "http://www.wikidata.org/entity/Q79800",
+     "score": 1.0
+    },
+    "Australia": {
+     "team": "http://www.wikidata.org/entity/Q268208",
+     "score": 1.0
+    },
+    "Brazil": {
+     "team": "http://www.wikidata.org/entity/Q83459",
+     "score": 1.0
+    },
+    "Canada": {
+     "team": "http://www.wikidata.org/entity/Q208635",
+     "score": 1.0
+    },
+    "Denmark": {
+     "team": "http://www.wikidata.org/entity/Q184387",
+     "score": 0.7876
+    },
+    "England": {
+     "team": "http://www.wikidata.org/entity/Q47762",
+     "score": 1.0
+    },
+    "France": {
+     "team": "http://www.wikidata.org/entity/Q47774",
+     "score": 1.0
+    },
+    "Germany": {
+     "team": "http://www.wikidata.org/entity/Q43310",
+     "score": 1.0
+    },
+    "India": {
+     "team": "http://www.wikidata.org/entity/Q268208",
+     "score": 0.8076
+    },
+    "Iran": {
+     "team": "http://www.wikidata.org/entity/Q184602",
+     "score": 0.7958
+    },
+    "Italy": {
+     "team": "http://www.wikidata.org/entity/Q47774",
+     "score": 0.7845
+    },
+    "Japan": {
+     "team": "http://www.wikidata.org/entity/Q170566",
+     "score": 1.0
+    },
+    "Mexico": {
+     "team": "http://www.wikidata.org/entity/Q164089",
+     "score": 1.0
+    },
+    "Netherlands": {
+     "team": "http://www.wikidata.org/entity/Q47050",
+     "score": 1.0
+    },
+    "New Zealand": {
+     "team": "http://www.wikidata.org/entity/Q175315",
+     "score": 1.0
+    },
+    "Peru": {
+     "team": "http://www.wikidata.org/entity/Q223748",
+     "score": 0.779
+    },
+    "Portugal": {
+     "team": "http://www.wikidata.org/entity/Q267245",
+     "score": 1.0
+    },
+    "Qatar": {
+     "team": "http://www.wikidata.org/entity/Q232731",
+     "score": 1.0
+    },
+    "Republic of Ireland": {
+     "team": "http://www.wikidata.org/entity/Q175315",
+     "score": 0.7151
+    },
+    "South Korea": {
+     "team": "http://www.wikidata.org/entity/Q170327",
+     "score": 0.7871
+    },
+    "Spain": {
+     "team": "http://www.wikidata.org/entity/Q42267",
+     "score": 1.0
+    },
+    "Sweden": {
+     "team": "http://www.wikidata.org/entity/Q160826",
+     "score": 1.0
+    },
+    "Switzerland": {
+     "team": "http://www.wikidata.org/entity/Q165141",
+     "score": 1.0
+    },
+    "United States": {
+     "team": "http://www.wikidata.org/entity/Q175315",
+     "score": 0.6625
+    }
+   }
+  }
  },
  "wcComposition": {
   "model": "Qwen/Qwen3-30B-A3B-Instruct-2507",
@@ -1840,91 +1941,299 @@ window.RECORDED_RUNS = {
  },
  "nobelAttribute": {
   "model": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+  "otherModels": [
+   "Qwen3-8B",
+   "Mistral-7B"
+  ],
   "rows": [
    {
     "name": "Alain Aspect",
     "gen": "1947",
-    "state": "correct"
+    "state": "correct",
+    "others": [
+     {
+      "model": "Qwen3-8B",
+      "gen": "1947",
+      "state": "correct"
+     },
+     {
+      "model": "Mistral-7B",
+      "gen": "1947",
+      "state": "correct"
+     }
+    ]
    },
    {
     "name": "Andrea M. Ghez",
     "gen": "1965",
-    "state": "correct"
+    "state": "correct",
+    "others": [
+     {
+      "model": "Qwen3-8B",
+      "gen": "1965",
+      "state": "correct"
+     },
+     {
+      "model": "Mistral-7B",
+      "gen": "1968",
+      "state": "wrong"
+     }
+    ]
    },
    {
     "name": "Anne L'Huillier",
     "gen": "1958",
-    "state": "correct"
+    "state": "correct",
+    "others": [
+     {
+      "model": "Qwen3-8B",
+      "gen": "1958",
+      "state": "correct"
+     },
+     {
+      "model": "Mistral-7B",
+      "gen": "1954",
+      "state": "wrong"
+     }
+    ]
    },
    {
     "name": "Anton Zeilinger",
     "gen": "1945",
-    "state": "correct"
+    "state": "correct",
+    "others": [
+     {
+      "model": "Qwen3-8B",
+      "gen": "1945",
+      "state": "correct"
+     },
+     {
+      "model": "Mistral-7B",
+      "gen": "1945",
+      "state": "correct"
+     }
+    ]
    },
    {
     "name": "Ferenc Krausz",
     "gen": "1962",
-    "state": "correct"
+    "state": "correct",
+    "others": [
+     {
+      "model": "Qwen3-8B",
+      "gen": "1959",
+      "state": "wrong"
+     },
+     {
+      "model": "Mistral-7B",
+      "gen": "1958",
+      "state": "wrong"
+     }
+    ]
    },
    {
     "name": "Geoffrey Hinton",
     "gen": "1947",
-    "state": "correct"
+    "state": "correct",
+    "others": [
+     {
+      "model": "Qwen3-8B",
+      "gen": "1947",
+      "state": "correct"
+     },
+     {
+      "model": "Mistral-7B",
+      "gen": "1947",
+      "state": "correct"
+     }
+    ]
    },
    {
     "name": "Giorgio Parisi",
     "gen": "1948",
-    "state": "correct"
+    "state": "correct",
+    "others": [
+     {
+      "model": "Qwen3-8B",
+      "gen": "1948",
+      "state": "correct"
+     },
+     {
+      "model": "Mistral-7B",
+      "gen": "1948",
+      "state": "correct"
+     }
+    ]
    },
    {
     "name": "John Clarke",
     "gen": "1931",
-    "state": "wrong"
+    "state": "wrong",
+    "others": [
+     {
+      "model": "Qwen3-8B",
+      "gen": "no answer",
+      "state": "abstain"
+     },
+     {
+      "model": "Mistral-7B",
+      "gen": "1940",
+      "state": "wrong"
+     }
+    ]
    },
    {
     "name": "John Clauser",
     "gen": "1942",
-    "state": "correct"
+    "state": "correct",
+    "others": [
+     {
+      "model": "Qwen3-8B",
+      "gen": "1942",
+      "state": "correct"
+     },
+     {
+      "model": "Mistral-7B",
+      "gen": "1942",
+      "state": "correct"
+     }
+    ]
    },
    {
     "name": "John Hopfield",
     "gen": "1933",
-    "state": "correct"
+    "state": "correct",
+    "others": [
+     {
+      "model": "Qwen3-8B",
+      "gen": "1926",
+      "state": "wrong"
+     },
+     {
+      "model": "Mistral-7B",
+      "gen": "1933",
+      "state": "correct"
+     }
+    ]
    },
    {
     "name": "John M. Martinis",
     "gen": "1962",
-    "state": "wrong"
+    "state": "wrong",
+    "others": [
+     {
+      "model": "Qwen3-8B",
+      "gen": "1957",
+      "state": "wrong"
+     },
+     {
+      "model": "Mistral-7B",
+      "gen": "1952",
+      "state": "wrong"
+     }
+    ]
    },
    {
     "name": "Klaus Hasselmann",
     "gen": "1931",
-    "state": "correct"
+    "state": "correct",
+    "others": [
+     {
+      "model": "Qwen3-8B",
+      "gen": "1931",
+      "state": "correct"
+     },
+     {
+      "model": "Mistral-7B",
+      "gen": "1931",
+      "state": "correct"
+     }
+    ]
    },
    {
     "name": "Michel Devoret",
     "gen": "1951",
-    "state": "wrong"
+    "state": "wrong",
+    "others": [
+     {
+      "model": "Qwen3-8B",
+      "gen": "1946",
+      "state": "wrong"
+     },
+     {
+      "model": "Mistral-7B",
+      "gen": "1958",
+      "state": "wrong"
+     }
+    ]
    },
    {
     "name": "Pierre Agostini",
     "gen": "1941",
-    "state": "correct"
+    "state": "correct",
+    "others": [
+     {
+      "model": "Qwen3-8B",
+      "gen": "1941",
+      "state": "correct"
+     },
+     {
+      "model": "Mistral-7B",
+      "gen": "1926",
+      "state": "wrong"
+     }
+    ]
    },
    {
     "name": "Reinhard Genzel",
     "gen": "1952",
-    "state": "correct"
+    "state": "correct",
+    "others": [
+     {
+      "model": "Qwen3-8B",
+      "gen": "1952",
+      "state": "correct"
+     },
+     {
+      "model": "Mistral-7B",
+      "gen": "1952",
+      "state": "correct"
+     }
+    ]
    },
    {
     "name": "Roger Penrose",
     "gen": "1931",
-    "state": "correct"
+    "state": "correct",
+    "others": [
+     {
+      "model": "Qwen3-8B",
+      "gen": "1931",
+      "state": "correct"
+     },
+     {
+      "model": "Mistral-7B",
+      "gen": "1931",
+      "state": "correct"
+     }
+    ]
    },
    {
     "name": "Syukuro Manabe",
     "gen": "1931",
-    "state": "correct"
+    "state": "correct",
+    "others": [
+     {
+      "model": "Qwen3-8B",
+      "gen": "1931",
+      "state": "correct"
+     },
+     {
+      "model": "Mistral-7B",
+      "gen": "1931",
+      "state": "correct"
+     }
+    ]
    }
   ],
   "stat": {

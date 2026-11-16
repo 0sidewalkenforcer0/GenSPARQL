@@ -115,10 +115,11 @@ POST /api/gensparql/query
 
 ```bash
 ollama pull qwen3:8b                 # once; Ollama serves on http://localhost:11434
+ollama pull bge-large                # once, for the embedding similarity
 ./start-fuseki.sh
 ```
 
-Open `http://localhost:8080/?mode=live` and, in the live panel, set the endpoint to `http://localhost:11434/v1` and the model to `qwen3:8b`. The API key field must not be empty, but Ollama ignores its value, so any text such as `ollama` will do. Keep the text (Jaccard) similarity. The prompts then go to Ollama on this machine and nowhere else.
+Open `http://localhost:8080/?mode=live` and, in the live panel, set the endpoint to `http://localhost:11434/v1` and the model to `qwen3:8b`. The API key field must not be empty, but Ollama ignores its value, so any text such as `ollama` will do. For the embedding similarity, choose *Embedding (cosine)*, set the embedding endpoint to `http://localhost:11434/v1` as well and the embedding model to `bge-large`. The prompts and the texts to embed then go to Ollama on this machine and nowhere else.
 
 The endpoint, model and key apply only to that query; the server does not store them. Clients other than the workbench can configure the provider through the environment instead:
 

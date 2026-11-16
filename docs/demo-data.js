@@ -22,7 +22,14 @@
       chatBase: "https://api.groq.com/openai/v1",
       chatModel: "openai/gpt-oss-120b",
       embBase: "https://api.openai.com/v1",
-      embModels: ["text-embedding-3-small", "text-embedding-3-large"]
+      embModel: "text-embedding-3-small",
+      // Suggestions for the embedding model field, which also accepts any other name.
+      embModels: [
+        {value: "bge-large", label: "Ollama"},
+        {value: "BAAI/bge-large-en-v1.5", label: "vLLM"},
+        {value: "text-embedding-3-small", label: "OpenAI"},
+        {value: "text-embedding-3-large", label: "OpenAI"}
+      ]
     },
 
     scenarios: [
@@ -115,7 +122,7 @@
         generatedPredicate: "?year",
         generatedTitle: "Generated birth years",
         metricLabel: `Accuracy vs Wikidata P569 (all ${R.nobelAttribute.laureates.toLocaleString("en")} laureates)`,
-        note: `Answers of ${short(R.nobelAttribute.model)} through GENOP in the evaluation over all ${R.nobelAttribute.laureates.toLocaleString("en")} laureates. Answer rate and accuracy refer to all laureates; the rows are the Physics laureates since 2020.`,
+        note: `Answers of ${short(R.nobelAttribute.model)} through GENOP in the evaluation over all ${R.nobelAttribute.laureates.toLocaleString("en")} laureates. Answer rate and accuracy refer to all laureates; the rows are the Physics laureates since 2020, and under each name the answers of ${R.nobelAttribute.otherModels.join(" and ")} to the same prompt.`,
         query:
 `SELECT ?name ?year WHERE {
   ?laureate a ex:NobelLaureate ;

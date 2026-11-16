@@ -6,7 +6,7 @@
   <title>GenSPARQL · Interactive KG Explorer</title>
   <meta name="description" content="GenSPARQL interactive demo with the World Cup 2026 knowledge graph.">
   <script src="page-mode.js?v=20261103-1"></script>
-  <link rel="stylesheet" href="styles.css?v=20261113-1">
+  <link rel="stylesheet" href="styles.css?v=20261116-1">
 
 </head>
 <body>
@@ -83,6 +83,11 @@
               <strong id="thetaVal">0.85</strong>
             </div>
             <input id="theta" type="range" min="0" max="1" step="0.01" value="0.85">
+            <div class="theta-similarity demo-only" role="radiogroup" aria-label="Similarity">
+              <span>Similarity</span>
+              <label><input type="radio" name="demoGroundMethod" id="demoGroundText" value="text" checked> Jaccard</label>
+              <label><input type="radio" name="demoGroundMethod" id="demoGroundEmbedding" value="embedding"> Embedding (bge-large-en-v1.5, recorded)</label>
+            </div>
           </div>
 
           <div class="run-row" id="defaultRunRow">
@@ -269,7 +274,7 @@
               <label class="ground-option" for="groundEmbedding">
                 <input type="radio" id="groundEmbedding" name="groundMethod" value="embedding">
                 <span>
-                  <strong>Embedding (BGE)</strong>
+                  <strong>Embedding (cosine)</strong>
                   <small>Semantic matching · better for aliases</small>
                 </span>
               </label>
@@ -281,7 +286,12 @@
                 </div>
                 <div class="field">
                   <label for="embModel">Embedding model</label>
-                  <select id="embModel" disabled></select>
+                  <input id="embModel" list="embModelOptions" autocomplete="off" spellcheck="false" disabled>
+                  <datalist id="embModelOptions"></datalist>
+                </div>
+                <div class="field">
+                  <label for="embKey">Embedding API key (optional)</label>
+                  <input id="embKey" type="password" placeholder="same as the chat key" autocomplete="off" disabled>
                 </div>
               </div>
             </fieldset>
@@ -337,12 +347,12 @@
   </main>
 
   <script src="native-graph.js"></script>
-  <script src="recorded-runs.js?v=20261113-1"></script>
-  <script src="demo-data.js?v=20261113-1"></script>
+  <script src="recorded-runs.js?v=20261116-1"></script>
+  <script src="demo-data.js?v=20261116-1"></script>
   <script src="fifa2026-data.js"></script>
   <script src="nobel-prize-data.js?v=20260826-1"></script>
   <script src="database-adapters.js?v=20260826-2"></script>
   <script src="engine-client.js?v=20260903-1"></script>
-  <script src="app.js?v=20261113-1"></script>
+  <script src="app.js?v=20261116-2"></script>
 </body>
 </html>
