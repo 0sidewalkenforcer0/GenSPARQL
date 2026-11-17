@@ -10,7 +10,7 @@
 
 **A generative extension of SPARQL 1.1 for Apache Jena, with LLM generation and entity grounding as first-class query operators.**
 
-▶ **[Try the interactive demo](https://0sidewalkenforcer0.github.io/GenSPARQL/)** — explore the three query shapes over the 2026 World Cup KG, with a live grounding-threshold slider.
+▶ **[Try the workbench](https://0sidewalkenforcer0.github.io/GenSPARQL/)** on two graphs built from Wikidata, the 2026 World Cup and the Nobel laureates. Its recorded mode replays the answers of three open-weight LLMs, and its live mode runs your own queries with a local model ([setup](#live-mode-with-a-local-model-ollama-no-provider-account)). ▶ **[Watch the 3-minute video](https://0sidewalkenforcer0.github.io/GenSPARQL/video/gensparql-demo.mp4)**.
 
 A SPARQL query returns only what a knowledge graph (KG) explicitly stores, so it cannot return an attribute the KG never modeled or an entity it does not record. Large language models (LLMs) hold broad open-world knowledge, but they optimize likelihood over truth and can hallucinate. GenSPARQL bridges the two by adding two operators that live inside the query algebra: a first-class `GENOP` that calls an LLM during query evaluation and binds the generated values to query variables, and a type-aware similarity join that grounds generated entities to real KG nodes. Because `GENOP` is an operator rather than an external call, the query planner defers it behind selective graph patterns, so the LLM runs only on the bindings that survive.
 
@@ -225,7 +225,14 @@ SELECT ?player WHERE {
 }
 ```
 
-The bracketed `options` set parameters such as the grounding similarity threshold `θ`. Because `GENOP` lives in the query algebra, the planner places it after the KG patterns that constrain its inputs, so the LLM runs only on the bindings that survive. Within a group, the planner evaluates the elements in the order of the paper's translation. An `OPTIONAL`, `MINUS` or `BIND` that mentions an output variable of a `GENOP`, or a variable of an earlier element that comes after the first `GENOP`, is applied after all other elements, in written order. Of the other elements, the planner first evaluates those that mention no output variable, then the filters whose variables the triple patterns among them bind, and then each `GENOP` in written order, followed by the elements that mention its output. The remaining filters are applied last.
+The bracketed `options` set parameters such as the grounding similarity threshold `θ`. Because `GENOP` lives in the query algebra, the planner places it after the KG patterns that constrain its inputs, so the LLM runs only on the bindings that survive. Within a group with the `GENOP` expressions G1, ..., Gn in written order, the planner orders the elements as follows:
+
+- An `OPTIONAL`, `MINUS` or `BIND` is *deferred* if it mentions an output variable of a `GENOP`, or a variable of an earlier element that mentions one or is deferred itself.
+- The other elements that mention no output variable come first. The filters over the variables that their triple patterns bind follow them, so they remove solutions before any prompt is sent.
+- Then each Gi in written order, followed by the elements for which Gi is the last `GENOP` whose output variable they mention. These elements are joined with Gi by similarity (see below).
+- Then the deferred elements, in written order, and finally the other filters.
+
+An `OPTIONAL` or `BIND` that is not deferred comes before the `GENOP` expressions even when it is written after them, so it can bind a placeholder variable.
 
 ---
 
@@ -233,7 +240,7 @@ The bracketed `options` set parameters such as the grounding similarity threshol
 
 A generated value is free text, whereas a KG term is an IRI or typed literal, so the two cannot be joined by equality. When a `GENOP` shares an output variable with a graph pattern of its group, GenSPARQL joins them by **similarity** instead, in both modes: it compares each generated value with the labels of the term that the pattern binds, by the Jaccard similarity of the lowercase word sets or by the cosine similarity of text embeddings, and keeps a match when the similarity reaches a threshold `θ`. Only the output variables of that `GENOP` are compared by similarity. Any other shared variable, the output of an earlier `GENOP` included, is compared by equality. A joined solution keeps the term of the graph. The default θ0 is 0.85. It is an engine parameter, which `-Dgensparql.theta0=0.9` sets for the service and `GenSPARQL.setSimilarityThreshold(0.9)` sets in Java, and the fourth argument of `GENOP` sets another value for that `GENOP`, as in `query6_simscore_join.sparql` (0.75). The mode only decides how often the prompt is sent: a context-mode `GENOP` sends it once for every solution of the patterns that bind its placeholders, a base-mode `GENOP` once. The similarity join also applies inside `UNION`, `OPTIONAL` and `GRAPH`, where it reads the labels of the named graph. If the embedding model fails, the query falls back to the Jaccard similarity, logs a warning and reports the fallback in the trace of the HTTP service.
 
-Grounding guarantees **membership, not truth**. It drops any generated name the KG does not contain, so no hallucinated *entity* leaks through. Generated *attribute* values are literals, are not grounded, and are only as reliable as the model that produced them.
+Every entity that the similarity join maps a name to belongs to the graph, but the mapping can be wrong: a name, also one that denotes no entity of the graph, can reach the threshold for an entity with a similar label. In the evaluation, the embedding similarity made one such match at `θ = 0.85` (George P. Smith to George E. Smith) and none at `θ = 0.9`. Generated attribute values are literals that are not mapped, and they are only as reliable as the LLM that generated them.
 
 ---
 
@@ -281,7 +288,6 @@ Every provider asks the model for a JSON array and reads the values of every arr
 To run the chat model *and* the embedding model as local open-weight models (for example on a SLURM cluster) instead of a hosted API, see [`deploy/README.md`](deploy/README.md). Serve the models with vLLM (`deploy/serve_llm.slurm`, `deploy/serve_embeddings.slurm`), then point the `openai` provider at them:
 
 ```bash
-export OPENAI_API_KEY=dummy
 export OPENAI_BASE_URL=http://<llm-node>:8000/v1
 export OPENAI_EMBEDDING_BASE_URL=http://<emb-node>:8001/v1
 export OPENAI_EMBEDDING_MODEL=BAAI/bge-large-en-v1.5
@@ -345,7 +351,7 @@ java -version  # should show 17 or higher
 ```
 
 ### Missing or invalid API key
-`GENOP` queries need a provider key exported in the shell; the `run_query*.sh` scripts stop when `OPENROUTER_API_KEY` is not set. To try GenSPARQL without a provider account, use the workbench with Ollama (see [Quick Verification](#quick-verification)), the `mock` provider, or `run_query1.sh`.
+A hosted API needs its key exported in the shell (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY` or `OPENROUTER_API_KEY`). A local OpenAI-compatible server such as Ollama or vLLM needs only `OPENAI_BASE_URL`, and no key. The `run_query*.sh` scripts call OpenRouter and stop when `OPENROUTER_API_KEY` is not set. To try GenSPARQL without a provider account, use the workbench with Ollama (see [Quick Verification](#quick-verification)), the `mock` provider, or `run_query1.sh`.
 
 ### Parser errors after editing the grammar
 The parser is generated at build time. Recompile from the project root so the grammar is regenerated:

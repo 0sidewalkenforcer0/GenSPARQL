@@ -42,7 +42,6 @@ echo " Node / port        : $NODE_HOST : $PORT   (TP=$TP, dtype=$DTYPE)"
 echo " HF_HOME            : $HF_HOME"
 echo
 echo " In the GenSPARQL client shell, export:"
-echo "   export OPENAI_API_KEY=dummy"
 echo "   export OPENAI_BASE_URL=http://$NODE_HOST:$PORT/v1"
 echo " and write query model specs as:  <model:openai:$MODEL>"
 echo "=============================================================="

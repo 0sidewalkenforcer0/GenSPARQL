@@ -37,8 +37,7 @@ compute-node hostname it landed on.
 In the shell where you run the GenSPARQL Java client / eval:
 
 ```bash
-export OPENAI_API_KEY=dummy                                   # vLLM doesn't check it, but it must be non-empty
-export OPENAI_BASE_URL=http://<llm-node>:8000/v1
+export OPENAI_BASE_URL=http://<llm-node>:8000/v1              # no key needed for a server other than OpenAI's
 
 export OPENAI_EMBEDDING_BASE_URL=http://<emb-node>:8001/v1    # only if embeddings run on a different server
 export OPENAI_EMBEDDING_MODEL=BAAI/bge-large-en-v1.5
@@ -47,8 +46,8 @@ export OPENAI_EMBEDDING_MODEL=BAAI/bge-large-en-v1.5
 Provider routing (no extra flag needed):
 - `GENOP` picks its provider from the model spec — `<model:openai:...>` → the `openai` provider → `OPENAI_BASE_URL`.
 - Grounding / similarity-join embeddings use the **default** provider, which is auto-detected
-  from `OPENAI_API_KEY` being set → also the `openai` provider → `OPENAI_EMBEDDING_BASE_URL`.
-- If you still have `OPENROUTER_API_KEY` exported, `OPENAI_API_KEY` takes precedence, so the
+  from `OPENAI_BASE_URL` (or `OPENAI_API_KEY`) being set → also the `openai` provider → `OPENAI_EMBEDDING_BASE_URL`.
+- If you still have `OPENROUTER_API_KEY` exported, `OPENAI_BASE_URL` and `OPENAI_API_KEY` take precedence, so the
   default stays on the local server. (Unset `OPENROUTER_API_KEY` to be safe.)
 
 And write query model specs against the `openai` provider using the HF repo id as the model:

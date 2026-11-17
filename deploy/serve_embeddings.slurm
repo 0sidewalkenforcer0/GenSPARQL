@@ -36,7 +36,7 @@ echo
 echo " In the GenSPARQL client shell, export:"
 echo "   export OPENAI_EMBEDDING_BASE_URL=http://$NODE_HOST:$PORT/v1"
 echo "   export OPENAI_EMBEDDING_MODEL=$MODEL"
-echo "   # (OPENAI_EMBEDDING_API_KEY defaults to OPENAI_API_KEY / 'dummy')"
+echo "   # (no key needed; OPENAI_EMBEDDING_API_KEY defaults to OPENAI_API_KEY if one is set)"
 echo "=============================================================="
 
 exec vllm serve "$MODEL" \
