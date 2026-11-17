@@ -498,8 +498,13 @@ class GenOpGroupSemanticsTest {
                 row("name", "Lionel Messi", "p", EX + "p1", "pos", "Forward")), rows);
     }
 
+    /**
+     * θ-compatibility in the join of a later GENOP (gen(μ2) of Section 2.2): the output of an
+     * earlier GENOP that a pattern has mapped is a term of the graph and is compared by equality;
+     * one that no pattern has mapped is still a generated literal and is compared by similarity.
+     */
     @Test
-    void theOutputOfAnEarlierGenopIsComparedByEqualityInTheJoinOfALaterOne() {
+    void theOutputOfAnEarlierGenopIsComparedByEqualityOnceMappedAndBySimilarityOtherwise() {
         MockLLMProvider lists = new MockLLMProvider()
                 .withResponse("List the teams", "[\"argentina\", \"France\", \"Mexico\"]")
                 .withDefaultResponse("[\"Lionel Messi\", \"Kylian Mbappe\"]");
@@ -511,8 +516,10 @@ class GenOpGroupSemanticsTest {
                 row("p", EX + "p2", "tag", "x", "team", WD + "Q47774")),
                 run(teams + "?team a ex:Team . BIND(\"x\" AS ?tag) " + players + "?p ex:playsFor ?team", lists),
                 "?team a ex:Team maps the teams, and ?p ex:playsFor ?team compares them by equality");
-        assertEquals(List.of(),
+        assertEquals(List.of(
+                row("p", EX + "p1", "tag", "x", "team", WD + "Q79800"),
+                row("p", EX + "p2", "tag", "x", "team", WD + "Q47774")),
                 run(teams + "BIND(\"x\" AS ?tag) " + players + "?p ex:playsFor ?team", lists),
-                "without that pattern ?team keeps the generated names, which equal no entity");
+                "without that pattern ?team keeps the generated names, which ?p ex:playsFor ?team maps by similarity");
     }
 }

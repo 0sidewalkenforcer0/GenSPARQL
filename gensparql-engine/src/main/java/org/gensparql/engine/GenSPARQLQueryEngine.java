@@ -922,7 +922,6 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
         Map<Var, SourceType> rightTypes = new HashMap<>(sourceTypes);
         List<OpGenerate> generating = new ArrayList<>();
         collectGeneratingSide(rightOp, generating);
-        keepOnlyCurrentOutputs(rightTypes, generating, leftOp);
         rightTypes.keySet().removeAll(patternBoundVars(rightOp));
         registered.forEach(sourceTypes::putIfAbsent);
 
@@ -1031,7 +1030,15 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
                 generatedTypes.putIfAbsent(v, SourceType.GEN);
             }
         }
-        keepOnlyCurrentOutputs(generatedTypes, generating, patternOp);
+        // gen(μ2) of Section 2.2: the output of an earlier GENOP that reaches this join through
+        // the incoming solutions is still a generated literal unless a pattern has mapped it, and
+        // is compared by similarity as well. SimScoreEvaluator.isGenerated checks each value, so a
+        // mapped term is still compared by equality.
+        registered.forEach((v, type) -> {
+            if (type == SourceType.GEN) {
+                generatedTypes.putIfAbsent(v, SourceType.GEN);
+            }
+        });
         generatedTypes.keySet().removeAll(patternBoundVars(generatingOp));
         // The filters above still need the variables generated before this join.
         registered.forEach(sourceTypes::putIfAbsent);
@@ -1104,29 +1111,6 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
     }
 
     /**
-     * Keep generated only the output variables of the current GENOP of a generating side: the
-     * last one, in written order, whose output the other side mentions, Gi for the patterns Qi.
-     * The output variables of the other GENOPs of the side are compared by equality, as every
-     * shared variable outside v̄i is: Ti-1 has already mapped them, or they keep their
-     * generated values.
-     */
-    private static void keepOnlyCurrentOutputs(Map<Var, SourceType> types, List<OpGenerate> generating,
-                                               Op other) {
-        OpGenerate current = currentGenerate(generating, other);
-        if (current == null) {
-            return;
-        }
-        Set<Var> kept = new HashSet<>(current.getOutputVariables());
-        for (OpGenerate g : generating) {
-            for (Var v : g.getOutputVariables()) {
-                if (!kept.contains(v)) {
-                    types.remove(v);
-                }
-            }
-        }
-    }
-
-    /**
      * The variables that a graph pattern or VALUES binds on the path along which a side passes its
      * solutions on (as {@link #collectGeneratingSide} walks it: joins, sequences, filters, BIND, the
      * required part of OPTIONAL and the left side of MINUS), outside its GENOPs. An output variable
@@ -1181,18 +1165,25 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
     }
 
     /**
-     * The evaluator of one similarity join Qi ⋈θi GENOP(...): its output variables take the
-     * threshold θi of the current GENOP Gi, its own argument or θ0, and not the threshold of
-     * another GENOP that generates the same variable. Without a current GENOP, each output takes
-     * the threshold of the last GENOP of the side that generates it.
+     * The evaluator of one similarity join Qi ⋈θi GENOP(...). As in Section 2.2, a shared variable
+     * is compared by similarity if the solution of the GENOP side binds it to a generated literal,
+     * the output of an earlier GENOP that no pattern has mapped included, and by equality
+     * otherwise, which {@link SimScoreEvaluator#isGenerated} decides per value. Every variable of
+     * the join takes the threshold θi of the current GENOP Gi, its own argument or θ0, and not the
+     * threshold of another GENOP that generates the same variable. Without a current GENOP, each
+     * output takes the threshold of the last GENOP of the side that generates it.
      */
     private SimScoreEvaluator joinEvaluator(ExecutionContext execCxt, List<OpGenerate> generating, Op other) {
         ThresholdRegistry thresholds = new ThresholdRegistry();
-        thresholds.setDefaultThreshold(GenSPARQLConfig.getDefaultThreshold());
         OpGenerate current = currentGenerate(generating, other);
-        for (OpGenerate g : current != null ? List.of(current) : generating) {
-            for (Var v : g.getOutputVariables()) {
-                thresholds.setThreshold(v, g.getEffectiveThreshold());
+        if (current != null) {
+            thresholds.setDefaultThreshold(current.getEffectiveThreshold());
+        } else {
+            thresholds.setDefaultThreshold(GenSPARQLConfig.getDefaultThreshold());
+            for (OpGenerate g : generating) {
+                for (Var v : g.getOutputVariables()) {
+                    thresholds.setThreshold(v, g.getEffectiveThreshold());
+                }
             }
         }
         return new SimScoreEvaluator(getSimText(execCxt), thresholds, new GraphLabels(execCxt.getActiveGraph()));
