@@ -1983,8 +1983,9 @@ ORDER BY ?year`
     const overviewGraph=state.graph.nodes.length>300&&!state.focusMode;
     const staticNobelOverview=state.dbKey==="nobelPrize"&&(state.graph.nobelCompactOverview||state.graph.nodes.length>1000)&&!state.focusMode;
     const overviewLeafTypes=new Set(["Athlete","NobelLaureate","NobelAward","CountryOrCitizenship"]);
-    // In an overview every label keeps its size on screen (styles.css, --k): the circle's radius
-    // scales with the zoom, the gap of 7 px and the baseline are in em of the counter-scaled font.
+    // In an overview a label grows on screen more slowly than the graph (styles.css, --k, and
+    // labelGrowth): the circle's radius scales with the zoom, the gap of 7 px and the baseline
+    // are in em of the counter-scaled font.
     const em=overviewGraph;
     state.nodeSel.filter(d=>!overviewGraph||!overviewLeafTypes.has(d.type)).append("text")
       .attr("x",d=>em?(nodeLabelAnchor(d)==="end"?-nodeRadius(d):nodeLabelAnchor(d)==="middle"?0:nodeRadius(d)):nodeLabelX(d))
@@ -1998,8 +1999,8 @@ ORDER BY ?year`
       .text(d=>d.label);
     // The labels of the leaves of an overview appear when the graph is zoomed in or the node is
     // in focus (styles.css).
-    // A leaf label keeps its size on screen (styles.css, --k): the circle's radius scales with
-    // the zoom, the gap of 7 px and the baseline are in em of the counter-scaled font.
+    // A leaf label grows on screen as the other labels of the overview do (styles.css, --k): the
+    // circle's radius scales with the zoom, the gap and the baseline are in em of the font.
     if(INTERACTIVE&&overviewGraph){
       state.nodeSel.filter(d=>overviewLeafTypes.has(d.type)).append("text")
         .attr("class","leaf-label")
@@ -2646,8 +2647,8 @@ ORDER BY ?year`
   // ---- label placement in a large graph ------------------------------------------------------
   // The labels of an overview compete for space on screen: a label is drawn only if it does not
   // overlap a label placed before it. Focused nodes come first, then the structural nodes by
-  // size, then the leaves by degree. A leaf label keeps its size on screen, so zooming in makes
-  // room for more of them and zooming out takes it away again; a leaf label of a node in focus
+  // size, then the leaves by degree. A label grows more slowly than the graph, so zooming in
+  // makes room for more of them and zooming out takes it away again; a leaf label of a node in focus
   // is shown by styles.css whatever this decides. The placement runs after a zoom, a drag and
   // the end of the layout, not on every frame.
   const LEAF_LABEL_MIN_ZOOM=.9;
@@ -2676,6 +2677,11 @@ ORDER BY ?year`
     scheduleLabelCull();
   }
 
+  // How much larger than at zoom 1 a label of a large graph is drawn on screen (cullLabels).
+  function labelGrowth(k){
+    return Math.min(1.8,Math.max(1,Math.sqrt(k)));
+  }
+
   function scheduleLabelCull(){
     if(state.labelCullTimer)clearTimeout(state.labelCullTimer);
     state.labelCullTimer=setTimeout(()=>{state.labelCullTimer=0;cullLabels()},90);
@@ -2697,7 +2703,12 @@ ORDER BY ?year`
     if(!svg||!stage)return;
     const large=state.graph.nodes.length>300;
     const t=NativeGraph.zoomTransform(svg),k=t.k;
-    svg.style.setProperty("--k",String(k));
+    // A label of a large graph grows on screen with the square root of the zoom, between its
+    // size at zoom 1 and 1.8 times that: zooming in makes the labels larger, but more slowly
+    // than the graph, so the room that opens shows more labels instead of the same ones larger.
+    // The stylesheet divides the font size by --k, the zoom over this growth.
+    const grow=labelGrowth(k);
+    svg.style.setProperty("--k",String(k/grow));
     const W=stage.clientWidth,H=stage.clientHeight;
     const farOut=svg.classList.contains("zoom-far");
     if(state.labelDegreeGraph!==state.graph){state.labelDegreeGraph=state.graph;state.labelDegrees=nodeDegrees(state.graph)}
@@ -2720,9 +2731,9 @@ ORDER BY ?year`
         if(!leaf&&farOut&&!focus)continue;                // hidden by the zoom-far rule anyway
         const text=el.textContent||"";
         if(!text){continue}
-        const px=emphasized?11:9.5;                       // constant on screen in a large graph
+        const px=(emphasized?11:9.5)*grow;               // its size on screen in a large graph
         const w=labelWidth(text,px),h=px*1.15;
-        const gap=nodeRadius(d)*k+7;
+        const gap=nodeRadius(d)*k+7*grow;                // the gap of .74em scales with the font
         const anchor=leaf?"start":(el.getAttribute("text-anchor")||"start");
         let x0;
         if(anchor==="end")x0=sx-gap-w;
