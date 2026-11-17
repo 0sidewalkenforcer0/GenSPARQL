@@ -28,7 +28,6 @@ A SPARQL query returns only what a knowledge graph (KG) explicitly stores, so it
 - [LLM Providers and Models](#llm-providers-and-models)
 - [Evaluation](#evaluation)
 - [Data and Privacy](#data-and-privacy)
-- [Earlier Benchmark Material](#earlier-benchmark-material)
 - [Project Structure](#project-structure)
 - [Known Limitations](#known-limitations)
 - [Troubleshooting](#troubleshooting)
@@ -352,12 +351,6 @@ The evaluation runs on the two graphs of the workbench, built from Wikidata: the
 
 ---
 
-## Earlier Benchmark Material
-
-The folder `gensparql-benchmark/` holds query generators and run scripts for KG completion over FB15k-237 and NELL-995 from an earlier version of GenSPARQL. It is not a Maven module, it is not part of the evaluation above, and it has not been updated since July 2026. The datasets are **not** committed; see [`gensparql-benchmark/DATA.md`](gensparql-benchmark/DATA.md) for how to obtain and place them, and the generator scripts (`generate_gensparql_queries.py`, `generate_expected_answers.py`, `generate_run_scripts.py`) for the workflow.
-
----
-
 ## Project Structure
 
 ```
@@ -374,7 +367,6 @@ GenSPARQL/
 │   ├── data/                     # Demo RDF datasets
 │   ├── queries/                  # Sample SPARQL queries
 │   └── run_query*.sh             # Per-query run scripts
-├── gensparql-benchmark/          # Earlier KG-completion material (FB15k-237, NELL-995), not built by Maven
 ├── eval/www27/                   # Evaluation: runner, scoring, gold data, results and recorded LLM answers
 ├── deploy/                       # vLLM serving scripts for local open-weight models (SLURM)
 ├── docs/                         # Web workbench (GitHub Pages) and the two graphs

@@ -29,9 +29,7 @@ benchmark_results_*/
 __pycache__/
 *.pyc
 
-# Large benchmark data (see gensparql-benchmark/DATA.md)
-gensparql-benchmark/GENSPARQL_Data/FB15k-237+H/
-gensparql-benchmark/GENSPARQL_Data/NELL995+H/
+# Large RDF data
 *.nt
 *.tdb/
 
