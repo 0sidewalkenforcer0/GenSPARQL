@@ -10,7 +10,7 @@
 
 **A generative extension of SPARQL 1.1 for Apache Jena: an LLM generates values during query evaluation, and a similarity join maps generated names to entities of the graph.**
 
-▶ **[Try the workbench](https://0sidewalkenforcer0.github.io/GenSPARQL/)** on two graphs built from Wikidata, the 2026 World Cup and the Nobel laureates. Its recorded mode replays the answers of three open-weight LLMs, and its live mode runs your own queries with a local model ([setup](#live-mode-with-a-local-model-ollama-no-provider-account)). ▶ **[Watch the 3-minute video](https://0sidewalkenforcer0.github.io/GenSPARQL/video/gensparql-demo.mp4)**.
+▶ **[Try the workbench](https://0sidewalkenforcer0.github.io/GenSPARQL/)** on two graphs built from Wikidata, the 2026 World Cup and the Nobel laureates. Its recorded mode replays the answers of three open-weight LLMs, and its live mode runs your own queries, also over a Turtle graph that you upload, with a local model ([setup](#live-mode-with-a-local-model-ollama-no-provider-account)). ▶ **[Watch the 3-minute video](https://0sidewalkenforcer0.github.io/GenSPARQL/video/gensparql-demo.mp4)**.
 
 A SPARQL query returns only what a knowledge graph (KG) explicitly stores, so it cannot return an attribute the KG never modeled or an entity it does not record. Large language models (LLMs) hold broad open-world knowledge, but they optimize likelihood over truth and can hallucinate. GenSPARQL bridges the two by adding two operators that live inside the query algebra: a first-class `GENOP` that calls an LLM during query evaluation and binds the generated values to query variables, and a similarity join that maps generated names to entities of the graph (also called grounding). Because `GENOP` is an operator rather than an external call, the query planner defers it behind selective graph patterns, so the LLM runs only on the bindings that survive.
 
@@ -27,6 +27,7 @@ A SPARQL query returns only what a knowledge graph (KG) explicitly stores, so it
 - [Available Functions](#available-functions)
 - [LLM Providers and Models](#llm-providers-and-models)
 - [Evaluation](#evaluation)
+- [Data and Privacy](#data-and-privacy)
 - [Earlier Benchmark Material](#earlier-benchmark-material)
 - [Project Structure](#project-structure)
 - [Known Limitations](#known-limitations)
@@ -223,7 +224,7 @@ GENOP("<prompt, may contain {?var} placeholders>", (?out1, ..., ?outk), <model:P
 
 It runs in one of two modes, covering two kinds of completion the KG cannot answer alone.
 
-Both examples are the queries of Figure 1 of the paper and run as written over the World Cup graph `docs/worldcup2026.ttl`, here with Mistral-7B on a local Ollama server. The engine itself asks the LLM for a JSON array, so the prompt does not need to.
+Both examples are the queries of Figure 2 of the paper and run as written over the World Cup graph `docs/worldcup2026.ttl`, here with Mistral-7B on a local Ollama server. The engine itself asks the LLM for a JSON array, so the prompt does not need to.
 
 **Generating attributes (context mode).** The prompt contains a placeholder, so the LLM is called once for each solution of the other patterns, here for each of the 26 players of Argentina, and fills in a property that the graph does not store:
 
@@ -231,9 +232,9 @@ Both examples are the queries of Figure 1 of the paper and run as written over t
 PREFIX ex:   <http://example.org/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 SELECT ?name ?pos WHERE {
-  ?p ex:playsFor ?t .
+  ?player ex:playsFor ?t .
   ?t rdfs:label "Argentina" .
-  ?p rdfs:label ?name .
+  ?player rdfs:label ?name .
   GENOP("Position of {?name}?", (?pos), <model:openai:mistral:7b>)
 }
 ```
@@ -242,9 +243,9 @@ SELECT ?name ?pos WHERE {
 
 ```sparql
 PREFIX ex:   <http://example.org/>
-SELECT ?p WHERE {
-  ?p a ex:Athlete .
-  GENOP("List footballers who have won the World Cup.", (?p), <model:openai:mistral:7b>, 0.85)
+SELECT ?player WHERE {
+  ?player a ex:Athlete .
+  GENOP("List footballers who have won the World Cup.", (?player), <model:openai:mistral:7b>, 0.85)
 }
 ```
 
@@ -257,18 +258,21 @@ The optional `θ` in [0, 1] is the threshold of the similarity join of this `GEN
 
 An `OPTIONAL` or `BIND` that is not deferred comes before the `GENOP` expressions even when it is written after them, so it can bind a placeholder variable.
 
+A context-mode `GENOP` in the optional part of `A OPTIONAL { B }` can use variables of `A` in its placeholders. GenSPARQL therefore evaluates `B` separately for each solution of `A`, and keeps the solution unextended if `B` yields none.
+
 ---
 
 ## Mapping Generated Names to Entities (Similarity Join)
 
 A generated value is free text, whereas a KG term is an IRI or typed literal, so the two cannot be joined by equality. When a `GENOP` shares an output variable with a graph pattern of its group, GenSPARQL joins them by **similarity** instead, in both modes:
 
-- **What is compared.** Each generated value is compared with the labels of the term that the pattern binds: the values of the first of `rdfs:label`, `skos:prefLabel`, `schema:name` and `foaf:name` that the term has in the queried graph, or else its local name. A match is kept when the similarity reaches the threshold `θ`, and the joined solution keeps the term of the graph.
-- **Which variables.** Only the output variables of that `GENOP` are compared by similarity. Any other shared variable, the output of an earlier `GENOP` included, is compared by equality.
+- **What is compared.** Each generated value is compared with the labels of the term that the pattern binds: the values of the first of `rdfs:label`, `skos:prefLabel`, `schema:name` and `foaf:name` that the term has in the queried graph, or else its local name, and for a literal its lexical form. A match is kept when the similarity reaches the threshold `θ`, and the joined solution keeps the term of the graph.
+- **Which variables.** A shared variable is compared by similarity if the `GENOP` side binds it to a generated literal, the output of an earlier `GENOP` that no pattern has mapped included, and by equality otherwise, for example an output that a pattern has already mapped to an entity. All of them use the threshold of the current `GENOP`.
 - **Similarity.** The request chooses the Jaccard similarity of the lowercase word sets or the cosine similarity of text embeddings. If the embedding model fails, the query falls back to the Jaccard similarity, logs a warning and reports the fallback in the trace of the HTTP service.
 - **Threshold.** The default θ0 is 0.85. It is an engine parameter, which `MAVEN_OPTS=-Dgensparql.theta0=0.9 ./start-fuseki.sh` sets for the service and `GenSPARQL.setSimilarityThreshold(0.9)` sets in Java. The fourth argument of a `GENOP` sets another value for that `GENOP`, as in `query6_simscore_join.sparql` (0.75).
 - **Modes.** The mode only decides how often the prompt is sent: a context-mode `GENOP` sends it once for every solution of the patterns that bind its placeholders, a base-mode `GENOP` once.
 - **Where.** The similarity join also applies inside `UNION`, `OPTIONAL` and `GRAPH`, where it reads the labels of the named graph.
+- **Filters.** For a literal `?x` that a `GENOP` with the threshold `θ` generated, `FILTER(?x = t)` holds if the similarity of `?x` to a label of `t` reaches `θ`, and `FILTER(?x != t)` is its negation. All other expressions follow SPARQL.
 
 Every entity that the similarity join maps a name to belongs to the graph, but the mapping can be wrong: a name, also one that denotes no entity of the graph, can reach the threshold for an entity with a similar label. In the evaluation, the embedding similarity made one such match at `θ = 0.85` (George P. Smith to George E. Smith) and none at `θ = 0.9`. Generated attribute values are literals that are not mapped, and they are only as reliable as the LLM that generated them.
 
@@ -332,11 +336,19 @@ export OPENAI_EMBEDDING_MODEL=BAAI/bge-large-en-v1.5
 
 The evaluation runs on the two graphs of the workbench, built from Wikidata: the 2026 FIFA World Cup (1,248 players, 48 teams, 16 host cities and their stadiums; 4,000 triples) and the Nobel laureates (1,018 laureates, 1,026 awards; 10,849 triples). Three open-weight LLMs, Qwen3-30B-A3B-Instruct-2507, Qwen3-8B in non-thinking mode and Mistral-7B-Instruct-v0.3, were served by vLLM at temperature 0, and every answer went through `GENOP` in the HTTP service. The embedding similarity used bge-large-en-v1.5.
 
-- **Completing attributes.** The generated positions are correct for 55-59% of the answered players (a uniform guess among the four positions: 26%), and the birth years for 69-90% of the answered laureates.
-- **Mapping generated names.** Over six list queries, 20-61% of the generated names denote no entity of the graph. At `θ = 0.85`, the embedding similarity (bge-large-en-v1.5) maps 83% of the entities that the names denote, with one wrong match; the Jaccard similarity maps 67%, with none from `θ = 0.6` on.
-- **LLM calls.** The planner reduces the calls of a composed query from 1,248 to 104, and those of a second one from 230 to 17.
+- **Generating attributes.** The generated positions are correct for 55-59% of the answered players (answering midfielder for every player: 33%; a uniform guess among the four positions: 26%), and the birth years for 69-90% of the answered laureates.
+- **Mapping names to entities.** Over six list queries, 20-61% of the generated names denote no entity of the graph. At `θ = 0.85`, the embedding similarity (bge-large-en-v1.5) maps 83% of the entities that the names denote, with one wrong match; the Jaccard similarity maps 67%, with no incorrect match from `θ = 0.6` on.
+- **Counting LLM calls.** The planner reduces the calls of a composed query from 1,248 to 104, and those of a second one from 230 to 17.
 
 [`eval/www27/README.md`](eval/www27/README.md) describes how to rerun the evaluation; `eval/www27/results/` holds the queries' results, the recorded LLM answers and the scores, and `eval/www27/gold/` the gold data.
+
+---
+
+## Data and Privacy
+
+- The two graphs in `docs/` are built from Wikidata (CC0) by `gensparql-example/data/build_worldcup2026_kg.py` and `gensparql-example/data/build_nobel_prize_kg.py`. The World Cup graph holds the official 2026 squads as Wikidata records them, and the Nobel graph includes the citizenship and gender of the laureates.
+- Generated values about people can be incorrect. GenSPARQL does not write them into the graphs: the dataset of the service is read-only.
+- The workbench collects no user data. Names of people in prompts and embedding requests reach an external server only when a remote endpoint is chosen; with the default settings they go to Ollama on this machine. The page loads one web font from Google Fonts.
 
 ---
 
