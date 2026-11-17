@@ -1650,23 +1650,6 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
 `;
     const samples={
-      playerPositionAndGoals:`PREFIX ex:   <http://example.org/>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-
-# Ask the LLM for two player attributes in one call.
-SELECT ?name ?position ?goals
-WHERE {
-  ?player a ex:Athlete ;
-          rdfs:label ?name .
-
-  FILTER(?name = "Lionel Messi")
-
-  GENOP(
-    "For {?name} at the FIFA World Cup 2026, return the player's football position and number of goals.",
-    (?position, ?goals),
-    <model>
-  )
-}`,
       argentinaPositions:`PREFIX ex:   <http://example.org/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX wd:   <http://www.wikidata.org/entity/>
@@ -1685,107 +1668,116 @@ WHERE {
   )
 }
 ORDER BY ?position ?name`,
-      topRankedTeams:`PREFIX ex:   <http://example.org/>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+      worldCupWinners:`PREFIX ex:   <http://example.org/>
 
-# Which players play for teams ranked in the top 10 of the current FIFA Men's World Ranking?
-SELECT ?name ?teamName ?ranking
+# Figure 2(b) of the paper: a base-mode GENOP lists names, and the similarity join
+# maps them to the athletes of the graph at the threshold 0.85.
+SELECT ?player
 WHERE {
-  ?player ex:playsFor ?team ;
-          rdfs:label ?name .
-
-  ?team rdfs:label ?teamName .
+  ?player a ex:Athlete .
 
   GENOP(
-    "What is the current FIFA men's world ranking of {?teamName}? Return only an integer.",
-    (?ranking),
-    <model>
-  )
-
-  FILTER(xsd:integer(?ranking) <= 10)
-}`,
-      worldCupGoals:`PREFIX ex:   <http://example.org/>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
-
-# List all players and show their goals if they scored at least once.
-SELECT ?name ?teamName ?goals
-WHERE {
-  ?player ex:playsFor ?team ;
-          rdfs:label ?name .
-
-  ?team rdfs:label ?teamName .
-
-  OPTIONAL {
-    GENOP(
-      "How many goals did {?name} score at the FIFA World Cup 2026? Return only an integer.",
-      (?goals),
-      <model>
-    )
-
-    FILTER(xsd:integer(?goals) > 0)
-  }
-}
-ORDER BY DESC(xsd:integer(?goals))`,
-      spainMatches:`PREFIX ex:   <http://example.org/>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-
-# Which teams did Spain play, and what was each result?
-SELECT ?opponentName ?result
-WHERE {
-  ?opponent a ex:Team ;
-            rdfs:label ?opponentName .
-
-  FILTER(LCASE(STR(?opponentName)) != "spain")
-
-  GENOP(
-    "Did Spain play against {?opponentName} at the FIFA World Cup 2026? Return only Yes or No.",
-    (?played),
-    <model>
-  )
-
-  FILTER(?played = "Yes")
-
-  GENOP(
-    "What was the result of Spain against {?opponentName} at the FIFA World Cup 2026? Return only the score in the format Spain X-Y Opponent.",
-    (?result),
-    <model>
+    "List footballers who have won the World Cup.",
+    (?player),
+    <model>,
+    0.85
   )
 }`,
-      spainArgentinaScorers:`PREFIX ex:   <http://example.org/>
+      nationalTeams:`PREFIX ex:   <http://example.org/>
+
+# Scenario 2: map generated team names to the teams of the graph.
+# Change the threshold 0.85 to see which names map.
+SELECT ?team
+WHERE {
+  ?team a ex:Team .
+
+  GENOP(
+    "List the national teams that play at the 2026 FIFA World Cup.",
+    (?team),
+    <model>,
+    0.85
+  )
+}`,
+      groupADefenders:`PREFIX ex:   <http://example.org/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+
+# Scenario 3: the planner evaluates the patterns for Group A before GENOP,
+# so the LLM is called for the 104 players of Group A, not for all 1,248.
+SELECT ?name ?pos
+WHERE {
+  ?t ex:inGroup ?g .
+  ?g rdfs:label "Group A" .
+  ?p ex:playsFor ?t ;
+     rdfs:label ?name .
+
+  GENOP(
+    "Which position does the footballer {?name} primarily play: goalkeeper, defender, midfielder or forward?",
+    (?pos),
+    <model>
+  )
+
+  FILTER(LCASE(STR(?pos)) = "defender")
+}`,
+      nobelFields:`PREFIX ex:   <http://example.org/>
+
+# Scenario 2: map generated field names to the Nobel fields of the graph.
+# At 0.85 neither Physics nor Chemistry maps, because the graph labels them
+# Nobel Prize in Physics and Nobel Prize in Chemistry.
+SELECT ?field
+WHERE {
+  ?field a ex:NobelField .
+
+  GENOP(
+    "List the fields in which the Nobel Prize is awarded.",
+    (?field),
+    <model>,
+    0.85
+  )
+}`,
+      physicsBirthYears:`PREFIX ex:   <http://example.org/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX wd:   <http://www.wikidata.org/entity/>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
 
-# Who scored for Spain or Argentina at the 2026 FIFA World Cup?
-SELECT ?name ?teamName ?goals
+# Scenario 1: generate the birth years that the graph leaves out,
+# here for the Physics laureates since 2020.
+SELECT ?name ?born
 WHERE {
-  {
-    ?player a ex:Athlete ;
-            ex:playsFor wd:Q42267 ;
-            rdfs:label ?name .
-
-    wd:Q42267 rdfs:label ?teamName .
-  }
-  UNION
-  {
-    ?player a ex:Athlete ;
-            ex:playsFor wd:Q79800 ;
-            rdfs:label ?name .
-
-    wd:Q79800 rdfs:label ?teamName .
-  }
+  ?a ex:field wd:Q38104 ;
+     ex:winningYear ?y ;
+     ex:winner ?l .
+  ?l rdfs:label ?name .
+  FILTER(xsd:integer(STR(?y)) >= 2020)
 
   GENOP(
-    "How many goals did {?name} score at the FIFA World Cup 2026? Return only an integer.",
-    (?goals),
+    "In which year was the Nobel laureate {?name} born? Answer with the year only.",
+    (?born),
     <model>
   )
-
-  FILTER(xsd:integer(?goals) > 0)
 }
-ORDER BY DESC(xsd:integer(?goals))`,
+ORDER BY ?name`,
+      physicsContributions:`PREFIX ex:   <http://example.org/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX wd:   <http://www.wikidata.org/entity/>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+
+# Scenario 3: the planner applies the FILTER on the award year before GENOP,
+# so the LLM is called for the 17 Physics awards since 2020, not for all 230.
+SELECT ?name ?contribution
+WHERE {
+  ?a ex:field wd:Q38104 ;
+     ex:winningYear ?y ;
+     ex:winner ?l .
+  ?l rdfs:label ?name .
+  FILTER(xsd:integer(STR(?y)) >= 2020)
+
+  GENOP(
+    "For which contribution did {?name} receive the Nobel Prize in Physics? Answer with one short phrase.",
+    (?contribution),
+    <model>
+  )
+}
+ORDER BY ?name`,
       nobelQuantumLaureates:`PREFIX ex:   <http://example.org/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
@@ -1809,7 +1801,7 @@ ORDER BY ?year`
     // The editor grows with the query, up to the maximum height of the stylesheet.
     const fitEditor=()=>{editor.style.height="auto";editor.style.height=`${editor.scrollHeight+2}px`};
     editor.addEventListener("input",fitEditor);
-    editor.value=samples.playerPositionAndGoals;
+    editor.value=samples.argentinaPositions;
     requestAnimationFrame(fitEditor);
     editor.addEventListener("keydown",event=>{
       if(event.key==="Tab"){
@@ -1821,10 +1813,18 @@ ORDER BY ?year`
         event.preventDefault();$("liveRunBtn").click();
       }
     });
+    // Each sample runs over one of the two built-in graphs: loading it selects that graph.
+    const sampleDb={argentinaPositions:"fifa2026",worldCupWinners:"fifa2026",nationalTeams:"fifa2026",
+      groupADefenders:"fifa2026",nobelFields:"nobelPrize",physicsBirthYears:"nobelPrize",
+      physicsContributions:"nobelPrize",nobelQuantumLaureates:"nobelPrize"};
     $("loadSampleQuery").onclick=()=>{
-      const key=$("liveSampleSelect")?.value||"playerPositionAndGoals";
-      editor.value=samples[key]||samples.playerPositionAndGoals;
+      const key=$("liveSampleSelect")?.value||"argentinaPositions";
+      editor.value=samples[key]||samples.argentinaPositions;
       fitEditor();
+      const db=sampleDb[key], select=$("databaseSelect");
+      if(db&&select&&select.value!==db&&[...select.options].some(o=>o.value===db)){
+        select.value=db;select.dispatchEvent(new Event("change"));
+      }
       editor.focus();
     };
     $("clearLiveQuery").onclick=()=>{editor.value="";fitEditor();editor.focus();$("liveQueryResult").hidden=true};
