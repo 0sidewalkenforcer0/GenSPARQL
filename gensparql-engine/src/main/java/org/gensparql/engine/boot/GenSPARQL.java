@@ -270,7 +270,7 @@ public class GenSPARQL {
         // Check if query contains ElementGenerate
         org.apache.jena.sparql.syntax.Element pattern = query.getQueryPattern();
         Op op;
-        if (containsElementGenerate(pattern)) {
+        if (AlgebraGeneratorGenSPARQL.containsGenerate(pattern)) {
             // Use our custom algebra generator
             op = AlgebraGeneratorGenSPARQL.compileQuery(query);
         } else {
@@ -284,70 +284,6 @@ public class GenSPARQL {
 
         // Return a QueryExecution wrapper
         return new GenSPARQLQueryExecution(query, dataset, plan);
-    }
-
-    /**
-     * Does this pattern contain a GENOP anywhere?
-     *
-     * <p>The answer decides whether the query is compiled by GenSPARQL or handed to Jena, and
-     * Jena's compiler rejects ElementGenerate outright. Missing a nesting construct here does
-     * not degrade the plan, it fails the query, which is what happened for a GENOP inside
-     * GRAPH, a sub-select, SERVICE or MINUS.
-     */
-    private static boolean containsElementGenerate(org.apache.jena.sparql.syntax.Element element) {
-        if (element == null) {
-            return false;
-        }
-        if (element instanceof ElementGenerate) {
-            return true;
-        }
-        if (element instanceof org.apache.jena.sparql.syntax.ElementGroup) {
-            for (org.apache.jena.sparql.syntax.Element e
-                    : ((org.apache.jena.sparql.syntax.ElementGroup) element).getElements()) {
-                if (containsElementGenerate(e)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        if (element instanceof org.apache.jena.sparql.syntax.ElementUnion) {
-            for (org.apache.jena.sparql.syntax.Element e
-                    : ((org.apache.jena.sparql.syntax.ElementUnion) element).getElements()) {
-                if (containsElementGenerate(e)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        if (element instanceof org.apache.jena.sparql.syntax.ElementOptional) {
-            return containsElementGenerate(
-                    ((org.apache.jena.sparql.syntax.ElementOptional) element).getOptionalElement());
-        }
-        if (element instanceof org.apache.jena.sparql.syntax.ElementMinus) {
-            return containsElementGenerate(
-                    ((org.apache.jena.sparql.syntax.ElementMinus) element).getMinusElement());
-        }
-        if (element instanceof org.apache.jena.sparql.syntax.ElementNamedGraph) {
-            return containsElementGenerate(
-                    ((org.apache.jena.sparql.syntax.ElementNamedGraph) element).getElement());
-        }
-        if (element instanceof org.apache.jena.sparql.syntax.ElementService) {
-            return containsElementGenerate(
-                    ((org.apache.jena.sparql.syntax.ElementService) element).getElement());
-        }
-        if (element instanceof org.apache.jena.sparql.syntax.ElementSubQuery) {
-            return containsElementGenerate(
-                    ((org.apache.jena.sparql.syntax.ElementSubQuery) element).getQuery().getQueryPattern());
-        }
-        if (element instanceof org.apache.jena.sparql.syntax.ElementExists) {
-            return containsElementGenerate(
-                    ((org.apache.jena.sparql.syntax.ElementExists) element).getElement());
-        }
-        if (element instanceof org.apache.jena.sparql.syntax.ElementNotExists) {
-            return containsElementGenerate(
-                    ((org.apache.jena.sparql.syntax.ElementNotExists) element).getElement());
-        }
-        return false;
     }
 
     /**
