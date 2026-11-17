@@ -70,17 +70,17 @@ public class SimilarityFunction extends FunctionBase2 {
      * Get embedding for text (with caching).
      */
     private float[] getEmbedding(String text) {
-        // Check cache first
-        float[] cached = embeddingCache.get(text);
-        if (cached != null) {
-            return cached;
-        }
-
-        // Get embedding from LLM provider
         try {
             LLMProvider provider = LLMProviderRegistry.getDefault();
             if (!provider.supportsEmbedding()) {
                 return null;
+            }
+            // Cached embeddings belong to the endpoint and model that computed them.
+            String cacheKey = provider.getEmbeddingEndpointId() + '\u0001'
+                    + provider.getDefaultEmbeddingModel() + '\u0001' + text;
+            float[] cached = embeddingCache.get(cacheKey);
+            if (cached != null) {
+                return cached;
             }
 
             EmbedRequest request = new EmbedRequest(text, null);
@@ -90,8 +90,8 @@ public class SimilarityFunction extends FunctionBase2 {
                 float[] embedding = response.getFirstEmbedding();
 
                 // Cache if not too large
-                if (embeddingCache.size() < MAX_CACHE_SIZE) {
-                    embeddingCache.put(text, embedding);
+                if (embedding != null && embeddingCache.size() < MAX_CACHE_SIZE) {
+                    embeddingCache.put(cacheKey, embedding);
                 }
 
                 return embedding;
