@@ -1190,7 +1190,14 @@ Element ServiceGraphPattern() :
 }
 {
     <SERVICE> [ <SILENT> { silent = true; } ] s = VarOrIri() el = GroupGraphPattern()
-    { return new ElementService(s, el, silent); }
+    {
+        // The pattern of SERVICE is sent to the remote endpoint, which would have to evaluate
+        // GENOP. Reject it here with a message instead of the internal error of the evaluation.
+        if (containsGenerate(el)) {
+            throw new ParseException("GENOP inside SERVICE is not supported: the remote endpoint would have to evaluate it");
+        }
+        return new ElementService(s, el, silent);
+    }
 }
 
 /**
