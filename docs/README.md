@@ -8,7 +8,7 @@ The workbench of the demonstration. It shows the two graphs of the demonstration
   - *Ground entities* maps generated names to entities with the Jaccard or the embedding similarity and the threshold θ;
   - *Generate attributes* compares generated values with Wikidata;
   - *Compose + defer* counts the LLM calls in the order of the planner and with GENOP evaluated first.
-- **Live mode** (`index.html?mode=live`). The workbench sends each query unchanged to the GenSPARQL service, and the Java engine evaluates it. The result table shows the answers and the number of LLM calls.
+- **Live mode** (`index.html?mode=live`). The workbench sends each query unchanged to the GenSPARQL service, and the Java engine evaluates it. The result table shows the answers and the number of LLM calls. The sample queries follow the scenarios of the paper, and loading a sample selects the graph that it queries.
 
 ## Running the live mode on this machine
 
