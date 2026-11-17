@@ -6,7 +6,8 @@
     datasetEndpoint: "/api/gensparql/datasets",
     queryEndpoint: "/api/gensparql/query",
     healthEndpoint: "/api/gensparql/health",
-    timeoutMs: 120000
+    // A local model on a laptop can need minutes for a query with many prompts.
+    timeoutMs: 600000
   };
 
   const supplied = window.GENSPARQL_ENGINE_CONFIG || {};
@@ -36,9 +37,21 @@
 
   async function fetchWithTimeout(target, options = {}) {
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), Number(config.timeoutMs) || DEFAULTS.timeoutMs);
+    const limit = Number(config.timeoutMs) || DEFAULTS.timeoutMs;
+    const timer = setTimeout(() => controller.abort(), limit);
     try {
       return await fetch(target, { ...options, signal: controller.signal });
+    } catch (err) {
+      // The browser's own messages ("signal is aborted without reason", "Failed to fetch") say
+      // nothing about the service, so name the two cases that happen in practice.
+      if (err && err.name === "AbortError") {
+        throw new Error(`No answer from the Java engine within ${Math.round(limit / 1000)} s. `
+          + "A local model may still be loading or generating; the engine keeps evaluating the query.");
+      }
+      if (err instanceof TypeError) {
+        throw new Error(`Could not reach the Java engine at ${getApiBase()}. Is the service running (./start-fuseki.sh)?`);
+      }
+      throw err;
     } finally {
       clearTimeout(timer);
     }

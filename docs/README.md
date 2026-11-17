@@ -8,7 +8,7 @@ The workbench of the demonstration. It shows the two graphs of the demonstration
   - *Ground entities* maps generated names to entities with the Jaccard or the embedding similarity and the threshold θ;
   - *Generate attributes* compares generated values with Wikidata;
   - *Compose + defer* counts the LLM calls in the order of the planner and with GENOP evaluated first.
-- **Live mode** (`index.html?mode=live`). The workbench sends each query unchanged to the GenSPARQL service, and the Java engine evaluates it. The result table shows the answers and the number of LLM calls. The sample queries follow the scenarios of the paper, and loading a sample selects the graph that it queries.
+- **Live mode** (`index.html?mode=live`). The workbench sends each query unchanged to the GenSPARQL service, and the Java engine evaluates it. The result table shows the answers and the number of LLM calls. The sample queries follow the scenarios of the paper, and loading a sample selects the graph that it queries. The page waits up to ten minutes for an answer, since a local model may need that long for a query with many prompts, and it remembers the endpoint and model names of the live panel in the browser, never the key.
 
 ## Running the live mode on this machine
 
@@ -36,8 +36,8 @@ The recorded mode also runs from a static server, for example `python3 -m http.s
 
 - `index.html`, `styles.css`, `app.js`, `page-mode.js`: the page and its two modes. `index.html?print` lays out the workbench views in two columns for figures.
 - `engine-client.js`: calls to the service (default `http://localhost:8080`).
-- `native-graph.js`: the graph view. Its layout runs on d3-force from the local copy `vendor/d3.v7.8.5.min.js` (ISC license, `vendor/d3-LICENSE.txt`).
-- `database-adapters.js`, `fifa2026-data.js`, `nobel-prize-data.js` and the two `.ttl` files: the built-in graphs.
+- `native-graph.js`: the graph view, drawn as SVG. Zoom and pan are d3-zoom, dragging a node is d3-drag and the layout runs on d3-force, all from the local copy `vendor/d3.v7.8.5.min.js` (ISC license, `vendor/d3-LICENSE.txt`). No label is drawn over another label, a similarity box or another node: in the overview a label that has no free place appears when the zoom makes room for it, and in a result view it moves to another side of its node, away from its edges, or appears when its node is hovered. Labels too small to read in a crowded view also wait for the zoom.
+- `database-adapters.js`, `fifa2026-data.js`, `nobel-prize-data.js` and the two `.ttl` files: the built-in graphs. An uploaded Turtle file is parsed by `vendor/n3.v2.13.12.min.js` (N3.js, MIT license, `vendor/n3-LICENSE.txt`).
 - `demo-data.js`: the recorded queries and the live defaults.
 - `recorded-runs.js`: the recorded answers.
 - `video/`: the narrated demo video.

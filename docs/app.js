@@ -13,6 +13,7 @@
     compositionStageMeta:null,compositionStrategy:null,compositionStep:null,tooltipPinnedId:null,
     nobelExpandedField:null,
     liveLabelsMandatory:false,
+    liveLabelScale:1,
     graphRenderFrame:0,thetaFrame:0,resizeTimer:0
   };
   if (!CFG.databases[state.dbKey]) state.dbKey = "fifa2026";
@@ -30,8 +31,10 @@
   // Outside the figure layout, d3-force drives the layout (native-graph.js), and the graph reacts
   // to dragging and hovering as the explorer of the Circular Factory demo does.
   const INTERACTIVE=!PRINT_LAYOUT&&window.NativeGraph?.physics==="d3";
-  const SIMILARITY_BOX_WIDTH=PRINT_LAYOUT?62:96;
-  const SIMILARITY_BOX_HEIGHT=PRINT_LAYOUT?28:27;
+  // A box shows the similarity of a name to its closest entity; the method is in the status line
+  // of the graph and in the tooltip of the name, so the box holds only the score.
+  const SIMILARITY_BOX_WIDTH=PRINT_LAYOUT?62:34;
+  const SIMILARITY_BOX_HEIGHT=PRINT_LAYOUT?28:15;
   const SIMILARITY_BOX_GAP=5;
 
   function cloneGraph(graph){
@@ -344,12 +347,6 @@
     xsd:"http://www.w3.org/2001/XMLSchema#"
   };
 
-  function unescapeLiteral(token){
-    const m=String(token).match(/^"((?:\\.|[^"\\])*)"/s);
-    if(!m)return String(token);
-    try{return JSON.parse('"'+m[1]+'"')}catch(_){return m[1].replace(/\\"/g,'"').replace(/\\n/g,'\n').replace(/\\t/g,'\t').replace(/\\\\/g,'\\')}
-  }
-
   function localName(iri){
     const s=String(iri||"");
     const hash=s.lastIndexOf("#"),slash=s.lastIndexOf("/"),colon=s.lastIndexOf(":");
@@ -375,100 +372,6 @@
       if(String(iri).startsWith(base))return `${prefix}:${String(iri).slice(base.length)}`;
     }
     return String(iri);
-  }
-
-  function stripLineComments(text){
-    return String(text).split(/\r?\n/).map(line=>{
-      let quote=false,escape=false,angle=0;
-      for(let i=0;i<line.length;i++){
-        const c=line[i];
-        if(quote){
-          if(escape){escape=false;continue}
-          if(c==="\\"){escape=true;continue}
-          if(c==='"')quote=false;
-          continue;
-        }
-        if(c==='"'){quote=true;continue}
-        if(c==='<'){angle++;continue}
-        if(c==='>'&&angle){angle--;continue}
-        if(c==='#'&&!angle)return line.slice(0,i);
-      }
-      return line;
-    }).join("\n");
-  }
-
-  function splitStatements(text){
-    const out=[];
-    let start=0,quote=false,escape=false,angle=0,paren=0,brace=0;
-    const src=String(text);
-    for(let i=0;i<src.length;i++){
-      const c=src[i];
-      if(quote){
-        if(escape){escape=false;continue}
-        if(c==="\\"){escape=true;continue}
-        if(c==='"')quote=false;
-        continue;
-      }
-      if(c==='"'){quote=true;continue}
-      if(c==='<'){angle++;continue}
-      if(c==='>'&&angle){angle--;continue}
-      if(angle)continue;
-      if(c==='(')paren++;
-      else if(c===')'&&paren)paren--;
-      else if(c==='{')brace++;
-      else if(c==='}'&&brace)brace--;
-      else if(c==='.'&&!paren&&!brace){
-        const part=src.slice(start,i).trim();
-        if(part)out.push(part);
-        start=i+1;
-      }
-    }
-    const tail=src.slice(start).trim();
-    if(tail)out.push(tail);
-    return out;
-  }
-
-  function turtleLex(text){
-    const tokens=[];
-    const src=String(text);
-    let i=0;
-    while(i<src.length){
-      if(/\s/.test(src[i])){i++;continue}
-      if(src[i]===';'||src[i]===','){tokens.push(src[i++]);continue}
-      if(src[i]==='<'){
-        let j=i+1;
-        while(j<src.length&&src[j]!=='>')j++;
-        tokens.push(src.slice(i,Math.min(j+1,src.length)));i=Math.min(j+1,src.length);continue;
-      }
-      if(src[i]==='"'){
-        let j=i+1,escape=false;
-        while(j<src.length){
-          const c=src[j];
-          if(escape){escape=false;j++;continue}
-          if(c==='\\'){escape=true;j++;continue}
-          if(c==='"'){j++;break}
-          j++;
-        }
-        if(src[j]==='@'){
-          j++;
-          while(j<src.length&&/[A-Za-z0-9-]/.test(src[j]))j++;
-        }else if(src.slice(j,j+2)==='^^'){
-          j+=2;
-          if(src[j]==='<'){
-            j++;
-            while(j<src.length&&src[j]!=='>')j++;
-            if(src[j]==='>')j++;
-          }else{
-            while(j<src.length&&!/[\s;,]/.test(src[j]))j++;
-          }
-        }
-        tokens.push(src.slice(i,j));i=j;continue;
-      }
-      let j=i+1;
-      while(j<src.length&&!/[\s;,]/.test(src[j]))j++;
-      tokens.push(src.slice(i,j));i=j;
-    }
-    return tokens;
   }
 
   function setEngineStatus(text,kind=""){
@@ -551,48 +454,37 @@
     sync();
   }
 
+  // An uploaded graph is parsed by N3.js (docs/vendor), which covers the Turtle 1.1 grammar:
+  // string escapes and triple-quoted literals, blank node property lists and collections,
+  // @base, SPARQL-style PREFIX and BASE, and also N-Triples and TriG. The explorer draws the
+  // IRIs and blank nodes with their rdf:type and rdfs:label; other literals are kept in the
+  // triples but not drawn.
   function parseTurtleToDatabase(text,fileName){
-    const clean=stripLineComments(text);
+    if(typeof N3==="undefined")throw new Error("vendor/n3.v2.13.12.min.js failed to load.");
     const prefixes={...BUILTIN_PREFIXES};
-    clean.replace(/@prefix\s+([A-Za-z][\w-]*):\s*<([^>]+)>\s*\./gi,(_,pfx,iri)=>{prefixes[pfx]=iri;return _});
-
-    const withoutPrefixes=clean.replace(/@prefix\s+[A-Za-z][\w-]*:\s*<[^>]+>\s*\./gi," ");
-    const triples=[];
-    const tripleSeen=new Set();
-
-    for(const statement of splitStatements(withoutPrefixes)){
-      const tokens=turtleLex(statement);
-      if(tokens.length<3)continue;
-      let i=0;
-      const subjectToken=tokens[i++];
-      const subject=resolveIriToken(subjectToken,prefixes);
-      let predicateToken=null;
-      while(i<tokens.length){
-        if(tokens[i]===';'){i++;predicateToken=null;continue}
-        if(tokens[i]===','){i++;continue}
-        if(!predicateToken)predicateToken=tokens[i++];
-        if(i>=tokens.length)break;
-        const objectToken=tokens[i++];
-        if(objectToken===';'||objectToken===',')continue;
-        const predicate=resolveIriToken(predicateToken,prefixes);
-        const literal=objectToken.startsWith('"');
-        const object=literal
-          ? {kind:"literal",value:unescapeLiteral(objectToken),raw:objectToken}
-          : {kind:"iri",value:resolveIriToken(objectToken,prefixes),raw:objectToken};
-        const key=`${subject}\u0001${predicate}\u0001${object.kind}\u0001${object.value}`;
-        if(!tripleSeen.has(key)){
-          tripleSeen.add(key);
-          triples.push({s:subject,p:predicate,o:object});
-        }
-        if(tokens[i]===','){
-          i++;
-        }else if(tokens[i]===';'){
-          i++;predicateToken=null;
-        }
-      }
+    const parser=new N3.Parser({baseIRI:`file:///${encodeURIComponent(fileName||"upload.ttl")}`});
+    let quads;
+    try{
+      quads=parser.parse(String(text),null,(prefix,iri)=>{prefixes[prefix]=typeof iri==="string"?iri:iri.value});
+    }catch(err){
+      throw new Error(`RDF syntax error: ${err.message||err}`);
     }
 
-    if(!triples.length)throw new Error("No Turtle triples could be parsed from this file.");
+    const termId=t=>t.termType==="BlankNode"?`_:${t.value}`:t.value;
+    const triples=[];
+    const tripleSeen=new Set();
+    for(const q of quads){
+      const subject=termId(q.subject),predicate=q.predicate.value;
+      const object=q.object.termType==="Literal"
+        ? {kind:"literal",value:q.object.value,raw:q.object.value,language:q.object.language||"",datatype:q.object.datatype?.value||""}
+        : {kind:"iri",value:termId(q.object),raw:termId(q.object)};
+      const key=`${subject}\u0001${predicate}\u0001${object.kind}\u0001${object.value}`;
+      if(tripleSeen.has(key))continue;
+      tripleSeen.add(key);
+      triples.push({s:subject,p:predicate,o:object});
+    }
+
+    if(!triples.length)throw new Error("No RDF triples could be parsed from this file.");
 
     const nodes=new Map();
     const ensureNode=id=>{
@@ -629,7 +521,7 @@
     });
 
     return {
-      label:fileName.replace(/\.(ttl|turtle)$/i,"")||"Uploaded KG",
+      label:fileName.replace(/\.(ttl|turtle|nt|trig|nq|n3)$/i,"")||"Uploaded KG",
       source:fileName,
       graph:{nodes:[...nodes.values()],links},
       triples,
@@ -750,10 +642,20 @@
     // naturally gives Player -> Team -> Group and Venue -> City. When a result
     // has no outgoing parent (for example Group), fall back to a small set of
     // incoming structural neighbours instead of expanding the whole graph.
+    // A hub such as a Nobel field points to a thousand awards; it keeps its most connected
+    // neighbours and then the most recent ones by label, as the Nobel overview does, instead of
+    // pulling the whole graph into the view.
+    const degreeOf=other=>(outgoing.get(other)||[]).length+(incoming.get(other)||[]).length;
+    const MAX_PARENTS=12;
     resultIds.forEach(id=>{
-      const parents=(outgoing.get(id)||[])
+      let parents=[...new Set((outgoing.get(id)||[])
         .map(item=>item.id)
-        .filter(other=>!resultIds.has(other));
+        .filter(other=>!resultIds.has(other)))];
+      if(parents.length>MAX_PARENTS){
+        parents=parents
+          .sort((a,b)=>degreeOf(b)-degreeOf(a)||String(nodeById.get(b)?.label||b).localeCompare(String(nodeById.get(a)?.label||a)))
+          .slice(0,MAX_PARENTS);
+      }
       if(parents.length){
         parents.forEach(other=>depth1.add(other));
         return;
@@ -904,6 +806,7 @@
   }
 
   function layoutLiveRelatedGraph(graph,resultIds,depth1Ids,depth2Ids){
+    graph.nodes.forEach(node=>{delete node.liveRadiusScale});
     const stage=$("graphStage");
     const width=stage.clientWidth||760;
     const height=stage.clientHeight||570;
@@ -1104,10 +1007,21 @@
       }
       return count;
     };
+    // A generated value stays next to the entity it was generated for: it is never swapped,
+    // and it moves with its entity when that entity is swapped.
+    const children=new Map();
+    (graph.nodes||[]).filter(node=>node.liveGeneratedPos&&node.sourceAthleteId).forEach(node=>{
+      if(!children.has(node.sourceAthleteId))children.set(node.sourceAthleteId,[]);
+      children.get(node.sourceAthleteId).push(node);
+    });
+    const shift=(node,dx,dy)=>(children.get(node.id)||[]).forEach(child=>{
+      child.x=child.fx=child.x+dx;child.y=child.fy=child.y+dy;
+    });
     const swap=(a,b)=>{
-      const x=a.x,y=a.y;
+      const x=a.x,y=a.y,dx=b.x-a.x,dy=b.y-a.y;
       a.x=a.fx=b.x;a.y=a.fy=b.y;
       b.x=b.fx=x;b.y=b.fy=y;
+      shift(a,dx,dy);shift(b,-dx,-dy);
     };
 
     let current=crossingCount();
@@ -1117,7 +1031,7 @@
         const e1=links[i],e2=links[j];
         if(!independent(e1,e2)||!crosses(e1.a,e1.b,e2.a,e2.b))continue;
         for(const [a,b] of [[e1.a,e2.a],[e1.a,e2.b],[e1.b,e2.a],[e1.b,e2.b]]){
-          if(a===b||layer(a)!==layer(b))continue;
+          if(a===b||layer(a)!==layer(b)||layer(a)==="generated")continue;
           const key=String(a.id)<String(b.id)?`${a.id}|${b.id}`:`${b.id}|${a.id}`;
           candidates.set(key,[a,b]);
         }
@@ -1237,9 +1151,10 @@
       const font=node.liveLabelFont;
       return {font,height:font*1.38};
     }
-    if(node.liveContextDepth===2)return {font:10,height:13};
-    if(node.liveContextDepth===1)return {font:7.5,height:10.5};
-    return {font:8.8,height:12};
+    const px=livePx();
+    if(node.liveContextDepth===2)return {font:10*px,height:13*px};
+    if(node.liveContextDepth===1)return {font:7.5*px,height:10.5*px};
+    return {font:8.8*px,height:12*px};
   }
 
   function liveLabelEstimatedWidth(node,fontOverride=null){
@@ -1248,7 +1163,8 @@
     // Intentionally conservative: this is wider than the average rendered
     // sans-serif glyph, so a successful estimated layout stays separated after
     // the browser renders the actual text.
-    return Math.max(18,text.length*font*.72+5);
+    const px=livePx();
+    return Math.max(18*px,text.length*font*.72+5*px);
   }
 
   function liveLabelBox(node,side,dy=0){
@@ -1262,11 +1178,26 @@
         bottom:node.liveLabelAbsY+metrics.height*.28
       };
     }
-    const gap=Math.max(5,nodeRadius(node)+5);
-    const cy=(Number.isFinite(node.y)?node.y:0)+dy;
-    const left=side==="left"
-      ? (Number.isFinite(node.x)?node.x:0)-gap-width
-      : (Number.isFinite(node.x)?node.x:0)+gap;
+    const px=livePx();
+    const x=Number.isFinite(node.x)?node.x:0,y=Number.isFinite(node.y)?node.y:0;
+    if(side==="above"||side==="below"){
+      // Centred on the node, the text just above or below it; dy is the baseline offset
+      // that nodeLabelY renders (it adds the 3.5 px that centre a side label on the node).
+      const offset=side==="above"
+        ?-(nodeRadius(node)+4*px+metrics.height*.28)
+        :nodeRadius(node)+4*px+metrics.height*.78;
+      const cy=y+offset;
+      return {
+        left:x-width/2,
+        right:x+width/2,
+        top:cy-metrics.height*.78,
+        bottom:cy+metrics.height*.28,
+        dy:offset-3.5*px
+      };
+    }
+    const gap=nodeRadius(node)+5*px;
+    const cy=y+dy;
+    const left=side==="left"?x-gap-width:x+gap;
     return {
       left,
       right:left+width,
@@ -1279,22 +1210,22 @@
     return a.left<b.right+gap&&a.right+gap>b.left&&a.top<b.bottom+gap&&a.bottom+gap>b.top;
   }
 
-  function packMandatoryLiveLabels(nodes,width,height){
+  function packMandatoryLiveLabels(nodes,view,px=1){
     if(!nodes.length)return;
-    const edgePad=6;
-    const availableW=Math.max(120,width-edgePad*2);
-    const availableH=Math.max(100,height-edgePad*2);
-    const fonts=[8.6,8.1,7.6,7.1,6.6,6.2];
+    const edgePad=6*px;
+    const availableW=Math.max(120*px,view.w-edgePad*2);
+    const availableH=Math.max(100*px,view.h-edgePad*2);
+    const fonts=[8.6,8.1,7.6,7.1,6.6,6.2].map(font=>font*px);
     let layout=null;
 
     for(const font of fonts){
-      const maxTextW=Math.max(...nodes.map(node=>liveLabelEstimatedWidth(node,font)),28);
+      const maxTextW=Math.max(...nodes.map(node=>liveLabelEstimatedWidth(node,font)),28*px);
       const labelH=font*1.38;
       for(let cols=1;cols<=Math.min(12,nodes.length);cols++){
         const rows=Math.ceil(nodes.length/cols);
         const cellW=availableW/cols;
         const cellH=availableH/rows;
-        if(cellW<maxTextW+8||cellH<labelH+5)continue;
+        if(cellW<maxTextW+8*px||cellH<labelH+5*px)continue;
         const score=Math.abs((cellW/cellH)-2.8)+rows*.002;
         if(!layout||score<layout.score)layout={font,cols,rows,cellW,cellH,score};
       }
@@ -1302,13 +1233,13 @@
     }
 
     if(!layout){
-      const font=6;
+      const font=6*px;
       let best=null;
       for(let cols=1;cols<=Math.min(14,nodes.length);cols++){
         const rows=Math.ceil(nodes.length/cols);
         const cellW=availableW/cols,cellH=availableH/rows;
-        const maxTextW=Math.max(...nodes.map(node=>liveLabelEstimatedWidth(node,font)),28);
-        const fit=Math.min(cellW/(maxTextW+6),cellH/(font*1.38+4));
+        const maxTextW=Math.max(...nodes.map(node=>liveLabelEstimatedWidth(node,font)),28*px);
+        const fit=Math.min(cellW/(maxTextW+6*px),cellH/(font*1.38+4*px));
         if(!best||fit>best.fit)best={font,cols,rows,cellW,cellH,fit};
       }
       layout=best;
@@ -1318,10 +1249,10 @@
     for(let r=0;r<layout.rows;r++){
       for(let c=0;c<layout.cols;c++){
         if(slots.length>=nodes.length)break;
-        const left=edgePad+c*layout.cellW;
-        const top=edgePad+r*layout.cellH;
+        const left=view.x+edgePad+c*layout.cellW;
+        const top=view.y+edgePad+r*layout.cellH;
         slots.push({
-          x:left+4,
+          x:left+4*px,
           y:top+layout.cellH*.62,
           cx:left+layout.cellW*.5,
           cy:top+layout.cellH*.5
@@ -1350,10 +1281,16 @@
   }
 
   function resolveLiveLabelCollisions(graph,resultCount){
-    const stage=$("graphStage");
-    const width=stage?.clientWidth||760;
-    const height=stage?.clientHeight||570;
-    const edgePad=4;
+    // The view is laid out small and zoomed to fit, so sizes and gaps are screen pixels
+    // converted to graph units with the scale of the fit, and labels stay in the shown region.
+    const fit=liveFitTransform(graph.nodes);
+    state.liveLabelScale=fit.scale;
+    const px=1/fit.scale;
+    const view=liveViewBox(fit);
+    // Circles keep about their designed size on screen; a view larger than the stage keeps them.
+    const radiusScale=Math.min(1,px*1.15);
+    graph.nodes.forEach(node=>{node.liveRadiusScale=radiusScale});
+    const edgePad=4*px;
     const placed=[];
 
     graph.nodes.forEach(node=>{
@@ -1361,7 +1298,7 @@
       node.liveLabelDy=0;
       node.liveLabelAbsX=null;
       node.liveLabelAbsY=null;
-      node.liveLabelFont=Number.isFinite(node.liveVisualFont)?node.liveVisualFont:null;
+      node.liveLabelFont=Number.isFinite(node.liveVisualFont)?node.liveVisualFont*px:null;
     });
 
     // Small graphs can keep every label. For denser result sets, readability
@@ -1380,7 +1317,9 @@
       candidates=[...graph.nodes].sort((a,b)=>String(a.label||a.id).localeCompare(String(b.label||b.id)));
     }else if(resultLabelsMandatory){
       const seen=new Set();
-      candidates=[...structural,...graph.nodes.filter(node=>node.liveQueryResult)]
+      // The results are the answer, so their labels are placed first; a context label is
+      // shown where it still fits, and hovering shows the rest.
+      candidates=[...graph.nodes.filter(node=>node.liveQueryResult),...structural]
         .filter(node=>!seen.has(node.id)&&seen.add(node.id));
     }else{
       const profile=liveVisualProfile(resultCount,graph.nodes.length);
@@ -1393,15 +1332,18 @@
         .filter(node=>!seen.has(node.id)&&seen.add(node.id));
     }
 
-    const mandatoryIds=new Set(state.liveLabelsMandatory?candidates.map(node=>node.id):[]);
+    const mandatoryIds=new Set(!state.liveLabelsMandatory?[]
+      :allDisplayedMandatory?candidates.map(node=>node.id)
+      :candidates.filter(node=>node.liveQueryResult).map(node=>node.id));
     const sideOrder=node=>{
-      if(node.labelSide==="left")return ["left","right"];
-      if(node.labelSide==="right")return ["right","left"];
-      return (node.x||0)>width/2?["right","left"]:["left","right"];
+      const sides=node.labelSide==="left"?["left","right"]
+        :node.labelSide==="right"?["right","left"]
+        :(node.x||0)>view.x+view.w/2?["right","left"]:["left","right"];
+      return [...sides,"below","above"];
     };
-    const dyAttempts=[0,-8,8,-16,16];
+    const dyAttempts=[0,-8,8,-16,16].map(dy=>dy*px);
     const nodeObstacles=graph.nodes.map(node=>{
-      const radius=nodeRadius(node)+2;
+      const radius=nodeRadius(node)+2*px;
       return {id:node.id,left:node.x-radius,right:node.x+radius,top:node.y-radius,bottom:node.y+radius};
     });
     let mandatoryPlaced=0;
@@ -1409,28 +1351,33 @@
     candidates.forEach(node=>{
       let chosen=null;
       for(const side of sideOrder(node)){
-        for(const dy of dyAttempts){
+        for(const dy of (side==="above"||side==="below"?[0]:dyAttempts)){
           const box=liveLabelBox(node,side,dy);
-          if(box.left<edgePad||box.right>width-edgePad||box.top<edgePad||box.bottom>height-edgePad)continue;
-          if(placed.some(other=>liveLabelBoxesOverlap(box,other,4)))continue;
-          if(nodeObstacles.some(other=>other.id!==node.id&&liveLabelBoxesOverlap(box,other,1)))continue;
+          if(box.left<view.x+edgePad||box.right>view.x+view.w-edgePad||box.top<view.y+edgePad||box.bottom>view.y+view.h-edgePad)continue;
+          if(placed.some(other=>liveLabelBoxesOverlap(box,other,4*px)))continue;
+          if(nodeObstacles.some(other=>other.id!==node.id&&liveLabelBoxesOverlap(box,other,px)))continue;
           chosen={box,side,dy};
           break;
         }
         if(chosen)break;
       }
-      if(!chosen)return;
+      if(!chosen){
+        // A team or a field in the middle of its results has no free side here; declutterLabels
+        // finds it a place over the results once they are drawn.
+        if(node.liveContextDepth===1)node.liveShowLabel=true;
+        return;
+      }
       node.liveShowLabel=true;
       node.labelSide=chosen.side;
-      node.liveLabelDy=chosen.dy;
+      node.liveLabelDy=Number.isFinite(chosen.box.dy)?chosen.box.dy:chosen.dy;
       placed.push(chosen.box);
       if(mandatoryIds.has(node.id))mandatoryPlaced+=1;
     });
 
     if(state.liveLabelsMandatory&&mandatoryPlaced<mandatoryIds.size){
-      // Tiny graphs should retain every label. Use the compact slot layout
-      // rather than knowingly drawing labels on top of one another.
-      packMandatoryLiveLabels(candidates,width,height);
+      // A mandatory label that found no place next to its node takes a free slot of the
+      // compact layout; the labels that were placed stay next to their nodes.
+      packMandatoryLiveLabels(candidates.filter(node=>mandatoryIds.has(node.id)&&!node.liveShowLabel),view,px);
     }
   }
 
@@ -1448,12 +1395,14 @@
       try{box=text.getBBox()}catch(_){return}
       if(!box||!box.width||!box.height)return;
       const priority=d.liveContextDepth===2?0:d.liveContextDepth===1?1:2;
-      items.push({d,el:this,box:{left:box.x,right:box.x+box.width,top:box.y,bottom:box.y+box.height},priority});
+      // getBBox is in the coordinates of the node, so the position of the node is added.
+      const x=Number.isFinite(d.x)?d.x:0,y=Number.isFinite(d.y)?d.y:0;
+      items.push({d,el:this,box:{left:x+box.x,right:x+box.x+box.width,top:y+box.y,bottom:y+box.y+box.height},priority});
     });
     items.sort((a,b)=>a.priority-b.priority||String(a.d.label||a.d.id).localeCompare(String(b.d.label||b.d.id)));
     const placed=[];
     items.forEach(item=>{
-      if(placed.some(other=>liveLabelBoxesOverlap(item.box,other,4))){
+      if(placed.some(other=>liveLabelBoxesOverlap(item.box,other,4*livePx()))){
         item.d.liveShowLabel=false;
         NativeGraph.select(item.el).classed("live-show-label",false);
         return;
@@ -1492,10 +1441,9 @@
     state.tooltipPinnedId=null;
 
     if(!resultIds.size){
-      state.contextIds=new Set();
-      state.focusMode=false;
-      state.graph=fullGraph;
-      rerenderCurrentGraphWithoutReset();
+      // The overview of the page, as after loading the graph: a free layout of the whole graph
+      // took long to settle and piled the labels of thousands of nodes in its middle meanwhile.
+      initGraph();
       $("graphStatus").textContent="No result value matched a KG entity · full graph retained";
       return;
     }
@@ -1554,6 +1502,7 @@
     const depth2=new Set(state.graph.nodes.filter(n=>n.liveContextDepth===2).map(n=>n.id));
     const resultIds=new Set([...state.resultIds].filter(id=>state.graph.nodes.some(n=>n.id===id)));
     layoutLiveRelatedGraph(state.graph,resultIds,depth1,depth2);
+    state.liveLabelScale=liveFitTransform(state.graph.nodes).scale;
 
     const generatedBySource=new Map();
     state.graph.nodes.filter(n=>n.liveGeneratedPos&&n.sourceAthleteId).forEach(node=>{
@@ -1565,7 +1514,7 @@
       const source=state.graph.nodes.find(n=>n.id===sourceId);
       if(!source)return;
       const baseAngle=source._liveAngle||stableUnit(source.id,411)*Math.PI*2;
-      const distance=Math.max(11,nodeRadius(source)+8);
+      const distance=nodeRadius(source)+Math.max(...nodes.map(nodeRadius))+6*livePx();
       const ordered=[...nodes].sort((a,b)=>String(a.generatedVariable||a.id).localeCompare(String(b.generatedVariable||b.id))||String(a.label||a.id).localeCompare(String(b.label||b.id)));
       ordered.forEach((node,index)=>{
         const angle=baseAngle+((ordered.length===1?0:(index-(ordered.length-1)/2))*.58);
@@ -1616,16 +1565,20 @@
       generatedVars.forEach((variable,varIndex)=>{
         const value=row[variable];
         if(!value)return;
+        // The similarity join binds an output variable to an entity of the graph, which is
+        // already a result node; only a generated literal becomes a node of its own.
+        if(value.kind==="iri"){const id=nodeIdForIri(value.value);if(id&&nodeById.has(id))return;}
+        const text=value.kind==="iri"?displayQueryValue(value,result.prefixes):String(value.value);
         const key=`${source.id}|${variable}|${value.value}`;
         if(seen.has(key))return;
         seen.add(key);
         const angle=stableUnit(key,307)*Math.PI*2;
-        const distance=Math.max(10,nodeRadius(source)+7);
+        const distance=nodeRadius(source)+3.0+6*livePx();   // the two circles do not touch
         const id=`live:genop:${rowIndex}:${varIndex}:${hashString(key)}`;
         const node={
-          id,label:String(value.value),aliases:[String(value.value)],type:"Generated",
+          id,label:text,aliases:[text],type:"Generated",
           generatedAttribute:true,liveGeneratedPos:true,generatedVariable:variable,
-          sourceAthleteId:source.id,sourceAthleteLabel:source.label,positionLabel:String(value.value),
+          sourceAthleteId:source.id,sourceAthleteLabel:source.label,positionLabel:text,
           liveGeneratedRadius:3.0,liveQueryResult:true,
           x:(source.x||0)+Math.cos(angle)*distance,
           y:(source.y||0)+Math.sin(angle)*distance
@@ -1636,6 +1589,9 @@
       });
     });
     if(!added.length)return;
+    // The variable on every edge says the same thing many times over; the result table and the
+    // legend name it once.
+    if(added.length>8)links.forEach(link=>{link.hideGeneratedEdgeLabel=true});
     state.graph.nodes.push(...added);
     state.graph.links.push(...links);
     added.forEach(node=>state.resultIds.add(node.id));
@@ -1832,6 +1788,8 @@ ORDER BY ?year`
       clearMessage();
       const btn=$("liveRunBtn");
       btn.disabled=true;btn.textContent="Running…";
+      const startedAt=Date.now();
+      const ticker=setInterval(()=>{btn.textContent=`Running… ${Math.round((Date.now()-startedAt)/1000)} s`},1000);
       try{
         const db=currentDb();
         const prefixes={...BUILTIN_PREFIXES,...(db.prefixes||{})};
@@ -1864,11 +1822,14 @@ ORDER BY ?year`
         const sim=result.trace?.similarity;
         const fellBack=sim&&sim.requested==="embedding"&&sim.used!=="embedding";
         const simText=fellBack?` The embedding model failed (${sim.fallbackReason||"no reason given"}), so the query used the Jaccard similarity.`:"";
-        showMessage(`${executorLabel} completed on ${db.label}: ${result.total} row${result.total===1?"":"s"}${opText}${genopText}. Matching entities are shown in the graph.${simText}`,fellBack?"warn":"ok");
+        const seconds=((Date.now()-startedAt)/1000).toFixed(1);
+        const graphText=result.total?" Matching entities are shown in the graph.":" The graph keeps the full KG.";
+        showMessage(`${executorLabel} completed on ${db.label} in ${seconds} s: ${result.total} row${result.total===1?"":"s"}${opText}${genopText}.${graphText}${simText}`,fellBack?"warn":"ok");
       }catch(err){
         $("liveQueryResult").hidden=true;
         showMessage(`Query failed: ${err.message||err}`,"err");
       }finally{
+        clearInterval(ticker);
         btn.disabled=false;btn.textContent="Run query ▶";
       }
     };
@@ -1884,11 +1845,28 @@ ORDER BY ?year`
 
   function liveOn(){return $("liveBox").open&&$("key").value.trim().length>0}
 
+  // The endpoint and model names of the live panel survive a reload; the key does not.
+  const LIVE_SETTINGS=["chatBase","chatModel","embBase","embModel"];
+  function savedLiveSetting(id){
+    try{return localStorage.getItem("gensparql.live."+id)}catch(_){return null}
+  }
+  function saveLiveSetting(id,value){
+    try{localStorage.setItem("gensparql.live."+id,value)}catch(_){}
+  }
+
   function initLive(){
     $("chatBase").value=CFG.live.chatBase;
     $("chatModel").value=CFG.live.chatModel;
     $("embBase").value=CFG.live.embBase;
     $("embModel").value=CFG.live.embModel;
+    LIVE_SETTINGS.forEach(id=>{
+      const saved=savedLiveSetting(id);
+      if(saved!==null&&saved.trim())$(id).value=saved;
+      $(id).addEventListener("change",()=>saveLiveSetting(id,$(id).value.trim()));
+    });
+    const grounding=savedLiveSetting("grounding");
+    if(grounding==="embedding")$("groundEmbedding").checked=true;
+    else if(grounding==="jaccard")$("groundText").checked=true;
     CFG.live.embModels.forEach(m=>{const o=document.createElement("option");o.value=m.value;o.label=m.label;$("embModelOptions").appendChild(o)});
     $("key").addEventListener("input",renderScenario);
     $("liveBox").addEventListener("toggle",renderScenario);
@@ -1896,6 +1874,7 @@ ORDER BY ?year`
     // input that became checked.
     const onGroundingMethodChange=async()=>{
       syncGrounding();
+      saveLiveSetting("grounding",$("groundEmbedding")?.checked?"embedding":"jaccard");
       if(currentScenario()?.id==="entity"&&state.graph?.nodes.some(n=>n.generatedCandidate)){
         // No second Run required: recompute pass/fail and redraw relation edges live.
         try{
@@ -2004,20 +1983,31 @@ ORDER BY ?year`
     const overviewGraph=state.graph.nodes.length>300&&!state.focusMode;
     const staticNobelOverview=state.dbKey==="nobelPrize"&&(state.graph.nobelCompactOverview||state.graph.nodes.length>1000)&&!state.focusMode;
     const overviewLeafTypes=new Set(["Athlete","NobelLaureate","NobelAward","CountryOrCitizenship"]);
+    // In an overview every label keeps its size on screen (styles.css, --k): the circle's radius
+    // scales with the zoom, the gap of 7 px and the baseline are in em of the counter-scaled font.
+    const em=overviewGraph;
     state.nodeSel.filter(d=>!overviewGraph||!overviewLeafTypes.has(d.type)).append("text")
-      .attr("x",d=>nodeLabelX(d))
+      .attr("x",d=>em?(nodeLabelAnchor(d)==="end"?-nodeRadius(d):nodeLabelAnchor(d)==="middle"?0:nodeRadius(d)):nodeLabelX(d))
+      .attr("dx",d=>em?(nodeLabelAnchor(d)==="end"?"-0.74em":nodeLabelAnchor(d)==="middle"?null:"0.74em"):null)
       .attr("text-anchor",d=>nodeLabelAnchor(d))
-      .attr("y",nodeLabelY)
+      .attr("y",d=>em?0:nodeLabelY(d))
+      .attr("dy",d=>em?"0.35em":null)
       .style("font-size",d=>Number.isFinite(d.liveLabelFont)?`${d.liveLabelFont}px`:null,"important")
+      // The halo of a label sized for the zoom of a Run-result view is sized with it.
+      .style("stroke-width",d=>Number.isFinite(d.liveLabelFont)?`${d.liveLabelFont*.3}px`:null,"important")
       .text(d=>d.label);
     // The labels of the leaves of an overview appear when the graph is zoomed in or the node is
     // in focus (styles.css).
+    // A leaf label keeps its size on screen (styles.css, --k): the circle's radius scales with
+    // the zoom, the gap of 7 px and the baseline are in em of the counter-scaled font.
     if(INTERACTIVE&&overviewGraph){
       state.nodeSel.filter(d=>overviewLeafTypes.has(d.type)).append("text")
         .attr("class","leaf-label")
-        .attr("x",d=>nodeLabelX(d))
-        .attr("text-anchor",d=>nodeLabelAnchor(d))
-        .attr("y",nodeLabelY)
+        .attr("x",d=>nodeRadius(d))
+        .attr("dx","0.74em")
+        .attr("text-anchor","start")
+        .attr("y",0)
+        .attr("dy","0.35em")
         .text(d=>d.label);
     }
 
@@ -2025,6 +2015,7 @@ ORDER BY ?year`
 
     state.zoom=NativeGraph.zoom().scaleExtent([.12,6]).on("zoom",e=>{state.zoomLayer.attr("transform",e.transform);updateZoomLabels(e.transform.k)});
     svg.call(state.zoom).on("dblclick.zoom",null);
+    $("kgGraph").classList.toggle("large",overviewGraph);
 
     state.nodeSel.call(nodeDrag(staticNobelOverview));
     focusOnHover(state.nodeSel)
@@ -2060,6 +2051,7 @@ ORDER BY ?year`
       .force("collision",NativeGraph.forceCollide().radius(d=>nodeRadius(d)+3).iterations(1))
       .on("tick",tick);
     state.anchored=makeElastic(state.simulation,state.graph.nodes);
+    state.simulation.on("end.labels",scheduleLabelCull).on("tick.labels",cullWhileMoving);
 
     // A dense overview does not need
     // that level of precision and was keeping the main thread busy for several seconds.
@@ -2068,6 +2060,7 @@ ORDER BY ?year`
       // of additional force ticks only repeat SVG writes without changing it.
       state.simulation.alpha(0).stop();
       tick();
+      scheduleLabelCull();
     }else if(overviewGraph){
       state.simulation.alphaDecay(.12).alphaMin(.03).velocityDecay(.5);
     }
@@ -2129,14 +2122,21 @@ ORDER BY ?year`
       if(d.evaluationState==="abstain")cls+=" abstain";
       return cls;
     }
-    if(d.groundingLink)return"link grounding-link";
+    if(d.groundingLink)return d.additionalPair?"link grounding-link additional-pair":"link grounding-link";
     if(d.potentialGroundingLink)return"link potential-grounding-link";
     if(d.compositionBindingLink)return"link composition-binding-link";
     if(d.compositionPathLink)return"link composition-path-link";
     return"link";
   }
 
+  // A Run-result view is laid out small and zoomed to fit, so its circles are scaled back to
+  // the size on screen they were designed for (liveRadiusScale, resolveLiveLabelCollisions).
   function nodeRadius(d){
+    const r=baseNodeRadius(d);
+    return Number.isFinite(d.liveRadiusScale)?r*d.liveRadiusScale:r;
+  }
+
+  function baseNodeRadius(d){
     if(d.nobelDenseOverview)return 1.45;
     if(d.type==="NobelPrize")return 10;
     if(d.type==="NobelField")return 7.5;
@@ -2285,14 +2285,17 @@ ORDER BY ?year`
   function nodeLabelX(d){
     if(Number.isFinite(d.liveLabelAbsX))return d.liveLabelAbsX-(Number.isFinite(d.x)?d.x:0);
     if(d.compositionGroup)return 0;
+    if((d.liveQueryResult||d.liveContextDepth)&&(d.labelSide==="above"||d.labelSide==="below"))return 0;
     const sideAware=d.liveQueryResult||d.liveContextDepth||d.generatedCandidate||d.generatedAttribute||d.hasGeneratedAttribute||d.compositionSource||d.compositionTeam||d.outerCountry;
-    if(sideAware&&d.labelSide==="left")return -(nodeRadius(d)+7);
-    return nodeRadius(d)+7;
+    const gap=d.liveQueryResult||d.liveContextDepth?nodeRadius(d)+5*livePx():nodeRadius(d)+7;
+    if(sideAware&&d.labelSide==="left")return -gap;
+    return gap;
   }
 
   function nodeLabelAnchor(d){
     if(Number.isFinite(d.liveLabelAbsX))return"start";
     if(d.compositionGroup)return"middle";
+    if((d.liveQueryResult||d.liveContextDepth)&&(d.labelSide==="above"||d.labelSide==="below"))return"middle";
     const sideAware=d.liveQueryResult||d.liveContextDepth||d.generatedCandidate||d.generatedAttribute||d.hasGeneratedAttribute||d.compositionSource||d.compositionTeam||d.outerCountry;
     return sideAware&&d.labelSide==="left"?"end":"start";
   }
@@ -2300,7 +2303,7 @@ ORDER BY ?year`
   function nodeLabelY(d){
     if(Number.isFinite(d.liveLabelAbsY))return d.liveLabelAbsY-(Number.isFinite(d.y)?d.y:0);
     if(d.compositionGroup)return -(nodeRadius(d)+5);
-    if(d.liveQueryResult||d.liveContextDepth)return 3.5+(d.liveLabelDy||0);
+    if(d.liveQueryResult||d.liveContextDepth)return 3.5*livePx()+(d.liveLabelDy||0);
     return d.generatedAttribute?-1:3.5;
   }
 
@@ -2354,8 +2357,9 @@ ORDER BY ?year`
 
   function layoutSimilarityBoxes(candidates,cx,cy){
     const placed=[];
-    const tangentShifts=[0,34,-34,68,-68,102,-102,136,-136,170,-170];
-    const radialShifts=[0,24,48,72,96,-12];
+    const step=SIMILARITY_BOX_HEIGHT+7,radialStep=Math.round(SIMILARITY_BOX_HEIGHT*.9);
+    const tangentShifts=[0,1,-1,2,-2,3,-3,4,-4,5,-5].map(i=>i*step);
+    const radialShifts=[0,1,2,3,4,-.5].map(i=>i*radialStep);
 
     [...candidates]
       .sort((a,b)=>(a.radialAngle||0)-(b.radialAngle||0))
@@ -2431,8 +2435,8 @@ ORDER BY ?year`
           return `translate(${d.similarityBoxX},${d.similarityBoxY})`;
         }
         return d.labelSide==="left"
-          ? `translate(${nodeRadius(d)+12},-14)`
-          : `translate(${-nodeRadius(d)-SIMILARITY_BOX_WIDTH-12},-14)`;
+          ? `translate(${nodeRadius(d)+12},${-SIMILARITY_BOX_HEIGHT/2})`
+          : `translate(${-nodeRadius(d)-SIMILARITY_BOX_WIDTH-12},${-SIMILARITY_BOX_HEIGHT/2})`;
       });
 
     boxes.append("rect")
@@ -2441,18 +2445,9 @@ ORDER BY ?year`
       .attr("rx",0)
       .attr("ry",0);
 
-    if(!PRINT_LAYOUT){
-      boxes.append("text")
-        .attr("x",SIMILARITY_BOX_WIDTH/2)
-        .attr("y",10)
-        .attr("text-anchor","middle")
-        .attr("class","similarity-box-title")
-        .text(d=>similarityLabel(d.similarityMethod));
-    }
-
     boxes.append("text")
       .attr("x",SIMILARITY_BOX_WIDTH/2)
-      .attr("y",PRINT_LAYOUT?18:22)
+      .attr("y",PRINT_LAYOUT?18:11)
       .attr("text-anchor","middle")
       .attr("class","similarity-box-score")
       .text(d=>d.score.toFixed(2));
@@ -2465,9 +2460,10 @@ ORDER BY ?year`
       .attr("y2",d=>d.target.y);
 
     if(state.generatedLabelSel){
+      const f=d=>Number.isFinite(d.labelT)?d.labelT:.5;
       state.generatedLabelSel
-        .attr("x",d=>(d.source.x+d.target.x)/2)
-        .attr("y",d=>(d.source.y+d.target.y)/2-6);
+        .attr("x",d=>d.source.x+(d.target.x-d.source.x)*f(d))
+        .attr("y",d=>d.source.y+(d.target.y-d.source.y)*f(d)-6);
     }
 
     state.nodeSel.attr("transform",d=>`translate(${d.x},${d.y})`);
@@ -2613,6 +2609,7 @@ ORDER BY ?year`
         if(!e.active)state.simulation.alphaTarget(0);
         if(INTERACTIVE){state.dragId=null;scheduleClasses()}
         if(state.anchored||!state.focusMode){d.fx=null;d.fy=null}
+        scheduleLabelCull();
       });
   }
 
@@ -2633,13 +2630,352 @@ ORDER BY ?year`
     state.classFrame=requestAnimationFrame(()=>{state.classFrame=0;applyClasses()});
   }
 
-  // In a large graph the labels of the small nodes fade out when zoomed out, and the labels of
-  // the leaves fade in when zoomed in (styles.css).
+  // In a large graph the labels of the small nodes fade out when zoomed out (styles.css), and the
+  // labels compete for space on screen (cullLabels), which the zoom changes.
   function updateZoomLabels(k){
     if(!INTERACTIVE)return;
     const svg=$("kgGraph"),large=(state.graph?.nodes?.length||0)>300;
     svg.classList.toggle("zoom-far",large&&k<.45);
     svg.classList.toggle("zoom-near",k>=1.6);
+    svg.classList.toggle("large",large);
+    // The label size on screen (--k) and the placement follow when the gesture pauses, since
+    // every change of --k recomputes the style of every label.
+    scheduleLabelCull();
+  }
+
+  // ---- label placement in a large graph ------------------------------------------------------
+  // The labels of an overview compete for space on screen: a label is drawn only if it does not
+  // overlap a label placed before it. Focused nodes come first, then the structural nodes by
+  // size, then the leaves by degree. A leaf label keeps its size on screen, so zooming in makes
+  // room for more of them and zooming out takes it away again; a leaf label of a node in focus
+  // is shown by styles.css whatever this decides. The placement runs after a zoom, a drag and
+  // the end of the layout, not on every frame.
+  const LEAF_LABEL_MIN_ZOOM=.9;
+  const labelWidthCache=new Map();
+  let labelMeasure=null;
+
+  function labelWidth(text,px){
+    const key=`${px}\u0001${text}`;
+    let w=labelWidthCache.get(key);
+    if(w===undefined){
+      labelMeasure||=document.createElement("canvas").getContext("2d");
+      const family=getComputedStyle(document.body).getPropertyValue("--sans").trim()||"sans-serif";
+      labelMeasure.font=`${px}px ${family}`;
+      w=labelMeasure.measureText(text).width;
+      labelWidthCache.set(key,w);
+    }
+    return w;
+  }
+
+  // While a layout moves, the placement runs a few times a second, so that labels placed at the
+  // start do not drift onto each other before the layout comes to rest.
+  function cullWhileMoving(){
+    const now=performance.now();
+    if(now-(state.labelCullAt||0)<300)return;
+    state.labelCullAt=now;
+    scheduleLabelCull();
+  }
+
+  function scheduleLabelCull(){
+    if(state.labelCullTimer)clearTimeout(state.labelCullTimer);
+    state.labelCullTimer=setTimeout(()=>{state.labelCullTimer=0;cullLabels()},90);
+  }
+
+  function nodeDegrees(graph){
+    const degree=new Map();
+    const id=v=>typeof v==="object"&&v!==null?v.id:v;
+    (graph.links||[]).forEach(l=>{
+      degree.set(id(l.source),(degree.get(id(l.source))||0)+1);
+      degree.set(id(l.target),(degree.get(id(l.target))||0)+1);
+    });
+    return degree;
+  }
+
+  function cullLabels(){
+    if(!INTERACTIVE||!state.nodeSel||!state.graph?.nodes)return;
+    const svg=$("kgGraph"),stage=$("graphStage");
+    if(!svg||!stage)return;
+    const large=state.graph.nodes.length>300;
+    const t=NativeGraph.zoomTransform(svg),k=t.k;
+    svg.style.setProperty("--k",String(k));
+    const W=stage.clientWidth,H=stage.clientHeight;
+    const farOut=svg.classList.contains("zoom-far");
+    if(state.labelDegreeGraph!==state.graph){state.labelDegreeGraph=state.graph;state.labelDegrees=nodeDegrees(state.graph)}
+    const degree=state.labelDegrees;
+    // While the layout still moves, a leaf label would be placed for a moment and then drift
+    // into its neighbours, so leaf labels wait for the end of the simulation.
+    const sim=state.simulation;
+    const settling=!!sim&&typeof sim.alpha==="function"&&sim.alpha()>(typeof sim.alphaMin==="function"?sim.alphaMin():.001);
+    const items=[];
+    state.nodeSel.each(function(d){
+      if(!Number.isFinite(d.x)||!Number.isFinite(d.y))return;
+      const g=this,sx=d.x*k+t.x,sy=d.y*k+t.y;
+      const focus=state.selectedId===d.id||g.classList.contains("inspect")||g.classList.contains("neighbor")
+        ||g.classList.contains("query-result")||g.classList.contains("context");
+      const emphasized=g.classList.contains("query-result")||g.classList.contains("inspect");
+      for(const el of g.querySelectorAll("text")){
+        const leaf=el.classList.contains("leaf-label");
+        if(!leaf&&!large)continue;                       // a small graph keeps every label
+        if(leaf&&(k<LEAF_LABEL_MIN_ZOOM||settling)&&!focus){el.classList.remove("shown");continue}
+        if(!leaf&&farOut&&!focus)continue;                // hidden by the zoom-far rule anyway
+        const text=el.textContent||"";
+        if(!text){continue}
+        const px=emphasized?11:9.5;                       // constant on screen in a large graph
+        const w=labelWidth(text,px),h=px*1.15;
+        const gap=nodeRadius(d)*k+7;
+        const anchor=leaf?"start":(el.getAttribute("text-anchor")||"start");
+        let x0;
+        if(anchor==="end")x0=sx-gap-w;
+        else if(anchor==="middle")x0=sx-w/2;
+        else x0=sx+gap;
+        const cy=sy;
+        items.push({el,leaf,focus,id:d.id,priority:focus?0:(leaf?2:1),weight:leaf?(degree.get(d.id)||0):nodeRadius(d),
+          text,x0,x1:x0+w,y0:cy-h/2,y1:cy+h/2});
+      }
+    });
+    items.sort((a,b)=>a.priority-b.priority||b.weight-a.weight||a.text.localeCompare(b.text));
+    const cell=48,grid=new Map();
+    const cells=b=>{
+      const out=[];
+      for(let cx=Math.floor(b.x0/cell);cx<=Math.floor(b.x1/cell);cx++)
+        for(let cy=Math.floor(b.y0/cell);cy<=Math.floor(b.y1/cell);cy++)out.push(`${cx}_${cy}`);
+      return out;
+    };
+    const pad=2;
+    const overlaps=b=>{
+      for(const key of cells(b)){
+        const bucket=grid.get(key);
+        if(!bucket)continue;
+        for(const o of bucket){
+          if(b.x0<o.x1+pad&&b.x1>o.x0-pad&&b.y0<o.y1+pad&&b.y1>o.y0-pad)return true;
+        }
+      }
+      return false;
+    };
+    const place=b=>cells(b).forEach(key=>{(grid.get(key)||grid.set(key,[]).get(key)).push(b)});
+    // The name of a leaf is drawn only where it covers no other node: a name over the dots of
+    // its neighbours is hard to read and makes the view look denser than it is.
+    const circleGrid=new Map();
+    if(items.some(it=>it.leaf)){
+      state.nodeSel.each(function(d){
+        if(!Number.isFinite(d.x)||!Number.isFinite(d.y))return;
+        const r=nodeRadius(d)*k,sx=d.x*k+t.x,sy=d.y*k+t.y;
+        if(sx+r<0||sx-r>W||sy+r<0||sy-r>H)return;
+        const b={id:d.id,x0:sx-r,x1:sx+r,y0:sy-r,y1:sy+r};
+        cells(b).forEach(key=>{(circleGrid.get(key)||circleGrid.set(key,[]).get(key)).push(b)});
+      });
+    }
+    const coversNode=it=>{
+      for(const key of cells(it)){
+        for(const c of circleGrid.get(key)||[]){
+          if(c.id!==it.id&&it.x0<c.x1&&it.x1>c.x0&&it.y0<c.y1&&it.y1>c.y0)return true;
+        }
+      }
+      return false;
+    };
+    for(const it of items){
+      const offscreen=it.x1<0||it.x0>W||it.y1<0||it.y0>H;
+      const show=it.focus||(!offscreen&&!overlaps(it)&&!(it.leaf&&coversNode(it)));
+      if(show)place(it);
+      if(it.leaf)it.el.classList.toggle("shown",show);
+      else it.el.classList.toggle("occluded",!show);
+    }
+    if(large)raiseLabelledNodes();
+    else declutterLabels();
+  }
+
+  // ---- label placement in a small graph ----------------------------------------------------
+  // A view of up to a few hundred nodes draws every label at a fixed side of its node, so the
+  // labels of close nodes run into each other, into a similarity box or into another node.
+  // When the layout is at rest and after a zoom, each label keeps its place if that place is
+  // free, else moves to another side of its node, else is hidden until its node is hovered.
+  // The labels are placed in the order of their priority (labelPriority), and the nodes of
+  // the labels that come first are drawn last, so that no circle covers them.
+  function labelPriority(g,d,opacity){
+    const c=g.classList;
+    if(state.selectedId===d.id||c.contains("inspect"))return 0;
+    if(opacity<.5||c.contains("outer-country")||c.contains("live-context-2"))return 6;
+    if(c.contains("query-result")||c.contains("live-query-result-node")||c.contains("composition-survivor"))return 1;
+    if(c.contains("candidate-dropped"))return 2.6;          // after the mapped names and the scores
+    if(c.contains("live-context-1"))return 1.5;              // the team or field around the results
+    if(c.contains("generated-candidate")||c.contains("generated-attribute")||c.contains("composition-pos-node")||c.contains("live-generated-pos"))return 2;
+    if(c.contains("grounded-target")||c.contains("potential-ground-target")||c.contains("attribute-source")
+      ||c.contains("composition-source")||c.contains("composition-team")||c.contains("composition-group"))return 3;
+    return 5;
+  }
+
+  function declutterLabels(){
+    const svgEl=$("kgGraph");
+    if(!svgEl||!state.nodeSel)return;
+    const frame=svgEl.getBoundingClientRect();
+    const W=frame.width,H=frame.height;
+    if(!W||!H)return;
+    const t=NativeGraph.zoomTransform(svgEl),k=t.k||1;
+    const rel=r=>({x0:r.left-frame.left,x1:r.right-frame.left,y0:r.top-frame.top,y1:r.bottom-frame.top});
+    const styleOf=new Map();
+    const style=e=>{let s=styleOf.get(e);if(!s){s=getComputedStyle(e);styleOf.set(e,s)}return s};
+    const shown=el=>{
+      for(let e=el;e&&e!==svgEl;e=e.parentNode){
+        const s=style(e);
+        if(s.display==="none"||s.visibility==="hidden")return false;
+      }
+      return true;
+    };
+    const opacityOf=el=>{let o=1;for(let e=el;e&&e!==svgEl;e=e.parentNode)o*=parseFloat(style(e).opacity||"1");return o};
+    const hit=(a,b,pad)=>a.x0<b.x1+pad&&a.x1+pad>b.x0&&a.y0<b.y1+pad&&a.y1+pad>b.y0;
+
+    svgEl.querySelectorAll(".declutter-hidden").forEach(el=>el.classList.remove("declutter-hidden"));
+    styleOf.clear();
+
+    const fixed=[];
+    svgEl.querySelectorAll(".similarity-box").forEach(el=>{if(shown(el))fixed.push(rel(el.getBoundingClientRect()))});
+
+    const circles=[],items=[],order=[];
+    state.nodeSel.each(function(d){
+      if(!Number.isFinite(d.x)||!Number.isFinite(d.y))return;
+      const sx=d.x*k+t.x,sy=d.y*k+t.y,rs=Math.max(1,nodeRadius(d)*k);
+      const visible=shown(this);
+      const opacity=visible?opacityOf(this):0;
+      const priority=labelPriority(this,d,opacity);
+      order.push({g:this,priority});
+      if(!visible)return;
+      circles.push({id:d.id,x0:sx-rs,x1:sx+rs,y0:sy-rs,y1:sy+rs});
+      const el=this.querySelector(":scope > text");
+      if(!el||!el.textContent||!shown(el))return;
+      const r=el.getBoundingClientRect();
+      if(r.width<1||r.height<1)return;
+      const c=rel(r);
+      if(c.x1<0||c.x0>W||c.y1<0||c.y0>H)return;             // the label is outside the view
+      items.push({kind:"node",d,el,sx,sy,rs,w:r.width,h:r.height,current:c,priority});
+    });
+
+    // Labels on edges: the similarity of an additional pair, the variable of a generated value.
+    if(state.generatedLabelSel){
+      state.generatedLabelSel.each(function(d){
+        if(!shown(this)||!d.source||!d.target)return;
+        const r=this.getBoundingClientRect();
+        if(r.width<1||r.height<1)return;
+        const c=rel(r);
+        items.push({kind:"edge",d,el:this,w:r.width,h:r.height,current:c,priority:d.scoreLabel?2.5:4,
+          cx0:(c.x0+c.x1)/2,cy0:(c.y0+c.y1)/2});
+      });
+    }
+
+    // The direction of the edges of a node: its label goes the other way, where the edges leave
+    // room, as the inward labels of a ring whose edges point outwards.
+    const edgeDir=new Map();
+    (state.graph?.links||[]).forEach(l=>{
+      const s=l.source,e=l.target;
+      if(!s||!e||typeof s!=="object"||typeof e!=="object")return;
+      if(!Number.isFinite(s.x)||!Number.isFinite(e.x))return;
+      const dx=e.x-s.x,dy=e.y-s.y,len=Math.hypot(dx,dy);
+      if(len<1e-6)return;
+      [[s.id,dx/len,dy/len],[e.id,-dx/len,-dy/len]].forEach(([id,ux,uy])=>{
+        const v=edgeDir.get(id)||{x:0,y:0,n:0};
+        v.x+=ux;v.y+=uy;v.n+=1;edgeDir.set(id,v);
+      });
+    });
+    const gap=3;
+    const spots=it=>{
+      const {w,h}=it;
+      if(it.kind==="edge"){
+        const d=it.d,f0=Number.isFinite(d.labelT)?d.labelT:.5;
+        const s=[d.source.x*k+t.x,d.source.y*k+t.y],e=[d.target.x*k+t.x,d.target.y*k+t.y];
+        // the label sits 6 graph units above the point of the edge at f0 (tick)
+        const dy=it.cy0-(s[1]+(e[1]-s[1])*f0);
+        const at=f=>{const x=s[0]+(e[0]-s[0])*f,y=s[1]+(e[1]-s[1])*f+dy;return {x0:x-w/2,x1:x+w/2,y0:y-h/2,y1:y+h/2,f}};
+        return [it.current,...[.5,.38,.62,.28,.72].filter(f=>Math.abs(f-f0)>.01).map(at)];
+      }
+      const {sx,sy,rs}=it,o=rs*.72;
+      const right={x0:sx+rs+gap,x1:sx+rs+gap+w,y0:sy-h/2,y1:sy+h/2,side:"right"};
+      const left={x0:sx-rs-gap-w,x1:sx-rs-gap,y0:sy-h/2,y1:sy+h/2,side:"left"};
+      const below={x0:sx-w/2,x1:sx+w/2,y0:sy+rs+1,y1:sy+rs+1+h,side:"below"};
+      const above={x0:sx-w/2,x1:sx+w/2,y0:sy-rs-1-h,y1:sy-rs-1,side:"above"};
+      const ru={x0:sx+o+gap,x1:sx+o+gap+w,y0:sy-o-h,y1:sy-o,side:"right-up"};
+      const rd={x0:sx+o+gap,x1:sx+o+gap+w,y0:sy+o,y1:sy+o+h,side:"right-down"};
+      const lu={x0:sx-o-gap-w,x1:sx-o-gap,y0:sy-o-h,y1:sy-o,side:"left-up"};
+      const ld={x0:sx-o-gap-w,x1:sx-o-gap,y0:sy+o,y1:sy+o+h,side:"left-down"};
+      const onLeft=(it.current.x0+it.current.x1)/2<sx-1;
+      const sides=[...(onLeft?[left,lu,ld,right,ru,rd]:[right,ru,rd,left,lu,ld]),below,above];
+      // A label that an earlier pass moved is placed again at the same side, measured at the
+      // present zoom: a pass during a zoom transition used another scale for the gap.
+      const moved=it.d.labelSideChosen&&sides.find(x=>x.side===it.d.labelSideChosen);
+      const options=moved?[moved,...sides.filter(x=>x!==moved)]:[it.current,...sides];
+      const v=edgeDir.get(it.d.id);
+      const pull=v?Math.hypot(v.x,v.y)/v.n:0;              // 1 when every edge leaves the same way
+      if(pull<.35)return options;
+      const ex=v.x/v.n/pull,ey=v.y/v.n/pull;
+      const away=s=>{
+        const cx=(s.x0+s.x1)/2-sx,cy=(s.y0+s.y1)/2-sy,l=Math.hypot(cx,cy)||1;
+        return -(cx*ex+cy*ey)/l*pull+(s===options[0]?.35:0);
+      };
+      return options.map((s,i)=>({s,score:away(s)-i*.001})).sort((a,b)=>b.score-a.score).map(x=>x.s);
+    };
+
+    items.sort((a,b)=>a.priority-b.priority||(a.kind===b.kind?0:a.kind==="node"?-1:1));
+    const placed=[];
+    const inside=s=>s.x0>=1&&s.x1<=W-1&&s.y0>=1&&s.y1<=H-1;
+    const free=(it,s,withCircles)=>{
+      if(placed.some(p=>hit(s,p,3)))return false;
+      if(fixed.some(p=>hit(s,p,2)))return false;
+      if(withCircles&&circles.some(c=>(it.kind!=="node"||c.id!==it.d.id)&&hit(s,c,1)))return false;
+      return true;
+    };
+    // A label smaller than this on screen cannot be read and only adds to the density; it
+    // appears when a zoom makes it large enough, or when its node is hovered. In a crowded view
+    // this holds for the labels of the results too.
+    const MIN_TEXT_HEIGHT=9;
+    const crowded=items.filter(it=>it.kind==="node").length>80;
+    items.forEach(it=>{
+      if(it.kind==="node"&&it.h<MIN_TEXT_HEIGHT&&(it.priority>=2||(crowded&&it.priority>=1))){
+        it.el.classList.add("declutter-hidden");
+        return;
+      }
+      const options=spots(it);
+      const wasInside=inside(it.current);
+      let chosen=options.find(s=>(!wasInside||inside(s))&&free(it,s,true))
+        ||options.find(s=>(!wasInside||inside(s))&&free(it,s,false));
+      if(!chosen){
+        it.el.classList.add("declutter-hidden");
+        return;
+      }
+      placed.push(chosen);
+      if(chosen===it.current)return;
+      if(it.kind==="node"&&chosen.side===it.d.labelSideChosen&&Math.abs(chosen.x0-it.current.x0)<.5&&Math.abs(chosen.y0-it.current.y0)<.5)return;
+      if(it.kind==="edge"){
+        it.d.labelT=chosen.f;
+        const f=chosen.f,d=it.d;
+        it.el.setAttribute("x",d.source.x+(d.target.x-d.source.x)*f);
+        it.el.setAttribute("y",d.source.y+(d.target.y-d.source.y)*f-6);
+        return;
+      }
+      // Back to the coordinates of the node, in which the text is drawn.
+      it.el.setAttribute("text-anchor","start");
+      it.el.removeAttribute("dx");
+      it.el.setAttribute("x",(chosen.x0-it.sx)/k);
+      it.el.setAttribute("y",((chosen.y0+chosen.y1)/2-it.sy)/k);
+      it.el.setAttribute("dy","0.35em");
+      it.d.labelSideChosen=chosen.side;
+    });
+
+    // The nodes of the labels placed first are drawn last.
+    const layer=order[0]?.g.parentNode;
+    if(layer){
+      const sorted=[...order].sort((a,b)=>b.priority-a.priority);
+      if(sorted.some((x,i)=>x.g!==order[i].g))sorted.forEach(x=>layer.appendChild(x.g));
+    }
+  }
+
+  // In an overview the circles of the leaves surround the structural nodes, so a node with a
+  // label is drawn after every node without one: its label then lies above the leaves.
+  function raiseLabelledNodes(){
+    const layer=state.nodeSel?.node()?.parentNode;
+    if(!layer)return;
+    const nodes=[...layer.children];
+    const rank=g=>g.querySelector(":scope > text:not(.leaf-label), :scope > text.leaf-label.shown")?1:0;
+    const ranked=nodes.map((g,i)=>({g,i,r:rank(g)}));
+    const sorted=[...ranked].sort((a,b)=>a.r-b.r||a.i-b.i);
+    if(sorted.some((x,i)=>x.g!==nodes[i]))sorted.forEach(x=>layer.appendChild(x.g));
   }
 
   function baseLinkClass(d,s,t){
@@ -2651,7 +2987,7 @@ ORDER BY ?year`
       return cls;
     }
 
-    if(d.groundingLink)return"link grounding-link";
+    if(d.groundingLink)return d.additionalPair?"link grounding-link additional-pair":"link grounding-link";
     if(d.potentialGroundingLink)return"link potential-grounding-link";
     if(d.compositionBindingLink)return"link composition-binding-link";
     if(d.compositionPathLink)return"link composition-path-link";
@@ -2810,31 +3146,73 @@ ORDER BY ?year`
     NativeGraph.select("#kgGraph").transition().duration(400).call(state.zoom.transform,NativeGraph.zoomIdentity.translate(tx,ty).scale(scale));
   }
 
-  function fitRelevantGraph(){
-    const nodes=state.graph.nodes.filter(n=>Number.isFinite(n.x)&&Number.isFinite(n.y));
-    if(!nodes.length)return;
-
-    const w=$("graphStage").clientWidth;
-    const h=$("graphStage").clientHeight;
-
-    // Smaller padding + higher maximum zoom because unrelated nodes have
-    // already been removed from this Run-result view.
+  // The zoom that shows the nodes of a Run-result view: smaller padding and a higher maximum
+  // zoom than the overview, because unrelated nodes have already been removed. The labels are
+  // placed with this zoom in mind (resolveLiveLabelCollisions), so both read the same fit.
+  function liveFitTransform(nodes){
+    const stage=$("graphStage");
+    const w=stage?.clientWidth||760,h=stage?.clientHeight||570;
+    const placed=(nodes||[]).filter(n=>Number.isFinite(n.x)&&Number.isFinite(n.y));
+    if(!placed.length)return {scale:1,tx:0,ty:0,w,h,empty:true};
     const pad=3;
-    const minX=NativeGraph.min(nodes,d=>d.x)-pad;
-    const maxX=NativeGraph.max(nodes,d=>d.x)+pad;
-    const minY=NativeGraph.min(nodes,d=>d.y)-pad;
-    const maxY=NativeGraph.max(nodes,d=>d.y)+pad;
-
+    const minX=NativeGraph.min(placed,d=>d.x)-pad;
+    const maxX=NativeGraph.max(placed,d=>d.x)+pad;
+    const minY=NativeGraph.min(placed,d=>d.y)-pad;
+    const maxY=NativeGraph.max(placed,d=>d.y)+pad;
     const bw=Math.max(maxX-minX,70);
     const bh=Math.max(maxY-minY,70);
     const scale=Math.max(.28,Math.min(6.2,.995/Math.max(bw/w,bh/h)));
-    const tx=w/2-scale*(minX+maxX)/2;
-    const ty=h/2-scale*(minY+maxY)/2;
+    return {scale,tx:w/2-scale*(minX+maxX)/2,ty:h/2-scale*(minY+maxY)/2,w,h,empty:false};
+  }
 
+  // The region of the graph that the fit shows, in graph units.
+  function liveViewBox(fit){
+    return {x:-fit.tx/fit.scale,y:-fit.ty/fit.scale,w:fit.w/fit.scale,h:fit.h/fit.scale};
+  }
+
+  // One screen pixel of the live view in graph units.
+  function livePx(){
+    return 1/(state.liveLabelScale||1);
+  }
+
+  // The zoom that shows every node of a composition stage together with its label. The labels
+  // of the outer nodes reach beyond their nodes, so a fit of the nodes alone cut them off at
+  // the edges of the stage; the hint bar covers the bottom of the stage.
+  function fitGraphWithLabels(){
+    if(!state.nodeSel)return;
+    let x0=Infinity,y0=Infinity,x1=-Infinity,y1=-Infinity;
+    const add=(a,b,c,d)=>{x0=Math.min(x0,a);y0=Math.min(y0,b);x1=Math.max(x1,c);y1=Math.max(y1,d)};
+    state.nodeSel.each(function(d){
+      if(!Number.isFinite(d.x)||!Number.isFinite(d.y))return;
+      const r=nodeRadius(d);
+      add(d.x-r,d.y-r,d.x+r,d.y+r);
+      const t=this.querySelector(":scope > text");
+      if(!t||getComputedStyle(t).display==="none")return;
+      try{
+        const b=t.getBBox();
+        if(b.width)add(d.x+b.x,d.y+b.y,d.x+b.x+b.width,d.y+b.y+b.height);
+      }catch(_){}
+    });
+    if(!Number.isFinite(x0))return;
+    const stage=$("graphStage"),w=stage?.clientWidth||760,h=stage?.clientHeight||570;
+    const padX=16,padTop=16,padBottom=46;
+    const bw=Math.max(x1-x0,70),bh=Math.max(y1-y0,70);
+    const scale=Math.max(.28,Math.min(6.2,(w-2*padX)/bw,(h-padTop-padBottom)/bh));
+    const tx=w/2-scale*(x0+x1)/2;
+    const ty=(padTop+h-padBottom)/2-scale*(y0+y1)/2;
     NativeGraph.select("#kgGraph")
       .transition()
       .duration(420)
       .call(state.zoom.transform,NativeGraph.zoomIdentity.translate(tx,ty).scale(scale));
+  }
+
+  function fitRelevantGraph(){
+    const fit=liveFitTransform(state.graph.nodes);
+    if(fit.empty)return;
+    NativeGraph.select("#kgGraph")
+      .transition()
+      .duration(420)
+      .call(state.zoom.transform,NativeGraph.zoomIdentity.translate(fit.tx,fit.ty).scale(fit.scale));
   }
 
   function fitGroundingGraph(){
@@ -3351,6 +3729,9 @@ ORDER BY ?year`
     state.selectedId=null;
 
     rerenderCurrentGraphWithoutReset();
+    // Beyond the closest entity of each name, a low θ adds a pair for nearly every entity; those
+    // pairs are drawn thin and light once there are many of them (crowded-pairs, styles.css).
+    $("kgGraph").classList.toggle("crowded-pairs",matchLinks.length>60);
 
     if(preserveViewport&&previousTransform){
       // Keep exactly the user's current zoom / pan.
@@ -3768,7 +4149,7 @@ ORDER BY ?year`
     NativeGraph.select("#kgGraph").call(state.zoom.transform,NativeGraph.zoomIdentity);
     requestAnimationFrame(()=>{
       tick();
-      fitRelevantGraph();
+      fitGraphWithLabels();
     });
   }
 
@@ -3954,7 +4335,8 @@ ORDER BY ?year`
     if(withGenerated)sources.forEach((source,index)=>{
       if(selected&&data.answered.size&&!data.answered.has(norm(source.label)))return;
       const angle=dense?stableUnit(source.id,331)*Math.PI*2:-Math.PI/2+index*Math.PI*2/Math.max(sources.length,1);
-      const distance=dense?3.4:14;
+      // Far enough from its laureate that the two circles and the edge label stay apart.
+      const distance=dense?3.4:30;
       const node={
         id:`generated:motivation:${source.id}`,label:data.s.generatedLabel||"Award motivation",aliases:[data.s.generatedLabel||"Award motivation"],type:"Generated",
         generatedAttribute:true,generatedAttributeLabel:data.s.generatedVariable||"?motivation",sourceAthleteId:source.id,sourceAthleteLabel:source.label,
@@ -4112,38 +4494,44 @@ ORDER BY ?year`
       links:generatedLinks
     };
 
-    // Two-ring radial attribute layout:
-    //   inner ring = existing KG Players
-    //   outer ring = GENOP-generated Position attributes
+    // Two-sided fan: the KG entities form two columns, half on each side of the centre, with
+    // their names facing the centre; each generated value lies further out on an arc, on the
+    // row of its entity, with its label facing outwards. A ring put the entities at its top and
+    // bottom so close together that their names ran into each other.
     const stage=$("graphStage");
     const width=stage.clientWidth||760;
     const height=stage.clientHeight||570;
     const cx=width/2;
     const cy=height/2;
-    const innerRadius=Math.min(width,height)*.205;
-    const outerRadius=Math.min(width,height)*.355;
     const count=Math.max(playerNodes.length,1);
+    const rightCount=Math.ceil(count/2);
+    const innerX=width*.135;
+    const edgeX=width*.18;
+    const spanY=height*.39;
 
     playerNodes.forEach((player,i)=>{
-      const angle=-Math.PI/2+(2*Math.PI*i/count);
-      const px=cx+Math.cos(angle)*innerRadius;
-      const py=cy+Math.sin(angle)*innerRadius;
+      const right=i<rightCount;
+      const n=right?rightCount:count-rightCount;
+      const j=right?i:i-rightCount;
+      const t=n<=1?0:j/(n-1)*2-1;                        // -1 at the top, 1 at the bottom
+      const side=right?1:-1;
+      const py=cy+t*spanY;
+      const px=cx+side*innerX;
 
       player.x=px;player.y=py;
       player.fx=px;player.fy=py;
-      player.radialAngle=angle;
-      // Player names face inward, away from the generated Position label.
-      player.labelSide=Math.cos(angle)>=0?"left":"right";
+      player.radialAngle=Math.atan2(py-cy,px-cx);
+      player.labelSide=right?"left":"right";
 
       const position=generatedNodes.find(n=>n.sourceAthleteId===player.id);
       if(position){
-        // Position stays on the same radial ray as its Player.
-        const qx=cx+Math.cos(angle)*outerRadius;
-        const qy=cy+Math.sin(angle)*outerRadius;
+        // The values lie on an arc: further out in the middle, closer at the top and bottom.
+        const qy=py;
+        const qx=cx+side*(innerX+edgeX*(1-.35*t*t));
         position.x=qx;position.y=qy;
         position.fx=qx;position.fy=qy;
-        position.radialAngle=angle;
-        position.labelSide=Math.cos(angle)<-.12?"left":"right";
+        position.radialAngle=Math.atan2(qy-cy,qx-cx);
+        position.labelSide=right?"right":"left";
       }
     });
 
@@ -4196,7 +4584,9 @@ ORDER BY ?year`
       .selectAll("line")
       .data(graphSnapshot.links)
       .join("line")
-      .attr("class",d=>linkClass(d));
+      .attr("class",d=>linkClass(d))
+      // A link of a Run-result view keeps its stroke width on screen whatever the zoom of the fit.
+      .attr("vector-effect",d=>Number.isFinite(d.liveQueryLinkDepth)||d.liveGeneratedLink?"non-scaling-stroke":null);
 
     state.generatedLabelSel=labelLayer
       .selectAll("text")
@@ -4210,7 +4600,10 @@ ORDER BY ?year`
         if(d.evaluationState==="abstain")cls+=" abstain";
         return cls;
       })
-      .text(d=>d.scoreLabel||d.predicate||"?generated");
+      .text(d=>d.scoreLabel||d.predicate||"?generated")
+      // The label of a generated attribute in a Run-result view keeps its size on screen.
+      .style("font-size",d=>d.liveGeneratedLink?`${7.3*livePx()}px`:null,"important")
+      .style("stroke-width",d=>d.liveGeneratedLink?`${2.2*livePx()}px`:null,"important");
 
     state.nodeSel=nodeLayer
       .selectAll("g")
@@ -4222,11 +4615,15 @@ ORDER BY ?year`
     styleNodeCircles(state.nodeSel);
 
     const denseCompositionSnapshot=graphSnapshot.nodes.length>300&&graphSnapshot.nodes.some(node=>node.compositionDense);
-    state.nodeSel.filter(node=>!denseCompositionSnapshot||node.compositionGroup).append("text")
+    // The 1,248 bindings of GENOP-first are a cloud of dots under their group labels; a label
+    // for each of them, even one hidden by the stylesheet, came back through a more specific rule.
+    state.nodeSel.filter(node=>(!denseCompositionSnapshot||node.compositionGroup)&&!node.compositionBindingCloud).append("text")
       .attr("x",d=>nodeLabelX(d))
       .attr("text-anchor",d=>nodeLabelAnchor(d))
       .attr("y",nodeLabelY)
       .style("font-size",d=>Number.isFinite(d.liveLabelFont)?`${d.liveLabelFont}px`:null,"important")
+      // The halo of a label sized for the zoom of a Run-result view is sized with it.
+      .style("stroke-width",d=>Number.isFinite(d.liveLabelFont)?`${d.liveLabelFont*.3}px`:null,"important")
       .text(d=>d.label);
 
     appendSimilarityBoxes(state.nodeSel);
@@ -4267,6 +4664,7 @@ ORDER BY ?year`
       .force("collision",NativeGraph.forceCollide().radius(d=>nodeRadius(d)+.8).iterations(1))
       .on("tick",tick);
     state.anchored=makeElastic(state.simulation,graphSnapshot.nodes);
+    state.simulation.on("end.labels",scheduleLabelCull).on("tick.labels",cullWhileMoving);
 
     updateStatus();
   }

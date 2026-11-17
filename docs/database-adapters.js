@@ -12,6 +12,20 @@
     };
   }
 
+  // The award nodes of the Nobel graph have no rdfs:label, so the page shows the field and
+  // the year instead of the local name award_Q<laureate>_Q<field>_<year>.
+  function labelNobelAwards(graph){
+    const labelById = new Map(graph.nodes.map(n => [n.id, n.label]));
+    graph.nodes.forEach(node => {
+      const m = /^award_Q\d+_Q(\d+)_(\d{4})$/.exec(node.label || "");
+      if (node.type !== "NobelAward" || !m) return;
+      const field = labelById.get("http://www.wikidata.org/entity/Q" + m[1]) || "";
+      const short = /Economic Sciences/.test(field) ? "Economic Sciences" : field.replace(/^Nobel Prize in /, "");
+      node.label = (short ? short + " " : "Nobel Prize ") + m[2];
+    });
+    return graph;
+  }
+
   const databases = {
     fifa2026:{
       key:"fifa2026",
@@ -23,7 +37,7 @@
       key:"nobelPrize",
       label:"Nobel Prize",
       source:"nobel-prize.ttl",
-      graph:cloneGraph(NOBEL)
+      graph:labelNobelAwards(cloneGraph(NOBEL))
     }
   };
 

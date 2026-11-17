@@ -6,7 +6,7 @@
   <title>GenSPARQL · Interactive KG Explorer</title>
   <meta name="description" content="GenSPARQL interactive demo with the World Cup 2026 knowledge graph.">
   <script src="page-mode.js?v=20261103-1"></script>
-  <link rel="stylesheet" href="styles.css?v=20261117-2">
+  <link rel="stylesheet" href="styles.css?v=20261117-8">
 
 </head>
 <body>
@@ -82,7 +82,7 @@
               <span>Grounding threshold θ</span>
               <strong id="thetaVal">0.85</strong>
             </div>
-            <input id="theta" type="range" min="0" max="1" step="0.01" value="0.85">
+            <input id="theta" type="range" min="0.01" max="1" step="0.01" value="0.85">
             <div class="theta-similarity demo-only" role="radiogroup" aria-label="Similarity">
               <span>Similarity</span>
               <label><input type="radio" name="demoGroundMethod" id="demoGroundText" value="text" checked> Jaccard</label>
@@ -349,13 +349,14 @@
   </main>
 
   <script src="vendor/d3.v7.8.5.min.js"></script>
-  <script src="native-graph.js?v=20261116-1"></script>
+  <script src="vendor/n3.v2.13.12.min.js"></script>
+  <script src="native-graph.js?v=20261117-2"></script>
   <script src="recorded-runs.js?v=20261117-1"></script>
   <script src="demo-data.js?v=20261117-2"></script>
   <script src="fifa2026-data.js"></script>
   <script src="nobel-prize-data.js?v=20260826-1"></script>
-  <script src="database-adapters.js?v=20260826-2"></script>
-  <script src="engine-client.js?v=20260903-1"></script>
-  <script src="app.js?v=20261117-3"></script>
+  <script src="database-adapters.js?v=20261117-1"></script>
+  <script src="engine-client.js?v=20261117-1"></script>
+  <script src="app.js?v=20261117-35"></script>
 </body>
 </html>
