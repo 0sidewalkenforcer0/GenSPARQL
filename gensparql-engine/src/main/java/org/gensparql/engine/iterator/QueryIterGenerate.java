@@ -702,7 +702,8 @@ public class QueryIterGenerate extends QueryIteratorBase {
         if (simScoreEvaluator == null) {
             simScoreEvaluator = org.gensparql.engine.similarity.SimScoreEvaluator.forExecution(execCxt);
         }
-        double threshold = opGen.hasThreshold() ? opGen.getThreshold() : simScoreEvaluator.getThreshold(var);
+        // The threshold of this GENOP, not of another GENOP that generates the same variable.
+        double threshold = opGen.getEffectiveThreshold();
         return simScoreEvaluator.computeSimilarity(TypedValue.rdf(existing), TypedValue.gen(generated))
                 >= threshold;
     }

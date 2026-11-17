@@ -130,6 +130,7 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
         if (simText instanceof EmbeddingSimText) {
             ((EmbeddingSimText) simText).resetFallback();
         }
+        context.set(GenSPARQLConstants.THRESHOLD_REGISTRY, filterThresholds(op));
 
         ExecutionContext execCxt = new ExecutionContext(context, dsg.getDefaultGraph(), dsg, QC.getFactory(context));
         QueryIterator qIter = QueryIterRoot.create(input, execCxt);
@@ -218,16 +219,6 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
             // Register output variables as GEN type
             for (Var outputVar : opGen.getOutputVariables()) {
                 sourceTypes.put(outputVar, SourceType.GEN);
-            }
-
-            // Register thresholds if specified
-            if (opGen.hasThreshold()) {
-                ThresholdRegistry registry = getThresholdRegistry(execCxt);
-                Double threshold = opGen.getThreshold();
-                for (Var outputVar : opGen.getOutputVariables()) {
-                    registry.setThreshold(outputVar, threshold);
-                    LOG.debug("Registered threshold {} for variable ?{}", threshold, outputVar.getName());
-                }
             }
 
             LOG.debug("[DEBUG GenSPARQLQueryEngine] Calling opGen.eval()...");
@@ -874,8 +865,8 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
 
         LOG.debug("executeSimJoinForSequence: leftTypes={}, rightTypes={}", leftTypes, rightTypes);
 
-        QueryIterator simJoin = new QueryIterSimJoin(leftIter, rightIter, newSimScoreEvaluator(execCxt),
-                leftTypes, rightTypes, execCxt);
+        QueryIterator simJoin = new QueryIterSimJoin(leftIter, rightIter,
+                joinEvaluator(execCxt, generating, leftOp), leftTypes, rightTypes, execCxt);
         return org.apache.jena.sparql.engine.join.Join.join(input, simJoin, execCxt);
     }
 
@@ -969,16 +960,12 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
         }
         Map<Var, SourceType> generatedTypes = new HashMap<>(sourceTypes);
         // Part of the GENOP side may have been evaluated by ARQ, for example an OPTIONAL without
-        // a GENOP in its optional part, which registers neither the output variables of the
-        // GENOPs below it nor their thresholds.
+        // a GENOP in its optional part, which registers no output variables of the GENOPs below it.
         List<OpGenerate> generating = new ArrayList<>();
         collectGeneratingSide(generatingOp, generating);
         for (OpGenerate g : generating) {
             for (Var v : g.getOutputVariables()) {
                 generatedTypes.putIfAbsent(v, SourceType.GEN);
-                if (g.hasThreshold()) {
-                    getThresholdRegistry(execCxt).setThreshold(v, g.getThreshold());
-                }
             }
         }
         keepOnlyCurrentOutputs(generatedTypes, generating, patternOp);
@@ -988,7 +975,7 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
 
         return new QueryIterSimJoin(patterns,
                 org.apache.jena.sparql.engine.iterator.QueryIterPlainWrapper.create(generated.iterator(), execCxt),
-                newSimScoreEvaluator(execCxt), new HashMap<>(), generatedTypes, execCxt);
+                joinEvaluator(execCxt, generating, patternOp), new HashMap<>(), generatedTypes, execCxt);
     }
 
     /** Every GENOP in the plan, walking by arity as {@link #planContains} does. */
@@ -1062,13 +1049,7 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
      */
     private static void keepOnlyCurrentOutputs(Map<Var, SourceType> types, List<OpGenerate> generating,
                                                Op other) {
-        Set<Var> mentioned = org.apache.jena.sparql.algebra.OpVars.visibleVars(other);
-        OpGenerate current = null;
-        for (OpGenerate g : generating) {
-            if (!java.util.Collections.disjoint(g.getOutputVariables(), mentioned)) {
-                current = g;
-            }
-        }
+        OpGenerate current = currentGenerate(generating, other);
         if (current == null) {
             return;
         }
@@ -1119,6 +1100,55 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
         } else if (op instanceof org.apache.jena.sparql.algebra.op.OpMinus) {
             collectPatternBoundVars(((org.apache.jena.sparql.algebra.op.OpMinus) op).getLeft(), out);
         }
+    }
+
+    /**
+     * The current GENOP of a generating side: the last one, in written order, whose output the
+     * other side mentions, Gi for the patterns Qi. Null if the other side mentions no output.
+     */
+    private static OpGenerate currentGenerate(List<OpGenerate> generating, Op other) {
+        Set<Var> mentioned = org.apache.jena.sparql.algebra.OpVars.visibleVars(other);
+        OpGenerate current = null;
+        for (OpGenerate g : generating) {
+            if (!java.util.Collections.disjoint(g.getOutputVariables(), mentioned)) {
+                current = g;
+            }
+        }
+        return current;
+    }
+
+    /**
+     * The evaluator of one similarity join Qi ⋈θi GENOP(...): its output variables take the
+     * threshold θi of the current GENOP Gi, its own argument or θ0, and not the threshold of
+     * another GENOP that generates the same variable. Without a current GENOP, each output takes
+     * the threshold of the last GENOP of the side that generates it.
+     */
+    private SimScoreEvaluator joinEvaluator(ExecutionContext execCxt, List<OpGenerate> generating, Op other) {
+        ThresholdRegistry thresholds = new ThresholdRegistry();
+        thresholds.setDefaultThreshold(GenSPARQLConfig.getDefaultThreshold());
+        OpGenerate current = currentGenerate(generating, other);
+        for (OpGenerate g : current != null ? List.of(current) : generating) {
+            for (Var v : g.getOutputVariables()) {
+                thresholds.setThreshold(v, g.getEffectiveThreshold());
+            }
+        }
+        return new SimScoreEvaluator(getSimText(execCxt), thresholds, new GraphLabels(execCxt.getActiveGraph()));
+    }
+
+    /**
+     * The thresholds of the FILTER comparisons {@code ?x = t} of a query (Section 2.2): an output
+     * variable takes the threshold of the first GENOP, in written order, that generates it, since a
+     * solution keeps the term that the first GENOP bound. Other variables take θ0.
+     */
+    private static ThresholdRegistry filterThresholds(Op op) {
+        ThresholdRegistry thresholds = new ThresholdRegistry();
+        thresholds.setDefaultThreshold(GenSPARQLConfig.getDefaultThreshold());
+        for (OpGenerate g : allGenerate(op)) {
+            for (Var v : g.getOutputVariables()) {
+                thresholds.setThresholdIfAbsent(v, g.getEffectiveThreshold());
+            }
+        }
+        return thresholds;
     }
 
     /**

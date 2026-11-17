@@ -38,6 +38,20 @@ public class ThresholdRegistry {
     }
 
     /**
+     * Set the threshold for a variable that has none yet.
+     *
+     * @param var       the variable
+     * @param threshold value between 0.0 and 1.0
+     * @throws IllegalArgumentException if threshold is out of range
+     */
+    public void setThresholdIfAbsent(Var var, double threshold) {
+        if (threshold < 0.0 || threshold > 1.0) {
+            throw new IllegalArgumentException("Threshold must be in [0.0, 1.0], got: " + threshold);
+        }
+        thresholds.putIfAbsent(var, threshold);
+    }
+
+    /**
      * Get the threshold for a specific variable.
      * Returns the default threshold if no custom threshold is set.
      *

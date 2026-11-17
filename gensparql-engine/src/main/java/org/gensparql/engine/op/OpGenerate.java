@@ -134,6 +134,16 @@ public class OpGenerate extends OpExt {
     }
 
     /**
+     * The threshold θ of this GENOP in the semantics of Section 2.1: its own argument, else the
+     * default θ0. It applies to the similarity join of this GENOP and to the comparison of its
+     * generated values with the terms of output variables that a solution already binds.
+     */
+    public double getEffectiveThreshold() {
+        Double theta = getThreshold();
+        return theta != null ? theta : org.gensparql.engine.GenSPARQLConfig.getDefaultThreshold();
+    }
+
+    /**
      * The similarity threshold grounding applies to this GenOp's generated values.
      *
      * <p>Most specific source wins: an explicit {@code grounding_threshold} option, then the
