@@ -116,6 +116,12 @@ public class OpenAIProvider implements LLMProvider {
         return DEFAULT_MODEL;
     }
 
+    /** The embedding endpoint: OpenAI-compatible servers often serve models of the same name. */
+    @Override
+    public String getEmbeddingEndpointId() {
+        return getName() + "@" + embeddingBaseUrl;
+    }
+
     @Override
     public String getDefaultEmbeddingModel() {
         // OPENAI_EMBEDDING_MODEL selects the embedding model, e.g. a foundation

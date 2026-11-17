@@ -66,6 +66,14 @@ public interface LLMProvider {
     }
 
     /**
+     * Identifies where this provider obtains embeddings, so that cached embeddings of one
+     * endpoint are not reused for another endpoint that serves a model of the same name.
+     */
+    default String getEmbeddingEndpointId() {
+        return getName();
+    }
+
+    /**
      * Get the default model for this provider.
      */
     String getDefaultModel();

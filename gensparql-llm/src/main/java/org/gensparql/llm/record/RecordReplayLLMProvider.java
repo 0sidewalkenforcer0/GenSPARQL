@@ -126,6 +126,11 @@ public class RecordReplayLLMProvider implements LLMProvider {
     }
 
     @Override
+    public String getEmbeddingEndpointId() {
+        return delegate.getEmbeddingEndpointId();
+    }
+
+    @Override
     public String getDefaultModel() {
         return delegate.getDefaultModel();
     }

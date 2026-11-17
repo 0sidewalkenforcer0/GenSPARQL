@@ -268,7 +268,9 @@ public class EmbeddingSimText implements SimText {
     }
 
     private static String cacheKey(String text, LLMProvider provider, ModelSpec model) {
-        String providerName = provider == null ? "default" : provider.getName();
+        // The endpoint, not only the provider's name: two OpenAI-compatible servers can serve
+        // different models under the same name.
+        String providerName = provider == null ? "default" : provider.getEmbeddingEndpointId();
         String modelName = model == null ? "default" : model.toString();
         return providerName + '\u0001' + modelName + '\u0001' + text;
     }
