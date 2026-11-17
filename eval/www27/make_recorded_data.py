@@ -218,7 +218,7 @@ def main():
     summary = load(RES, "summary.json")
     calls = load(RES, "planner-calls.json")
     data = {
-        "source": "eval/www27/results: E1-E3 of 2026-11-03 and the planner counts of 2026-11-04",
+        "source": "eval/www27/results: E1-E3 and the planner counts of 2026-11-03",
         "wcAttribute": wc_attribute(wc, summary),
         "wcEntity": wc_entity(),
         "wcComposition": wc_composition(wc, calls),
