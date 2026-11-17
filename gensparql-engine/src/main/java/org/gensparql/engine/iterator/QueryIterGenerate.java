@@ -526,8 +526,7 @@ public class QueryIterGenerate extends QueryIteratorBase {
 
             if (response.hasBindings()) {
                 for (Map<String, String> outputBinding : response.getBindings()) {
-                    Map<String, String> normalizedBinding = normalizeExplicitScalar(outputBinding);
-                    Map<String, String> validatedBinding = validateOutputBinding(normalizedBinding);
+                    Map<String, String> validatedBinding = validateOutputBinding(outputBinding);
                     if (validatedBinding != null) {
                         outputMaps.add(validatedBinding);
                     } else {
@@ -544,7 +543,7 @@ public class QueryIterGenerate extends QueryIteratorBase {
                     names.add(v.getName());
                 }
                 for (Map<String, String> parsed : new JsonResponseParser().parse(rawText, names)) {
-                    Map<String, String> validatedBinding = validateOutputBinding(normalizeExplicitScalar(parsed));
+                    Map<String, String> validatedBinding = validateOutputBinding(parsed);
                     if (validatedBinding != null) {
                         outputMaps.add(validatedBinding);
                     } else {
@@ -561,41 +560,6 @@ public class QueryIterGenerate extends QueryIteratorBase {
             return null;
         }
         return outputMaps;
-    }
-
-    /**
-     * Canonicalize a verbose single-value answer only when the query prompt explicitly lists
-     * the allowed labels (for example "Return exactly one value: A, B, or C"). This avoids
-     * guessing how arbitrary prose should be shortened while making classification output
-     * deterministic for a following exact SPARQL FILTER.
-     */
-    private Map<String, String> normalizeExplicitScalar(Map<String, String> binding) {
-        if (binding == null || opGen.getOutputVariables().size() != 1) return binding;
-        String var = opGen.getOutputVariables().get(0).getName();
-        String raw = binding.get(var);
-        if (raw == null || raw.isBlank()) return binding;
-
-        java.util.regex.Matcher list = java.util.regex.Pattern.compile(
-                "(?i)return\\s+(?:exactly\\s+)?(?:only\\s+)?one\\s+(?:value\\s*)?(?:of\\s*)?:\\s*([^\\n.]+)")
-                .matcher(opGen.getPromptTemplate());
-        if (!list.find()) return binding;
-
-        String fragment = list.group(1).replaceAll("(?i)\\s+or\\s+", ",").replace('|', ',');
-        List<String> matches = new ArrayList<>();
-        for (String item : fragment.split(",")) {
-            String candidate = item.trim().replaceAll("^[\\\"'`]+|[\\\"'`;:]+$", "").trim();
-            if (candidate.isEmpty()) continue;
-            java.util.regex.Pattern mention = java.util.regex.Pattern.compile(
-                    "(?i)(?<![\\p{L}\\p{N}])" + java.util.regex.Pattern.quote(candidate)
-                            + "(?![\\p{L}\\p{N}])");
-            if (mention.matcher(raw).find()) matches.add(candidate);
-        }
-        if (matches.size() != 1) return binding;
-
-        Map<String, String> normalized = new HashMap<>(binding);
-        normalized.put(var, matches.get(0));
-        LOG.debug("Normalized verbose scalar '{}' to explicit label '{}'", truncate(raw, 100), matches.get(0));
-        return normalized;
     }
 
     /**
