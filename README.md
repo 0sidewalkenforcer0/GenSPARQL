@@ -8,11 +8,11 @@
 ![Status](https://img.shields.io/badge/status-research%20prototype-yellow.svg)
 [![Live demo](https://img.shields.io/badge/live-demo-0E7C86.svg)](https://0sidewalkenforcer0.github.io/GenSPARQL/)
 
-**A generative extension of SPARQL 1.1 for Apache Jena, with LLM generation and entity grounding as first-class query operators.**
+**A generative extension of SPARQL 1.1 for Apache Jena: an LLM generates values during query evaluation, and a similarity join maps generated names to entities of the graph.**
 
 ▶ **[Try the workbench](https://0sidewalkenforcer0.github.io/GenSPARQL/)** on two graphs built from Wikidata, the 2026 World Cup and the Nobel laureates. Its recorded mode replays the answers of three open-weight LLMs, and its live mode runs your own queries with a local model ([setup](#live-mode-with-a-local-model-ollama-no-provider-account)). ▶ **[Watch the 3-minute video](https://0sidewalkenforcer0.github.io/GenSPARQL/video/gensparql-demo.mp4)**.
 
-A SPARQL query returns only what a knowledge graph (KG) explicitly stores, so it cannot return an attribute the KG never modeled or an entity it does not record. Large language models (LLMs) hold broad open-world knowledge, but they optimize likelihood over truth and can hallucinate. GenSPARQL bridges the two by adding two operators that live inside the query algebra: a first-class `GENOP` that calls an LLM during query evaluation and binds the generated values to query variables, and a type-aware similarity join that grounds generated entities to real KG nodes. Because `GENOP` is an operator rather than an external call, the query planner defers it behind selective graph patterns, so the LLM runs only on the bindings that survive.
+A SPARQL query returns only what a knowledge graph (KG) explicitly stores, so it cannot return an attribute the KG never modeled or an entity it does not record. Large language models (LLMs) hold broad open-world knowledge, but they optimize likelihood over truth and can hallucinate. GenSPARQL bridges the two by adding two operators that live inside the query algebra: a first-class `GENOP` that calls an LLM during query evaluation and binds the generated values to query variables, and a similarity join that maps generated names to entities of the graph (also called grounding). Because `GENOP` is an operator rather than an external call, the query planner defers it behind selective graph patterns, so the LLM runs only on the bindings that survive.
 
 ---
 
@@ -23,12 +23,13 @@ A SPARQL query returns only what a knowledge graph (KG) explicitly stores, so it
 - [Quick Verification](#quick-verification)
 - [Usage Examples](#usage-examples)
 - [The GENOP Operator](#the-genop-operator)
-- [Entity Grounding (Similarity Join)](#entity-grounding-similarity-join)
+- [Mapping Generated Names to Entities (Similarity Join)](#mapping-generated-names-to-entities-similarity-join)
 - [Available Functions](#available-functions)
 - [LLM Providers and Models](#llm-providers-and-models)
 - [Evaluation](#evaluation)
 - [Earlier Benchmark Material](#earlier-benchmark-material)
 - [Project Structure](#project-structure)
+- [Known Limitations](#known-limitations)
 - [Troubleshooting](#troubleshooting)
 - [Citing](#citing)
 - [License](#license)
@@ -103,6 +104,8 @@ GenSPARQL-aware API. Unlike Fuseki's standard query endpoint, the API parses que
 - `http://localhost:8080/` opens the recorded mode. It replays the answers that the LLMs gave in the evaluation, so it needs no model.
 - `http://localhost:8080/?mode=live` opens the live mode, which sends each query to the service.
 
+The [workbench README](docs/README.md) describes the two modes, the live defaults and the service API in more detail.
+
 The service answers only connections from this machine, because a query names the endpoint that the service sends its prompts to. To accept connections from the network, start it with `MAVEN_OPTS=-Dgensparql.server.allowRemote=true ./start-fuseki.sh`. The read-only Fuseki dataset is at `/gensparql`, and the workbench uses:
 
 ```text
@@ -161,8 +164,8 @@ The `gensparql-example/queries/` directory contains ready-to-use queries over th
 | File | Demonstrates | Script |
 |------|--------------|--------|
 | `query1_list_scientists_awards.sparql` | Basic SPARQL, no `GENOP` | `run_query1.sh` |
-| `query2_generate_descriptions.sparql` | `GENOP` context mode (attribute completion) | `run_query2.sh` |
-| `query3_list_nobel_laureates.sparql` | `GENOP` base mode (entity completion) | `run_query3.sh` |
+| `query2_generate_descriptions.sparql` | `GENOP` context mode (generating attributes) | `run_query2.sh` |
+| `query3_list_nobel_laureates.sparql` | `GENOP` base mode (listing entities) | `run_query3.sh` |
 | `query3_1_multi_output.sparql` | `GENOP` with multiple input and output variables | `run_query3_1.sh` |
 | `query3_2_union.sparql` | Combining KG results with `GENOP` via `UNION` | `run_query3_2.sh` |
 | `query4_filter_french_scientists.sparql` | Semantic `FILTER` using LLM knowledge | `run_query4.sh` |
@@ -222,7 +225,7 @@ It runs in one of two modes, covering two kinds of completion the KG cannot answ
 
 Both examples are the queries of Figure 1 of the paper and run as written over the World Cup graph `docs/worldcup2026.ttl`, here with Mistral-7B on a local Ollama server. The engine itself asks the LLM for a JSON array, so the prompt does not need to.
 
-**Attribute completion (context mode).** The prompt contains a placeholder, so the LLM is called once for each solution of the other patterns, here for each of the 26 players of Argentina, and fills in a property that the graph does not store:
+**Generating attributes (context mode).** The prompt contains a placeholder, so the LLM is called once for each solution of the other patterns, here for each of the 26 players of Argentina, and fills in a property that the graph does not store:
 
 ```sparql
 PREFIX ex:   <http://example.org/>
@@ -235,7 +238,7 @@ SELECT ?name ?pos WHERE {
 }
 ```
 
-**Entity completion (base mode).** The prompt has no placeholder, so a single LLM call returns a list of names, and the similarity join maps them to the athletes of the graph. Names of players outside the 2026 squads, such as Pelé, map to no entity:
+**Listing entities (base mode).** The prompt has no placeholder, so a single LLM call returns a list of names, and the similarity join maps them to the athletes of the graph. Names of players outside the 2026 squads, such as Pelé, map to no entity:
 
 ```sparql
 PREFIX ex:   <http://example.org/>
@@ -256,9 +259,16 @@ An `OPTIONAL` or `BIND` that is not deferred comes before the `GENOP` expression
 
 ---
 
-## Entity Grounding (Similarity Join)
+## Mapping Generated Names to Entities (Similarity Join)
 
-A generated value is free text, whereas a KG term is an IRI or typed literal, so the two cannot be joined by equality. When a `GENOP` shares an output variable with a graph pattern of its group, GenSPARQL joins them by **similarity** instead, in both modes: it compares each generated value with the labels of the term that the pattern binds, by the Jaccard similarity of the lowercase word sets or by the cosine similarity of text embeddings, and keeps a match when the similarity reaches a threshold `θ`. Only the output variables of that `GENOP` are compared by similarity. Any other shared variable, the output of an earlier `GENOP` included, is compared by equality. A joined solution keeps the term of the graph. The default θ0 is 0.85. It is an engine parameter, which `MAVEN_OPTS=-Dgensparql.theta0=0.9 ./start-fuseki.sh` sets for the service and `GenSPARQL.setSimilarityThreshold(0.9)` sets in Java, and the fourth argument of `GENOP` sets another value for that `GENOP`, as in `query6_simscore_join.sparql` (0.75). The mode only decides how often the prompt is sent: a context-mode `GENOP` sends it once for every solution of the patterns that bind its placeholders, a base-mode `GENOP` once. The similarity join also applies inside `UNION`, `OPTIONAL` and `GRAPH`, where it reads the labels of the named graph. If the embedding model fails, the query falls back to the Jaccard similarity, logs a warning and reports the fallback in the trace of the HTTP service.
+A generated value is free text, whereas a KG term is an IRI or typed literal, so the two cannot be joined by equality. When a `GENOP` shares an output variable with a graph pattern of its group, GenSPARQL joins them by **similarity** instead, in both modes:
+
+- **What is compared.** Each generated value is compared with the labels of the term that the pattern binds: the values of the first of `rdfs:label`, `skos:prefLabel`, `schema:name` and `foaf:name` that the term has in the queried graph, or else its local name. A match is kept when the similarity reaches the threshold `θ`, and the joined solution keeps the term of the graph.
+- **Which variables.** Only the output variables of that `GENOP` are compared by similarity. Any other shared variable, the output of an earlier `GENOP` included, is compared by equality.
+- **Similarity.** The request chooses the Jaccard similarity of the lowercase word sets or the cosine similarity of text embeddings. If the embedding model fails, the query falls back to the Jaccard similarity, logs a warning and reports the fallback in the trace of the HTTP service.
+- **Threshold.** The default θ0 is 0.85. It is an engine parameter, which `MAVEN_OPTS=-Dgensparql.theta0=0.9 ./start-fuseki.sh` sets for the service and `GenSPARQL.setSimilarityThreshold(0.9)` sets in Java. The fourth argument of a `GENOP` sets another value for that `GENOP`, as in `query6_simscore_join.sparql` (0.75).
+- **Modes.** The mode only decides how often the prompt is sent: a context-mode `GENOP` sends it once for every solution of the patterns that bind its placeholders, a base-mode `GENOP` once.
+- **Where.** The similarity join also applies inside `UNION`, `OPTIONAL` and `GRAPH`, where it reads the labels of the named graph.
 
 Every entity that the similarity join maps a name to belongs to the graph, but the mapping can be wrong: a name, also one that denotes no entity of the graph, can reach the threshold for an entity with a similar label. In the evaluation, the embedding similarity made one such match at `θ = 0.85` (George P. Smith to George E. Smith) and none at `θ = 0.9`. Generated attribute values are literals that are not mapped, and they are only as reliable as the LLM that generated them.
 
@@ -314,7 +324,7 @@ export OPENAI_EMBEDDING_MODEL=BAAI/bge-large-en-v1.5
 # query model spec, for example: <model:openai:Qwen/Qwen3-30B-A3B-Instruct-2507>
 ```
 
-`OPENAI_EMBEDDING_MODEL` (and `OPENAI_EMBEDDING_BASE_URL`) select the embedding model used by `gen:embedding` and embedding-based grounding.
+`OPENAI_EMBEDDING_MODEL` (and `OPENAI_EMBEDDING_BASE_URL`) select the embedding model used by `gen:embedding` and by the embedding similarity of the similarity join.
 
 ---
 
@@ -359,6 +369,16 @@ GenSPARQL/
 ├── start-fuseki.sh               # Builds and starts the HTTP service with the workbench
 └── pom.xml                       # Maven build configuration
 ```
+
+---
+
+## Known Limitations
+
+- `GENOP` cannot occur inside `EXISTS` or `NOT EXISTS`, as in the paper. The parser rejects such a query.
+- `GENOP` cannot occur inside `SERVICE`: the remote endpoint would have to evaluate it, and the query fails.
+- If two `GENOP` expressions generate the same variable, a `FILTER` comparison `?x = t` on that variable uses the threshold of the first of them in written order, whose value the solution keeps.
+- The experimental grounding mode (the `key: value` options of `GENOP`, off by default) reads the labels of the default graph only.
+- `gen:similarity` caches embeddings by their text only, so within one process it reuses them across embedding models. The similarity join keeps its embeddings per endpoint and model.
 
 ---
 
