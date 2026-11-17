@@ -591,9 +591,72 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
             };
         }
 
+        // GRAPH with a GENOP. ARQ would evaluate the group inside without the similarity join, so
+        // the engine evaluates it over the named graph, see executeGraph.
+        if (op instanceof org.apache.jena.sparql.algebra.op.OpGraph && planContainsGenOp(op)) {
+            return executeGraph((org.apache.jena.sparql.algebra.op.OpGraph) op, input, execCxt);
+        }
+
         // Fallback to standard QC execution for other ops (BGP, etc.)
         LOG.debug("Falling back to QC.execute for: {}", op.getClass().getSimpleName());
         return QC.execute(op, input, execCxt);
+    }
+
+    /**
+     * GRAPH g { P } with a GENOP in P. P is translated as every group is (Section 2.1) and
+     * evaluated with the named graph as the queried graph: its triple patterns match that graph,
+     * and the similarity join reads labels(t) from it (Section 2.2). For an IRI g that names no
+     * graph of the dataset there is no solution. For a variable ?g, P is evaluated over each named
+     * graph that an incoming solution leaves possible, and ?g is bound to the graph's name. A
+     * base-mode GENOP still sends a single prompt per query, since its answers are kept per GENOP.
+     * The legacy grounding path ({@code CandidateExtractor}, off by default) reads the default
+     * graph only.
+     */
+    private QueryIterator executeGraph(org.apache.jena.sparql.algebra.op.OpGraph opGraph, QueryIterator input,
+                                       ExecutionContext execCxt) {
+        org.apache.jena.graph.Node name = opGraph.getNode();
+        DatasetGraph dsg = execCxt.getDataset();
+        if (!name.isVariable()) {
+            if (!dsg.containsGraph(name)) {
+                input.close();
+                return org.apache.jena.sparql.engine.iterator.QueryIterNullIterator.create(execCxt);
+            }
+            return executeOp(opGraph.getSubOp(), input, new ExecutionContext(execCxt, dsg.getGraph(name)));
+        }
+        Var var = Var.alloc(name);
+        List<org.apache.jena.graph.Node> names = new ArrayList<>();
+        dsg.listGraphNodes().forEachRemaining(names::add);
+        List<Binding> out = new ArrayList<>();
+        try {
+            while (input.hasNext()) {
+                Binding mu = input.next();
+                org.apache.jena.graph.Node bound = mu.get(var);
+                for (org.apache.jena.graph.Node g : bound != null ? List.of(bound) : names) {
+                    if (!dsg.containsGraph(g)) {
+                        continue;
+                    }
+                    ExecutionContext inGraph = new ExecutionContext(execCxt, dsg.getGraph(g));
+                    QueryIterator sub = executeOp(opGraph.getSubOp(),
+                            org.apache.jena.sparql.engine.iterator.QueryIterSingleton.create(mu, inGraph), inGraph);
+                    try {
+                        while (sub.hasNext()) {
+                            Binding b = sub.next();
+                            org.apache.jena.graph.Node inner = b.get(var);
+                            if (inner == null) {
+                                out.add(org.apache.jena.sparql.engine.binding.BindingFactory.binding(b, var, g));
+                            } else if (inner.equals(g)) {
+                                out.add(b);
+                            }
+                        }
+                    } finally {
+                        sub.close();
+                    }
+                }
+            }
+        } finally {
+            input.close();
+        }
+        return org.apache.jena.sparql.engine.iterator.QueryIterPlainWrapper.create(out.iterator(), execCxt);
     }
 
     /**
