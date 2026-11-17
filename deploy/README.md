@@ -8,7 +8,7 @@ and served by the same tool.
 
 ```
  GenSPARQL (openai provider)
-   ├── chat        →  OPENAI_BASE_URL            →  vLLM  serve_llm.slurm         (e.g. Qwen2.5)
+   ├── chat        →  OPENAI_BASE_URL            →  vLLM  serve_llm.slurm         (e.g. Qwen3)
    └── embeddings  →  OPENAI_EMBEDDING_BASE_URL  →  vLLM  serve_embeddings.slurm  (e.g. bge-large)
 ```
 
@@ -53,7 +53,7 @@ Provider routing (no extra flag needed):
 And write query model specs against the `openai` provider using the HF repo id as the model:
 
 ```sparql
-GENOP("List one tool used in {?field}.", (?tool), <model:openai:Qwen/Qwen2.5-7B-Instruct>)
+GENOP("List one tool used in {?field}.", (?tool), <model:openai:Qwen/Qwen3-30B-A3B-Instruct-2507>)
 ```
 
 ## Model choices (see the review analysis)

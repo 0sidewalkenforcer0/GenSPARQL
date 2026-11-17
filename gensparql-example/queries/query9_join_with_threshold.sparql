@@ -5,7 +5,7 @@
 # 1. BGP: Query scientists and awards from the database (binds ?scientist and ?awardLabel as RDF type)
 # 2. GENOP: Generate Nobel Prize winners independently (binds ?scientist and ?awardLabel as GEN type)
 # 3. JOIN: Natural join between BGP and GENOP results
-# 4. Threshold: Uses 0.8 similarity threshold for matching GEN values
+# 4. Threshold: the GENOP gives none, so the default threshold θ0 (0.85) applies
 #
 # Key: Both BGP and GENOP bind the same variables (?scientist, ?awardLabel),
 # so they are joined on these variables. The threshold (0.8) controls how similar

@@ -27,7 +27,7 @@ A SPARQL query returns only what a knowledge graph (KG) explicitly stores, so it
 - [Available Functions](#available-functions)
 - [LLM Providers and Models](#llm-providers-and-models)
 - [Evaluation](#evaluation)
-- [Benchmark Reproduction](#benchmark-reproduction)
+- [Earlier Benchmark Material](#earlier-benchmark-material)
 - [Project Structure](#project-structure)
 - [Troubleshooting](#troubleshooting)
 - [Citing](#citing)
@@ -156,22 +156,25 @@ export OPENROUTER_API_KEY="sk-or-..."
 
 ### Example Queries
 
-The `gensparql-example/queries/` directory contains ready-to-use queries. The queries 1 to 8 have a matching `run_queryN.sh` script, and they call `<model:openrouter:openai/gpt-4o-mini>`; any other model of a configured provider works too:
+The `gensparql-example/queries/` directory contains ready-to-use queries over the small demo graphs in `gensparql-example/data/`. All of them call `<model:openrouter:openai/gpt-4o-mini>`; any other model of a configured provider works too. The queries with a script run with `./run_queryN.sh` from `gensparql-example/`:
 
-| File | Demonstrates |
-|------|--------------|
-| `query1_list_scientists_awards.sparql` | Basic SPARQL, no `GENOP` |
-| `query2_generate_descriptions.sparql` | `GENOP` context mode (attribute completion) |
-| `query3_list_nobel_laureates.sparql` | `GENOP` base mode (entity completion) |
-| `query3_1_multi_output.sparql` | `GENOP` with multiple input and output variables |
-| `query3_2_union.sparql` | Combining KG results with `GENOP` via `UNION` |
-| `query4_filter_french_scientists.sparql` | Semantic `FILTER` using LLM knowledge |
-| `query5_optional_genop.sparql` | Enriching results with `OPTIONAL` + `GENOP` |
-| `query5_1_optional_selective.sparql` | Selective `OPTIONAL` enrichment |
-| `query6_simscore_join.sparql` | Similarity join between KG and generated values |
-| `query7_cartesian_product.sparql` | `GENOP` inputs from independent BGPs |
-| `query8_genop_before_bgp.sparql` | `GENOP` inputs bound by a later BGP |
-| `query9_join_with_threshold.sparql` | Similarity join with the default threshold |
+| File | Demonstrates | Script |
+|------|--------------|--------|
+| `query1_list_scientists_awards.sparql` | Basic SPARQL, no `GENOP` | `run_query1.sh` |
+| `query2_generate_descriptions.sparql` | `GENOP` context mode (attribute completion) | `run_query2.sh` |
+| `query3_list_nobel_laureates.sparql` | `GENOP` base mode (entity completion) | `run_query3.sh` |
+| `query3_1_multi_output.sparql` | `GENOP` with multiple input and output variables | `run_query3_1.sh` |
+| `query3_2_union.sparql` | Combining KG results with `GENOP` via `UNION` | `run_query3_2.sh` |
+| `query4_filter_french_scientists.sparql` | Semantic `FILTER` using LLM knowledge | `run_query4.sh` |
+| `query5_optional_genop.sparql` | Enriching results with `OPTIONAL` + `GENOP` | `run_query5.sh` |
+| `query5_1_optional_selective.sparql` | Selective `OPTIONAL` enrichment | `run_query5_1.sh` |
+| `query6_simscore_join.sparql` | Similarity join between KG and generated values (θ = 0.75) | `run_query6.sh` |
+| `query7_cartesian_product.sparql` | `GENOP` inputs from independent BGPs | `run_query7.sh` |
+| `query8_genop_before_bgp.sparql` | `GENOP` inputs bound by a later BGP | `run_query8.sh` |
+| `query9_join_with_threshold.sparql` | Similarity join with the default threshold θ0 | none |
+| `nobel_quantum_simjoin.sparql` | Similarity join over a Nobel Prize graph (θ = 0.75) | `run_nobel_quantum_simjoin.sh` |
+
+The query without a script runs through the [Java API](#programmatic-use-java-api) or the HTTP service.
 
 Run one from the example module:
 
@@ -180,18 +183,30 @@ cd gensparql-example
 ./run_query2.sh
 ```
 
-The demo datasets live in `gensparql-example/data/` (a scientists/awards graph and a footballers graph).
+`gensparql-example/data/` holds the small demo graphs of these queries (scientists and awards, footballers) and earlier builds of the two graphs of the paper. The graphs of the paper and the workbench are `docs/worldcup2026.ttl` and `docs/nobel-prize.ttl`, and the queries of the evaluation are in [`eval/www27/`](eval/www27/README.md).
 
 ### Programmatic Use (Java API)
 
 ```java
 GenSPARQL.init();                                  // register engine + functions
 Query q = GenSPARQLQueryFactory.create(queryString);
-try (QueryExecution qe = GenSPARQL.createQueryExecution(q, dataset)) {
+Context cxt = ARQ.getContext().copy();
+cxt.set(GenSPARQLConstants.SIM_TEXT, new JaccardSimText());
+try (QueryExecution qe = GenSPARQL.createQueryExecution(q, dataset, cxt)) {
     ResultSet rs = qe.execSelect();
     // ...
 }
 ```
+
+The context chooses the similarity of the similarity join: `JaccardSimText`, or the cosine of embeddings with
+
+```java
+LLMProvider ollama = new OpenAIProvider("", "http://localhost:11434/v1", "", "http://localhost:11434/v1");
+cxt.set(GenSPARQLConstants.SIM_TEXT,
+        new EmbeddingSimText(new JaccardSimText(), ollama, ModelSpec.fromURI("model:openai:bge-large")));
+```
+
+Without this setting, the engine uses the embeddings of the default provider. If the embedding model fails, the query falls back to the Jaccard similarity and logs a warning.
 
 ---
 
@@ -200,32 +215,37 @@ try (QueryExecution qe = GenSPARQL.createQueryExecution(q, dataset)) {
 `GENOP` appears alongside `FILTER`, `BIND`, and `OPTIONAL` inside a graph pattern:
 
 ```sparql
-GENOP("<prompt, may contain {?vars}>", (?out1, ?out2), <model:PROVIDER:MODEL> [, options])
+GENOP("<prompt, may contain {?var} placeholders>", (?out1, ..., ?outk), <model:PROVIDER:MODEL> [, θ])
 ```
 
 It runs in one of two modes, covering two kinds of completion the KG cannot answer alone.
 
-**Attribute completion (context mode).** The prompt references bound variables and runs once per surviving binding, filling a property the KG never models:
+Both examples are the queries of Figure 1 of the paper and run as written over the World Cup graph `docs/worldcup2026.ttl`, here with Mistral-7B on a local Ollama server. The engine itself asks the LLM for a JSON array, so the prompt does not need to.
+
+**Attribute completion (context mode).** The prompt contains a placeholder, so the LLM is called once for each solution of the other patterns, here for each of the 26 players of Argentina, and fills in a property that the graph does not store:
 
 ```sparql
-SELECT ?name ?position WHERE {
-  ?p a ex:Athlete ; rdfs:label ?name .
-  GENOP("What position does {?name} play?", (?position),
-        <model:openrouter:deepseek/deepseek-chat>)
+PREFIX ex:   <http://example.org/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?name ?pos WHERE {
+  ?p ex:playsFor ?t .
+  ?t rdfs:label "Argentina" .
+  ?p rdfs:label ?name .
+  GENOP("Position of {?name}?", (?pos), <model:openai:mistral:7b>)
 }
 ```
 
-**Entity completion (base mode).** The prompt has no input variables, so a single LLM call can produce many result tuples, returning entities the KG is missing:
+**Entity completion (base mode).** The prompt has no placeholder, so a single LLM call returns a list of names, and the similarity join maps them to the athletes of the graph. Names of players outside the 2026 squads, such as Pelé, map to no entity:
 
 ```sparql
-SELECT ?player WHERE {
-  ?player a ex:Athlete .
-  GENOP("List footballers who have won the FIFA World Cup. Return ONLY a JSON array of names.",
-        (?player), <model:openrouter:deepseek/deepseek-chat>, 0.85)
+PREFIX ex:   <http://example.org/>
+SELECT ?p WHERE {
+  ?p a ex:Athlete .
+  GENOP("List footballers who have won the World Cup.", (?p), <model:openai:mistral:7b>, 0.85)
 }
 ```
 
-The bracketed `options` set parameters such as the grounding similarity threshold `θ`. Because `GENOP` lives in the query algebra, the planner places it after the KG patterns that constrain its inputs, so the LLM runs only on the bindings that survive. Within a group with the `GENOP` expressions G1, ..., Gn in written order, the planner orders the elements as follows:
+The optional `θ` in [0, 1] is the threshold of the similarity join of this `GENOP` (see the next section); without it, the default `θ0 = 0.85` applies. The grammar also accepts `key: value` options of an experimental grounding mode that is off by default. Because `GENOP` lives in the query algebra, the planner places it after the KG patterns that constrain its inputs, so the LLM runs only on the bindings that survive. Within a group with the `GENOP` expressions G1, ..., Gn in written order, the planner orders the elements as follows:
 
 - An `OPTIONAL`, `MINUS` or `BIND` is *deferred* if it mentions an output variable of a `GENOP`, or a variable of an earlier element that mentions one or is deferred itself.
 - The other elements that mention no output variable come first. The filters over the variables that their triple patterns bind follow them, so they remove solutions before any prompt is sent.
@@ -238,7 +258,7 @@ An `OPTIONAL` or `BIND` that is not deferred comes before the `GENOP` expression
 
 ## Entity Grounding (Similarity Join)
 
-A generated value is free text, whereas a KG term is an IRI or typed literal, so the two cannot be joined by equality. When a `GENOP` shares an output variable with a graph pattern of its group, GenSPARQL joins them by **similarity** instead, in both modes: it compares each generated value with the labels of the term that the pattern binds, by the Jaccard similarity of the lowercase word sets or by the cosine similarity of text embeddings, and keeps a match when the similarity reaches a threshold `θ`. Only the output variables of that `GENOP` are compared by similarity. Any other shared variable, the output of an earlier `GENOP` included, is compared by equality. A joined solution keeps the term of the graph. The default θ0 is 0.85. It is an engine parameter, which `-Dgensparql.theta0=0.9` sets for the service and `GenSPARQL.setSimilarityThreshold(0.9)` sets in Java, and the fourth argument of `GENOP` sets another value for that `GENOP`, as in `query6_simscore_join.sparql` (0.75). The mode only decides how often the prompt is sent: a context-mode `GENOP` sends it once for every solution of the patterns that bind its placeholders, a base-mode `GENOP` once. The similarity join also applies inside `UNION`, `OPTIONAL` and `GRAPH`, where it reads the labels of the named graph. If the embedding model fails, the query falls back to the Jaccard similarity, logs a warning and reports the fallback in the trace of the HTTP service.
+A generated value is free text, whereas a KG term is an IRI or typed literal, so the two cannot be joined by equality. When a `GENOP` shares an output variable with a graph pattern of its group, GenSPARQL joins them by **similarity** instead, in both modes: it compares each generated value with the labels of the term that the pattern binds, by the Jaccard similarity of the lowercase word sets or by the cosine similarity of text embeddings, and keeps a match when the similarity reaches a threshold `θ`. Only the output variables of that `GENOP` are compared by similarity. Any other shared variable, the output of an earlier `GENOP` included, is compared by equality. A joined solution keeps the term of the graph. The default θ0 is 0.85. It is an engine parameter, which `MAVEN_OPTS=-Dgensparql.theta0=0.9 ./start-fuseki.sh` sets for the service and `GenSPARQL.setSimilarityThreshold(0.9)` sets in Java, and the fourth argument of `GENOP` sets another value for that `GENOP`, as in `query6_simscore_join.sparql` (0.75). The mode only decides how often the prompt is sent: a context-mode `GENOP` sends it once for every solution of the patterns that bind its placeholders, a base-mode `GENOP` once. The similarity join also applies inside `UNION`, `OPTIONAL` and `GRAPH`, where it reads the labels of the named graph. If the embedding model fails, the query falls back to the Jaccard similarity, logs a warning and reports the fallback in the trace of the HTTP service.
 
 Every entity that the similarity join maps a name to belongs to the graph, but the mapping can be wrong: a name, also one that denotes no entity of the graph, can reach the threshold for an entity with a similar label. In the evaluation, the embedding similarity made one such match at `θ = 0.85` (George P. Smith to George E. Smith) and none at `θ = 0.9`. Generated attribute values are literals that are not mapped, and they are only as reliable as the LLM that generated them.
 
@@ -246,13 +266,13 @@ Every entity that the similarity join maps a name to belongs to the graph, but t
 
 ## Available Functions
 
-All functions use the prefix `PREFIX gen: <http://gensparql.org/function#>`. They can be called inside `FILTER`, `BIND`, and `SELECT` expressions.
+All functions use the prefix `PREFIX gen: <http://gensparql.org/function#>`. They can be called inside `FILTER`, `BIND`, and `SELECT` expressions. They are auxiliary functions outside the semantics of the paper: `GENOP` and the similarity join do not use them. The functions that call an LLM or an embedding model use the default provider.
 
 ### Similarity Functions
 | Function | Description |
 |----------|-------------|
-| `gen:similarity(?x, ?y)` | Semantic similarity between two values |
-| `gen:approxEq(?x, ?y, ?threshold)` | Approximate equality test |
+| `gen:similarity(?x, ?y)` | Cosine of the embeddings of two values; the Jaccard similarity of the lowercase words if the embeddings fail. It does not read the similarity that the query context sets for the similarity join |
+| `gen:approxEq(?x, ?y, ?threshold)` | Whether `gen:similarity(?x, ?y)` reaches the threshold |
 | `gen:embedding(?x)` | Embedding vector for text |
 
 ### NLP Functions
@@ -260,7 +280,7 @@ All functions use the prefix `PREFIX gen: <http://gensparql.org/function#>`. The
 |----------|-------------|
 | `gen:classify(?text, ?labels)` | Classify text into one of the given labels |
 | `gen:extract(?text, ?schema)` | Extract structured fields from text |
-| `gen:ground(?text)` | Map a natural-language mention to a KG entity (IRI) |
+| `gen:ground(?text)` | Ask the LLM for the Wikidata or DBpedia entity of a mention and return its IRI, without checking it against the queried graph |
 | `gen:validate(?value, ?schema)` | Check whether a value conforms to a schema |
 | `gen:entail(?premise, ?hypothesis)` | Textual entailment |
 | `gen:parseJSON(?raw, ?field)` | Extract a field from JSON text (`field`, `nested.field`, `array[0]`) |
@@ -291,7 +311,7 @@ To run the chat model *and* the embedding model as local open-weight models (for
 export OPENAI_BASE_URL=http://<llm-node>:8000/v1
 export OPENAI_EMBEDDING_BASE_URL=http://<emb-node>:8001/v1
 export OPENAI_EMBEDDING_MODEL=BAAI/bge-large-en-v1.5
-# query model spec: <model:openai:Qwen/Qwen2.5-7B-Instruct>
+# query model spec, for example: <model:openai:Qwen/Qwen3-30B-A3B-Instruct-2507>
 ```
 
 `OPENAI_EMBEDDING_MODEL` (and `OPENAI_EMBEDDING_BASE_URL`) select the embedding model used by `gen:embedding` and embedding-based grounding.
@@ -300,7 +320,7 @@ export OPENAI_EMBEDDING_MODEL=BAAI/bge-large-en-v1.5
 
 ## Evaluation
 
-The evaluation runs on the two graphs of the workbench, built from Wikidata: the 2026 FIFA World Cup (1,248 players, 48 teams, 16 host cities and their stadiums; 4,000 triples) and the Nobel laureates (1,018 laureates, 1,026 awards; 10,849 triples). Three open LLMs (Qwen3-30B-A3B-Instruct-2507, Qwen3-8B and Mistral-7B-Instruct-v0.3) were served by vLLM at temperature 0, and every answer went through `GENOP` in the HTTP service.
+The evaluation runs on the two graphs of the workbench, built from Wikidata: the 2026 FIFA World Cup (1,248 players, 48 teams, 16 host cities and their stadiums; 4,000 triples) and the Nobel laureates (1,018 laureates, 1,026 awards; 10,849 triples). Three open-weight LLMs, Qwen3-30B-A3B-Instruct-2507, Qwen3-8B in non-thinking mode and Mistral-7B-Instruct-v0.3, were served by vLLM at temperature 0, and every answer went through `GENOP` in the HTTP service. The embedding similarity used bge-large-en-v1.5.
 
 - **Completing attributes.** The generated positions are correct for 55-59% of the answered players (a uniform guess among the four positions: 26%), and the birth years for 69-90% of the answered laureates.
 - **Mapping generated names.** Over six list queries, 20-61% of the generated names denote no entity of the graph. At `θ = 0.85`, the embedding similarity (bge-large-en-v1.5) maps 83% of the entities that the names denote, with one wrong match; the Jaccard similarity maps 67%, with none from `θ = 0.6` on.
@@ -310,9 +330,9 @@ The evaluation runs on the two graphs of the workbench, built from Wikidata: the
 
 ---
 
-## Benchmark Reproduction
+## Earlier Benchmark Material
 
-The `gensparql-benchmark` module contains generators and runners for KG completion over FB15k-237 and NELL-995. The datasets themselves are **not** committed; see [`gensparql-benchmark/DATA.md`](gensparql-benchmark/DATA.md) for how to obtain and place them, and the generator scripts (`generate_gensparql_queries.py`, `generate_expected_answers.py`, `generate_run_scripts.py`) for the workflow.
+The folder `gensparql-benchmark/` holds query generators and run scripts for KG completion over FB15k-237 and NELL-995 from an earlier version of GenSPARQL. It is not a Maven module, it is not part of the evaluation above, and it has not been updated since July 2026. The datasets are **not** committed; see [`gensparql-benchmark/DATA.md`](gensparql-benchmark/DATA.md) for how to obtain and place them, and the generator scripts (`generate_gensparql_queries.py`, `generate_expected_answers.py`, `generate_run_scripts.py`) for the workflow.
 
 ---
 
@@ -332,7 +352,7 @@ GenSPARQL/
 │   ├── data/                     # Demo RDF datasets
 │   ├── queries/                  # Sample SPARQL queries
 │   └── run_query*.sh             # Per-query run scripts
-├── gensparql-benchmark/          # KG-completion benchmark harness (FB15k-237, NELL-995)
+├── gensparql-benchmark/          # Earlier KG-completion material (FB15k-237, NELL-995), not built by Maven
 ├── eval/www27/                   # Evaluation: runner, scoring, gold data, results and recorded LLM answers
 ├── deploy/                       # vLLM serving scripts for local open-weight models (SLURM)
 ├── docs/                         # Web workbench (GitHub Pages) and the two graphs
