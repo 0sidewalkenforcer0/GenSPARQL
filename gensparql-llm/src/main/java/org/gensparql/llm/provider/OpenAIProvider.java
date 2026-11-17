@@ -41,6 +41,10 @@ public class OpenAIProvider implements LLMProvider {
     private final String embeddingBaseUrl;
     private final String embeddingApiKey;
     private final ResponseParser responseParser;
+    // A self-hosted OpenAI-compatible server (Ollama, vLLM) usually needs no key, so a base URL
+    // other than OpenAI's makes the provider available without one.
+    private final boolean ownEndpoint;
+    private final boolean ownEmbeddingEndpoint;
 
     public OpenAIProvider() {
         this(System.getenv("OPENAI_API_KEY"));
@@ -70,6 +74,8 @@ public class OpenAIProvider implements LLMProvider {
         this.embeddingBaseUrl = (embeddingBaseUrl != null && !embeddingBaseUrl.isEmpty())
                 ? normalizeBaseUrl(embeddingBaseUrl) : this.baseUrl;
         this.embeddingApiKey = (embeddingApiKey != null && !embeddingApiKey.isEmpty()) ? embeddingApiKey : apiKey;
+        this.ownEndpoint = !this.baseUrl.equals(DEFAULT_BASE_URL);
+        this.ownEmbeddingEndpoint = !this.embeddingBaseUrl.equals(DEFAULT_BASE_URL);
         this.objectMapper = new ObjectMapper();
         this.responseParser = new JsonResponseParser();
         this.client = new OkHttpClient.Builder()
@@ -84,9 +90,25 @@ public class OpenAIProvider implements LLMProvider {
         return "openai";
     }
 
+    /**
+     * Available with a key, or without one for an endpoint other than OpenAI's: a local Ollama or
+     * vLLM server ignores the key, and the request then carries no Authorization header.
+     */
     @Override
     public boolean isAvailable() {
-        return apiKey != null && !apiKey.isEmpty();
+        return hasText(apiKey) || ownEndpoint;
+    }
+
+    private boolean isEmbeddingAvailable() {
+        return hasText(embeddingApiKey) || ownEmbeddingEndpoint;
+    }
+
+    private static boolean hasText(String value) {
+        return value != null && !value.isEmpty();
+    }
+
+    private static Request.Builder authorized(Request.Builder builder, String key) {
+        return hasText(key) ? builder.addHeader("Authorization", "Bearer " + key) : builder;
     }
 
     @Override
@@ -138,9 +160,8 @@ public class OpenAIProvider implements LLMProvider {
         String json = objectMapper.writeValueAsString(body);
         LOG.debug("OpenAI request: {}", truncate(json, 200));
 
-        Request httpRequest = new Request.Builder()
+        Request httpRequest = authorized(new Request.Builder(), apiKey)
                 .url(baseUrl + "/chat/completions")
-                .addHeader("Authorization", "Bearer " + apiKey)
                 .addHeader("Content-Type", "application/json")
                 .post(RequestBody.create(json, MediaType.parse("application/json")))
                 .build();
@@ -219,7 +240,7 @@ public class OpenAIProvider implements LLMProvider {
     }
 
     private EmbedResponse doEmbed(EmbedRequest request) throws IOException {
-        if (!isAvailable()) {
+        if (!isEmbeddingAvailable()) {
             throw new LLMException("OpenAI API key not configured", "openai", null, -1);
         }
 
@@ -232,9 +253,8 @@ public class OpenAIProvider implements LLMProvider {
 
         String json = objectMapper.writeValueAsString(body);
 
-        Request httpRequest = new Request.Builder()
+        Request httpRequest = authorized(new Request.Builder(), embeddingApiKey)
                 .url(embeddingBaseUrl + "/embeddings")
-                .addHeader("Authorization", "Bearer " + embeddingApiKey)
                 .addHeader("Content-Type", "application/json")
                 .post(RequestBody.create(json, MediaType.parse("application/json")))
                 .build();

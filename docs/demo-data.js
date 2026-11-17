@@ -19,12 +19,14 @@
 
   window.DEMO_DATA = {
 
-    // Default OpenAI-compatible endpoints for Live mode (all editable in the UI).
+    // Default OpenAI-compatible endpoints for Live mode (all editable in the UI): Ollama on
+    // this machine with Mistral-7B and bge-large, the setup of the demonstration, which needs
+    // neither a key nor Internet access.
     live: {
-      chatBase: "https://api.groq.com/openai/v1",
-      chatModel: "openai/gpt-oss-120b",
-      embBase: "https://api.openai.com/v1",
-      embModel: "text-embedding-3-small",
+      chatBase: "http://localhost:11434/v1",
+      chatModel: "mistral:7b",
+      embBase: "http://localhost:11434/v1",
+      embModel: "bge-large",
       // Suggestions for the embedding model field, which also accepts any other name.
       embModels: [
         {value: "bge-large", label: "Ollama"},

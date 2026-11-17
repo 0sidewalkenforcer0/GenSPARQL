@@ -140,4 +140,63 @@ class OpenAIProviderTest {
             server.stop(0);
         }
     }
+
+    /**
+     * A local Ollama or vLLM server needs no key: with an own base URL and an empty key the
+     * provider is available, and neither the chat nor the embedding request carries an
+     * Authorization header.
+     */
+    @Test
+    void anOwnEndpointNeedsNoKey() throws Exception {
+        List<String> authorizations = new ArrayList<>();
+        HttpServer server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
+        server.createContext("/v1/chat/completions", exchange -> {
+            authorizations.add(String.valueOf(exchange.getRequestHeaders().getFirst("Authorization")));
+            exchange.getRequestBody().readAllBytes();
+            byte[] reply = JSON.writeValueAsBytes(Map.of(
+                    "choices", List.of(Map.of("message", Map.of("role", "assistant", "content", "[\"Forward\"]"))),
+                    "usage", Map.of("prompt_tokens", 1, "completion_tokens", 1, "total_tokens", 2)));
+            exchange.getResponseHeaders().add("Content-Type", "application/json");
+            exchange.sendResponseHeaders(200, reply.length);
+            try (OutputStream out = exchange.getResponseBody()) {
+                out.write(reply);
+            }
+        });
+        server.createContext("/v1/embeddings", exchange -> {
+            authorizations.add(String.valueOf(exchange.getRequestHeaders().getFirst("Authorization")));
+            exchange.getRequestBody().readAllBytes();
+            byte[] out = "{\"data\":[{\"embedding\":[0.6,0.8],\"index\":0}],\"model\":\"m\"}".getBytes();
+            exchange.getResponseHeaders().add("Content-Type", "application/json");
+            exchange.sendResponseHeaders(200, out.length);
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(out);
+            }
+        });
+        server.start();
+        OpenAIProvider provider = new OpenAIProvider("", baseUrl(server), "", null);
+        try {
+            assertTrue(provider.isAvailable());
+            GenerateResponse generated = provider.generateSync(GenerateRequest.builder()
+                    .prompt("Position of Lionel Messi?")
+                    .modelSpec(ModelSpec.fromURI("model:openai:mistral:7b"))
+                    .outputVariables(List.of("pos"))
+                    .build());
+            EmbedResponse embedded = provider.embed(
+                    new EmbedRequest("Argentina", ModelSpec.fromURI("model:openai:bge-large"))).get();
+            assertTrue(generated.isSuccess(), generated.getErrorMessage());
+            assertTrue(embedded.isSuccess(), embedded.getErrorMessage());
+            assertEquals(List.of("null", "null"), authorizations);
+        } finally {
+            provider.close();
+            server.stop(0);
+        }
+    }
+
+    /** OpenAI's own endpoint still needs a key. */
+    @Test
+    void theOpenAiEndpointNeedsAKey() {
+        assertFalse(new OpenAIProvider("", null, null, null).isAvailable());
+        assertFalse(new OpenAIProvider(null, "https://api.openai.com/v1/", null, null).isAvailable());
+        assertTrue(new OpenAIProvider("sk-test", null, null, null).isAvailable());
+    }
 }

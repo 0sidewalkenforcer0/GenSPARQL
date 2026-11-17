@@ -108,7 +108,8 @@ public class LLMProviderRegistry {
         }
         if (defaultProvider == null) {
             throw new GenSPARQLException("No default LLM provider configured. " +
-                    "Set OPENAI_API_KEY, ANTHROPIC_API_KEY, or OPENROUTER_API_KEY environment variable.");
+                    "Set OPENAI_API_KEY, OPENAI_BASE_URL (a local OpenAI-compatible server), " +
+                    "ANTHROPIC_API_KEY, or OPENROUTER_API_KEY environment variable.");
         }
         return defaultProvider;
     }
@@ -168,9 +169,10 @@ public class LLMProviderRegistry {
      * Auto-detect provider based on environment variables.
      */
     private static LLMProvider autoDetectProvider() {
-        // Check for API keys in order of preference
-        if (System.getenv("OPENAI_API_KEY") != null) {
-            LOG.info("Auto-detected OpenAI API key");
+        // Check for API keys in order of preference. OPENAI_BASE_URL alone selects a local
+        // OpenAI-compatible server such as Ollama or vLLM, which needs no key.
+        if (System.getenv("OPENAI_API_KEY") != null || System.getenv("OPENAI_BASE_URL") != null) {
+            LOG.info("Auto-detected an OpenAI-compatible endpoint");
             return get("openai");
         }
         if (System.getenv("ANTHROPIC_API_KEY") != null) {

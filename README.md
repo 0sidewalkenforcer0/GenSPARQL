@@ -119,13 +119,13 @@ ollama pull bge-large                # once, for the embedding similarity
 ./start-fuseki.sh
 ```
 
-Open `http://localhost:8080/?mode=live` and, in the live panel, set the endpoint to `http://localhost:11434/v1` and the model to `mistral:7b`. Ollama serves a 4-bit build of Mistral-7B-Instruct-v0.3, so its answers can differ from the recorded ones. The API key field must not be empty, but Ollama ignores its value, so any text such as `ollama` will do. For the embedding similarity, choose *Embedding (cosine)*, set the embedding endpoint to `http://localhost:11434/v1` as well and the embedding model to `bge-large`. The prompts and the texts to embed then go to Ollama on this machine and nowhere else.
+Open `http://localhost:8080/?mode=live`. The live panel is preset to Ollama on this machine: the endpoint `http://localhost:11434/v1`, the chat model `mistral:7b` and, for *Embedding (cosine)*, the embedding model `bge-large` at the same endpoint. The API key field can stay empty, because a server other than OpenAI's is used without a key. Ollama serves a 4-bit build of Mistral-7B-Instruct-v0.3, so its answers can differ from the recorded ones. The prompts and the texts to embed go to Ollama on this machine and nowhere else.
 
 The endpoint, model and key apply only to that query; the server does not store them. Clients other than the workbench can configure the provider through the environment instead:
 
 ```bash
-export OPENAI_API_KEY=ollama
 export OPENAI_BASE_URL=http://localhost:11434/v1   # or a vLLM server, or a hosted API
+export OPENAI_API_KEY=...                          # only for a hosted API
 ./start-fuseki.sh
 ```
 
@@ -271,7 +271,7 @@ The target model is named inline in the query as `<model:PROVIDER:MODEL>`. Suppo
 | OpenAI | `<model:openai:gpt-4o>` | `OPENAI_API_KEY` |
 | Anthropic | `<model:anthropic:claude-...>` | `ANTHROPIC_API_KEY` |
 | Self-hosted (vLLM, OpenAI-compatible) | `<model:openai:Qwen/Qwen3-30B-A3B-Instruct-2507>` | `OPENAI_BASE_URL` (+ `OPENAI_API_KEY`) |
-| Ollama (local, OpenAI-compatible) | `<model:openai:mistral:7b>` | `OPENAI_BASE_URL=http://localhost:11434/v1`, `OPENAI_API_KEY=ollama` |
+| Ollama (local, OpenAI-compatible) | `<model:openai:mistral:7b>` | `OPENAI_BASE_URL=http://localhost:11434/v1` (no key needed) |
 | Mock (no network) | `<model:mock:...>` | none |
 
 Every provider asks the model for a JSON array and reads the values of every array in the answer; an empty array means no answer.
