@@ -91,11 +91,15 @@ final class QueryServlet extends JsonServlet {
             }
 
             JsonNode similarity = body.path("similarity");
+            String requestedSimilarity = null;
+            EmbeddingSimText embeddingSimText = null;
             if (similarity.isObject()) {
                 String method = optionalText(similarity, "method");
                 if (method == null || "jaccard".equalsIgnoreCase(method) || "text".equalsIgnoreCase(method)) {
+                    requestedSimilarity = "jaccard";
                     context.set(GenSPARQLConstants.SIM_TEXT, new JaccardSimText());
                 } else if ("embedding".equalsIgnoreCase(method)) {
+                    requestedSimilarity = "embedding";
                     String baseUrl = optionalText(similarity, "baseUrl");
                     String model = optionalText(similarity, "model");
                     String apiKey = optionalText(similarity, "apiKey");
@@ -107,9 +111,9 @@ final class QueryServlet extends JsonServlet {
                     }
                     String embeddingKey = apiKey == null ? (requestApiKey == null ? "" : requestApiKey) : apiKey;
                     embeddingProvider = new OpenAIProvider(embeddingKey, baseUrl, embeddingKey, baseUrl);
-                    context.set(GenSPARQLConstants.SIM_TEXT,
-                            new EmbeddingSimText(new JaccardSimText(), embeddingProvider,
-                                    ModelSpec.fromURI("model:openai:" + model)));
+                    embeddingSimText = new EmbeddingSimText(new JaccardSimText(), embeddingProvider,
+                            ModelSpec.fromURI("model:openai:" + model));
+                    context.set(GenSPARQLConstants.SIM_TEXT, embeddingSimText);
                 } else {
                     throw new IllegalArgumentException("similarity.method must be jaccard or embedding");
                 }
@@ -134,7 +138,19 @@ final class QueryServlet extends JsonServlet {
             byte[] payload = resultBuffer.toByteArray();
             if (includeTrace) {
                 ObjectNode result = (ObjectNode) JSON.readTree(payload);
-                result.putObject("trace").put("genopCalls", llmCalls.get());
+                ObjectNode trace = result.putObject("trace");
+                trace.put("genopCalls", llmCalls.get());
+                if (requestedSimilarity != null) {
+                    // The similarity the query used: the embedding similarity falls back to the
+                    // Jaccard similarity for the whole query if the embedding model fails.
+                    ObjectNode sim = trace.putObject("similarity");
+                    sim.put("requested", requestedSimilarity);
+                    boolean fellBack = embeddingSimText != null && embeddingSimText.usedFallback();
+                    sim.put("used", embeddingSimText != null && !fellBack ? "embedding" : "jaccard");
+                    if (fellBack) {
+                        sim.put("fallbackReason", embeddingSimText.fallbackReason());
+                    }
+                }
                 payload = JSON.writeValueAsBytes(result);
             }
             response.setStatus(HttpServletResponse.SC_OK);

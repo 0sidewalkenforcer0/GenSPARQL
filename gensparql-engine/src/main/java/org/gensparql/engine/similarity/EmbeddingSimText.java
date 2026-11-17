@@ -16,8 +16,11 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Embedding-based text similarity using LLM embeddings.
  *
- * Uses cosine similarity between embedding vectors when available,
- * falls back to Jaccard similarity for robustness.
+ * <p>Uses the cosine similarity of embedding vectors. If the embedding model fails, for example
+ * because the endpoint is down or does not serve the model, the instance falls back to the
+ * Jaccard similarity for every later pair of the query, so that one threshold is not applied to
+ * two kinds of scores. The first failure is logged once as a warning and kept as
+ * {@link #fallbackReason()}; the engine calls {@link #resetFallback()} when a query starts.
  *
  * Includes caching for efficiency.
  */
@@ -30,6 +33,8 @@ public class EmbeddingSimText implements SimText {
     private final SimText fallback;
     private final LLMProvider provider;
     private final ModelSpec embeddingModel;
+    // Why this query fell back to the Jaccard similarity; null while the embeddings work.
+    private volatile String fallbackReason;
 
     public EmbeddingSimText() {
         this(new JaccardSimText(), null, null);
@@ -57,12 +62,10 @@ public class EmbeddingSimText implements SimText {
             return 1.0;
         }
 
-        try {
-            // Try embedding-based similarity
-            float[] emb1 = getEmbedding(s1);
-            float[] emb2 = getEmbedding(s2);
-
-            if (emb1 != null && emb2 != null) {
+        if (fallbackReason == null) {
+            try {
+                float[] emb1 = getEmbedding(s1);
+                float[] emb2 = getEmbedding(s2);
                 double similarity = cosineSimilarity(emb1, emb2);
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Embedding similarity: s1=\"{}\" emb1={}", truncate(s1, 50), formatEmbedding(emb1));
@@ -70,14 +73,37 @@ public class EmbeddingSimText implements SimText {
                     LOG.debug("Embedding cosine_similarity={}", String.format("%.6f", similarity));
                 }
                 return similarity;
+            } catch (Exception e) {
+                fallBack(e.getMessage());
             }
-        } catch (Exception e) {
-            LOG.debug("Embedding similarity failed, using fallback: {}", e.getMessage());
         }
-
-        // Fall back to text-based similarity
         LOG.debug("Using fallback (Jaccard) for: \"{}\" vs \"{}\"", truncate(s1, 30), truncate(s2, 30));
         return fallback.similarity(s1, s2);
+    }
+
+    /** Switch this query to the fallback similarity; only the first failure is logged. */
+    private synchronized void fallBack(String reason) {
+        if (fallbackReason != null) {
+            return;
+        }
+        fallbackReason = reason == null || reason.isBlank() ? "the embedding model failed" : reason;
+        LOG.warn("Embedding similarity unavailable ({}); the query uses the Jaccard similarity instead",
+                fallbackReason);
+    }
+
+    /** Whether the current query fell back to the Jaccard similarity. */
+    public boolean usedFallback() {
+        return fallbackReason != null;
+    }
+
+    /** Why the current query fell back, or null if it did not. */
+    public String fallbackReason() {
+        return fallbackReason;
+    }
+
+    /** Start a new query with the embedding similarity. */
+    public void resetFallback() {
+        fallbackReason = null;
     }
 
     /**
@@ -106,37 +132,33 @@ public class EmbeddingSimText implements SimText {
 
     /**
      * Get embedding for text (with caching).
+     *
+     * @throws IllegalStateException with the reason if no embedding can be obtained
      */
     private float[] getEmbedding(String text) {
-        try {
-            LLMProvider activeProvider = provider != null ? provider : LLMProviderRegistry.getDefault();
-            if (activeProvider == null || !activeProvider.supportsEmbedding()) {
-                return null;
-            }
-            String cacheKey = cacheKey(text, activeProvider, embeddingModel);
-            float[] cached = embeddingCache.get(cacheKey);
-            if (cached != null) {
-                return cached;
-            }
-
-            EmbedRequest request = new EmbedRequest(text, embeddingModel);
-            EmbedResponse response = activeProvider.embedSync(request);
-
-            if (response.isSuccess()) {
-                float[] embedding = response.getFirstEmbedding();
-
-                // Cache if not too large
-                if (embedding != null && embeddingCache.size() < MAX_CACHE_SIZE) {
-                    embeddingCache.put(cacheKey, embedding);
-                }
-
-                return embedding;
-            }
-        } catch (Exception e) {
-            LOG.debug("Failed to get embedding: {}", e.getMessage());
+        LLMProvider activeProvider = provider != null ? provider : LLMProviderRegistry.getDefault();
+        if (activeProvider == null || !activeProvider.supportsEmbedding()) {
+            throw new IllegalStateException("no provider with embeddings is configured");
+        }
+        String cacheKey = cacheKey(text, activeProvider, embeddingModel);
+        float[] cached = embeddingCache.get(cacheKey);
+        if (cached != null) {
+            return cached;
         }
 
-        return null;
+        EmbedResponse response = activeProvider.embedSync(new EmbedRequest(text, embeddingModel));
+        if (response == null || !response.isSuccess()) {
+            throw new IllegalStateException(response == null ? "no response from the embedding model"
+                    : String.valueOf(response.getErrorMessage()));
+        }
+        float[] embedding = response.getFirstEmbedding();
+        if (embedding == null) {
+            throw new IllegalStateException("the embedding model returned no vector");
+        }
+        if (embeddingCache.size() < MAX_CACHE_SIZE) {
+            embeddingCache.put(cacheKey, embedding);
+        }
+        return embedding;
     }
 
     /**
@@ -164,22 +186,37 @@ public class EmbeddingSimText implements SimText {
         warmUpWith(texts, provider, null);
     }
 
-    /** Pre-compute embeddings with the provider configured for this query. */
+    /**
+     * Pre-compute embeddings with the provider configured for this query. A failed batch switches
+     * the query to the fallback similarity before the join compares its first pair.
+     */
     public void warmUpConfigured(java.util.Collection<String> texts) {
+        if (fallbackReason != null || texts == null || texts.isEmpty()) {
+            return;
+        }
         LLMProvider activeProvider;
         try {
             activeProvider = provider != null ? provider : LLMProviderRegistry.getDefault();
         } catch (Exception e) {
+            fallBack(e.getMessage());
             return;
         }
-        warmUpWith(texts, activeProvider, embeddingModel);
+        if (activeProvider == null || !activeProvider.supportsEmbedding()) {
+            fallBack("no provider with embeddings is configured");
+            return;
+        }
+        String failure = warmUpWith(texts, activeProvider, embeddingModel);
+        if (failure != null) {
+            fallBack(failure);
+        }
     }
 
-    private static void warmUpWith(java.util.Collection<String> texts,
-                                   LLMProvider provider,
-                                   ModelSpec embeddingModel) {
+    /** Cache the embeddings of the texts; returns the reason of the first failed batch, or null. */
+    private static String warmUpWith(java.util.Collection<String> texts,
+                                     LLMProvider provider,
+                                     ModelSpec embeddingModel) {
         if (texts == null || texts.isEmpty() || provider == null || !provider.supportsEmbedding()) {
-            return;
+            return null;
         }
 
         // Unique, non-empty, not-yet-cached texts (preserve encounter order).
@@ -194,9 +231,10 @@ public class EmbeddingSimText implements SimText {
             todo.add(t);
         }
         if (todo.isEmpty()) {
-            return;
+            return null;
         }
 
+        String failure = null;
         final int batch = 64;
         for (int i = 0; i < todo.size(); i += batch) {
             java.util.List<String> chunk =
@@ -204,6 +242,10 @@ public class EmbeddingSimText implements SimText {
             try {
                 EmbedResponse resp = provider.embedSync(new EmbedRequest(chunk, embeddingModel));
                 if (resp == null || !resp.isSuccess()) {
+                    if (failure == null) {
+                        failure = resp == null ? "no response from the embedding model"
+                                : String.valueOf(resp.getErrorMessage());
+                    }
                     continue;
                 }
                 java.util.List<float[]> embs = resp.getEmbeddings();
@@ -215,10 +257,14 @@ public class EmbeddingSimText implements SimText {
                 }
             } catch (Exception e) {
                 LOG.debug("warmUp batch failed: {}", e.getMessage());
+                if (failure == null) {
+                    failure = e.getMessage();
+                }
             }
         }
         LOG.debug("warmUp: cached embeddings for up to {} new strings ({} total cached)",
                 todo.size(), embeddingCache.size());
+        return failure;
     }
 
     private static String cacheKey(String text, LLMProvider provider, ModelSpec model) {

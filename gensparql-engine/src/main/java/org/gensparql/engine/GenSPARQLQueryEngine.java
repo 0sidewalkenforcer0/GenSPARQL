@@ -124,6 +124,12 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
 
         // Initialize threshold registry and sim text in context if not present
         initializeContext(context);
+        // Each query starts with the embedding similarity it asked for; a fallback to the
+        // Jaccard similarity applies to the query in which the embedding model failed.
+        Object simText = context.get(GenSPARQLConstants.SIM_TEXT);
+        if (simText instanceof EmbeddingSimText) {
+            ((EmbeddingSimText) simText).resetFallback();
+        }
 
         ExecutionContext execCxt = new ExecutionContext(context, dsg.getDefaultGraph(), dsg, QC.getFactory(context));
         QueryIterator qIter = QueryIterRoot.create(input, execCxt);
@@ -153,7 +159,8 @@ public class GenSPARQLQueryEngine extends QueryEngineMain {
             try {
                 context.set(GenSPARQLConstants.SIM_TEXT, new EmbeddingSimText());
             } catch (Exception e) {
-                LOG.debug("Could not initialize EmbeddingSimText, using Jaccard fallback");
+                LOG.warn("Could not initialize the embedding similarity ({}); using the Jaccard similarity",
+                        e.getMessage());
                 context.set(GenSPARQLConstants.SIM_TEXT, new JaccardSimText());
             }
         }

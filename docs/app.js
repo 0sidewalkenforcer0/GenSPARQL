@@ -1860,7 +1860,11 @@ ORDER BY ?year`
         addLiveGeneratedNodes(result);
         const opText=result.operators?.length?` · operators: ${[...new Set(result.operators)].join(", ")}`:"";
         const genopText=result.genopCalls?` · ${result.genopCalls} GENOP call${result.genopCalls===1?"":"s"}`:"";
-        showMessage(`${executorLabel} completed on ${db.label}: ${result.total} row${result.total===1?"":"s"}${opText}${genopText}. Matching entities are shown in the graph.`,"ok");
+        // The service falls back to the Jaccard similarity for the whole query if the embedding model fails.
+        const sim=result.trace?.similarity;
+        const fellBack=sim&&sim.requested==="embedding"&&sim.used!=="embedding";
+        const simText=fellBack?` The embedding model failed (${sim.fallbackReason||"no reason given"}), so the query used the Jaccard similarity.`:"";
+        showMessage(`${executorLabel} completed on ${db.label}: ${result.total} row${result.total===1?"":"s"}${opText}${genopText}. Matching entities are shown in the graph.${simText}`,fellBack?"warn":"ok");
       }catch(err){
         $("liveQueryResult").hidden=true;
         showMessage(`Query failed: ${err.message||err}`,"err");
