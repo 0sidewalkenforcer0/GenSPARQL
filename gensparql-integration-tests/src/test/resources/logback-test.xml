@@ -6,8 +6,9 @@
         </encoder>
     </appender>
 
-    <!-- GenSPARQL loggers -->
-    <logger name="org.gensparql" level="DEBUG"/>
+    <!-- GenSPARQL loggers: the mock models of the tests answer in plain text, which the JSON
+         parser reports as a warning -->
+    <logger name="org.gensparql" level="ERROR"/>
 
     <!-- Reduce noise from libraries -->
     <logger name="org.apache.jena" level="WARN"/>

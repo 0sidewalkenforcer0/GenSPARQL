@@ -35,6 +35,21 @@
     return cleanBase(config.apiBase);
   }
 
+  // A page that the service serves on another port, as after ./start-fuseki.sh 9090, calls that
+  // service while no other URL is set.
+  async function locate() {
+    const origin = location.origin;
+    if (localStorage.getItem("gensparql.engine.apiBase") || supplied.apiBase || origin === getApiBase()
+        || !["localhost", "127.0.0.1", "[::1]"].includes(location.hostname)) return getApiBase();
+    try {
+      const response = await fetch(origin + config.healthEndpoint);
+      if (response.ok && (await response.json()).engine === "GenSPARQL") config.apiBase = origin;
+    } catch (err) {
+      // The page comes from another server, such as a static server of the recorded mode.
+    }
+    return getApiBase();
+  }
+
   async function fetchWithTimeout(target, options = {}) {
     const controller = new AbortController();
     const limit = Number(config.timeoutMs) || DEFAULTS.timeoutMs;
@@ -207,6 +222,7 @@
     config,
     setApiBase,
     getApiBase,
+    locate,
     health,
     uploadFile,
     uploadUrl,

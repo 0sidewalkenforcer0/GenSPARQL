@@ -37,7 +37,8 @@ The recorded mode also runs from a static server, for example `python3 -m http.s
 ## Files
 
 - `index.html`, `styles.css`, `app.js`, `page-mode.js`: the page and its two modes. `index.html?print` lays out the graph panel as a figure for a two-column paper.
-- `engine-client.js`: calls to the service (default `http://localhost:8080`).
+- `engine-client.js`: calls to the service: by default the service that serves the page, or else `http://localhost:8080`.
+- `explorer-info.js`: the Info panel beside the graph.
 - `native-graph.js`: the graph view, drawn as SVG. Zoom and pan are d3-zoom, dragging a node is d3-drag and the layout runs on d3-force, all from the local copy `vendor/d3.v7.8.5.min.js` (ISC license, `vendor/d3-LICENSE.txt`). No label is drawn over another label, a similarity box or another node: in the overview the labels grow with the zoom, more slowly than the graph, and a label that has no free place appears when the zoom makes room for it, and in a result view it moves to another side of its node, away from its edges, or appears when its node is hovered. A click on a node gives its own label and the labels of its neighbours the first places, on the side away from it; a hover only highlights the neighbours and moves no label. Labels too small to read in a crowded view also wait for the zoom.
 - `database-adapters.js`, `fifa2026-data.js`, `nobel-prize-data.js` and the two `.ttl` files: the built-in graphs. An uploaded Turtle file is parsed by `vendor/n3.v2.13.12.min.js` (N3.js, MIT license, `vendor/n3-LICENSE.txt`).
 - `demo-data.js`: the recorded queries and the live defaults.

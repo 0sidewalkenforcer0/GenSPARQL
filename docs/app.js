@@ -475,6 +475,9 @@
       }
     };
     sync();
+    // Served by the service on another port, the page calls that service (engine-client.js).
+    const preset=base.value;
+    if(engine)engine.locate().then(found=>{if(base.value===preset&&found!==preset){base.value=found;sync()}});
   }
 
   // An uploaded graph is parsed by N3.js (docs/vendor), which covers the Turtle 1.1 grammar:
