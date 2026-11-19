@@ -13,6 +13,9 @@
   const d3 = window.d3;
   const hasD3 = Boolean(d3 && d3.zoom && d3.drag && d3.select);
   const val = (v, e, i) => (typeof v === "function" ? v.call(e, e.__data__, i) : v);
+  // A press that moves the pointer at most this many screen pixels is a click, not a drag or a
+  // pan, so that a press that jitters by a pixel still clicks (d3 counts any movement).
+  const CLICK_DISTANCE = 4;
 
   // ------------------------------------------------------------------ selection
 
@@ -98,9 +101,12 @@
 
   // ------------------------------------------------------------------ zoom and drag
 
+  // The pointer is in screen pixels, the graph in those of the page, which a zoom of the page
+  // (styles.css) makes larger on screen.
+  const pageScale = svg => (svg.clientWidth ? svg.getBoundingClientRect().width / svg.clientWidth : 1);
   const point = (event, svg) => {
-    const r = svg.getBoundingClientRect();
-    return { x: event.clientX - r.left, y: event.clientY - r.top };
+    const r = svg.getBoundingClientRect(), z = pageScale(svg);
+    return { x: (event.clientX - r.left) / z, y: (event.clientY - r.top) / z };
   };
   const transform = (x = 0, y = 0, k = 1) => ({
     x, y, k,
@@ -112,7 +118,7 @@
   /** d3-drag on every element of a selection; the listeners get (event, datum) as in d3. */
   function d3Drag() {
     const behavior = sel => sel.elements.forEach(el => d3.select(el).call(behavior.d3));
-    behavior.d3 = d3.drag();
+    behavior.d3 = d3.drag().clickDistance(CLICK_DISTANCE);
     behavior.on = (name, fn) => { behavior.d3.on(name, fn); return behavior; };
     return behavior;
   }
@@ -147,7 +153,7 @@
 
   /** d3-zoom with the calls app.js makes: scaleExtent, on("zoom"), transform and scaleBy. */
   function d3Zoom() {
-    const z = d3.zoom();
+    const z = d3.zoom().clickDistance(CLICK_DISTANCE);
     const behavior = sel => sel.elements.forEach(svg => d3.select(svg).call(z));
     behavior.d3 = z;
     behavior.scaleExtent = x => { z.scaleExtent(x); return behavior; };
@@ -175,8 +181,8 @@
       }, { passive: false });
       svg.addEventListener("pointerdown", e => {
         if (e.button !== 0 || e.target.closest?.(".node")) return;
-        const start = { x: e.clientX, y: e.clientY, t: svg.__ngTransform };
-        const move = m => apply(svg, transform(start.t.x + m.clientX - start.x, start.t.y + m.clientY - start.y, start.t.k));
+        const start = { x: e.clientX, y: e.clientY, t: svg.__ngTransform }, z = pageScale(svg);
+        const move = m => apply(svg, transform(start.t.x + (m.clientX - start.x) / z, start.t.y + (m.clientY - start.y) / z, start.t.k));
         const up = () => {
           window.removeEventListener("pointermove", move);
           window.removeEventListener("pointerup", up);
@@ -189,8 +195,8 @@
     behavior.on = (n, f) => (h[n] = f, behavior);
     behavior.transform = (sel, t) => sel.elements.forEach(svg => apply(svg, t));
     behavior.scaleBy = (sel, s) => sel.elements.forEach(svg => {
-      const old = svg.__ngTransform || transform(), r = svg.getBoundingClientRect();
-      const p = { x: r.width / 2, y: r.height / 2 };
+      const old = svg.__ngTransform || transform();
+      const p = { x: svg.clientWidth / 2, y: svg.clientHeight / 2 };
       const k = Math.max(limits[0], Math.min(limits[1], old.k * s));
       apply(svg, transform(p.x - (p.x - old.x) / old.k * k, p.y - (p.y - old.y) / old.k * k, k));
     });
@@ -323,7 +329,8 @@
     forceSimulation, forceLink, forceManyBody, forceCenter, forceCollide,
     min: (a, f = x => x) => Math.min(...a.map(f)),
     max: (a, f = x => x) => Math.max(...a.map(f)),
-    interaction: hasD3 ? "d3" : "native"
+    interaction: hasD3 ? "d3" : "native",
+    clickDistance: CLICK_DISTANCE
   };
 
   if (d3 && d3.forceSimulation && !document.documentElement.hasAttribute("data-print")) {

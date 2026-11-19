@@ -5,54 +5,222 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>GenSPARQL · Interactive KG Explorer</title>
   <meta name="description" content="GenSPARQL interactive demo with the World Cup 2026 knowledge graph.">
-  <script src="page-mode.js?v=20261103-1"></script>
-  <link rel="stylesheet" href="styles.css?v=20261117-8">
+  <script src="page-mode.js?v=20261118-1"></script>
+  <link rel="stylesheet" href="styles.css?v=20261119-5">
 
 </head>
 <body>
-  <div class="topbar">
+  <header class="topbar">
     <div class="topbar-inner">
       <div class="topbar-brand">
         <img class="topbar-brand-icon" src="gensparql-icon.png" alt="" aria-hidden="true">
-        <span class="topbar-name topbar-wordmark">GenSPARQL</span>
-        <span class="topbar-sep"></span>
-        <span class="topbar-meta">Research demo</span>
+        <div class="brand-text">
+          <h1 class="brand-title" id="pageTitle"><span class="brand-wordmark">GenSPARQL</span></h1>
+          <p class="brand-tagline" id="pageTagline">Generative query answering for incomplete knowledge graphs</p>
+        </div>
       </div>
 
       <div class="topbar-controls">
-        <div class="db-picker">
-          <span class="db-status" aria-hidden="true"></span>
-          <label for="databaseSelect">Database</label>
-          <select id="databaseSelect">
-            <option value="fifa2026">World Cup 2026</option>
-            <option value="nobelPrize">Nobel Prize</option>
-          </select>
-        </div>
-        <button class="top-control live-only" id="uploadKgBtn" type="button">Upload KG ↑</button>
-        <input class="kg-upload-input live-only" id="kgFileInput" type="file" accept=".ttl,.turtle,text/turtle,application/x-turtle">
-        <span class="kg-upload-status live-only" id="kgUploadStatus" aria-live="polite"></span>
         <button class="top-control" id="themeBtn" type="button">◐ Theme</button>
-        <a class="top-control" href="https://github.com/0sidewalkenforcer0/GenSPARQL" target="_blank" rel="noreferrer">Code ↗</a>
+        <a class="top-control" href="https://github.com/0sidewalkenforcer0/GenSPARQL" target="_blank" rel="noreferrer"><svg class="top-control-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>GitHub ↗</a>
       </div>
     </div>
-  </div>
+  </header>
 
   <main class="wrap">
-    <header class="hero">
-      <h1>GenSPARQL</h1>
-      <p>Generative query answering for incomplete knowledge graphs</p>
-    </header>
+    <section class="toolbar" aria-label="Query settings">
+      <div class="toolbar-row primary-settings">
+        <div class="control-group database-control">
+          <label class="control-label" for="databaseSelect">Database</label>
+          <div class="database-row">
+            <div class="db-picker">
+              <select id="databaseSelect">
+                <option value="fifa2026">World Cup 2026</option>
+                <option value="nobelPrize">Nobel Prize</option>
+              </select>
+            </div>
+            <button class="top-control live-only" id="uploadKgBtn" type="button">Upload KG ↑</button>
+            <input class="kg-upload-input live-only" id="kgFileInput" type="file" accept=".ttl,.turtle,text/turtle,application/x-turtle">
+            <span class="kg-upload-status live-only" id="kgUploadStatus" aria-live="polite"></span>
+          </div>
+        </div>
+
+        <div class="control-group mode-control">
+          <span class="control-label">Mode</span>
+          <nav class="page-mode-switch" aria-label="Mode">
+            <a class="page-mode-option" id="demoModeLink" href="index.html">
+              <span class="prerecorded-dot" aria-hidden="true"></span>
+              <span>Recorded</span>
+            </a>
+            <a class="page-mode-option" id="liveModeLink" href="index.html?mode=live">
+              <span class="live-dot" aria-hidden="true"></span>
+              <span>Live</span>
+            </a>
+          </nav>
+        </div>
+
+        <div class="control-group threshold-control" id="thetaWrap">
+          <div class="theta-row"><label for="theta">Threshold <span aria-hidden="true">θ</span></label><output id="thetaVal" for="theta">0.85</output></div>
+          <input id="theta" type="range" min="0.01" max="1" step="0.01" value="0.85" aria-label="Similarity threshold">
+        </div>
+
+        <fieldset class="control-group similarity-control">
+          <legend>Similarity</legend>
+          <div class="similarity-options">
+            <label><input type="radio" name="demoGroundMethod" id="demoGroundText" value="text" checked><span>Jaccard</span></label>
+            <label><input type="radio" name="demoGroundMethod" id="demoGroundEmbedding" value="embedding"><span>Embedding</span></label>
+          </div>
+          <span id="demoGroundNote" class="theta-similarity-note" hidden>Embedding scores are available for the built-in graphs.</span>
+        </fieldset>
+      </div>
+
+      <details class="connection-settings live-only" id="connectionSettings">
+        <summary>Connection settings <span>Java engine · chat model · embeddings</span></summary>
+        <div class="connection-panel">
+        <section class="engine-settings live-only" aria-label="Java GenSPARQL engine">
+          <div class="field">
+            <label for="engineBase">Java engine URL</label>
+            <div class="engine-settings-actions">
+              <input id="engineBase" value="http://localhost:8080" placeholder="http://localhost:8080">
+              <button class="top-control" id="testEngineBtn" type="button">Test engine</button>
+            </div>
+          </div>
+          <div class="engine-connection-status" id="engineConnectionStatus" aria-live="polite">Not connected yet.</div>
+        </section>
+        <div class="toolbar-row live-settings live-only">
+          <div class="field live-api-key-field">
+            <label for="key">API key</label>
+            <input id="key" type="password" placeholder="not needed for Ollama or vLLM on this machine" autocomplete="off">
+          </div>
+
+          <div class="field">
+            <label for="chatBase">OpenAI-compatible base URL</label>
+            <input id="chatBase" placeholder="http://localhost:11434/v1">
+          </div>
+          <div class="field">
+            <label for="chatModel">Chat model</label>
+            <input id="chatModel">
+          </div>
+
+          <fieldset class="grounding-method" hidden aria-hidden="true">
+            <legend>Grounding method</legend>
+
+            <label class="ground-option" for="groundText">
+              <input type="radio" id="groundText" name="groundMethod" value="text" checked>
+              <span>
+                <strong>Text (Jaccard)</strong>
+                <small>Fast · no embedding API required</small>
+              </span>
+            </label>
+
+            <label class="ground-option" for="groundEmbedding">
+              <input type="radio" id="groundEmbedding" name="groundMethod" value="embedding">
+              <span>
+                <strong>Embedding (cosine)</strong>
+                <small>Semantic matching · better for aliases</small>
+              </span>
+            </label>
+          </fieldset>
+
+          <div class="embedding-settings is-disabled" id="embeddingSettings">
+            <div class="field">
+              <label for="embBase">Embedding endpoint</label>
+              <input id="embBase" disabled>
+            </div>
+            <div class="field">
+              <label for="embModel">Embedding model</label>
+              <input id="embModel" list="embModelOptions" autocomplete="off" spellcheck="false" disabled>
+              <datalist id="embModelOptions"></datalist>
+            </div>
+            <div class="field">
+              <label for="embKey">Embedding API key (optional)</label>
+              <input id="embKey" type="password" placeholder="same as the chat key" autocomplete="off" disabled>
+            </div>
+          </div>
+        </div>
+        </div>
+      </details>
+    </section>
+
+    <div class="status-line">
+      <p class="caption" id="caption"></p>
+      <p class="privacy live-only" id="livePrivacy">
+        Live mode sends the active dataset and complete GenSPARQL query to your configured Java backend.
+      </p>
+    </div>
+
+    <nav class="tabs prerecorded-tabs demo-only" id="tabs" role="tablist" aria-label="Pre-recorded demos"></nav>
 
     <section class="workspace">
-      <div class="left-column">
-        <details class="prerecorded-shell" id="prerecordedBox" open>
-          <summary>
-            <span class="prerecorded-dot" aria-hidden="true"></span>
-            <span class="prerecorded-label">Pre-recorded demo</span>
-          </summary>
-          <div class="prerecorded-body">
-        <nav class="tabs prerecorded-tabs" id="tabs" role="tablist" aria-label="Pre-recorded demos"></nav>
-        <section class="query-panel">
+      <div class="graph-column">
+        <section class="execution-result demo-only" id="executionResult" hidden aria-live="polite">
+          <div class="execution-result-head">
+            <div>
+              <span class="execution-eyebrow">Execution result</span>
+              <strong id="executionTitle">Planner</strong>
+            </div>
+            <div class="execution-actions">
+              <button class="playback-btn" id="playSteps" type="button" aria-pressed="false">▶ Play steps</button>
+              <span class="execution-badge" id="executionBadge">—</span>
+            </div>
+          </div>
+
+          <div class="execution-order" id="executionOrder"></div>
+          <div class="playback-track" aria-hidden="true"><span id="playbackFill"></span></div>
+
+          <!-- Placeholders only. renderExecutionResult() fills every value
+               from demo-data.js before this panel is unhidden. -->
+          <div class="execution-metrics">
+            <div class="execution-metric">
+              <span>LLM calls</span>
+              <strong id="executionCalls">—</strong>
+            </div>
+            <div class="execution-metric">
+              <span>Query result</span>
+              <strong id="executionQueryResult">—</strong>
+            </div>
+            <div class="execution-metric">
+              <span>Reduction</span>
+              <strong id="executionReduction">—</strong>
+            </div>
+          </div>
+
+          <p class="execution-explanation" id="executionExplanation"></p>
+        </section>
+        <section class="panel graph-panel">
+          <div class="graph-toolbar">
+            <div class="graph-heading">
+              <div class="section-label" id="graphTitle">Knowledge Graph Explorer</div>
+              <div class="graph-status" id="graphStatus">Loading graph…</div>
+            </div>
+            <div class="header-legend" id="scoreLegend" hidden></div>
+          </div>
+
+          <div class="graph-stage" id="graphStage">
+            <div class="legend graph-legend" aria-label="Graph legend">
+              <span><i class="lg-kg"></i>KG entity</span>
+              <span><i class="lg-result"></i>Query result</span>
+              <span><i class="lg-context"></i>Query context</span>
+              <span><i class="lg-llm"></i>Generated attribute</span>
+              <span><i class="lg-drop"></i>Dropped</span>
+            </div>
+            <div class="graph-controls">
+              <button id="zoomOut" type="button">−</button>
+              <button id="zoomIn" type="button">+</button>
+              <button id="fitGraph" type="button">Fit</button>
+              <button id="lightAll" type="button" aria-pressed="false" title="Keep every node bright while a node or query result is in focus">Light all</button>
+              <button id="resetGraph" type="button">Reset</button>
+            </div>
+            <svg id="kgGraph" role="img" aria-label="Interactive knowledge graph"></svg>
+            <div class="tooltip" id="tooltip" hidden></div>
+            <div class="graph-help">Click a node or relation to inspect · Drag to explore · Scroll to zoom</div>
+          </div>
+        </section>
+
+      </div>
+
+      <aside class="query-column">
+        <section class="panel query-panel demo-only" id="prerecordedBox">
           <div class="panel-heading">
             <div>
               <div class="section-label">Query</div>
@@ -77,19 +245,7 @@
             <pre class="query-code" id="query"></pre>
           </div>
 
-          <div class="theta-wrap" id="thetaWrap">
-            <div class="theta-row">
-              <span>Grounding threshold θ</span>
-              <strong id="thetaVal">0.85</strong>
-            </div>
-            <input id="theta" type="range" min="0.01" max="1" step="0.01" value="0.85">
-            <div class="theta-similarity demo-only" role="radiogroup" aria-label="Similarity">
-              <span>Similarity</span>
-              <label><input type="radio" name="demoGroundMethod" id="demoGroundText" value="text" checked> Jaccard</label>
-              <label><input type="radio" name="demoGroundMethod" id="demoGroundEmbedding" value="embedding"> Embedding (bge-large-en-v1.5, recorded)</label>
-              <span class="theta-similarity-note" id="demoGroundNote" hidden>Recorded embedding scores exist for the two built-in graphs only.</span>
-            </div>
-          </div>
+
 
           <div class="run-row" id="defaultRunRow">
             <div class="run-action-cluster">
@@ -120,243 +276,106 @@
               </div>
             </div>
           </div>
-
-          <section class="execution-result" id="executionResult" hidden aria-live="polite">
-            <div class="execution-result-head">
-              <div>
-                <span class="execution-eyebrow">Execution result</span>
-                <strong id="executionTitle">Planner</strong>
-              </div>
-              <span class="execution-badge" id="executionBadge">—</span>
-            </div>
-
-            <div class="execution-order" id="executionOrder"></div>
-
-            <!-- Placeholders only. renderExecutionResult() fills every value
-                 from demo-data.js before this panel is unhidden. -->
-            <div class="execution-metrics">
-              <div class="execution-metric">
-                <span>LLM calls</span>
-                <strong id="executionCalls">—</strong>
-              </div>
-              <div class="execution-metric">
-                <span>Query result</span>
-                <strong id="executionQueryResult">—</strong>
-              </div>
-              <div class="execution-metric">
-                <span>Reduction</span>
-                <strong id="executionReduction">—</strong>
-              </div>
-            </div>
-
-            <p class="execution-explanation" id="executionExplanation"></p>
-          </section>
-
-          <section class="attribute-result" id="attributeResult" hidden aria-live="polite">
-            <div class="attribute-result-head">
-              <div>
-                <span class="attribute-eyebrow">GENOP result</span>
-                <strong id="attributeResultTitle">Generated player positions</strong>
-              </div>
-              <span class="generated-pill">GENERATED</span>
-            </div>
-
-            <div class="attribute-metrics">
-              <div class="attribute-metric">
-                <span>Answer rate</span>
-                <strong id="attributeAnswerRate">—</strong>
-              </div>
-              <div class="attribute-metric">
-                <span id="attributeAccuracyLabel">Correct among answered entities in Wikidata</span>
-                <strong id="attributeAccuracy">—</strong>
-              </div>
-              <div class="attribute-metric">
-                <span>SPARQL alone</span>
-                <strong id="attributeSparqlAlone">0</strong>
-              </div>
-            </div>
-
-            <div class="sample-summary" id="attributeSampleSummary"></div>
-            <div class="attribute-rows" id="attributeRows"></div>
-
-            <p class="attribute-note" id="attributeResultNote">
-            </p>
-          </section>
         </section>
-          </div>
-        </details>
 
-        <details class="live-panel" id="liveBox">
-          <summary>
-            <span class="live-dot"></span>
-            <span class="live-label">Live mode</span>
-            <span class="live-summary-copy">Java GenSPARQL engine</span>
-          </summary>
-
-          <div class="live-body">
-            <p class="privacy" id="livePrivacy">
-              Live mode sends the active dataset and complete GenSPARQL query to your configured Java backend.
-            </p>
-
-            <section class="engine-settings full" aria-labelledby="engineSettingsTitle">
-              <div class="engine-settings-head">
-                <div class="engine-settings-title" id="engineSettingsTitle">Java GenSPARQL engine</div>
-              </div>
-              <div class="engine-settings-grid">
-                <div class="field">
-                  <label for="engineBase">Java engine URL</label>
-                  <input id="engineBase" value="http://localhost:8080" placeholder="http://localhost:8080">
-                </div>
-              </div>
-              <div class="engine-settings-actions">
-                <button class="top-control" id="testEngineBtn" type="button">Test engine</button>
-                <div class="engine-connection-status" id="engineConnectionStatus" aria-live="polite">Not connected yet.</div>
-              </div>
-            </section>
-
-            <div class="live-query-block">
-              <div class="live-query-head">
-                <label for="liveQuery">Query</label>
-              </div>
-              <div class="live-query-shell">
-                <div class="live-query-top">
-                  <span>SPARQL / GenSPARQL</span>
-                  <strong>Query</strong>
-                </div>
-                <textarea id="liveQuery" spellcheck="false" aria-label="Live SPARQL query"></textarea>
-              </div>
-              <div class="live-query-actions">
-                <div class="live-query-action-row live-query-load-row">
-                  <select class="sample-query-select" id="liveSampleSelect" aria-label="Sample live query">
-                    <option value="argentinaPositions">World Cup · positions of the Argentine players</option>
-                    <option value="worldCupWinners">World Cup · players who have won a World Cup (Fig. 2b)</option>
-                    <option value="nationalTeams">World Cup · national teams (vary θ)</option>
-                    <option value="groupADefenders">World Cup · defenders of Group A (104 prompts)</option>
-                    <option value="nobelFields">Nobel · fields of the prize (vary θ)</option>
-                    <option value="physicsBirthYears">Nobel · birth years of Physics laureates since 2020</option>
-                    <option value="physicsContributions">Nobel · contributions of Physics laureates since 2020</option>
-                    <option value="nobelQuantumLaureates">Nobel · quantum mechanics pioneers</option>
-                  </select>
-                  <button class="top-control" id="loadSampleQuery" type="button">Load sample</button>
-                </div>
-                <div class="live-query-action-row live-query-run-row">
-                  <button class="run-btn" id="liveRunBtn" type="button">Run query ▶</button>
-                  <button class="top-control" id="clearLiveQuery" type="button">Clear</button>
-                </div>
-              </div>
-              <div class="live-run-feedback" id="liveRunFeedback" aria-live="polite"></div>
+        <section class="attribute-result demo-only" id="attributeResult" hidden aria-live="polite">
+          <div class="attribute-result-head">
+            <div>
+              <span class="attribute-eyebrow">GENOP result</span>
+              <strong id="attributeResultTitle">Generated player positions</strong>
             </div>
+            <span class="generated-pill">Generated</span>
+          </div>
 
-            <div class="field live-api-key-field">
-              <label for="key">API key</label>
-              <input id="key" type="password" placeholder="not needed for Ollama or vLLM on this machine" autocomplete="off">
+          <div class="attribute-metrics">
+            <div class="attribute-metric">
+              <span>Answer rate</span>
+              <strong id="attributeAnswerRate">—</strong>
             </div>
-
-            <div class="field">
-              <label for="chatBase">OpenAI-compatible base URL</label>
-              <input id="chatBase" placeholder="http://localhost:11434/v1">
+            <div class="attribute-metric">
+              <span id="attributeAccuracyLabel">Correct among answered entities in Wikidata</span>
+              <strong id="attributeAccuracy">—</strong>
             </div>
-            <div class="field">
-              <label for="chatModel">Chat model</label>
-              <input id="chatModel">
+            <div class="attribute-metric">
+              <span>SPARQL alone</span>
+              <strong id="attributeSparqlAlone">0</strong>
             </div>
+          </div>
 
-            <fieldset class="grounding-method full">
-              <legend>Grounding method</legend>
+          <div class="sample-summary" id="attributeSampleSummary"></div>
+          <div class="attribute-rows" id="attributeRows"></div>
 
-              <label class="ground-option" for="groundText">
-                <input type="radio" id="groundText" name="groundMethod" value="text" checked>
-                <span>
-                  <strong>Text (Jaccard)</strong>
-                  <small>Fast · no embedding API required</small>
-                </span>
-              </label>
+          <p class="attribute-note" id="attributeResultNote">
+          </p>
+        </section>
 
-              <label class="ground-option" for="groundEmbedding">
-                <input type="radio" id="groundEmbedding" name="groundMethod" value="embedding">
-                <span>
-                  <strong>Embedding (cosine)</strong>
-                  <small>Semantic matching · better for aliases</small>
-                </span>
-              </label>
-
-              <div class="embedding-settings is-disabled" id="embeddingSettings">
-                <div class="field">
-                  <label for="embBase">Embedding endpoint</label>
-                  <input id="embBase" disabled>
-                </div>
-                <div class="field">
-                  <label for="embModel">Embedding model</label>
-                  <input id="embModel" list="embModelOptions" autocomplete="off" spellcheck="false" disabled>
-                  <datalist id="embModelOptions"></datalist>
-                </div>
-                <div class="field">
-                  <label for="embKey">Embedding API key (optional)</label>
-                  <input id="embKey" type="password" placeholder="same as the chat key" autocomplete="off" disabled>
-                </div>
+        <section class="panel live-query-panel live-only" aria-label="Live query">
+          <div class="live-query-block">
+            <div class="live-query-head">
+              <label class="section-label" for="liveQuery">Query</label>
+            </div>
+            <div class="live-query-shell">
+              <div class="live-query-top">
+                <span>SPARQL / GenSPARQL</span>
+                <strong>Query</strong>
               </div>
-            </fieldset>
-
-            <div class="message" id="message"></div>
+              <textarea id="liveQuery" spellcheck="false" aria-label="Live SPARQL query"></textarea>
+            </div>
+            <div class="live-query-actions">
+              <div class="live-query-action-row live-query-load-row">
+                <select class="sample-query-select" id="liveSampleSelect" aria-label="Sample live query">
+                  <option value="" hidden>Custom query</option>
+                  <option value="argentinaPositions">World Cup · positions of the Argentine players</option>
+                  <option value="worldCupWinners">World Cup · players who have won a World Cup (Fig. 2b)</option>
+                  <option value="nationalTeams">World Cup · national teams (vary θ)</option>
+                  <option value="groupADefenders">World Cup · defenders of Group A (104 prompts)</option>
+                  <option value="nobelFields">Nobel · fields of the prize (vary θ)</option>
+                  <option value="physicsBirthYears">Nobel · birth years of Physics laureates since 2020</option>
+                  <option value="physicsContributions">Nobel · contributions of Physics laureates since 2020</option>
+                  <option value="nobelQuantumLaureates">Nobel · quantum mechanics pioneers</option>
+                </select>
+              </div>
+              <div class="live-query-action-row live-query-run-row">
+                <button class="run-btn" id="liveRunBtn" type="button">Run query ▶</button>
+                <button class="top-control" id="clearLiveQuery" type="button">Clear</button>
+              </div>
+            </div>
+            <div class="live-run-feedback" id="liveRunFeedback" aria-live="polite"></div>
           </div>
-        </details>
-      </div>
+        </section>
 
-      <div class="right-column">
-      <section class="panel graph-panel">
-        <div class="graph-toolbar">
-          <div>
-            <div class="section-label" id="graphTitle">Knowledge Graph Explorer</div>
-            <div class="graph-status" id="graphStatus">Loading graph…</div>
+        <section class="panel live-query-result live-query-result-panel live-only" id="liveQueryResult" hidden aria-live="polite">
+          <div class="live-result-panel-head">
+            <div>
+              <div class="section-label">Query Results</div>
+              <div class="live-result-meta" id="liveResultMeta"></div>
+            </div>
           </div>
-          <div class="graph-controls">
-            <button id="zoomOut" type="button">−</button>
-            <button id="zoomIn" type="button">+</button>
-            <button id="fitGraph" type="button">Fit</button>
-            <button id="lightAll" type="button" aria-pressed="false" title="Keep every node bright while a node or query result is in focus">Light all</button>
-            <button id="resetGraph" type="button">Reset</button>
+          <div class="live-result-scroll" id="liveResultBody"></div>
+        </section>
+
+        <section class="panel info-panel" id="infoPanel" aria-labelledby="infoHeading">
+          <div class="info-panel-head">
+            <div><h2 id="infoHeading">Info</h2><span id="infoKind">Graph overview</span></div>
+            <button class="info-clear" id="clearInfo" type="button" title="Return to graph overview" aria-label="Clear selection" hidden>×</button>
           </div>
-        </div>
-
-        <div class="graph-stage" id="graphStage">
-          <svg id="kgGraph" role="img" aria-label="Interactive knowledge graph"></svg>
-          <div class="tooltip" id="tooltip" hidden></div>
-          <div class="graph-help">Independent from Live results · Hover a node to focus its neighbours · Click to keep the focus · Drag a node to pull its neighbours · Scroll to zoom</div>
-        </div>
-
-        <div class="legend">
-          <span><i class="lg-kg"></i>KG entity</span>
-          <span><i class="lg-result"></i>Query result</span>
-          <span><i class="lg-context"></i>Query context</span>
-          <span><i class="lg-llm"></i>Generated attribute</span>
-          <span><i class="lg-drop"></i>Dropped</span>
-        </div>
-      </section>
-
-      <section class="panel live-query-result live-query-result-panel live-only" id="liveQueryResult" hidden aria-live="polite">
-        <div class="live-result-panel-head">
-          <div>
-            <div class="section-label">Query Results</div>
-            <div class="live-result-meta" id="liveResultMeta"></div>
-          </div>
-        </div>
-        <div class="live-result-scroll" id="liveResultBody"></div>
-      </section>
-      </div>
+          <div class="info-content" id="infoContent" aria-live="polite"></div>
+        </section>
+      </aside>
     </section>
 
-    <p class="caption" id="caption"></p>
   </main>
 
   <script src="vendor/d3.v7.8.5.min.js"></script>
   <script src="vendor/n3.v2.13.12.min.js"></script>
-  <script src="native-graph.js?v=20261117-2"></script>
+  <script src="native-graph.js?v=20261118-2"></script>
   <script src="recorded-runs.js?v=20261117-1"></script>
-  <script src="demo-data.js?v=20261117-2"></script>
+  <script src="demo-data.js?v=20261118-1"></script>
   <script src="fifa2026-data.js"></script>
   <script src="nobel-prize-data.js?v=20260826-1"></script>
   <script src="database-adapters.js?v=20261117-1"></script>
   <script src="engine-client.js?v=20261117-1"></script>
-  <script src="app.js?v=20261117-36"></script>
+  <script src="explorer-info.js?v=20261118-2"></script>
+  <script src="app.js?v=20261119-7"></script>
 </body>
 </html>

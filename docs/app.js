@@ -14,8 +14,13 @@
     nobelExpandedField:null,
     liveLabelsMandatory:false,
     liveLabelScale:1,
-    graphRenderFrame:0,thetaFrame:0,resizeTimer:0
+    graphRenderFrame:0,thetaFrame:0,resizeTimer:0,
+    view:0,playbackTimer:0
   };
+  // The address keeps the database, the scenario, θ and the similarity (writeUrl), so a link
+  // opens the same view, as the T-MIGRANTS explorer keeps its focus and filters in its address.
+  const URL_STATE=new URLSearchParams(location.search);
+  if (CFG.databases[URL_STATE.get("db")]) state.dbKey = URL_STATE.get("db");
   if (!CFG.databases[state.dbKey]) state.dbKey = "fifa2026";
 
   const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
@@ -278,12 +283,14 @@
         if(!button||button.parentElement!==tabs)return;
         const i=Number(button.dataset.scenarioIndex);
         if(i===state.scenarioIndex)return;
+        newView();
         state.scenarioIndex=i;
         renderTabs();
         renderScenario();
         clearMessage();
         $("attributeResult").hidden=true;
         scheduleGraphInit();
+        writeUrl();
       };
     }
     scenarioList().forEach((s,i)=>{
@@ -308,12 +315,18 @@
     $("queryName").textContent=s.name;
     $("query").innerHTML=hl(q);
     renderMode(q);
-    $("thetaWrap").classList.toggle("off",!s.hero);
+    $("thetaWrap").classList.toggle("inactive",!s.hero);
+    $("theta").disabled=pageMode==="demo"&&!s.hero;
 
     const isComposition=s.id==="composition";
     const isAttribute=s.id==="attribute";
     $("defaultRunRow").hidden=isComposition;
     $("composeRun").hidden=!isComposition;
+    // The physical order of each strategy depends on the query (demo-data.js).
+    if(isComposition&&s.orders){
+      $("runGenopFirst").querySelector("small").textContent=s.orders.genopFirst;
+      $("runPlanner").querySelector("small").textContent=s.orders.planner;
+    }
 
     if(!isComposition){
       $("executionResult").hidden=true;
@@ -374,11 +387,21 @@
     return String(iri);
   }
 
-  function setEngineStatus(text,kind=""){
+  function setEngineStatus(text,kind="",retry=null){
     const el=$("engineConnectionStatus");
     if(!el)return;
     el.textContent=text;
     el.className="engine-connection-status"+(kind?` ${kind}`:"");
+    if(retry)el.append(retryButton(retry));
+  }
+
+  // A request that failed can be repeated from its message, as the T-MIGRANTS explorer offers
+  // Retry when its server does not answer.
+  function retryButton(action){
+    const button=document.createElement("button");
+    button.type="button";button.className="retry-btn";button.textContent="Retry";
+    button.onclick=action;
+    return button;
   }
 
   function engineClient(){
@@ -446,7 +469,7 @@
         const version=data.version?` ${data.version}`:"";
         setEngineStatus(`Connected · ${name}${version}`,"ok");
       }catch(err){
-        setEngineStatus(`Connection failed: ${err.message||err}`,"err");
+        setEngineStatus(`Connection failed: ${err.message||err}`,"err",()=>test.click());
       }finally{
         test.disabled=false;test.textContent="Test engine";
       }
@@ -478,7 +501,8 @@
       const object=q.object.termType==="Literal"
         ? {kind:"literal",value:q.object.value,raw:q.object.value,language:q.object.language||"",datatype:q.object.datatype?.value||""}
         : {kind:"iri",value:termId(q.object),raw:termId(q.object)};
-      const key=`${subject}\u0001${predicate}\u0001${object.kind}\u0001${object.value}`;
+      // Literals that differ in their language or datatype are different terms.
+      const key=`${subject}\u0001${predicate}\u0001${object.kind}\u0001${object.value}\u0001${object.language||""}\u0001${object.datatype||""}`;
       if(tripleSeen.has(key))continue;
       tripleSeen.add(key);
       triples.push({s:subject,p:predicate,o:object});
@@ -549,6 +573,7 @@
         const option=document.createElement("option");
         option.value=key;option.textContent=`Uploaded · ${db.label}`;
         $("databaseSelect").appendChild(option);
+        newView();
         state.dbKey=key;
         $("databaseSelect").value=key;
         localStorage.setItem("gensparql.database",key);
@@ -556,6 +581,7 @@
         syncPreRecordedVisibility();
         initGraph();
         clearMessage();
+        writeUrl();
 
         try{
             const engine=engineClient();
@@ -595,9 +621,21 @@
     return compactIri(value.value,prefixes);
   }
 
+  // The column beside the graph scrolls by itself (styles.css): a card that a run or a click
+  // fills comes into view there, with as little scrolling as it needs.
+  function revealInColumn(el){
+    const col=el?.closest(".query-column");
+    if(!col||el.hidden||col.scrollHeight<=col.clientHeight+1)return;
+    const c=col.getBoundingClientRect(),r=el.getBoundingClientRect();
+    const z=col.offsetWidth?c.width/col.offsetWidth:1;     // the zoom of the page
+    if(r.top>=c.top&&r.top<=c.bottom-Math.min(160*z,r.height))return;
+    col.scrollTo({top:col.scrollTop+(r.top-c.top)/z-8,behavior:"smooth"});
+  }
+
   function renderLiveQueryResult(result){
     const panel=$("liveQueryResult"),meta=$("liveResultMeta"),body=$("liveResultBody");
     panel.hidden=false;
+    requestAnimationFrame(()=>revealInColumn(panel));
     const displayRows=result.rows.slice(0,250);
     const shown=displayRows.length;
     const plan=result.plan?` · ${result.plan}`:"";
@@ -607,7 +645,7 @@
       return;
     }
     const head=result.vars.map(v=>`<th>?${esc(v)}</th>`).join("");
-    const rows=displayRows.map(row=>`<tr>${result.vars.map(v=>`<td>${esc(displayQueryValue(row[v],result.prefixes))}</td>`).join("")}</tr>`).join("");
+    const rows=displayRows.map((row,index)=>`<tr tabindex="0" aria-label="Inspect result row ${index+1}">${result.vars.map(v=>`<td>${esc(displayQueryValue(row[v],result.prefixes))}</td>`).join("")}</tr>`).join("");
     body.innerHTML=`<table class="live-result-table"><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table>`;
   }
 
@@ -813,7 +851,7 @@
     const pad=10;
     const inner={x:pad,y:pad,w:Math.max(120,width-pad*2),h:Math.max(100,height-pad*2)};
     const nodeById=new Map(graph.nodes.map(n=>[n.id,n]));
-    const results=[...resultIds].map(id=>nodeById.get(id)).filter(Boolean);
+    let results=[...resultIds].map(id=>nodeById.get(id)).filter(Boolean);
     const depth1=[...depth1Ids].map(id=>nodeById.get(id)).filter(Boolean);
     const depth2=[...depth2Ids].map(id=>nodeById.get(id)).filter(Boolean);
     const visual=liveVisualProfile(results.length,graph.nodes.length);
@@ -841,8 +879,7 @@
       node.liveShowLabel=false;
     });
 
-    const links=graph.links;
-    const connected=(a,b)=>links.some(link=>{
+    const connected=(a,b)=>graph.links.some(link=>{
       const s=typeof link.source==="object"?link.source.id:link.source;
       const t=typeof link.target==="object"?link.target.id:link.target;
       return (s===a&&t===b)||(s===b&&t===a);
@@ -853,6 +890,21 @@
       gridNodes(results,inner,resultRadius,101);
       enforceLiveNodeSeparation(graph,inner);
       return;
+    }
+
+    // A generated value is placed beside its entity afterwards (redistributeLiveQueryGraph). The
+    // few entities of one ring around their context (ringNodes) are laid out without their
+    // values, so that they stay around the context. More entities keep their values in the grid
+    // of unconnected results: the compaction pulls each entity towards its value, which spreads
+    // the entities and leaves room for the values.
+    let leftOut=[];
+    if(results.some(n=>n.liveGeneratedPos)&&results.filter(n=>!n.liveGeneratedPos).length<=6){
+      leftOut=results.filter(n=>n.liveGeneratedPos);
+      const generated=new Set(leftOut.map(n=>n.id));
+      const endId=end=>typeof end==="object"?end.id:end;
+      results=results.filter(n=>!generated.has(n.id));
+      graph={nodes:graph.nodes.filter(n=>!generated.has(n.id)),
+        links:graph.links.filter(l=>!generated.has(endId(l.source))&&!generated.has(endId(l.target)))};
     }
 
     const roots=depth2.length?depth2:depth1;
@@ -961,6 +1013,12 @@
     compactLiveConnections(graph,inner);
     enforceLiveNodeSeparation(graph,inner);
     reduceLiveEdgeCrossings(graph);
+    // Until then a value that the layout leaves out sits on its entity, so that the zoom of the
+    // fit, which sizes the gaps of the live view (livePx), is that of the graph as laid out.
+    leftOut.forEach(node=>{
+      const source=nodeById.get(node.sourceAthleteId);
+      if(source){node.x=node.fx=source.x;node.y=node.fy=source.y;}
+    });
   }
 
   function compactLiveConnections(graph,box){
@@ -1441,8 +1499,8 @@
     state.tooltipPinnedId=null;
 
     if(!resultIds.size){
-      // The overview of the page, as after loading the graph: a free layout of the whole graph
-      // took long to settle and piled the labels of thousands of nodes in its middle meanwhile.
+      // The overview of the page, as after loading the graph, rather than a free layout of the
+      // whole graph, which takes long to settle.
       initGraph();
       $("graphStatus").textContent="No result value matched a KG entity · full graph retained";
       return;
@@ -1510,10 +1568,26 @@
       if(!generatedBySource.has(key))generatedBySource.set(key,[]);
       generatedBySource.get(key).push(node);
     });
+    const nodeById=new Map(state.graph.nodes.map(n=>[n.id,n])),contextOf=new Map();
+    state.graph.links.forEach(link=>{
+      const a=nodeById.get(typeof link.source==="object"?link.source.id:link.source);
+      const b=nodeById.get(typeof link.target==="object"?link.target.id:link.target);
+      if(!a||!b||a.liveGeneratedPos||b.liveGeneratedPos)return;
+      [[a,b],[b,a]].forEach(([from,to])=>{
+        if(!generatedBySource.has(from.id))return;
+        if(!contextOf.has(from.id))contextOf.set(from.id,[]);
+        contextOf.get(from.id).push(to);
+      });
+    });
     generatedBySource.forEach((nodes,sourceId)=>{
       const source=state.graph.nodes.find(n=>n.id===sourceId);
       if(!source)return;
-      const baseAngle=source._liveAngle||stableUnit(source.id,411)*Math.PI*2;
+      // On the side of the entity away from its context, where the entity lies after the
+      // compaction.
+      const context=contextOf.get(sourceId)||[];
+      const cx=context.reduce((sum,n)=>sum+n.x,0)/context.length,cy=context.reduce((sum,n)=>sum+n.y,0)/context.length;
+      const baseAngle=context.length&&Math.hypot(source.x-cx,source.y-cy)>1e-6?Math.atan2(source.y-cy,source.x-cx)
+        :source._liveAngle||stableUnit(source.id,411)*Math.PI*2;
       const distance=nodeRadius(source)+Math.max(...nodes.map(nodeRadius))+6*livePx();
       const ordered=[...nodes].sort((a,b)=>String(a.generatedVariable||a.id).localeCompare(String(b.generatedVariable||b.id))||String(a.label||a.id).localeCompare(String(b.label||b.id)));
       ordered.forEach((node,index)=>{
@@ -1757,7 +1831,14 @@ ORDER BY ?year`
     // The editor grows with the query, up to the maximum height of the stylesheet.
     const fitEditor=()=>{editor.style.height="auto";editor.style.height=`${editor.scrollHeight+2}px`};
     editor.addEventListener("input",fitEditor);
-    editor.value=samples.argentinaPositions;
+    // Choosing a sample loads it into the editor at the current θ. While the editor holds anything
+    // else, the picker shows "Custom query", so that choosing the same sample again restores it.
+    const picker=$("liveSampleSelect");
+    const sampleText=key=>window.GENSPARQL_EXPLORER.withThreshold(samples[key],$("theta").value);
+    editor.addEventListener("input",()=>{if(samples[picker.value]&&editor.value!==sampleText(picker.value))picker.value=""});
+    const initialSample=state.dbKey==="nobelPrize"?"physicsBirthYears":"argentinaPositions";
+    editor.value=sampleText(initialSample);
+    picker.value=initialSample;
     requestAnimationFrame(fitEditor);
     editor.addEventListener("keydown",event=>{
       if(event.key==="Tab"){
@@ -1769,27 +1850,29 @@ ORDER BY ?year`
         event.preventDefault();$("liveRunBtn").click();
       }
     });
-    // Each sample runs over one of the two built-in graphs: loading it selects that graph.
+    // Each sample runs over one of the two built-in graphs: loading it selects that graph. The focus
+    // stays on the picker, so that the arrow keys can step through the samples.
     const sampleDb={argentinaPositions:"fifa2026",worldCupWinners:"fifa2026",nationalTeams:"fifa2026",
       groupADefenders:"fifa2026",nobelFields:"nobelPrize",physicsBirthYears:"nobelPrize",
       physicsContributions:"nobelPrize",nobelQuantumLaureates:"nobelPrize"};
-    $("loadSampleQuery").onclick=()=>{
-      const key=$("liveSampleSelect")?.value||"argentinaPositions";
-      editor.value=samples[key]||samples.argentinaPositions;
+    picker.onchange=()=>{
+      const key=picker.value;
+      if(!samples[key])return;
+      editor.value=sampleText(key);
       fitEditor();
       const db=sampleDb[key], select=$("databaseSelect");
       if(db&&select&&select.value!==db&&[...select.options].some(o=>o.value===db)){
         select.value=db;select.dispatchEvent(new Event("change"));
       }
-      editor.focus();
     };
-    $("clearLiveQuery").onclick=()=>{editor.value="";fitEditor();editor.focus();$("liveQueryResult").hidden=true};
+    $("clearLiveQuery").onclick=()=>{editor.value="";picker.value="";fitEditor();editor.focus();$("liveQueryResult").hidden=true};
     $("liveRunBtn").onclick=async()=>{
       clearMessage();
       const btn=$("liveRunBtn");
       btn.disabled=true;btn.textContent="Running…";
       const startedAt=Date.now();
       const ticker=setInterval(()=>{btn.textContent=`Running… ${Math.round((Date.now()-startedAt)/1000)} s`},1000);
+      const view=state.view;
       try{
         const db=currentDb();
         const prefixes={...BUILTIN_PREFIXES,...(db.prefixes||{})};
@@ -1810,12 +1893,17 @@ ORDER BY ?year`
           model:$("embModel")?.value?.trim()||""
         }:{method:"jaccard"};
         const result=await engine.query(editor.value,{datasetId,prefixes,includeTrace:true,llm,similarity});
+        if(view!==state.view){
+          showMessage(`The query on ${db.label} finished after the database changed to ${currentDb().label}, so its result is not shown.`,"warn");
+          return;
+        }
         const executorLabel="Java engine";
         setEngineStatus(`Java query completed · ${result.total} row${result.total===1?"":"s"}`,"ok");
 
         renderLiveQueryResult(result);
         highlightLiveQueryResult(result);
         addLiveGeneratedNodes(result);
+        window.GENSPARQL_EXPLORER?.showQuery(result);
         const opText=result.operators?.length?` · operators: ${[...new Set(result.operators)].join(", ")}`:"";
         const genopText=result.genopCalls?` · ${result.genopCalls} GENOP call${result.genopCalls===1?"":"s"}`:"";
         // The service falls back to the Jaccard similarity for the whole query if the embedding model fails.
@@ -1826,8 +1914,9 @@ ORDER BY ?year`
         const graphText=result.total?" Matching entities are shown in the graph.":" The graph keeps the full KG.";
         showMessage(`${executorLabel} completed on ${db.label} in ${seconds} s: ${result.total} row${result.total===1?"":"s"}${opText}${genopText}.${graphText}${simText}`,fellBack?"warn":"ok");
       }catch(err){
+        if(view!==state.view)return;
         $("liveQueryResult").hidden=true;
-        showMessage(`Query failed: ${err.message||err}`,"err");
+        showMessage(`Query failed: ${err.message||err}`,"err",()=>$("liveRunBtn").click());
       }finally{
         clearInterval(ticker);
         btn.disabled=false;btn.textContent="Run query ▶";
@@ -1837,15 +1926,16 @@ ORDER BY ?year`
 
   function initTheme(){
     $("themeBtn").onclick=()=>{
+      // The page is light unless data-theme says dark: the stylesheet does not follow the theme of
+      // the system, so the toggle must not either, or its first click sets the light theme again.
       const r=document.documentElement;
-      const now=r.getAttribute("data-theme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");
-      r.setAttribute("data-theme",now==="dark"?"light":"dark");
+      r.setAttribute("data-theme",r.getAttribute("data-theme")==="dark"?"light":"dark");
     };
   }
 
-  function liveOn(){return $("liveBox").open&&$("key").value.trim().length>0}
+  function liveOn(){return pageMode==="live"&&$("key").value.trim().length>0}
 
-  // The endpoint and model names of the live panel survive a reload; the key does not.
+  // The endpoint and model names of live mode survive a reload; the key does not.
   const LIVE_SETTINGS=["chatBase","chatModel","embBase","embModel"];
   function savedLiveSetting(id){
     try{return localStorage.getItem("gensparql.live."+id)}catch(_){return null}
@@ -1855,6 +1945,13 @@ ORDER BY ?year`
   }
 
   function initLive(){
+    // The connection settings lie over the workspace (styles.css): a click outside them or
+    // Escape closes them.
+    const settings=$("connectionSettings");
+    if(settings){
+      document.addEventListener("click",e=>{if(settings.open&&!settings.contains(e.target))settings.open=false});
+      document.addEventListener("keydown",e=>{if(e.key==="Escape"&&settings.open)settings.open=false});
+    }
     $("chatBase").value=CFG.live.chatBase;
     $("chatModel").value=CFG.live.chatModel;
     $("embBase").value=CFG.live.embBase;
@@ -1869,7 +1966,6 @@ ORDER BY ?year`
     else if(grounding==="jaccard")$("groundText").checked=true;
     CFG.live.embModels.forEach(m=>{const o=document.createElement("option");o.value=m.value;o.label=m.label;$("embModelOptions").appendChild(o)});
     $("key").addEventListener("input",renderScenario);
-    $("liveBox").addEventListener("toggle",renderScenario);
     // Both radios need their own handler: a change event only fires on the
     // input that became checked.
     const onGroundingMethodChange=async()=>{
@@ -1893,7 +1989,7 @@ ORDER BY ?year`
   // similarity. It sets the radios of the live panel, which the grounding view reads.
   function initDemoGrounding(){
     const rebuild=async()=>{
-      if(currentScenario()?.id==="entity"&&state.graph?.nodes.some(n=>n.generatedCandidate)){
+      if(pageMode==="demo"&&currentScenario()?.id==="entity"&&state.graph?.nodes.some(n=>n.generatedCandidate)){
         try{
           await buildGroundEntityView({preserveViewport:true});
         }catch(err){
@@ -1901,8 +1997,19 @@ ORDER BY ?year`
         }
       }
     };
-    $("demoGroundText").onchange=()=>{$("groundText").checked=true;rebuild()};
-    $("demoGroundEmbedding").onchange=()=>{$("groundEmbedding").checked=true;rebuild()};
+    const choose=method=>{
+      $("groundText").checked=method==="text";
+      $("groundEmbedding").checked=method==="embedding";
+      if(pageMode==="live"){
+        syncGrounding();
+        saveLiveSetting("grounding",method==="embedding"?"embedding":"jaccard");
+      }
+      writeUrl();
+      window.GENSPARQL_EXPLORER?.graphChanged();
+      rebuild();
+    };
+    $("demoGroundText").onchange=()=>choose("text");
+    $("demoGroundEmbedding").onchange=()=>choose("embedding");
     syncDemoGrounding();
   }
 
@@ -1911,10 +2018,12 @@ ORDER BY ?year`
   function syncDemoGrounding(){
     const embedding=$("demoGroundEmbedding");
     if(!embedding)return;
-    const available=Boolean(recordedEntityRun()?.embedding);
+    const available=pageMode==="live"||Boolean(recordedEntityRun()?.embedding);
     embedding.disabled=!available;
     embedding.closest("label")?.classList.toggle("is-disabled",!available);
     $("demoGroundNote").hidden=available;
+    $("demoGroundText").checked=$("groundText").checked;
+    $("demoGroundEmbedding").checked=$("groundEmbedding").checked;
     if(!available&&embedding.checked){
       $("demoGroundText").checked=true;$("groundText").checked=true;
     }
@@ -1926,17 +2035,48 @@ ORDER BY ?year`
     $("embBase").disabled=!on;$("embModel").disabled=!on;$("embKey").disabled=!on;
   }
 
-  function showMessage(text,kind="ok"){
-    $("message").textContent=text;$("message").className="message show "+kind;
+  function showMessage(text,kind="ok",retry=null){
     const live=$("liveRunFeedback");
-    if(live){live.textContent=text;live.className="live-run-feedback "+kind;}
-    // The recorded mode hides the live panel that holds both message areas.
+    if(live){
+      live.textContent=text;live.className="live-run-feedback "+kind;
+      if(retry)live.append(retryButton(retry));
+    }
+    // The recorded mode has no live query panel, so an error goes to the graph status.
     if(pageMode==="demo"&&kind==="err")$("graphStatus").textContent=text;
   }
   function clearMessage(){
-    $("message").className="message";$("message").textContent="";
     const live=$("liveRunFeedback");
     if(live){live.textContent="";live.className="live-run-feedback";}
+  }
+
+  function bindInspectorLinks(layer,links){
+    state.linkHitSel=layer.append("g").attr("class","relation-hit-targets")
+      .selectAll("line").data(links).join("line")
+      .attr("class","relation-hit-target")
+      .on("click",(event,link)=>{
+        if(clickAfterDrag(event))return;
+        event.stopPropagation();
+        state.selectedId=null;state.inspectedLink=link;
+        $("tooltip").hidden=true;
+        window.GENSPARQL_EXPLORER?.showLink(link);
+        applyClasses();
+      });
+  }
+
+  function inspectNode(event,node){
+    state.inspectedLink=null;
+    window.GENSPARQL_EXPLORER?.showNode(node);
+  }
+
+  function clearInspector(){
+    state.inspectedLink=null;
+    window.GENSPARQL_EXPLORER?.overview();
+  }
+
+  function keyboardInspect(event){
+    if(event.key!=="Enter"&&event.key!==" ")return;
+    event.preventDefault();
+    event.currentTarget.dispatchEvent(new MouseEvent("click",{bubbles:true}));
   }
 
   function initGraph(){
@@ -1947,6 +2087,7 @@ ORDER BY ?year`
 
     state.graph=graphForInitialDisplay();
     state.resultIds.clear();state.contextIds.clear();state.selectedId=null;state.focusMode=false;state.tooltipPinnedId=null;
+    state.inspectedLink=null;
     resetPointerFocus();
     state.compositionStageMeta=null;state.compositionStrategy=null;state.compositionStep=null;
 
@@ -1963,6 +2104,7 @@ ORDER BY ?year`
       .data(state.graph.links)
       .join("line")
       .attr("class",d=>linkClass(d));
+    bindInspectorLinks(linkLayer,state.graph.links);
 
     state.generatedLabelSel=labelLayer.selectAll("text")
       .data(state.graph.links.filter(d=>d.generatedAttributeLink&&!d.hideGeneratedEdgeLabel))
@@ -1973,9 +2115,13 @@ ORDER BY ?year`
     state.nodeSel=nodeLayer.selectAll("g")
       .data(state.graph.nodes,d=>d.id)
       .join("g")
-      .attr("class",d=>nodeClass(d));
+      .attr("class",d=>nodeClass(d))
+      .attr("role","button").attr("tabindex",0)
+      .attr("aria-label",d=>`Inspect ${d.label}`)
+      .on("keydown",keyboardInspect);
 
-    state.nodeSel.append("circle").attr("r",nodeRadius);
+    // The radius in --r caps the outline of the circle (styles.css).
+    state.nodeSel.append("circle").attr("r",nodeRadius).style("--r",d=>`${nodeRadius(d)}px`);
     styleNodeCircles(state.nodeSel);
     // Large built-in KGs use different leaf types (Athlete in FIFA,
     // NobelLaureate/NobelAward in Nobel). Keep only structural labels in the
@@ -2023,18 +2169,11 @@ ORDER BY ?year`
       .on("click",(e,d)=>{
         if(clickAfterDrag(e))return;
         e.stopPropagation();
+        inspectNode(e,d);
+        revealInColumn($("infoPanel"));
         if(state.graph?.nobelOverview&&d.type==="NobelField"){
           state.nobelExpandedField=state.nobelExpandedField===d.id?null:d.id;
           initGraph();
-          return;
-        }
-        if(d.liveGeneratedPos||d.compositionPosNode){
-          state.tooltipPinnedId=state.tooltipPinnedId===d.id?null:d.id;
-          if(state.tooltipPinnedId){
-            showTip(e,d);
-          }else{
-            $("tooltip").hidden=true;
-          }
           return;
         }
         state.tooltipPinnedId=null;
@@ -2043,7 +2182,7 @@ ORDER BY ?year`
         applyClasses();
       });
 
-    svg.on("click",e=>{if(clickAfterDrag(e))return;state.tooltipPinnedId=null;$("tooltip").hidden=true;state.selectedId=null;applyClasses()});
+    svg.on("click",e=>{if(clickAfterDrag(e))return;state.tooltipPinnedId=null;$("tooltip").hidden=true;state.selectedId=null;clearInspector();applyClasses()});
 
     state.simulation=NativeGraph.forceSimulation(state.graph.nodes)
       .force("link",NativeGraph.forceLink(state.graph.links).id(d=>d.id).distance(d=>d.source?.type==="Athlete"||d.target?.type==="Athlete"?20:40).strength(.78))
@@ -2067,12 +2206,20 @@ ORDER BY ?year`
     }
 
     updateStatus();
-    // Dense graphs settle in a short, aggressively decayed native simulation.
-    // Fit as soon as that layout is useful instead of making the UI feel blocked.
-    setTimeout(()=>fitGraph(false),staticNobelOverview?0:(overviewGraph?240:600));
+    // Dense graphs settle in a short, aggressively decayed native simulation. Fit as soon as
+    // that layout is useful instead of making the UI feel blocked, but not before its first
+    // tick: the simulation starts the nodes without a position in a spiral around the origin,
+    // and its first tick moves them to the middle of the stage, which the fit frames.
+    const sim=state.simulation,delay=staticNobelOverview?0:(overviewGraph?240:600);
+    const fitOnce=()=>{sim.on("tick.firstfit",null);if(state.simulation===sim)fitGraph(false)};
+    if(staticNobelOverview||sim.alpha()<sim.alphaMin())setTimeout(fitOnce,delay);
+    else{
+      let ticked=false,due=false;
+      sim.on("tick.firstfit",()=>{ticked=true;if(due)fitOnce()});
+      setTimeout(()=>{due=true;if(ticked)fitOnce()},delay);
+    }
     // A free d3 layout keeps spreading after that, so it is fitted once more when it comes to rest.
     if(INTERACTIVE&&!state.anchored){
-      const sim=state.simulation;
       sim.on("end.fit",()=>{sim.on("end.fit",null);if(state.simulation===sim)fitGraph(false)});
     }
   }
@@ -2175,7 +2322,7 @@ ORDER BY ?year`
         if(d.liveGeneratedPos)return "#fde68a";
         return null;
       })
-      .style("stroke-width",d=>d.liveGeneratedPos?1.6:null)
+      .style("--node-stroke",d=>d.liveGeneratedPos?"1.6px":null)
       .style("filter",d=>d.liveGeneratedPos?"drop-shadow(0 0 4px rgba(245,158,11,.35))":null);
   }
 
@@ -2186,6 +2333,16 @@ ORDER BY ?year`
     if(sources.length!==4||generated.length!==4)return false;
     const bySource=new Map(generated.map(n=>[n.sourceAthleteId,n]));
     if(sources.some(src=>!bySource.has(src.id)))return false;
+    // Four pairs that share a context node, such as the four teams of a group, stay on the ring
+    // around that node (layoutLiveRelatedGraph), which keeps their links to it short.
+    const sourceSet=new Set(sources.map(n=>n.id)),sharedBy=new Map();
+    state.graph.links.forEach(link=>{
+      const s=typeof link.source==="object"?link.source.id:link.source;
+      const t=typeof link.target==="object"?link.target.id:link.target;
+      const other=sourceSet.has(s)&&!sourceSet.has(t)?t:sourceSet.has(t)&&!sourceSet.has(s)?s:null;
+      if(other)sharedBy.set(other,(sharedBy.get(other)||0)+1);
+    });
+    if([...sharedBy.values()].some(count=>count>1))return false;
 
     const stage=$("graphStage");
     const width=stage?.clientWidth||760;
@@ -2440,11 +2597,13 @@ ORDER BY ?year`
           : `translate(${-nodeRadius(d)-SIMILARITY_BOX_WIDTH-12},${-SIMILARITY_BOX_HEIGHT/2})`;
       });
 
+    const theta=Number($("theta").value);
     boxes.append("rect")
       .attr("width",SIMILARITY_BOX_WIDTH)
       .attr("height",SIMILARITY_BOX_HEIGHT)
       .attr("rx",0)
-      .attr("ry",0);
+      .attr("ry",0)
+      .style("fill",d=>PRINT_LAYOUT?null:scoreFill(d.score,theta));
 
     boxes.append("text")
       .attr("x",SIMILARITY_BOX_WIDTH/2)
@@ -2459,6 +2618,9 @@ ORDER BY ?year`
       .attr("y1",d=>d.source.y)
       .attr("x2",d=>d.target.x)
       .attr("y2",d=>d.target.y);
+    if(state.linkHitSel)state.linkHitSel
+      .attr("x1",d=>d.source.x).attr("y1",d=>d.source.y)
+      .attr("x2",d=>d.target.x).attr("y2",d=>d.target.y);
 
     if(state.generatedLabelSel){
       const f=d=>Number.isFinite(d.labelT)?d.labelT:.5;
@@ -2480,14 +2642,14 @@ ORDER BY ?year`
       tip.innerHTML=
         `<strong>${esc(d.sourceAthleteLabel||"Generated position")}</strong>`+
         `<div>Position: ${esc(d.positionLabel||d.label||"?pos")}${code}</div>`+
-        `<div>GENERATED by GENOP</div>`+
+        `<div>Generated by GENOP</div>`+
         filterLine+
         `<code>${esc(d.id)}</code>`;
     }else if(d.generatedAttribute){
       const attributeLabel=d.generatedAttributeLabel||currentScenario()?.generatedPredicate||"generated attribute";
       tip.innerHTML=
         `<strong>${esc(d.label)}</strong>`+
-        `<div>${esc(attributeLabel)} · GENERATED by GENOP</div>`+
+        `<div>${esc(attributeLabel)} · generated by GENOP</div>`+
         `<div>evaluation: ${esc(d.evaluationState||"—")}</div>`+
         `<code>${esc(d.id)}</code>`;
     }else if(d.generatedCandidate){
@@ -2503,12 +2665,25 @@ ORDER BY ?year`
     }else{
       tip.innerHTML=`<strong>${esc(d.label)}</strong><div>${esc(d.type)}</div><code>${esc(d.id)}</code>`;
     }
+    // The last line says what a click does, as in the tooltips of the T-MIGRANTS explorer.
+    const action=d.id===state.selectedId?"Click to release the selection":"Click or drag to inspect in Info";
+    tip.insertAdjacentHTML("beforeend",`<div class="tooltip-action">${action}</div>`);
     moveTip(e);
   }
+  // The tooltip follows the pointer and turns to the other side of it near the right or the
+  // bottom edge of the stage instead of being cut off there.
   function moveTip(e){
-    const r=$("graphStage").getBoundingClientRect(),tip=$("tooltip");
-    tip.style.left=Math.min(e.clientX-r.left+14,r.width-280)+"px";
-    tip.style.top=Math.max(e.clientY-r.top-8,8)+"px";
+    const stage=$("graphStage"),r=stage.getBoundingClientRect(),tip=$("tooltip");
+    // The pointer is in screen pixels, the tooltip in those of the page, which a zoom of the page
+    // (styles.css) makes larger.
+    const z=stage.offsetWidth?r.width/stage.offsetWidth:1;
+    const x=(e.clientX-r.left)/z,y=(e.clientY-r.top)/z,width=r.width/z,height=r.height/z;
+    const w=tip.offsetWidth||260,h=tip.offsetHeight||80,gap=14,margin=8;
+    let left=x+gap,top=y+gap;
+    if(left+w+margin>width)left=x-w-gap;
+    if(top+h+margin>height)top=y-h-gap;
+    tip.style.left=Math.max(margin,left)+"px";
+    tip.style.top=Math.max(margin,top)+"px";
   }
 
   function neighborIds(ids){
@@ -2526,8 +2701,8 @@ ORDER BY ?year`
   // The positions that a layout computed become anchors: a spring holds each node there instead
   // of pinning it, a link between two anchored nodes rests at its drawn length, and anchored
   // nodes do not repel, so the graph is at rest as drawn. A dragged node pulls its neighbours
-  // along its links, and when it is let go the graph springs back to the drawn layout. A graph
-  // without computed positions keeps its forces.
+  // along its links, and when it is let go the graph stays as the drag left it (reanchor). A
+  // graph without computed positions keeps its forces.
   function makeElastic(sim,nodes){
     if(!INTERACTIVE)return false;
     const placed=nodes.filter(n=>n.fx!=null&&n.fy!=null);
@@ -2565,6 +2740,24 @@ ORDER BY ?year`
     return true;
   }
 
+  // The graph stays as the drag left it, so that a view can be arranged by hand: the dropped node
+  // and the neighbours that it pulled along are anchored where they are, and the links rest at
+  // their new lengths.
+  function reanchor(node){
+    const sim=state.simulation;
+    sim.nodes().forEach(n=>{if(n.ax!=null){n.ax=n.x;n.ay=n.y}});
+    node.ax=node.fx??node.x;node.ay=node.fy??node.y;
+    // d3 evaluates these accessors once per node when they are set, so setting them again makes
+    // the forces read the new anchor.
+    ["link","charge"].forEach(name=>{
+      const force=sim.force(name),key=name==="link"?"distance":"strength";
+      if(force)force[key](force[key]());
+    });
+    const ax=sim.force("anchorX"),ay=sim.force("anchorY");
+    if(ax)ax.x(ax.x());
+    if(ay)ay.y(ay.y());
+  }
+
   // The nodes under the pointer belong to the graph that was just removed: a removed element
   // fires no mouseleave, so a kept hover id would dim the next view.
   function resetPointerFocus(){
@@ -2572,8 +2765,8 @@ ORDER BY ?year`
     if(state.classFrame){cancelAnimationFrame(state.classFrame);state.classFrame=0;}
   }
 
-  // A press and release on a node also fires a click, which selects the node. After a drag
-  // that moved the node, that click is swallowed, so dragging does not select.
+  // A press and release on a node also fires a click, which selects or releases the node. After
+  // a drag that moved the node, that click is swallowed: the drop has selected the node already.
   function clickAfterDrag(e){
     if(!state.suppressClick)return false;
     state.suppressClick=false;
@@ -2581,34 +2774,55 @@ ORDER BY ?year`
     return true;
   }
 
-  // Dragging reheats the simulation. A dropped node is released: in an anchored graph it springs
-  // back with its neighbours, otherwise the forces place it, or it stays pinned while query
-  // results are focused.
+  // A dropped node is selected and shown in Info, as a click does, but a drag never releases a
+  // selection and does not open a Nobel field. In the figure layout a drag only arranges.
+  function selectDragged(d){
+    inspectNode(null,d);
+    state.tooltipPinnedId=null;
+    $("tooltip").hidden=true;
+    state.selectedId=d.id;
+    applyClasses();
+  }
+
+  // A press becomes a drag once the pointer has moved more than the click distance in screen
+  // pixels, the distance at which d3 stops firing the click (native-graph.js). Only then does the
+  // drag reheat the simulation and pin the node, so a click leaves the layout as it is. In an
+  // anchored graph a dropped node stays where it was dropped, with the neighbours that it pulled
+  // along; otherwise the forces place it, or it stays pinned while query results are focused.
+  const CLICK_DISTANCE=window.NativeGraph?.clickDistance??4;
+  const clientPoint=e=>{
+    const s=e.sourceEvent,p=s?.changedTouches?.[0]||s;
+    return p&&Number.isFinite(p.clientX)?{x:p.clientX,y:p.clientY}:null;
+  };
   function nodeDrag(staticLayout=false){
     return NativeGraph.drag()
-      .on("start",(e,d)=>{
-        state.dragStart={x:e.x,y:e.y};state.dragMoved=false;
-        if((INTERACTIVE||!staticLayout)&&!e.active){
-          // At full heat at once, so that the neighbours follow from the first move.
-          if(INTERACTIVE)state.simulation.alpha(Math.max(state.simulation.alpha(),.3));
-          state.simulation.alphaTarget(INTERACTIVE?.3:.22).restart();
-        }
-        d.fx=d.x;d.fy=d.y;
-        if(INTERACTIVE){state.dragId=d.id;scheduleClasses()}
-      })
+      .on("start",e=>{state.dragStart=clientPoint(e);state.dragMoved=false})
       .on("drag",(e,d)=>{
+        if(!state.dragMoved){
+          const p=clientPoint(e),s=state.dragStart;
+          if(p&&s&&(p.x-s.x)**2+(p.y-s.y)**2<=CLICK_DISTANCE**2)return;
+          state.dragMoved=true;
+          // At full heat at once, so that the neighbours follow from the first move. A drag event
+          // counts its own gesture as active.
+          if((INTERACTIVE||!staticLayout)&&e.active<=1){
+            if(INTERACTIVE)state.simulation.alpha(Math.max(state.simulation.alpha(),.3));
+            state.simulation.alphaTarget(INTERACTIVE?.3:.22).restart();
+          }
+          if(INTERACTIVE){state.dragId=d.id;scheduleClasses()}
+        }
         d.fx=e.x;d.fy=e.y;
-        if(state.dragStart&&Math.hypot(e.x-state.dragStart.x,e.y-state.dragStart.y)>3)state.dragMoved=true;
       })
       .on("end",(e,d)=>{
-        if(INTERACTIVE&&state.dragMoved){
-          state.suppressClick=true;
-          setTimeout(()=>{state.suppressClick=false},0);
-        }
+        const moved=state.dragMoved;
         state.dragStart=null;state.dragMoved=false;
+        if(!moved)return;
+        state.suppressClick=true;
+        setTimeout(()=>{state.suppressClick=false},0);
+        if(!PRINT_LAYOUT)selectDragged(d);
         if(!INTERACTIVE&&staticLayout){state.simulation.stop();tick();return}
         if(!e.active)state.simulation.alphaTarget(0);
         if(INTERACTIVE){state.dragId=null;scheduleClasses()}
+        if(state.anchored)reanchor(d);
         if(state.anchored||!state.focusMode){d.fx=null;d.fy=null}
         scheduleLabelCull();
       });
@@ -2717,12 +2931,19 @@ ORDER BY ?year`
     // into its neighbours, so leaf labels wait for the end of the simulation.
     const sim=state.simulation;
     const settling=!!sim&&typeof sim.alpha==="function"&&sim.alpha()>(typeof sim.alphaMin==="function"?sim.alphaMin():.001);
+    // The selection (applyClasses): pinned labels are drawn whatever else, the neighbours of the
+    // selected node come next. Their nodes get .label-focus, which shows a label that the
+    // stylesheet hides otherwise, as the name of a player in a result view.
+    const pinned=state.labelPinned||new Set(),near=state.labelNear||new Set();
+    const selected=state.selectedId&&state.graph.nodes.find(n=>n.id===state.selectedId);
+    const selectedX=selected&&Number.isFinite(selected.x)?selected.x*k+t.x:null;
     const items=[];
     state.nodeSel.each(function(d){
       if(!Number.isFinite(d.x)||!Number.isFinite(d.y))return;
       const g=this,sx=d.x*k+t.x,sy=d.y*k+t.y;
-      const focus=state.selectedId===d.id||g.classList.contains("inspect")||g.classList.contains("neighbor")
-        ||g.classList.contains("query-result")||g.classList.contains("context");
+      const isPinned=pinned.has(d.id),isNear=!isPinned&&near.has(d.id);
+      g.classList.toggle("label-focus",isNear);
+      const focus=isPinned||isNear||g.classList.contains("query-result")||g.classList.contains("context");
       const emphasized=g.classList.contains("query-result")||g.classList.contains("inspect");
       for(const el of g.querySelectorAll("text")){
         const leaf=el.classList.contains("leaf-label");
@@ -2734,14 +2955,20 @@ ORDER BY ?year`
         const px=(emphasized?11:9.5)*grow;               // its size on screen in a large graph
         const w=labelWidth(text,px),h=px*1.15;
         const gap=nodeRadius(d)*k+7*grow;                // the gap of .74em scales with the font
-        const anchor=leaf?"start":(el.getAttribute("text-anchor")||"start");
-        let x0;
-        if(anchor==="end")x0=sx-gap-w;
-        else if(anchor==="middle")x0=sx-w/2;
-        else x0=sx+gap;
-        const cy=sy;
-        items.push({el,leaf,focus,id:d.id,priority:focus?0:(leaf?2:1),weight:leaf?(degree.get(d.id)||0):nodeRadius(d),
-          text,x0,x1:x0+w,y0:cy-h/2,y1:cy+h/2});
+        let places;
+        if(leaf){
+          // A leaf label is drawn to the right of its node. The name of a neighbour of the selected
+          // node goes to the side away from it, else to the other side, so that the names around
+          // a hub spread to both sides.
+          const right={side:"right",x0:sx+gap},left={side:"left",x0:sx-gap-w};
+          places=isNear&&selectedX!=null?(sx<selectedX?[left,right]:[right,left]):[right];
+        }else{
+          const anchor=el.getAttribute("text-anchor")||"start";
+          places=[{side:null,x0:anchor==="end"?sx-gap-w:anchor==="middle"?sx-w/2:sx+gap}];
+        }
+        items.push({el,leaf,focus,pinned:isPinned,id:d.id,
+          priority:isPinned?0:isNear?1:focus?1.5:(leaf?3:2),weight:leaf?(degree.get(d.id)||0):nodeRadius(d),text,
+          places:places.map(p=>({...p,id:d.id,x1:p.x0+w,y0:sy-h/2,y1:sy+h/2}))});
       }
     });
     items.sort((a,b)=>a.priority-b.priority||b.weight-a.weight||a.text.localeCompare(b.text));
@@ -2776,23 +3003,37 @@ ORDER BY ?year`
         cells(b).forEach(key=>{(circleGrid.get(key)||circleGrid.set(key,[]).get(key)).push(b)});
       });
     }
-    const coversNode=it=>{
-      for(const key of cells(it)){
+    const coversNode=b=>{
+      for(const key of cells(b)){
         for(const c of circleGrid.get(key)||[]){
-          if(c.id!==it.id&&it.x0<c.x1&&it.x1>c.x0&&it.y0<c.y1&&it.y1>c.y0)return true;
+          if(c.id!==b.id&&b.x0<c.x1&&b.x1>c.x0&&b.y0<c.y1&&b.y1>c.y0)return true;
         }
       }
       return false;
     };
+    // A label in focus may lie over the dots around its node, which are dimmed, but not over
+    // another label.
+    const free=(it,b)=>!(b.x1<0||b.x0>W||b.y1<0||b.y0>H)&&!overlaps(b)&&!(it.leaf&&!it.focus&&coversNode(b));
     for(const it of items){
-      const offscreen=it.x1<0||it.x0>W||it.y1<0||it.y0>H;
-      const show=it.focus||(!offscreen&&!overlaps(it)&&!(it.leaf&&coversNode(it)));
-      if(show)place(it);
-      if(it.leaf)it.el.classList.toggle("shown",show);
-      else it.el.classList.toggle("occluded",!show);
+      const chosen=it.pinned?it.places[0]:it.places.find(b=>free(it,b));
+      if(chosen)place(chosen);
+      if(it.leaf){
+        it.el.classList.toggle("shown",!!chosen);
+        if(chosen)setLeafLabelSide(it.el,chosen.side);
+      }
+      else it.el.classList.toggle("occluded",!chosen);
     }
     if(large)raiseLabelledNodes();
     else declutterLabels();
+  }
+
+  function setLeafLabelSide(el,side){
+    if((el.dataset.side||"right")===side)return;
+    el.dataset.side=side;
+    const left=side==="left";
+    el.setAttribute("text-anchor",left?"end":"start");
+    el.setAttribute("x",String((left?-1:1)*nodeRadius(el.__data__)));
+    el.setAttribute("dx",left?"-0.74em":"0.74em");
   }
 
   // ---- label placement in a small graph ----------------------------------------------------
@@ -2805,6 +3046,7 @@ ORDER BY ?year`
   function labelPriority(g,d,opacity){
     const c=g.classList;
     if(state.selectedId===d.id||c.contains("inspect"))return 0;
+    if(state.labelNear?.has(d.id))return .5;                // the neighbours of the selection
     if(opacity<.5||c.contains("outer-country")||c.contains("live-context-2"))return 6;
     if(c.contains("query-result")||c.contains("live-query-result-node")||c.contains("composition-survivor"))return 1;
     if(c.contains("candidate-dropped"))return 2.6;          // after the mapped names and the scores
@@ -2818,11 +3060,14 @@ ORDER BY ?year`
   function declutterLabels(){
     const svgEl=$("kgGraph");
     if(!svgEl||!state.nodeSel)return;
+    // Boxes on screen are measured in the pixels of the page, as the nodes are placed: a zoom of
+    // the page (styles.css) makes the screen boxes larger by z.
     const frame=svgEl.getBoundingClientRect();
-    const W=frame.width,H=frame.height;
+    const z=svgEl.clientWidth?frame.width/svgEl.clientWidth:1;
+    const W=frame.width/z,H=frame.height/z;
     if(!W||!H)return;
     const t=NativeGraph.zoomTransform(svgEl),k=t.k||1;
-    const rel=r=>({x0:r.left-frame.left,x1:r.right-frame.left,y0:r.top-frame.top,y1:r.bottom-frame.top});
+    const rel=r=>({x0:(r.left-frame.left)/z,x1:(r.right-frame.left)/z,y0:(r.top-frame.top)/z,y1:(r.bottom-frame.top)/z});
     const styleOf=new Map();
     const style=e=>{let s=styleOf.get(e);if(!s){s=getComputedStyle(e);styleOf.set(e,s)}return s};
     const shown=el=>{
@@ -2840,6 +3085,12 @@ ORDER BY ?year`
 
     const fixed=[];
     svgEl.querySelectorAll(".similarity-box").forEach(el=>{if(shown(el))fixed.push(rel(el.getBoundingClientRect()))});
+    // The legend, the zoom buttons and the hint lie over the graph, so a label keeps clear of
+    // them.
+    $("graphStage")?.querySelectorAll(".graph-legend,.graph-controls,.graph-help").forEach(el=>{
+      const r=el.getBoundingClientRect();
+      if(r.width&&r.height&&getComputedStyle(el).display!=="none")fixed.push(rel(r));
+    });
 
     const circles=[],items=[],order=[];
     state.nodeSel.each(function(d){
@@ -2857,7 +3108,7 @@ ORDER BY ?year`
       if(r.width<1||r.height<1)return;
       const c=rel(r);
       if(c.x1<0||c.x0>W||c.y1<0||c.y0>H)return;             // the label is outside the view
-      items.push({kind:"node",d,el,sx,sy,rs,w:r.width,h:r.height,current:c,priority});
+      items.push({kind:"node",d,el,sx,sy,rs,w:r.width/z,h:r.height/z,current:c,priority});
     });
 
     // Labels on edges: the similarity of an additional pair, the variable of a generated value.
@@ -2867,7 +3118,7 @@ ORDER BY ?year`
         const r=this.getBoundingClientRect();
         if(r.width<1||r.height<1)return;
         const c=rel(r);
-        items.push({kind:"edge",d,el:this,w:r.width,h:r.height,current:c,priority:d.scoreLabel?2.5:4,
+        items.push({kind:"edge",d,el:this,w:r.width/z,h:r.height/z,current:c,priority:d.scoreLabel?2.5:4,
           cx0:(c.x0+c.x1)/2,cy0:(c.y0+c.y1)/2});
       });
     }
@@ -2932,6 +3183,7 @@ ORDER BY ?year`
       if(withCircles&&circles.some(c=>(it.kind!=="node"||c.id!==it.d.id)&&hit(s,c,1)))return false;
       return true;
     };
+    const covers=(it,s)=>circles.filter(c=>(it.kind!=="node"||c.id!==it.d.id)&&hit(s,c,1)).length;
     // A label smaller than this on screen cannot be read and only adds to the density; it
     // appears when a zoom makes it large enough, or when its node is hovered. In a crowded view
     // this holds for the labels of the results too.
@@ -2944,8 +3196,13 @@ ORDER BY ?year`
       }
       const options=spots(it);
       const wasInside=inside(it.current);
-      let chosen=options.find(s=>(!wasInside||inside(s))&&free(it,s,true))
-        ||options.find(s=>(!wasInside||inside(s))&&free(it,s,false));
+      let chosen=options.find(s=>(!wasInside||inside(s))&&free(it,s,true));
+      // Where every spot covers a node, the label of a result or of a mapped name takes the spot
+      // that covers the fewest, and any other label waits for the hover or a zoom.
+      if(!chosen&&it.priority<2.5){
+        const open=options.filter(s=>(!wasInside||inside(s))&&free(it,s,false));
+        chosen=open.reduce((best,s)=>!best||covers(it,s)<covers(it,best)?s:best,null);
+      }
       if(!chosen){
         it.el.classList.add("declutter-hidden");
         return;
@@ -3022,24 +3279,39 @@ ORDER BY ?year`
     const focus=state.selectedId||hover;
     const near=new Set();
     if(focus){near.add(focus);neighborIds(new Set([focus])).forEach(x=>near.add(x))}
+    const relationIds=new Set(state.inspectedLink?[state.inspectedLink.source,state.inspectedLink.target].map(value=>typeof value==="object"?value.id:value):[]);
+    relationIds.forEach(id=>near.add(id));
     const dim=!state.lightAll;
-    const hoverDims=dim&&!!hover&&!state.selectedId&&!state.focusMode;
+    const hoverDims=dim&&!!hover&&!state.selectedId&&!state.inspectedLink&&!state.focusMode;
     state.nodeSel
       .classed("query-result",d=>state.resultIds.has(d.id))
       .classed("context",d=>state.contextIds.has(d.id)&&!state.resultIds.has(d.id))
-      .classed("inspect",d=>state.selectedId===d.id||hover===d.id)
+      .classed("inspect",d=>state.selectedId===d.id||hover===d.id||relationIds.has(d.id))
       .classed("neighbor",d=>INTERACTIVE&&!!focus&&focus!==d.id&&near.has(d.id))
       .classed("faded",d=>{
         if(!dim)return false;
         if(state.focusMode)return !state.resultIds.has(d.id)&&!state.contextIds.has(d.id);
         if(state.selectedId)return !near.has(d.id);
+        if(state.inspectedLink)return !near.has(d.id);
         return false;
       })
       .classed("dimmed",d=>hoverDims&&!near.has(d.id));
+    // The labels make room for a new selection: the label of the selected node and of the ends of
+    // an inspected relation are drawn whatever else, and its neighbours are placed before the
+    // other labels (cullLabels, declutterLabels). A hover only highlights and moves no label.
+    const labelKey=[state.selectedId||"",...[...relationIds].sort()].join("|");
+    if(labelKey!==state.labelKey||state.labelGraph!==state.graph){
+      state.labelKey=labelKey;state.labelGraph=state.graph;
+      state.labelPinned=new Set(relationIds);
+      if(state.selectedId)state.labelPinned.add(state.selectedId);
+      state.labelNear=state.selectedId?neighborIds(new Set([state.selectedId])):new Set();
+      scheduleLabelCull();
+    }
     const ends=d=>[typeof d.source==="object"?d.source.id:d.source,typeof d.target==="object"?d.target.id:d.target];
     state.linkSel.attr("class",d=>{
       const [s,t]=ends(d);
       let cls=baseLinkClass(d,s,t);
+      if(state.inspectedLink)cls+=state.inspectedLink===d?" inspect-link":" faded";
       if(!dim)cls=cls.replace(/ faded\b/g,"");
       if(INTERACTIVE&&focus&&(s===focus||t===focus))cls+=" focus-link";
       else if(hoverDims)cls+=" dimmed";
@@ -3060,6 +3332,8 @@ ORDER BY ?year`
   }
 
   function updateStatus(){
+    window.GENSPARQL_EXPLORER?.graphChanged();
+    renderScoreLegend();
     const db=currentDb();
     const scenario=currentScenario()?.id;
 
@@ -3145,6 +3419,9 @@ ORDER BY ?year`
 
   function fitGraph(focusOnly){
     if(!state.graph?.nodes?.length||typeof NativeGraph==="undefined"||!state.zoom)return;
+    // A live result is laid out small and sized for its own fit: the margins below, in graph
+    // units, would leave it a fraction of the stage.
+    if(state.graph.nodes.some(n=>n.liveQueryResult)){fitRelevantGraph();return}
     const nodes=state.graph.nodes.filter(n=>{
       if(!Number.isFinite(n.x)||!Number.isFinite(n.y))return false;
       return !focusOnly||!state.focusMode||state.resultIds.has(n.id)||state.contextIds.has(n.id);
@@ -3160,20 +3437,27 @@ ORDER BY ?year`
   // The zoom that shows the nodes of a Run-result view: smaller padding and a higher maximum
   // zoom than the overview, because unrelated nodes have already been removed. The labels are
   // placed with this zoom in mind (resolveLiveLabelCollisions), so both read the same fit.
+  // The fit takes in the circles and keeps a margin at the edges of the stage, so that the
+  // outermost nodes lie wholly inside it.
   function liveFitTransform(nodes){
     const stage=$("graphStage");
     const w=stage?.clientWidth||760,h=stage?.clientHeight||570;
     const placed=(nodes||[]).filter(n=>Number.isFinite(n.x)&&Number.isFinite(n.y));
     if(!placed.length)return {scale:1,tx:0,ty:0,w,h,empty:true};
-    const pad=3;
-    const minX=NativeGraph.min(placed,d=>d.x)-pad;
-    const maxX=NativeGraph.max(placed,d=>d.x)+pad;
-    const minY=NativeGraph.min(placed,d=>d.y)-pad;
-    const maxY=NativeGraph.max(placed,d=>d.y)+pad;
+    const pad=3,margin=16;
+    const minX=NativeGraph.min(placed,d=>d.x-nodeRadius(d))-pad;
+    const maxX=NativeGraph.max(placed,d=>d.x+nodeRadius(d))+pad;
+    const minY=NativeGraph.min(placed,d=>d.y-nodeRadius(d))-pad;
+    const maxY=NativeGraph.max(placed,d=>d.y+nodeRadius(d))+pad;
+    // Circles and labels keep their size on screen at any zoom (resolveLiveLabelCollisions), so a
+    // small result is zoomed until it fills the stage. The least box keeps a single node from a
+    // zoom without end.
     const bw=Math.max(maxX-minX,70);
     const bh=Math.max(maxY-minY,70);
-    const scale=Math.max(.28,Math.min(6.2,.995/Math.max(bw/w,bh/h)));
-    return {scale,tx:w/2-scale*(minX+maxX)/2,ty:h/2-scale*(minY+maxY)/2,w,h,empty:false};
+    // The hint bar covers the bottom of the stage, as in fitGraphWithLabels.
+    const bottom=40;
+    const scale=Math.max(.28,.995/Math.max(bw/Math.max(1,w-2*margin),bh/Math.max(1,h-margin-bottom)));
+    return {scale,tx:w/2-scale*(minX+maxX)/2,ty:(margin+h-bottom)/2-scale*(minY+maxY)/2,w,h,empty:false};
   }
 
   // The region of the graph that the fit shows, in graph units.
@@ -3220,6 +3504,9 @@ ORDER BY ?year`
   function fitRelevantGraph(){
     const fit=liveFitTransform(state.graph.nodes);
     if(fit.empty)return;
+    // The zoom reaches four times beyond the fit either way: the fit of a small result lies above
+    // the limit of 6 of the other views.
+    state.zoom.scaleExtent([Math.min(.12,fit.scale/4),Math.max(6,fit.scale*4)]);
     NativeGraph.select("#kgGraph")
       .transition()
       .duration(420)
@@ -3462,8 +3749,10 @@ ORDER BY ?year`
   async function buildGroundEntityView(options={}){
     let matches;
     let method;
+    const view=state.view;
     if($("groundEmbedding").checked){
       matches=await embeddingGroundingMatches();
+      if(view!==state.view)return;
       method="Embedding";
     }else{
       matches=textGroundingMatches();
@@ -3629,7 +3918,7 @@ ORDER BY ?year`
     //
     // Threshold affects the generated ring:
     //   grounded candidate   -> closer to its target's radial ray
-    //   below-threshold      -> farther out and more dispersed
+    //   below-threshold      -> farther out
     const targetOrder=[];
     const targetSeen=new Set();
 
@@ -3664,20 +3953,12 @@ ORDER BY ?year`
     const innerRadius=Math.min(width,height)*.185;
     const groundedRadius=Math.min(width,height)*.345;
     const potentialRadius=Math.min(width,height)*.415;
-
-    const targetAngle=new Map();
-    targetOrder.forEach((id,i)=>{
-      const angle=-Math.PI/2+(2*Math.PI*i/Math.max(targetOrder.length,1));
-      targetAngle.set(id,angle);
-
-      const country=relevantCountries.find(n=>n.id===id);
-      if(country){
-        const x=cx+Math.cos(angle)*innerRadius;
-        const y=cy+Math.sin(angle)*innerRadius;
-        country.x=x;country.y=y;
-        country.fx=x;country.fy=y;
-      }
-    });
+    // In a stage wider than high, the rings widen into ellipses, up to half as wide again: the
+    // labels run across, so the names and score boxes at the top and at the bottom of the rings
+    // take the room of the width. The figure layout keeps its columns.
+    const stretch=PRINT_LAYOUT?1:Math.min(1.5,Math.max(1,width/height));
+    // The direction from the inner ring to the outer rings at the angle of the rings.
+    const outwards=angle=>Math.atan2(Math.sin(angle),stretch*Math.cos(angle));
 
     const groupedCandidates=new Map();
     generatedNodes.forEach(candidate=>{
@@ -3686,27 +3967,49 @@ ORDER BY ?year`
       groupedCandidates.get(key).push(candidate);
     });
 
+    // Each entity takes an arc of the ring in proportion to the names whose closest entity it
+    // is, and its names spread over that arc, so that several names close to one entity, such
+    // as three names near New Zealand, have room for their score boxes.
+    const weightOf=id=>Math.max(1,groupedCandidates.get(id)?.length||0);
+    const totalWeight=targetOrder.reduce((sum,id)=>sum+weightOf(id),0)||1;
+    const targetAngle=new Map(),targetSpan=new Map();
+    let arcStart=-Math.PI/2-Math.PI*weightOf(targetOrder[0])/totalWeight;
+    targetOrder.forEach(id=>{
+      const span=2*Math.PI*weightOf(id)/totalWeight;
+      const angle=arcStart+span/2;
+      arcStart+=span;
+      targetAngle.set(id,angle);
+      targetSpan.set(id,span);
+
+      const country=relevantCountries.find(n=>n.id===id);
+      if(country){
+        const x=cx+Math.cos(angle)*innerRadius*stretch;
+        const y=cy+Math.sin(angle)*innerRadius;
+        country.x=x;country.y=y;
+        country.fx=x;country.fy=y;
+      }
+    });
+
     groupedCandidates.forEach((candidates,targetId)=>{
       candidates.sort((a,b)=>a.label.localeCompare(b.label));
       const base=targetAngle.has(targetId)
         ? targetAngle.get(targetId)
         : -Math.PI/2;
+      const step=(targetSpan.get(targetId)||0)/candidates.length;
 
       candidates.forEach((candidate,i)=>{
         const centered=i-(candidates.length-1)/2;
 
-        // Passing candidates cluster closely on the same ray.
-        // Failing candidates spread farther around the outer ring.
-        const angularStep=candidate.grounded?.075:.15;
-        const angle=base+centered*angularStep;
+        // The names of an entity share its arc; a failing name lies farther out.
+        const angle=base+centered*step;
         const radius=candidate.grounded?groundedRadius:potentialRadius;
 
-        const x=cx+Math.cos(angle)*radius;
+        const x=cx+Math.cos(angle)*radius*stretch;
         const y=cy+Math.sin(angle)*radius;
 
         candidate.x=x;candidate.y=y;
         candidate.fx=x;candidate.fy=y;
-        candidate.radialAngle=angle;
+        candidate.radialAngle=outwards(angle);
         candidate.labelSide=Math.cos(angle)<-.12?"left":"right";
       });
     });
@@ -3726,11 +4029,11 @@ ORDER BY ?year`
     remainingCountries.forEach((country,i)=>{
       const angle=-Math.PI/2+Math.PI/Math.max(remainingCountries.length,1)
         +(2*Math.PI*i/Math.max(remainingCountries.length,1));
-      const x=cx+Math.cos(angle)*outerCountryRadius;
+      const x=cx+Math.cos(angle)*outerCountryRadius*stretch;
       const y=cy+Math.sin(angle)*outerCountryRadius;
       country.x=x;country.y=y;
       country.fx=x;country.fy=y;
-      country.radialAngle=angle;
+      country.radialAngle=outwards(angle);
       country.labelSide=Math.cos(angle)<0?"left":"right";
     });
 
@@ -3774,16 +4077,18 @@ ORDER BY ?year`
     const {s,result,cost}=compositionContext();
     const bindings=s.bindingLabel||"Athlete bindings";
     const selection=s.selectionLabel||"Group A only";
+    // The step that selects the bindings: KG patterns, or a FILTER as for the Nobel awards.
+    const select={title:s.selectionTitle||"KG selection",detail:selection,kind:s.selectionTitle==="FILTER"?"filter":"kg"};
     const generated=s.generatedVariable||"?pos";
     const filter=s.filterLabel||'?pos = "Defender"';
     const matches=result.matches??result.defenders;
     const genopFirstSteps=[
           {title:bindings,detail:`${cost.genopFirst} bindings`,kind:"kg"},
           {title:"GENOP",detail:`${cost.genopFirst} LLM calls`,kind:"genop"},
-          {title:"KG selection",detail:selection,kind:"kg"},
+          select,
         ];
     const plannerSteps=[
-          {title:"KG selection",detail:selection,kind:"kg"},
+          select,
           {title:"GENOP",detail:`${cost.planned} LLM calls`,kind:"genop"},
         ];
     if(s.hasFilter!==false){genopFirstSteps.push({title:"FILTER",detail:filter,kind:"filter"});plannerSteps.push({title:"FILTER",detail:filter,kind:"filter"});}
@@ -3795,11 +4100,48 @@ ORDER BY ?year`
   function setActiveExecutionStep(index){
     const order=$("executionOrder");
     if(!order)return;
-    order.querySelectorAll(".execution-step").forEach((node,i)=>{
+    const steps=order.querySelectorAll(".execution-step");
+    steps.forEach((node,i)=>{
       node.classList.toggle("is-active",i===index);
       node.classList.toggle("is-complete",i<index);
       node.setAttribute("aria-current",i===index?"step":"false");
     });
+    const fill=$("playbackFill");
+    if(fill)fill.style.width=steps.length>1?`${Math.max(0,index)/(steps.length-1)*100}%`:"100%";
+  }
+
+  // Play steps shows the steps of the last strategy one after the other at a pace for reading,
+  // with the line under the steps as its progress, as the playback of the time brush of the
+  // T-MIGRANTS explorer. It starts again from Step 1 after the last step.
+  const PLAYBACK_STEP_MS=1600;
+  function stopPlayback(){
+    clearTimeout(state.playbackTimer);state.playbackTimer=0;
+    const button=$("playSteps");
+    if(button){button.setAttribute("aria-pressed","false");button.textContent="▶ Play steps";}
+  }
+  function togglePlayback(){
+    if(state.playbackTimer){stopPlayback();return;}
+    const strategy=state.compositionStrategy;
+    if(!strategy)return;
+    const show=state.dbKey==="nobelPrize"?showNobelCompositionStep:showCompositionStep;
+    const last=compositionSteps(strategy).length-1,view=state.view;
+    let index=state.compositionStep==null||state.compositionStep>=last?0:state.compositionStep+1;
+    $("playSteps").setAttribute("aria-pressed","true");$("playSteps").textContent="❚❚ Pause";
+    const next=()=>{
+      if(view!==state.view){stopPlayback();return;}
+      show(strategy,index);
+      if(index++>=last){stopPlayback();return;}
+      state.playbackTimer=setTimeout(next,PLAYBACK_STEP_MS);
+    };
+    state.playbackTimer=setTimeout(next,0);
+  }
+
+  // A change of database or scenario starts a new view. A run that is still stepping or waiting
+  // for an answer when the view changes stops instead of drawing over the new view, as the
+  // T-MIGRANTS explorer drops an answer that belongs to an earlier request.
+  function newView(){
+    stopPlayback();
+    return ++state.view;
   }
 
   function renderExecutionResult(strategy){
@@ -3831,13 +4173,13 @@ ORDER BY ?year`
     }).join("");
 
     $("executionOrder").querySelectorAll("[data-composition-step]").forEach(button=>{
-      button.onclick=()=>showCompositionStep(strategy,Number(button.dataset.compositionStep));
+      button.onclick=()=>{stopPlayback();showCompositionStep(strategy,Number(button.dataset.compositionStep))};
     });
 
     const bindings=(s.bindingLabel||"athlete bindings").toLowerCase();
     $("executionExplanation").textContent=genopFirst
-      ? `GENOP runs before selective KG patterns, so the LLM is invoked for all ${cost.genopFirst} ${bindings} before later operators discard irrelevant rows. Click any execution step to inspect the execution order.`
-      : `The planner evaluates ${s.selectionLabel||"selective KG patterns"} first and defers GENOP until only ${cost.planned} bindings remain. This reduces LLM calls from ${cost.genopFirst} to ${cost.planned} (${cost.factor} fewer) while preserving the recorded logical query result.`;
+      ? `GENOP runs before ${s.selective||"the selective KG patterns"}, so the LLM is invoked for all ${cost.genopFirst} ${bindings} before later operators discard irrelevant rows. Click any execution step to inspect the execution order.`
+      : `The planner evaluates ${s.selective||"the selective KG patterns"} first and defers GENOP until only ${cost.planned} bindings remain. This reduces LLM calls from ${cost.genopFirst} to ${cost.planned} (${cost.factor} fewer) while preserving the recorded logical query result.`;
   }
 
   // The positions that the recorded model generated for the players in the evaluation (E1,
@@ -4271,11 +4613,14 @@ ORDER BY ?year`
   async function executeCompositionStrategy(strategy){
     if(state.dbKey==="nobelPrize")return executeNobelCompositionStrategy(strategy);
     clearMessage();
-    const {result,cost}=compositionContext();
+    stopPlayback();
+    const view=state.view;
+    const {s,result,cost}=compositionContext();
     const btnA=$("runGenopFirst");
     const btnB=$("runPlanner");
     btnA.disabled=true;
     btnB.disabled=true;
+    $("playSteps").disabled=true;
 
     const isPlanner=strategy==="planner";
     const active=isPlanner?btnB:btnA;
@@ -4286,15 +4631,17 @@ ORDER BY ?year`
       renderExecutionResult(strategy);
       const steps=compositionSteps(strategy);
       for(let i=0;i<steps.length;i++){
+        if(view!==state.view)return;
         showCompositionStep(strategy,i);
         // Let each physical operator stage remain visible long enough to read.
         if(i<steps.length-1)await new Promise(resolve=>setTimeout(resolve,520));
       }
+      if(view!==state.view)return;
 
       const calls=isPlanner?cost.planned:cost.genopFirst;
       const order=isPlanner
-        ? "KG patterns → GENOP → FILTER"
-        : "GENOP → KG patterns → FILTER";
+        ? s.orders?.planner||"KG patterns → GENOP → FILTER"
+        : s.orders?.genopFirst||"GENOP → KG patterns → FILTER";
 
       showMessage(
         `${isPlanner?"Planner":"GENOP-first"} completed · ${calls} LLM calls · ${order} · recorded result ${result.defenders}/${result.total}. Click any Step above to replay that intermediate KG state.`,
@@ -4304,6 +4651,7 @@ ORDER BY ?year`
       active.querySelector("strong").textContent=original;
       btnA.disabled=false;
       btnB.disabled=false;
+      $("playSteps").disabled=false;
     }
   }
 
@@ -4369,10 +4717,11 @@ ORDER BY ?year`
     if(strategy==="genop-first"){
       if(safeIndex===0){title="Step 1 · Physics award bindings";status=`${cost.genopFirst} Physics award bindings before GENOP`;}
       else if(safeIndex===1){withGenerated=true;title="Step 2 · GENOP";status=`${cost.genopFirst} LLM calls, one per binding`;}
-      else {selected=true;withGenerated=true;title=safeIndex===2?"Step 3 · KG selection":"Step 4 · Result";status=`Physics ${s.sinceYear}+ leaves ${cost.planned} laureates · ${result.matches} generated contributions`;}
+      else if(safeIndex===2){selected=true;withGenerated=true;title=`Step 3 · ${s.selectionTitle||"KG selection"}`;status=`The FILTER on the award year keeps ${cost.planned} of ${cost.genopFirst} Physics award bindings · ${result.matches} generated contributions`;}
+      else {selected=true;withGenerated=true;title="Step 4 · Result";status=`${cost.genopFirst} LLM calls · ${result.matches} generated contributions`;}
     }else{
       selected=true;
-      if(safeIndex===0){title="Step 1 · KG selection";status=`Physics ${s.sinceYear}+ reduces ${cost.genopFirst} award bindings to ${cost.planned} before GENOP`;}
+      if(safeIndex===0){title=`Step 1 · ${s.selectionTitle||"KG selection"}`;status=`The FILTER on the award year keeps ${cost.planned} of ${cost.genopFirst} Physics award bindings before GENOP`;}
       else {withGenerated=true;title=safeIndex===1?"Step 2 · GENOP":"Step 3 · Result";status=`${cost.planned} LLM calls · ${result.matches} generated contributions`;}
     }
     const graph=buildNobelCompositionStage({selected,withGenerated});
@@ -4383,35 +4732,42 @@ ORDER BY ?year`
 
   async function executeNobelCompositionStrategy(strategy){
     clearMessage();
+    stopPlayback();
+    const view=state.view;
     const {s,result,cost}=compositionContext(),btnA=$("runGenopFirst"),btnB=$("runPlanner");
     const active=strategy==="planner"?btnB:btnA,original=active.querySelector("strong").textContent;
-    btnA.disabled=true;btnB.disabled=true;active.querySelector("strong").textContent="Running…";
+    btnA.disabled=true;btnB.disabled=true;$("playSteps").disabled=true;active.querySelector("strong").textContent="Running…";
     try{
       renderExecutionResult(strategy);
-      $("executionOrder").querySelectorAll("[data-composition-step]").forEach(button=>button.onclick=()=>showNobelCompositionStep(strategy,Number(button.dataset.compositionStep)));
+      $("executionOrder").querySelectorAll("[data-composition-step]").forEach(button=>button.onclick=()=>{stopPlayback();showNobelCompositionStep(strategy,Number(button.dataset.compositionStep))});
       const steps=compositionSteps(strategy);
       for(let index=0;index<steps.length;index++){
+        if(view!==state.view)return;
         showNobelCompositionStep(strategy,index);
         if(index<steps.length-1)await new Promise(resolve=>setTimeout(resolve,620));
       }
+      if(view!==state.view)return;
       const calls=strategy==="planner"?cost.planned:cost.genopFirst,matches=result.matches??result.defenders;
       showMessage(`${strategy==="planner"?"Planner-first":"GENOP-first"} completed · ${calls} LLM calls · ${matches}/${result.total} ${s.resultLabel}. Click a Step to replay its intermediate KG.`,"ok");
     }finally{
-      active.querySelector("strong").textContent=original;btnA.disabled=false;btnB.disabled=false;
+      active.querySelector("strong").textContent=original;btnA.disabled=false;btnB.disabled=false;$("playSteps").disabled=false;
     }
   }
 
 
   function renderAttributeResult(rows,stat,model){
     $("attributeResult").hidden=false;
+    requestAnimationFrame(()=>revealInColumn($("attributeResult")));
     $("attributeAnswerRate").textContent=stat?.a||"—";
     $("attributeAccuracy").textContent=stat?.b||"—";
 
-    const counts={correct:0,wrong:0,abstain:0};
+    const counts={correct:0,wrong:0,abstain:0,unscored:0};
     rows.forEach(r=>{if(counts[r.state]!==undefined)counts[r.state]++});
 
+    // An entity without a value in Wikidata is not scored, so the counts add up to the rows.
     $("attributeSampleSummary").textContent=
-      `Displayed sample · ${counts.correct} correct · ${counts.wrong} wrong · ${counts.abstain} abstain`;
+      `Displayed sample · ${counts.correct} correct · ${counts.wrong} wrong · ${counts.abstain} abstain`
+      +(counts.unscored?` · ${counts.unscored} unscored (no value in Wikidata)`:"");
 
     // Under each name, the answers of the other recorded LLMs to the same prompt.
     const others=r=>(r.others||[]).length
@@ -4507,8 +4863,8 @@ ORDER BY ?year`
 
     // Two-sided fan: the KG entities form two columns, half on each side of the centre, with
     // their names facing the centre; each generated value lies further out on an arc, on the
-    // row of its entity, with its label facing outwards. A ring put the entities at its top and
-    // bottom so close together that their names ran into each other.
+    // row of its entity, with its label facing outwards. In two columns the names of the
+    // entities stay apart.
     const stage=$("graphStage");
     const width=stage.clientWidth||760;
     const height=stage.clientHeight||570;
@@ -4620,9 +4976,13 @@ ORDER BY ?year`
       .selectAll("g")
       .data(graphSnapshot.nodes,d=>d.id)
       .join("g")
-      .attr("class",d=>nodeClass(d));
+      .attr("class",d=>nodeClass(d))
+      .attr("role","button").attr("tabindex",0)
+      .attr("aria-label",d=>`Inspect ${d.label}`)
+      .on("keydown",keyboardInspect);
 
-    state.nodeSel.append("circle").attr("r",nodeRadius);
+    // The radius in --r caps the outline of the circle (styles.css).
+    state.nodeSel.append("circle").attr("r",nodeRadius).style("--r",d=>`${nodeRadius(d)}px`);
     styleNodeCircles(state.nodeSel);
 
     const denseCompositionSnapshot=graphSnapshot.nodes.length>300&&graphSnapshot.nodes.some(node=>node.compositionDense);
@@ -4649,22 +5009,16 @@ ORDER BY ?year`
       .on("click",(e,d)=>{
         if(clickAfterDrag(e))return;
         e.stopPropagation();
-        if(d.compositionPosNode){
-          state.tooltipPinnedId=state.tooltipPinnedId===d.id?null:d.id;
-          if(state.tooltipPinnedId){
-            showTip(e,d);
-          }else{
-            $("tooltip").hidden=true;
-          }
-          return;
-        }
+        inspectNode(e,d);
+        revealInColumn($("infoPanel"));
         state.tooltipPinnedId=null;
         $("tooltip").hidden=true;
         state.selectedId=state.selectedId===d.id?null:d.id;
         applyClasses();
       });
 
-    svg.on("click",e=>{if(clickAfterDrag(e))return;state.tooltipPinnedId=null;$("tooltip").hidden=true;state.selectedId=null;applyClasses()});
+    svg.on("click",e=>{if(clickAfterDrag(e))return;state.tooltipPinnedId=null;$("tooltip").hidden=true;state.selectedId=null;clearInspector();applyClasses()});
+    bindInspectorLinks(linkLayer,graphSnapshot.links);
 
     state.simulation=NativeGraph.forceSimulation(graphSnapshot.nodes)
       .force("link",NativeGraph.forceLink(graphSnapshot.links).id(d=>d.id)
@@ -4739,6 +5093,7 @@ ORDER BY ?year`
     if(state.graphRenderFrame){cancelAnimationFrame(state.graphRenderFrame);state.graphRenderFrame=0;}
     if(state.thetaFrame){cancelAnimationFrame(state.thetaFrame);state.thetaFrame=0;}
     if(state.simulation)state.simulation.stop();
+    newView();
     state.dbKey=nextKey;
     state.scenarioIndex=0;
     state.nobelExpandedField=null;
@@ -4756,6 +5111,67 @@ ORDER BY ?year`
       syncDemoGrounding();
     }
     initGraph();
+    writeUrl();
+  }
+
+  // The fill of a score box: red below θ, neutral at θ and teal above, stronger the farther the
+  // score lies from θ, so the boxes read as the colour ramp in the panel headers of the
+  // T-MIGRANTS explorer. A box at least a quarter coloured keeps the side of θ visible.
+  function scoreFill(score,theta){
+    const above=score>=theta;
+    const distance=above?(theta>=1?1:(score-theta)/(1-theta)):(theta-score)/Math.max(theta,1e-6);
+    const strength=Math.round(25+75*Math.min(1,Math.max(0,distance)));
+    return `color-mix(in srgb,var(${above?"--score-high":"--score-low"}) ${strength}%,var(--score-mid))`;
+  }
+
+  // The legend of the score boxes in the header of the graph, with θ marked on the ramp.
+  function renderScoreLegend(){
+    const legend=$("scoreLegend");
+    if(!legend)return;
+    const shown=!PRINT_LAYOUT&&Boolean(state.graph?.nodes?.some(n=>n.generatedCandidate));
+    legend.hidden=!shown;
+    if(!shown)return;
+    const theta=Number($("theta").value);
+    legend.innerHTML=`<span>Similarity</span><span>0</span>`+
+      `<span class="score-ramp" style="--theta:${(theta*100).toFixed(1)}%" role="img" aria-label="Scores below θ are red, scores from θ on are teal"></span>`+
+      `<span>1</span><span class="score-legend-theta">θ ${theta.toFixed(2)}</span>`;
+  }
+
+  // The address of the current view. The mode links carry it to the other mode, without the
+  // scenario, which live mode does not have. An uploaded graph exists only in this page.
+  function writeUrl(){
+    const params=new URLSearchParams(location.search);
+    if(currentDb()?.uploaded)params.delete("db");else params.set("db",state.dbKey);
+    const scenario=currentScenario();
+    if(pageMode==="demo"&&state.scenarioIndex>0&&scenario)params.set("tab",scenario.id);else params.delete("tab");
+    const theta=Number($("theta").value);
+    if(Math.abs(theta-Number($("theta").defaultValue))>1e-9)params.set("theta",theta.toFixed(2));else params.delete("theta");
+    if($("groundEmbedding").checked)params.set("sim","embedding");else params.delete("sim");
+    const query=params.toString().replace(/=(?=&|$)/g,"");
+    history.replaceState(null,"",location.pathname+(query?"?"+query:"")+location.hash);
+    const shared=new URLSearchParams(params);
+    shared.delete("mode");shared.delete("tab");
+    const demo=shared.toString(),live=new URLSearchParams(shared);
+    live.set("mode","live");
+    $("demoModeLink").href="index.html"+(demo?"?"+demo.replace(/=(?=&|$)/g,""):"");
+    $("liveModeLink").href="index.html?"+live.toString().replace(/=(?=&|$)/g,"");
+  }
+
+  // θ, the similarity and the scenario of the address, once the controls exist.
+  function applyUrlState(){
+    const theta=Number(URL_STATE.get("theta"));
+    if(URL_STATE.has("theta")&&theta>=.01&&theta<=1){
+      $("theta").value=String(theta);
+      $("thetaVal").textContent=theta.toFixed(2);
+    }
+    const sim=URL_STATE.get("sim");
+    if(sim==="embedding"||sim==="jaccard"){
+      $("groundEmbedding").checked=sim==="embedding";
+      $("groundText").checked=sim!=="embedding";
+      if(pageMode==="live")syncGrounding();
+    }
+    const tab=scenarioList().findIndex(s=>s.id===URL_STATE.get("tab"));
+    if(pageMode==="demo"&&tab>=0)state.scenarioIndex=tab;
   }
 
   function syncPreRecordedVisibility(){
@@ -4769,6 +5185,20 @@ ORDER BY ?year`
   }
 
   function init(){
+    window.GENSPARQL_EXPLORER?.attach({
+      getGraph:()=>state.graph,
+      getDatabase:currentDb,
+      getScenario:currentScenario,
+      getSettings:()=>({
+        mode:pageMode,
+        theta:Number($("theta").value),
+        thetaUsed:pageMode==="live"||Boolean(currentScenario()?.hero),
+        similarity:$("groundEmbedding").checked?"Embedding":"Jaccard",
+        model:pageMode==="live"?($("chatModel")?.value.trim()||"the configured chat model"):currentScenario()?.recordedModel
+      }),
+      selectNode:id=>{state.inspectedLink=null;state.selectedId=state.graph.nodes.some(node=>node.id===id)?id:null;applyClasses();},
+      clearSelection:()=>{state.inspectedLink=null;state.selectedId=null;if(state.nodeSel)applyClasses();}
+    });
     initTheme();
     if(pageMode==="live"){
       initLive();
@@ -4777,19 +5207,28 @@ ORDER BY ?year`
       initLiveQuery();
     }
     $("databaseSelect").value=state.dbKey;$("databaseSelect").onchange=changeDb;
+    applyUrlState();
+    initDemoGrounding();
+    $("theta").oninput=()=>{
+      $("thetaVal").textContent=Number($("theta").value).toFixed(2);
+      renderScoreLegend();
+      window.GENSPARQL_EXPLORER?.graphChanged();
+      if(pageMode==="live"){
+        const editor=$("liveQuery");
+        editor.value=window.GENSPARQL_EXPLORER.withThreshold(editor.value,$("theta").value);
+        editor.dispatchEvent(new Event("input"));
+        return;
+      }
+      renderScenario();
+      if(state.thetaFrame)cancelAnimationFrame(state.thetaFrame);
+      state.thetaFrame=requestAnimationFrame(()=>{
+        state.thetaFrame=0;
+        if(currentScenario()?.id==="entity"&&state.graph?.nodes.some(n=>n.generatedCandidate))updateGroundingThresholdOnly();
+      });
+    };
+    $("theta").onchange=writeUrl;
     if(pageMode==="demo"){
-      initDemoGrounding();
-      $("theta").oninput=()=>{
-        $("thetaVal").textContent=Number($("theta").value).toFixed(2);
-        renderScenario();
-        if(state.thetaFrame)cancelAnimationFrame(state.thetaFrame);
-        state.thetaFrame=requestAnimationFrame(()=>{
-          state.thetaFrame=0;
-          if(currentScenario()?.id==="entity"&&state.graph?.nodes.some(n=>n.generatedCandidate)){
-            updateGroundingThresholdOnly();
-          }
-        });
-      };
+      $("playSteps").onclick=togglePlayback;
       $("runBtn").onclick=execute;
       $("runGenopFirst").onclick=()=>executeCompositionStrategy("genop-first");
       $("runPlanner").onclick=()=>executeCompositionStrategy("planner");
@@ -4813,6 +5252,7 @@ ORDER BY ?year`
       syncPreRecordedVisibility();
     }
     initGraph();
+    writeUrl();
   }
   init();
 })();

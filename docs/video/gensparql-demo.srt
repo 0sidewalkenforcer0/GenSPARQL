@@ -11,82 +11,94 @@ A similarity join maps the generated names to the entities of the graph.
 The query planner invokes the LLM only for the bindings that the other graph patterns and filters select.
 
 4
-00:00:25,867 --> 00:00:33,492
-The workbench shows a graph of the 2026 World Cup and a graph of Nobel laureates, both built from Wikidata.
+00:00:25,867 --> 00:00:33,717
+The workbench queries a graph of the 2026 World Cup and a graph of Nobel laureates, both built from Wikidata.
 
 5
-00:00:33,942 --> 00:00:40,167
-On the project page, its recorded mode replays the answers of three open-weight LLMs.
+00:00:34,167 --> 00:00:41,592
+Its recorded mode replays the answers of three open-weight LLMs from the evaluation of the paper.
 
 6
-00:00:41,167 --> 00:00:44,242
-The graph stores no positions of the players.
+00:00:42,042 --> 00:00:47,617
+Hovering a node highlights its neighbours, and a click shows its details in the Info panel.
 
 7
-00:00:44,692 --> 00:00:51,492
-A context-mode GENOP sends one prompt for each Argentine player and binds the generated position.
+00:00:48,633 --> 00:00:51,708
+The graph stores no positions of the players.
 
 8
-00:00:51,942 --> 00:01:01,267
-The workbench compares the positions that Qwen3-30B, Qwen3-8B and Mistral-7B generated with the positions in Wikidata.
+00:00:52,158 --> 00:00:58,958
+A context-mode GENOP sends one prompt for each Argentine player and binds the generated position.
 
 9
-00:01:03,967 --> 00:01:09,592
-A base-mode GENOP sends a single prompt that lists the national teams of the World Cup.
+00:00:59,408 --> 00:01:07,783
+The workbench compares the positions that the three LLMs of the evaluation generated with the positions in Wikidata.
 
 10
-00:01:10,042 --> 00:01:17,267
-The similarity join maps each generated name to every team with a label of similarity at least θ.
+00:01:10,467 --> 00:01:16,092
+A base-mode GENOP sends a single prompt that lists the national teams of the World Cup.
 
 11
-00:01:17,717 --> 00:01:24,967
-At θ = 0.85, United States stays unmapped, because the graph labels the team USA.
+00:01:16,542 --> 00:01:23,767
+The similarity join maps each generated name to every team with a label of similarity at least θ.
 
 12
-00:01:25,417 --> 00:01:35,692
-With the embedding similarity at θ = 0.8, the mapping view adds only incorrect matches, such as Australia to USA and Sweden to Norway.
+00:01:24,217 --> 00:01:31,467
+At θ = 0.85, United States stays unmapped, because the graph labels the team USA.
 
 13
-00:01:38,600 --> 00:01:44,050
-This query asks for the players of Group A whose generated position is defender.
+00:01:31,917 --> 00:01:42,192
+With the embedding similarity at θ = 0.8, the mapping view adds only incorrect matches, such as Australia to USA and Sweden to Norway.
 
 14
-00:01:44,500 --> 00:01:51,175
-With GENOP first, the LLM is called once for each of the 1,248 players.
+00:01:44,000 --> 00:01:53,050
+In the Nobel graph, Physics also stays unmapped at θ = 0.85, because the graph labels the field Nobel Prize in Physics.
 
 15
-00:01:51,625 --> 00:02:01,625
-The planner first evaluates the patterns that select Group A, so the LLM is called only for its 104 players, twelve times fewer calls.
+00:01:57,167 --> 00:02:02,617
+This query asks for the players of Group A whose generated position is defender.
 
 16
-00:02:03,333 --> 00:02:08,433
-In the live mode, the service evaluates each query with the chosen LLM.
+00:02:03,067 --> 00:02:09,742
+With GENOP first, the LLM is called once for each of the 1,248 players.
 
 17
-00:02:08,883 --> 00:02:16,833
-Here, the service and Ollama with Mistral-7B and bge-large-en-v1.5 run on this laptop, without a provider account.
+00:02:10,192 --> 00:02:20,192
+The planner first evaluates the patterns that select Group A, so the LLM is called only for its 104 players, twelve times fewer calls.
 
 18
-00:02:17,283 --> 00:02:23,783
-The query asks for the position of each Argentine player, so the service sends one prompt per player.
+00:02:21,900 --> 00:02:27,025
+In the live mode, the service evaluates each query with the chosen LLM.
 
 19
-00:02:27,271 --> 00:02:34,496
-The answers appear in the result table, and the workbench reports 26 LLM calls, one per player.
+00:02:27,475 --> 00:02:35,425
+Here, the service and Ollama with Mistral-7B and bge-large-en-v1.5 run on this laptop, without a provider account.
 
 20
-00:02:34,946 --> 00:02:39,146
-Attendees can also edit the sample queries or write their own.
+00:02:35,875 --> 00:02:44,075
+Choosing a sample loads it. This one asks for the position of each Argentine player, so the service sends one prompt per player.
 
 21
-00:02:39,596 --> 00:02:45,496
-This edit asks for the players of Japan, and the service again sends one prompt per player.
+00:02:47,432 --> 00:02:55,682
+The answers appear in the result table and in the graph, and the workbench reports 26 LLM calls, one per player.
 
 22
-00:02:48,718 --> 00:02:52,468
-The positions of the Japanese players appear in the table.
+00:02:56,132 --> 00:03:00,332
+Attendees can also edit the sample queries or write their own.
 
 23
-00:02:54,367 --> 00:03:02,067
+00:03:00,782 --> 00:03:06,682
+This edit asks for the players of Japan, and the service again sends one prompt per player.
+
+24
+00:03:09,896 --> 00:03:14,571
+The positions of the Japanese players appear in the table and in the graph.
+
+25
+00:03:15,021 --> 00:03:19,546
+Attendees can also upload a graph of their own as a Turtle file.
+
+26
+00:03:21,033 --> 00:03:28,733
 The project page replays the recorded runs, and the repository contains the code, the queries and the evaluation.
 

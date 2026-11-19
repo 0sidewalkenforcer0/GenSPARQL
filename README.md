@@ -50,9 +50,9 @@ ollama pull bge-large                # once, for the embedding similarity
 ./start-fuseki.sh                    # builds the modules and serves http://localhost:8080/
 ```
 
-Open `http://localhost:8080/?mode=live`. The live panel is preset to Ollama on this machine: the endpoint `http://localhost:11434/v1`, the chat model `mistral:7b` and, for *Embedding (cosine)*, the embedding model `bge-large` at the same endpoint. The API key field can stay empty. Ollama serves a 4-bit build of Mistral-7B-Instruct-v0.3, so its answers can differ from the recorded ones. The prompts and the texts to embed go to Ollama on this machine and nowhere else. Any other OpenAI-compatible endpoint, such as a vLLM server or a hosted API, can be entered instead; its key is sent with each query and not stored. `http://localhost:8080/` opens the recorded mode.
+Open `http://localhost:8080/?mode=live`. Live mode is preset to Ollama on this machine: the endpoint `http://localhost:11434/v1`, the chat model `mistral:7b` and, for *Embedding (cosine)*, the embedding model `bge-large` at the same endpoint. The API key field can stay empty. Ollama serves a 4-bit build of Mistral-7B-Instruct-v0.3, so its answers can differ from the recorded ones. The prompts and the texts to embed go to Ollama on this machine and nowhere else. Any other OpenAI-compatible endpoint, such as a vLLM server or a hosted API, can be entered instead; its key is sent with each query and not stored. `http://localhost:8080/` opens the recorded mode.
 
-The sample queries of the live panel follow the scenarios of the paper. *Load sample* also selects the graph that the sample queries. With Mistral-7B and the Jaccard similarity on a laptop:
+The sample queries of live mode follow the scenarios of the paper. Choosing a sample loads it into the editor and selects the graph that it queries. With Mistral-7B and the Jaccard similarity on a laptop:
 
 | Sample | Scenario of the paper | LLM calls | Time |
 |--------|----------------------|-----------|------|
@@ -65,11 +65,11 @@ The sample queries of the live panel follow the scenarios of the paper. *Load sa
 | Nobel · contributions of Physics laureates since 2020 | 3 | 17 | 11 s |
 | Nobel · quantum mechanics pioneers | 4 | 1 | 1 s |
 
-The samples can be edited, and the live panel also runs queries of your own and graphs uploaded as Turtle files. The [workbench README](docs/README.md) describes the two modes and the service API.
+The samples can be edited, and live mode also runs queries of your own and graphs uploaded as Turtle files. The [workbench README](docs/README.md) describes the two modes and the service API.
 
 ### The service
 
-`./start-fuseki.sh 9090` serves on another port. The service answers only connections from this machine, because a query names the endpoint that the service sends its prompts to. To accept connections from the network, start it with `MAVEN_OPTS=-Dgensparql.server.allowRemote=true ./start-fuseki.sh`. The read-only Fuseki dataset is at `/gensparql`, and the workbench uses `GET /api/gensparql/health`, `POST /api/gensparql/datasets` and `POST /api/gensparql/query`. Clients other than the workbench can configure the LLM through the environment instead:
+`./start-fuseki.sh 9090` serves on another port. The service answers only connections from this machine, because a query names the endpoint that the service sends its prompts to. To accept connections from the network, start it with `MAVEN_OPTS=-Dgensparql.server.allowRemote=true ./start-fuseki.sh`. Browsers may call it from pages of this machine and of the project page; `-Dgensparql.server.allowedOrigins` adds further origins, separated by commas. The read-only Fuseki dataset is at `/gensparql`, and the workbench uses `GET /api/gensparql/health`, `POST /api/gensparql/datasets` and `POST /api/gensparql/query`. Clients other than the workbench can configure the LLM through the environment instead:
 
 ```bash
 export OPENAI_BASE_URL=http://localhost:11434/v1   # or a vLLM server, or a hosted API
@@ -216,7 +216,7 @@ The model is named in the query as `<model:PROVIDER:MODEL>`:
 | Anthropic | `<model:anthropic:claude-...>` | `ANTHROPIC_API_KEY` |
 | Mock (no network) | `<model:mock:...>` | none |
 
-In the workbench, `<model>` stands for the model of the live panel. Every provider asks the model for a JSON array and reads the values of every array in the answer. [`deploy/README.md`](deploy/README.md) describes how to serve the chat and embedding models with vLLM on a SLURM cluster, and `OPENAI_EMBEDDING_BASE_URL` and `OPENAI_EMBEDDING_MODEL` select the embedding model of the default provider.
+In the workbench, `<model>` stands for the chat model set in live mode. Every provider asks the model for a JSON array and reads the values of every array in the answer. [`deploy/README.md`](deploy/README.md) describes how to serve the chat and embedding models with vLLM on a SLURM cluster, and `OPENAI_EMBEDDING_BASE_URL` and `OPENAI_EMBEDDING_MODEL` select the embedding model of the default provider.
 
 ### Example programs
 

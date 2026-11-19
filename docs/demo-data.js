@@ -94,7 +94,10 @@
         // Measured through the service: GENOP written before the Group A patterns makes
         // genopFirst calls with the reordering switched off and planned calls with it on.
         cost: { genopFirst: R.wcComposition.genopFirst, planned: R.wcComposition.planned,
-                factor: factor(R.wcComposition.genopFirst, R.wcComposition.planned) }
+                factor: factor(R.wcComposition.genopFirst, R.wcComposition.planned) },
+        // The planner evaluates the patterns for Group A before GENOP (paper, Section 4).
+        orders: { genopFirst: "GENOP → KG patterns → FILTER", planner: "KG patterns → GENOP → FILTER" },
+        selective: "the KG patterns for Group A"
       }
     ],
 
@@ -172,7 +175,12 @@ SELECT ?name ?c WHERE {
         cost: { genopFirst: R.nobelComposition.genopFirst, planned: R.nobelComposition.planned,
                 factor: factor(R.nobelComposition.genopFirst, R.nobelComposition.planned) },
         bindingLabel: "Physics award bindings",
-        selectionLabel: "Physics awards since 2020",
+        // The awards since 2020 are selected by the FILTER on the award year, which the planner
+        // evaluates before GENOP (paper, Section 4); GENOP first runs on all Physics awards.
+        selectionTitle: "FILTER",
+        selectionLabel: "xsd:integer(STR(?y)) >= 2020",
+        selective: "the FILTER on the award year",
+        orders: { genopFirst: "KG patterns → GENOP → FILTER", planner: "KG patterns → FILTER → GENOP" },
         generatedVariable: "?c",
         generatedLabel: "Contribution",
         sinceYear: 2020,

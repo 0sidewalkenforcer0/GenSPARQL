@@ -10,36 +10,27 @@
   if (params.has("print")) document.documentElement.dataset.print = "";
 
   document.addEventListener("DOMContentLoaded", () => {
-    const livePanel = document.getElementById("liveBox");
-    const demoPanel = document.getElementById("prerecordedBox");
-    const title = document.querySelector(".hero h1");
-    const subtitle = document.querySelector(".hero p");
-    const modeLabel = document.querySelector(".topbar-meta");
-    const demoSummary = demoPanel?.querySelector(":scope > summary");
-    const liveSummary = livePanel?.querySelector(":scope > summary");
+    const title = document.getElementById("pageTitle");
+    const tagline = document.getElementById("pageTagline");
+    const links = {
+      demo: document.getElementById("demoModeLink"),
+      live: document.getElementById("liveModeLink"),
+    };
 
     if (mode === "live") {
-      if (livePanel) livePanel.open = true;
-      if (demoPanel) demoPanel.open = false;
-      if (title) title.textContent = "GenSPARQL Workbench";
-      if (subtitle) subtitle.textContent = "Run SPARQL and GENOP queries with the local Java engine";
-      if (modeLabel) modeLabel.textContent = "Local workbench";
+      // The name keeps its wordmark (styles.css); only the word after it is added.
+      if (title) title.append(" Workbench");
+      if (tagline) tagline.textContent = "Run SPARQL and GENOP queries with the local Java engine";
       document.title = "GenSPARQL · Local Workbench";
-    } else {
-      if (demoPanel) demoPanel.open = true;
-      if (livePanel) livePanel.open = false;
     }
 
-    demoSummary?.setAttribute("aria-current", mode === "demo" ? "page" : "false");
-    liveSummary?.setAttribute("aria-current", mode === "live" ? "page" : "false");
-
-    demoSummary?.addEventListener("click", event => {
-      event.preventDefault();
-      if (mode !== "demo") window.location.assign("index.html");
-    });
-    liveSummary?.addEventListener("click", event => {
-      event.preventDefault();
-      if (mode !== "live") window.location.assign("index.html?mode=live");
-    });
+    // The two modes are separate pages; the link of the open mode stays put.
+    for (const [linkMode, link] of Object.entries(links)) {
+      if (!link) continue;
+      if (linkMode === mode) {
+        link.setAttribute("aria-current", "page");
+        link.addEventListener("click", event => event.preventDefault());
+      }
+    }
   });
 })();
